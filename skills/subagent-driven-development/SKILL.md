@@ -36,6 +36,8 @@ digraph when_to_use {
 }
 ```
 
+- Skip SDD for single mechanical tasks already in-session with no multi-task plan — prefer direct execution or executing-plans for a tiny plan.
+
 **vs. Executing Plans (parallel session):**
 - Same session (no context switch)
 - Fresh subagent per task (no context pollution)

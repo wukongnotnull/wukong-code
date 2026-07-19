@@ -30,6 +30,21 @@ When multiple skills apply, process skills come first — they set the approach,
 - "Let's build X" → wukong-code:brainstorming first, then implementation skills.
 - "Fix this bug" → wukong-code:systematic-debugging first, then domain skills.
 
+## Scope routing
+
+Pick the smallest process skill that fits. Do **not** auto-chain
+brainstorming → writing-plans → using-git-worktrees → subagent-driven-development
+for mechanical work.
+
+| User intent | Route |
+|-------------|--------|
+| New feature, behavior change, or ambiguous product intent ("let's build X", "add Y") | `brainstorming` first (then plans / SDD as that skill directs) |
+| Bug with unclear root cause | `systematic-debugging` first |
+| Named mechanical fix (exact file + exact change: typo, lint, one-liner, "just change Z in foo.ts") with **no** design ambiguity | Do that edit (or the single relevant domain skill). Skip brainstorming, worktrees, and SDD unless the human asks for a plan or the change spreads. |
+| Multi-step implementation with a written plan | `executing-plans` or `subagent-driven-development` as appropriate; use worktrees when those skills require isolation |
+
+**Still mandatory:** if any skill applies, invoke it before acting. Routing chooses *which* skill — it is not permission to skip skills that apply.
+
 ## Red Flags
 
 These thoughts mean STOP—you're rationalizing:
