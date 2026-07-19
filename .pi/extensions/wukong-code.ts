@@ -98,7 +98,11 @@ Pi does not ship a standard task-list tool. If an installed todo/task tool is av
 }
 
 function messageContainsBootstrap(message: unknown): boolean {
-	const content = (message as { content?: unknown }).content;
+	const msg = message as { role?: unknown; summary?: unknown; content?: unknown };
+	if (typeof msg.summary === "string" && msg.summary.includes(BOOTSTRAP_MARKER)) {
+		return true;
+	}
+	const content = msg.content;
 	if (typeof content === "string") return content.includes(BOOTSTRAP_MARKER);
 	if (!Array.isArray(content)) return false;
 	return content.some((part) => {

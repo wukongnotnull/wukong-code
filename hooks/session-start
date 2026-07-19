@@ -7,6 +7,21 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
+# On Claude compact, skip re-inject if stdin JSON still carries our marker
+# (field names vary by harness version — check common locations).
+if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ] && [ -z "${CURSOR_PLUGIN_ROOT:-}" ] && [ -z "${COPILOT_CLI:-}" ]; then
+  if [ ! -t 0 ] && IFS= read -r -t 0.001 -n 1 peek 2>/dev/null; then
+    stdin_json="${peek}$(cat || true)"
+    if printf '%s' "$stdin_json" | grep -q '"source"[[:space:]]*:[[:space:]]*"compact"\|"matcher"[[:space:]]*:[[:space:]]*"compact"\|compact'; then
+      if printf '%s' "$stdin_json" | grep -q 'EXTREMELY_IMPORTANT\|You have wukong-code'; then
+        # Marker still present in compact payload/summary — do not pay bootstrap again
+        printf '{}\n'
+        exit 0
+      fi
+    fi
+  fi
+fi
+
 # Read using-wukong-code content and strip YAML frontmatter (align with OpenCode/Pi).
 using_wukong_code_raw=$(cat "${PLUGIN_ROOT}/skills/using-wukong-code/SKILL.md" 2>&1 || echo "Error reading using-wukong-code skill")
 if [[ "$using_wukong_code_raw" == Error* ]]; then

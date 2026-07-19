@@ -100,6 +100,25 @@ test('startup context injects the bootstrap as one user message until agent_end'
   assert.equal(afterEnd, undefined, 'startup bootstrap should clear after agent_end');
 });
 
+test('session_compact skips inject when compaction summary still has bootstrap marker', async () => {
+  const { handlers } = await loadExtension();
+  const sessionCompact = firstHandler(handlers, 'session_compact');
+  const context = firstHandler(handlers, 'context');
+
+  await sessionCompact({ type: 'session_compact', compactionEntry: {}, fromExtension: false }, {});
+
+  const summary = {
+    role: 'compactionSummary',
+    summary: 'Prior work. Marker present: wukong-code:using-wukong-code bootstrap for pi',
+    tokensBefore: 123,
+    timestamp: 1,
+  };
+  const user = { role: 'user', content: [{ type: 'text', text: 'Continue' }], timestamp: 2 };
+  const result = await context({ type: 'context', messages: [summary, user] }, {});
+
+  assert.equal(result, undefined, 'must not re-inject when summary retains bootstrap marker');
+});
+
 test('session_compact injects bootstrap after compaction summaries, not before compaction', async () => {
   const { handlers } = await loadExtension();
   const sessionCompact = firstHandler(handlers, 'session_compact');
