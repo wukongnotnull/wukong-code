@@ -4,6 +4,8 @@
 
 **Goal:** Cut programming-session token waste from SDD prompt paste, resident skill prose, TDD reloads, bootstrap re-injection, and over-triggering the full brainstorm→worktrees→SDD chain — without weakening Iron Laws, Red Flags tables, or the “Let’s make a react todo list” brainstorming acceptance path.
 
+**Completion status (2026-07-19):** Tasks 1–10 are landed on `dev` (skills slim/contracts/routing + session-start frontmatter strip + Pi compact summary dedup). Claude Code compact stdin peek was attempted then **reverted** per plan fallback — Shape A always re-injects on compact (documented in `docs/porting-to-a-new-harness.md`). Follow-up PR: OpenCode dedup scans **all** messages for `EXTREMELY_IMPORTANT` + test that stripped bootstrap does not start with `---`.
+
 **Architecture:** Prefer mechanical wins first (bootstrap strip/dedup, SDD contract pointers). Then change load/trigger *instructions* so agents stop reloading duplicate prose. Slim high-frequency skills by moving Examples/Advantages/long rationale into `references/` while keeping checklists and hard gates resident. Behavioral trigger routing is last and narrowly scoped.
 
 **Tech Stack:** Bash hooks, OpenCode JS plugin, Pi TypeScript extension, Markdown skills, existing Node/bash tests under `tests/`.
