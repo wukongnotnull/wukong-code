@@ -435,13 +435,11 @@ messages break some models (#894). Three things you must replicate:
   any leading compaction-summary messages; its dedup guard also scans
   `compactionSummary.summary` for the bootstrap marker so a summary that
   retained the marker does not trigger a second inject. Claude Code (Shape A)
-  best-effort: on `compact` SessionStart, if stdin JSON still contains
-  `EXTREMELY_IMPORTANT` or `You have wukong-code`, the hook emits `{}` and
-  skips re-inject; otherwise it re-injects as usual. Shape A reads compact
-  stdin with a non-blocking peek so startup hooks do not hang when stdin is
-  an open pipe with no payload. If a harness cannot safely read compact stdin
-  even with that guard, document the limitation and rely on Pi/OpenCode dedup
-  instead. OpenCode relies on its per-step re-injection plus the dedup guard.
+  cannot safely skip compact re-inject: SessionStart stdin has no documented
+  compaction-summary field to scan for the marker, and attempting a stdin peek
+  is unreliable on macOS (can hang or miss payload). Shape A always re-injects
+  on the `startup|clear|compact` matcher — do not attempt stdin peek. OpenCode
+  relies on its per-step re-injection plus the dedup guard.
 - **Message-object shape is per-harness — discover yours, don't copy a literal.**
   The two references use *incompatible* shapes: pi builds
   `{ role, content: [{ type, text }], timestamp }`; OpenCode manipulates
