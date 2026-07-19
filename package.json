@@ -1,6 +1,6 @@
 {
   "name": "wukong-code",
-  "version": "6.2.0",
+  "version": "6.2.1",
   "description": "Wukong Code skills and runtime bootstrap for coding agents",
   "type": "module",
   "main": ".opencode/plugins/wukong-code.js",

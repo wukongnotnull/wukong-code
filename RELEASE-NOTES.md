@@ -1,5 +1,16 @@
 # Wukong Code Release Notes
 
+## v6.2.1 (2026-07-19)
+
+### Lower Resident Skill Cost
+
+Mechanical slim of high-frequency skills: Iron Laws, Red Flags, and checklists stay resident; long examples and depth move to on-demand `references/`. Covered by `tests/skills/test-skill-slim-gates.sh`.
+
+- **`writing-skills`** — ~689 → ~243 lines (SDO, authoring patterns, testing/bulletproofing depth on demand)
+- **`subagent-driven-development`** — ~345 → ~277 lines (reviewer-prompt construction, model-selection depth, when-to-use digraph on demand)
+- **`test-driven-development`** — ~261 → ~175 lines (R-G-R digraph and Good/Bad walkthroughs on demand)
+- **`receiving-code-review`** — ~213 → ~151 lines (worked dialogues and external-review checklist on demand)
+
 ## v6.2.0 (2026-07-19)
 
 ### Lower Ritual, Same Gates
