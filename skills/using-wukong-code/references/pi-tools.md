@@ -4,8 +4,11 @@ Skills speak in actions ("dispatch a subagent", "create a todo", "read a file").
 
 | Action skills request | Pi equivalent |
 | --- | --- |
-| Dispatch a subagent (`Subagent (general-purpose):` template) | Use an installed subagent tool such as `subagent` from `pi-subagents` if available |
-| Task tracking ("create a todo", "mark complete") | Use an installed todo/task tool if available, otherwise track tasks in the plan or `TODO.md` |
+| Invoke a `Skill` | Pi native skills — load the relevant `SKILL.md` with `read`, or `/skill:name` |
+| Dispatch a subagent (`Subagent (general-purpose):` / Claude `Task`) | Use an installed subagent tool such as `subagent` from `pi-subagents` if available |
+| Task tracking (`TodoWrite`, "create a todo", "mark complete") | Use an installed todo/task tool if available, otherwise track tasks in the plan or `TODO.md` |
+| Read / write / edit files | `read`, `write`, `edit` |
+| Run shell commands | `bash` |
 
 ## Subagents
 
