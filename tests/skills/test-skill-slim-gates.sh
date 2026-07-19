@@ -73,6 +73,18 @@ assert_contains skills/test-driven-development/references/red-green-refactor-dep
 assert_contains skills/test-driven-development/references/rationalizations-and-examples.md "I'll write tests after"
 assert_max_lines skills/test-driven-development/SKILL.md 180
 
+echo "=== receiving-code-review slim gates ==="
+assert_file skills/receiving-code-review/SKILL.md
+assert_file skills/receiving-code-review/references/examples.md
+assert_file skills/receiving-code-review/references/external-review-and-yagni.md
+assert_contains skills/receiving-code-review/SKILL.md "You're absolutely right!"
+assert_contains skills/receiving-code-review/SKILL.md "human partner"
+assert_contains skills/receiving-code-review/SKILL.md "The Response Pattern"
+assert_contains skills/receiving-code-review/SKILL.md "Technical correctness over social comfort"
+assert_contains skills/receiving-code-review/references/examples.md "Performative Agreement"
+assert_contains skills/receiving-code-review/references/external-review-and-yagni.md "be skeptical, but check carefully"
+assert_max_lines skills/receiving-code-review/SKILL.md 160
+
 if (( fail )); then
   echo "STATUS: FAILED"
   exit 1
