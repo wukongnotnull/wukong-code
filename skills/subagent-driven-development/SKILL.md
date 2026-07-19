@@ -242,6 +242,11 @@ and is re-read on every later turn. Hand artifacts over as files:
   constraints that bind the task.
 - Fix dispatches append their fix report (with test results) to the same
   report file and return a short summary; re-reviews read the updated file.
+- **Contracts:** do not paste `implementer-contract.md` / `task-reviewer-contract.md`
+  into the dispatch prompt. Instruct the subagent to Read the path under
+  `skills/subagent-driven-development/`. Controllers must not `Read` the
+  full contract into their own context on every task — only fill the thin
+  template placeholders.
 
 ## Durable Progress
 
@@ -265,8 +270,10 @@ a ledger file, not only in todos.
 
 ## Prompt Templates
 
-- [implementer-prompt.md](implementer-prompt.md) - Dispatch implementer subagent
-- [task-reviewer-prompt.md](task-reviewer-prompt.md) - Dispatch task reviewer subagent (spec compliance + code quality)
+- [implementer-contract.md](implementer-contract.md) — stable implementer rules (subagent Reads once)
+- [implementer-prompt.md](implementer-prompt.md) — thin dispatch shell (placeholders only)
+- [task-reviewer-contract.md](task-reviewer-contract.md) — stable reviewer rubric
+- [task-reviewer-prompt.md](task-reviewer-prompt.md) — thin dispatch shell
 - Final whole-branch review: use wukong-code:requesting-code-review's [code-reviewer.md](../requesting-code-review/code-reviewer.md)
 
 ## Example Workflow
