@@ -1,5 +1,25 @@
 # Wukong Code Release Notes
 
+## v6.2.0 (2026-07-19)
+
+### Lower Ritual, Same Gates
+
+Process skills now route by scope and ambiguity so low-clarity creative work still hits hard gates, while clear small work skips ceremony that burned tokens without improving quality.
+
+- **Primary workflow + progress budget in `using-wukong-code`.** After Scope routing, load exactly one primary process skill; load secondaries only when their precondition appears; do not cascade-preload or unchanged-reload skills. Progress updates are milestone-based (not every tool call), with summarized passing tests and backoff CI polling.
+- **Condensed brainstorming.** Clear request + acceptance criteria uses a short approach (≤5 bullets) and one approval; no forced 2–3 alternatives; design docs persist only when asked or multi-subsystem. Ambiguous / creative work (including `Let's make a react todo list`) still uses Full depth and `<HARD-GATE>` before code.
+- **Same-task verification reuse.** `verification-before-completion` still requires evidence before claims, but allows citing a prior in-task run when the claim, HEAD, and relevant paths are unchanged — so finishing does not re-run a suite solely because a later stage repeats the same requirement.
+- **Intent-first finishing.** If the human already said how to integrate (e.g. open a PR), skip the 4-option menu after verification; show the menu only when intent is absent.
+- **Focused systematic debugging.** Single failing test + stable local repro + clear change surface uses a short path (still root-cause first, still regression); cross-boundary or unclear failures keep the full Four Phases.
+
+Live Cursor subagent adversarial routing: 7/7 PASS under pressure (see `docs/wukong-code/plans/2026-07-19-phase2-workflow-routing.md`). Not a substitute for the optional `wukong-code-evals` tmux harness.
+
+### OpenCode / Bootstrap Token Savings
+
+- **OpenCode dedup scans all messages.** Bootstrap inject skips when `EXTREMELY_IMPORTANT` already appears in any message part, not only the first user turn — avoids duplicate bootstrap copies when the marker survives later in the thread.
+- **Tests:** `marker-elsewhere` scenario; assert stripped bootstrap body does not start with YAML `---`; restore `SKILL.md` after the missing-file cache test so later cases still see the file.
+- **Already on the line (from the token-savings plan):** session-start strips YAML frontmatter; Pi skips re-inject when the compaction summary retains the bootstrap marker; Claude Code Shape A still always re-injects on compact (stdin peek unsafe — documented in `docs/porting-to-a-new-harness.md`).
+
 ## v6.1.1 (2026-07-02)
 
 ### Codex
