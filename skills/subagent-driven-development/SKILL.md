@@ -333,8 +333,11 @@ On-demand comparison vs manual/executing-plans:
 - **wukong-code:requesting-code-review** - Code review template for the final whole-branch review
 - **wukong-code:finishing-a-development-branch** - Complete development after all tasks
 
-**Subagents should use:**
-- **wukong-code:test-driven-development** - Subagents follow TDD for each task
+**TDD for subagents:**
+- Default: follow the TDD steps already written in the task brief/plan and
+  record RED/GREEN evidence in the report (see implementer-contract.md).
+- Load **wukong-code:test-driven-development** only when: the brief omits TDD
+  steps, the implementer skipped RED, or a reviewer requires TDD remediation.
 
 **Alternative workflow:**
 - **wukong-code:executing-plans** - Use for parallel session instead of same-session execution

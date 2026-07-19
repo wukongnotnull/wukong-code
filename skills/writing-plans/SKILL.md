@@ -140,6 +140,8 @@ Every step must contain the actual content an engineer needs. These are **plan f
 - Complete code in every step — if a step changes code, show the code
 - Exact commands with expected output
 - DRY, YAGNI, TDD, frequent commits
+- Plans are the TDD source of truth for SDD implementers: keep per-task
+  RED→GREEN steps explicit so implementers need not reload the full TDD skill.
 
 ## Self-Review
 
