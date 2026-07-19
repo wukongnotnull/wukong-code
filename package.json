@@ -1,0 +1,23 @@
+{
+  "name": "wukong-code",
+  "version": "6.1.1",
+  "description": "Wukong Code skills and runtime bootstrap for coding agents",
+  "type": "module",
+  "main": ".opencode/plugins/wukong-code.js",
+  "keywords": [
+    "pi-package",
+    "skills",
+    "tdd",
+    "debugging",
+    "collaboration",
+    "workflow"
+  ],
+  "pi": {
+    "extensions": [
+      "./.pi/extensions/wukong-code.ts"
+    ],
+    "skills": [
+      "./skills"
+    ]
+  }
+}

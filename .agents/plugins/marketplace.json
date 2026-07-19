@@ -1,0 +1,20 @@
+{
+  "name": "wukong-code-dev",
+  "interface": {
+    "displayName": "Wukong Code Dev"
+  },
+  "plugins": [
+    {
+      "name": "wukong-code",
+      "source": {
+        "source": "url",
+        "url": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}
