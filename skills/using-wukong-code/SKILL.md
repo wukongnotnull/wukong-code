@@ -28,7 +28,7 @@ Then announce "Using [skill] to [purpose]" and follow the skill exactly. If it h
 When multiple skills apply, process skills come first — they set the approach, then implementation skills (frontend-design, etc.) carry it out. Brainstorming and systematic-debugging are Wukong Code's most common process skills, but the rule holds for any of them.
 
 - "Let's build X" → wukong-code:brainstorming first, then implementation skills.
-- "Fix this bug" → wukong-code:systematic-debugging first, then domain skills.
+- "Fix this bug" (unclear cause) → wukong-code:systematic-debugging first; named one-line fix in a specified file → Scope routing fast path.
 
 ## Scope routing
 
@@ -40,10 +40,12 @@ for mechanical work.
 |-------------|--------|
 | New feature, behavior change, or ambiguous product intent ("let's build X", "add Y") | `brainstorming` first (then plans / SDD as that skill directs) |
 | Bug with unclear root cause | `systematic-debugging` first |
-| Named mechanical fix (exact file + exact change: typo, lint, one-liner, "just change Z in foo.ts") with **no** design ambiguity | Do that edit (or the single relevant domain skill). Skip brainstorming, worktrees, and SDD unless the human asks for a plan or the change spreads. |
+| Named mechanical fix (exact file + exact change: typo, single-file lint fix, one-liner, "just change Z in foo.ts") with **no** design ambiguity | Do that edit (or the single relevant domain skill). Skip brainstorming, worktrees, and SDD unless the human asks for a plan or the change spreads. |
 | Multi-step implementation with a written plan | `executing-plans` or `subagent-driven-development` as appropriate; use worktrees when those skills require isolation |
 
 **Still mandatory:** if any skill applies, invoke it before acting. Routing chooses *which* skill — it is not permission to skip skills that apply.
+
+**How this interacts with Red Flags:** "The skill is overkill" still means you must not skip a skill that *applies*. Scope routing decides *which* skill applies. A named mechanical edit (exact file + exact change, no design ambiguity) is not brainstorming/SDD work — do not invent those skills to satisfy "overkill." Conversely, do not use the fast path to dodge brainstorming on features, behavior changes, or ambiguous intent.
 
 ## Red Flags
 

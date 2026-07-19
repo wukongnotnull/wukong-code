@@ -17,7 +17,7 @@ Do NOT invoke any implementation skill, write any code, scaffold any project, or
 
 If you are about to build a feature, change user-facing behavior, or invent a design, you do **not** get to skip this skill because it "feels small." A todo list, a new utility module, or a behavior tweak still needs a short design and approval.
 
-**Fast path (does not use this skill):** the human named an exact mechanical edit with no design choices (typo, rename already agreed, clear one-line fix in a specified file). That path is routed in `using-wukong-code` Scope routing — do not force brainstorming onto it.
+**Fast path (does not use this skill):** the human named an exact mechanical edit with no design choices (typo, rename already agreed, clear one-line fix in a specified file). Config or behavior changes are NOT fast path. That path is routed in `using-wukong-code` Scope routing — do not force brainstorming onto it.
 
 ## Checklist
 
