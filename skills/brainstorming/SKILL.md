@@ -15,13 +15,40 @@ Do NOT invoke any implementation skill, write any code, scaffold any project, or
 
 ## Anti-Pattern: "This Is Too Simple To Need A Design"
 
-If you are about to build a feature, change user-facing behavior, or invent a design, you do **not** get to skip this skill because it "feels small." A todo list, a new utility module, or a behavior tweak still needs a short design and approval.
+If you are about to build a feature, change user-facing behavior, or invent a design, you do **not** get to skip this skill because it "feels small." A todo list, a new utility module, or a behavior tweak still needs design approval (Full or Condensed below)—never skip the HARD-GATE by calling the work "simple."
 
 **Fast path (does not use this skill):** the human named an exact mechanical edit with no design choices (typo, rename already agreed, clear one-line fix in a specified file). Config or behavior changes are NOT fast path. That path is routed in `using-wukong-code` Scope routing — do not force brainstorming onto it.
 
-## Checklist
+## Depth routing
 
-You MUST create a task for each of these items and complete them in order:
+Pick a depth before running the checklist. Condensed shortens ceremony; it does **not** skip design approval.
+
+| Depth | When | Behavior |
+|-------|------|----------|
+| **Full** | Requirements ambiguous, product/behavior intent unclear, or no acceptance criteria | Full checklist below (2–3 approaches, sectioned approval, persist spec, user reviews spec → writing-plans) |
+| **Condensed** | Human gave a clear request **and** acceptance criteria, but work is still a feature/behavior change (not mechanical fast path) | Explore context → state the chosen approach in at most 5 bullets → **one approval** → exit per Condensed exits. Do not require 2–3 alternatives. Do **not** write/commit a design doc unless the human asks or the work spans multiple subsystems. |
+
+Offer alternatives only when they materially change cost, risk, or UX. Visual companion rules still apply (just-in-time, never required).
+
+### Condensed checklist
+
+You MUST create a task for each of these and complete them in order:
+
+1. **Explore project context** — check files, docs, recent commits
+2. **Clarify only if needed** — at most a few targeted questions; skip if acceptance criteria are already explicit
+3. **Present approach** — at most 5 bullets; get one approval (HARD-GATE still applies)
+4. **Exit** — follow Condensed exits below
+
+### Condensed exits
+
+After approval:
+
+- **Multi-step or cross-module work** → invoke `writing-plans` (do not start implementation skills yet)
+- **Single-module, clear acceptance criteria** → implement directly (skip writing-plans). Still use verification-before-completion / finishing-a-development-branch when those apply later
+
+## Checklist (Full depth)
+
+When Depth routing selected **Full**, you MUST create a task for each of these items and complete them in order:
 
 1. **Explore project context** — check files, docs, recent commits
 2. **Offer the visual companion just-in-time** — NOT upfront. The first time a question would genuinely be clearer shown than described, offer it then (its own message); on approval its browser tab opens for you. If no visual question ever arises, never offer it. See the Visual Companion section below.
@@ -33,7 +60,7 @@ You MUST create a task for each of these items and complete them in order:
 8. **User reviews written spec** — ask user to review the spec file before proceeding
 9. **Transition to implementation** — invoke writing-plans skill to create implementation plan
 
-## After the Design
+## After the Design (Full depth)
 
 **Documentation:**
 
@@ -59,12 +86,12 @@ After the spec review loop passes, ask the user to review the written spec befor
 
 Wait for the user's response. If they request changes, make them and re-run the spec review loop. Only proceed once the user approves.
 
-**Implementation:**
+**Implementation (Full depth):**
 
 - Invoke the writing-plans skill to create a detailed implementation plan
 - Do NOT invoke any other skill. writing-plans is the next step.
 
-**The terminal state is invoking writing-plans.** Do NOT invoke frontend-design, mcp-builder, or any other implementation skill. The ONLY skill you invoke after brainstorming is writing-plans.
+**Full-depth terminal state is invoking writing-plans.** Do NOT invoke frontend-design, mcp-builder, or any other implementation skill before that. (Condensed single-module exit may implement after approval—see Condensed exits.)
 
 ## Process depth (on demand)
 

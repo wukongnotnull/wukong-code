@@ -3,8 +3,8 @@ import { pathToFileURL } from 'url';
 
 const [, , pluginPath, scenario] = process.argv;
 
-if (!pluginPath || !['present', 'missing'].includes(scenario)) {
-  console.error('Usage: node test-bootstrap-caching.mjs PLUGIN_PATH present|missing');
+if (!pluginPath || !['present', 'missing', 'marker-elsewhere'].includes(scenario)) {
+  console.error('Usage: node test-bootstrap-caching.mjs PLUGIN_PATH present|missing|marker-elsewhere');
   process.exit(2);
 }
 
@@ -32,11 +32,15 @@ const mod = await import(pathToFileURL(pluginPath).href);
 const plugin = await mod.WukongCodePlugin({ client: {}, directory: '.' });
 const transform = plugin['experimental.chat.messages.transform'];
 
-const firstOutput = makeOutput(`${scenario} bootstrap first step`);
+const firstOutput = scenario === 'marker-elsewhere'
+  ? makeOutputWithMarkerElsewhere(`${scenario} bootstrap first step`)
+  : makeOutput(`${scenario} bootstrap first step`);
 await transform({}, firstOutput);
 const afterFirst = { existsCount, readCount };
 
-const secondOutput = makeOutput(`${scenario} bootstrap second step`);
+const secondOutput = scenario === 'marker-elsewhere'
+  ? makeOutputWithMarkerElsewhere(`${scenario} bootstrap second step`)
+  : makeOutput(`${scenario} bootstrap second step`);
 await transform({}, secondOutput);
 const afterSecond = { existsCount, readCount };
 
@@ -44,6 +48,7 @@ const result = {
   scenario,
   firstBootstrapParts: countBootstrapParts(firstOutput),
   secondBootstrapParts: countBootstrapParts(secondOutput),
+  bootstrapStartsWithFrontmatter: bootstrapText(firstOutput).trimStart().startsWith('---'),
   staleMentionMapping: bootstrapText(firstOutput).includes('@mention'),
   staleTaskMapping: bootstrapText(firstOutput).includes('`Task` tool with subagents'),
   mapsSubagentToTask: bootstrapText(firstOutput).includes('`task` with `subagent_type: "general"`'),
@@ -56,7 +61,9 @@ const result = {
 
 const failures = scenario === 'present'
   ? assertPresentBootstrap(result)
-  : assertMissingBootstrap(result);
+  : scenario === 'marker-elsewhere'
+    ? assertMarkerElsewhere(result)
+    : assertMissingBootstrap(result);
 
 if (failures.length > 0) {
   console.error(JSON.stringify(result, null, 2));
@@ -77,6 +84,21 @@ function makeOutput(text) {
     messages: [{
       info: { role: 'user' },
       parts: [{ type: 'text', text }],
+    }],
+  };
+}
+
+function makeOutputWithMarkerElsewhere(text) {
+  return {
+    messages: [{
+      info: { role: 'user' },
+      parts: [{ type: 'text', text }],
+    }, {
+      info: { role: 'assistant' },
+      parts: [{
+        type: 'text',
+        text: 'Earlier turn retained <EXTREMELY_IMPORTANT>You have wukong-code</EXTREMELY_IMPORTANT>',
+      }],
     }],
   };
 }
@@ -121,6 +143,20 @@ function assertPresentBootstrap(result) {
   }
   if (!result.mapsMutationToApplyPatch) {
     failures.push('expected OpenCode bootstrap to map file mutation to apply_patch');
+  }
+  if (result.bootstrapStartsWithFrontmatter) {
+    failures.push('expected stripped bootstrap body not to start with YAML frontmatter ---');
+  }
+  return failures;
+}
+
+function assertMarkerElsewhere(result) {
+  const failures = [];
+  if (result.firstBootstrapParts !== 0) {
+    failures.push(`expected no inject when marker exists in a later message, got ${result.firstBootstrapParts} on first user`);
+  }
+  if (result.secondBootstrapParts !== 0) {
+    failures.push(`expected no inject on second transform when marker exists elsewhere, got ${result.secondBootstrapParts}`);
   }
   return failures;
 }

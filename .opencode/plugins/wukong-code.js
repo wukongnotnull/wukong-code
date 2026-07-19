@@ -127,10 +127,15 @@ ${toolMapping}
       const firstUser = output.messages.find(m => m.info.role === 'user');
       if (!firstUser || !firstUser.parts.length) return;
 
-      // Guard: skip if first user message already contains bootstrap.
-      // This prevents double injection when OpenCode passes an already
-      // transformed in-memory message array through the hook again.
-      if (firstUser.parts.some(p => p.type === 'text' && p.text.includes('EXTREMELY_IMPORTANT'))) return;
+      // Guard: skip if ANY message already contains bootstrap (not only the
+      // first user turn). Prevents double injection when OpenCode re-runs
+      // transform and when the marker survived in a later turn/summary.
+      const alreadyHasBootstrap = output.messages.some(
+        (m) => Array.isArray(m.parts) && m.parts.some(
+          (p) => p.type === 'text' && typeof p.text === 'string' && p.text.includes('EXTREMELY_IMPORTANT')
+        )
+      );
+      if (alreadyHasBootstrap) return;
 
       const ref = firstUser.parts[0];
       firstUser.parts.unshift({ ...ref, type: 'text', text: bootstrap });

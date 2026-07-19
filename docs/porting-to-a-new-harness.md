@@ -439,7 +439,8 @@ messages break some models (#894). Three things you must replicate:
   compaction-summary field to scan for the marker, and attempting a stdin peek
   is unreliable on macOS (can hang or miss payload). Shape A always re-injects
   on the `startup|clear|compact` matcher — do not attempt stdin peek. OpenCode
-  relies on its per-step re-injection plus the dedup guard.
+  relies on its per-step re-injection plus a dedup guard that scans **all**
+  message parts for `EXTREMELY_IMPORTANT` (not only the first user turn).
 - **Message-object shape is per-harness — discover yours, don't copy a literal.**
   The two references use *incompatible* shapes: pi builds
   `{ role, content: [{ type, text }], timestamp }`; OpenCode manipulates

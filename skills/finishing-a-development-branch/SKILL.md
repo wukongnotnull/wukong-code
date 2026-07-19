@@ -7,9 +7,9 @@ description: Use when implementation is complete, all tests pass, and you need t
 
 ## Overview
 
-Guide completion of development work by presenting clear options and handling chosen workflow.
+Guide completion of development work by verifying tests, then either executing a stated integration intent or presenting clear options.
 
-**Core principle:** Verify tests → Detect environment → Present options → Execute choice → Clean up.
+**Core principle:** Verify tests → Detect environment → Honor stated integration intent **or** present options → Execute choice → Clean up.
 
 **Announce at start:** "I'm using the finishing-a-development-branch skill to complete this work."
 
@@ -17,10 +17,12 @@ Guide completion of development work by presenting clear options and handling ch
 
 ### Step 1: Verify Tests
 
-**Before presenting options, verify tests pass:**
+**Before integrating or presenting options, verify tests pass.**
+
+Follow `verification-before-completion`: run the suite, or reuse in-task evidence when Evidence reuse applies (same claim, same HEAD, relevant paths unchanged, full output still in context). Do **not** re-run a full suite solely because this skill's Step 1 repeats a verification you just completed under those conditions.
 
 ```bash
-# Run project's test suite
+# Run project's test suite (when reuse does not apply)
 npm test / cargo test / pytest / go test ./...
 ```
 
@@ -39,14 +41,14 @@ Stop. Don't proceed to Step 2.
 
 ### Step 2: Detect Environment
 
-**Determine workspace state before presenting options:**
+**Determine workspace state before presenting options or executing intent:**
 
 ```bash
 GIT_DIR=$(cd "$(git rev-parse --git-dir)" 2>/dev/null && pwd -P)
 GIT_COMMON=$(cd "$(git rev-parse --git-common-dir)" 2>/dev/null && pwd -P)
 ```
 
-This determines which menu to show and how cleanup works:
+This determines which menu to show (when needed) and how cleanup works:
 
 | State | Menu | Cleanup |
 |-------|------|---------|
@@ -63,9 +65,11 @@ git merge-base HEAD main 2>/dev/null || git merge-base HEAD master 2>/dev/null
 
 Or ask: "This branch split from main - is that correct?"
 
-### Step 4: Present Options
+### Step 4: Integration Intent or Present Options
 
-**Normal repo and named-branch worktree — present exactly these 4 options:**
+**If your human partner already specified the integration action** (e.g. "open a PR", "merge to dev", "PR then merge"), skip the menu: map that instruction to the matching option below and go to Step 5. Present the menu only when intent is absent or conflicting.
+
+**Normal repo and named-branch worktree — when showing the menu, present exactly these 4 options:**
 
 ```
 Implementation complete. What would you like to do?
@@ -78,7 +82,7 @@ Implementation complete. What would you like to do?
 Which option?
 ```
 
-**Detached HEAD — present exactly these 3 options:**
+**Detached HEAD — when showing the menu, present exactly these 3 options:**
 
 ```
 Implementation complete. You're on a detached HEAD (externally managed workspace).
@@ -94,17 +98,17 @@ Which option?
 
 ### Step 5: Execute Choice
 
-After the user picks an option, Read `skills/finishing-a-development-branch/references/finish-options.md` for per-option commands, confirmation prompts, and workspace cleanup (Options 1 and 4 only).
+After the user picks an option (or after mapping stated intent to an option), Read `skills/finishing-a-development-branch/references/finish-options.md` for per-option commands, confirmation prompts, and workspace cleanup (Options 1 and 4 only).
 
 ## Common Mistakes
 
 **Skipping test verification**
 - **Problem:** Merge broken code, create failing PR
-- **Fix:** Always verify tests before offering options
+- **Fix:** Always verify tests (run or valid Evidence reuse) before integrating or offering options
 
-**Open-ended questions**
+**Open-ended questions when intent is absent**
 - **Problem:** "What should I do next?" is ambiguous
-- **Fix:** Present exactly 4 structured options (or 3 for detached HEAD)
+- **Fix:** Present exactly 4 structured options (or 3 for detached HEAD). If intent was already stated, execute it—do not re-ask.
 
 **Cleaning up worktree for Option 2**
 - **Problem:** Remove worktree user needs for PR iteration
@@ -138,9 +142,10 @@ After the user picks an option, Read `skills/finishing-a-development-branch/refe
 - Run `git worktree remove` from inside the worktree
 
 **Always:**
-- Verify tests before offering options
-- Detect environment before presenting menu
-- Present exactly 4 options (or 3 for detached HEAD)
+- Verify tests before integrating or offering options (run or valid Evidence reuse)
+- Detect environment before presenting menu or executing intent
+- When intent is absent: present exactly 4 options (or 3 for detached HEAD)
+- When intent is already stated: execute that action after verification—do not show the menu
 - Get typed confirmation for Option 4
 - Clean up worktree for Options 1 & 4 only
 - `cd` to main repo root before worktree removal
