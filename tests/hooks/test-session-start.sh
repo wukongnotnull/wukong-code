@@ -185,6 +185,16 @@ assert_command_output \
     CLAUDE_PLUGIN_ROOT="$REPO_ROOT" \
     bash "$HOOK_UNDER_TEST"
 
+fm_home="$(make_home frontmatter-stripped)"
+assert_command_output \
+    "SessionStart strips YAML frontmatter from using-wukong-code" \
+    "nested" \
+    "You have wukong-code" \
+    "name: using-wukong-code"$'\037'"description: Use when starting" \
+    "$fm_home" \
+    CLAUDE_PLUGIN_ROOT="$REPO_ROOT" \
+    bash "$HOOK_UNDER_TEST"
+
 legacy_home="$(make_home legacy-warning-removed)"
 mkdir -p "$legacy_home/.config/wukong-code/skills"
 assert_command_output \

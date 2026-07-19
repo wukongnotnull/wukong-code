@@ -7,8 +7,22 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-# Read using-wukong-code content
-using_wukong_code_content=$(cat "${PLUGIN_ROOT}/skills/using-wukong-code/SKILL.md" 2>&1 || echo "Error reading using-wukong-code skill")
+# Read using-wukong-code content and strip YAML frontmatter (align with OpenCode/Pi).
+using_wukong_code_raw=$(cat "${PLUGIN_ROOT}/skills/using-wukong-code/SKILL.md" 2>&1 || echo "Error reading using-wukong-code skill")
+if [[ "$using_wukong_code_raw" == Error* ]]; then
+  using_wukong_code_content="$using_wukong_code_raw"
+else
+  # Same regex contract as .opencode/plugins/wukong-code.js and .pi/extensions/wukong-code.ts
+  using_wukong_code_content=$(printf '%s' "$using_wukong_code_raw" | awk '
+    BEGIN { in_fm=0; done_fm=0 }
+    NR==1 && /^---$/ { in_fm=1; next }
+    in_fm && /^---$/ { in_fm=0; done_fm=1; next }
+    in_fm { next }
+    { print }
+  ')
+  # Trim leading blank lines after strip
+  using_wukong_code_content=$(printf '%s' "$using_wukong_code_content" | sed -e '1{/./!d;}')
+fi
 
 # Escape string for JSON embedding using bash parameter substitution.
 # Each ${s//old/new} is a single C-level pass - orders of magnitude

@@ -357,12 +357,13 @@ and what you assemble vs. what the harness loads raw — depends entirely on you
 shape. Do **not** apply one shape's recipe to another.
 
 **Shape A — a script reads `SKILL.md` and prints the harness's JSON.** The
-dispatched script (`hooks/session-start`) `cat`s the whole `SKILL.md` (frontmatter
-included — that's fine; it's emitted verbatim), wraps it with the "You have
-wukong-code… for all other skills use the Skill tool" preamble, escapes it, and
-prints the harness's JSON shape. The tool mapping for Shape A does **not** go
-inline here — it lives in `references/<harness>-tools.md` (Step 4). Get the JSON
-output shape exactly right. `hooks/session-start`
+dispatched script (`hooks/session-start`) reads `SKILL.md`, **strips YAML
+frontmatter** before injection (same regex contract as Shape B in OpenCode/Pi),
+wraps the remaining skill prose (including `<EXTREMELY_IMPORTANT>` / Red Flags)
+with the "You have wukong-code… for all other skills use the Skill tool" preamble,
+escapes it, and prints the harness's JSON shape. The tool mapping for Shape A
+does **not** go inline here — it lives in `references/<harness>-tools.md`
+(Step 4). Get the JSON output shape exactly right. `hooks/session-start`
 detects the harness from environment variables and prints *one of three* shapes:
 
 - Cursor (`CURSOR_PLUGIN_ROOT` set): `{ "additional_context": "…" }`
