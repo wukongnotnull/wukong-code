@@ -2,6 +2,8 @@
 
 Expanded guidance for each checklist phase. Read on demand when you need more detail than the resident checklist provides.
 
+**Depth routing:** The resident skill chooses Full vs Condensed first. This file describes the **Full** flow. Condensed (clear request + acceptance criteria) uses the shorter checklist and exits in `SKILL.md`—do not force the Full diagram onto Condensed work.
+
 ## Process Flow
 
 ```dot
@@ -29,7 +31,7 @@ digraph brainstorming {
 }
 ```
 
-**The terminal state is invoking writing-plans.** Do NOT invoke frontend-design, mcp-builder, or any other implementation skill. The ONLY skill you invoke after brainstorming is writing-plans.
+**Full-depth terminal state is invoking writing-plans.** Do NOT invoke frontend-design, mcp-builder, or any other implementation skill before that. (Condensed single-module exit may implement after approval—see resident `SKILL.md`.)
 
 ## The Process
 

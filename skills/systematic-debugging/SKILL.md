@@ -43,9 +43,32 @@ Use for ANY technical issue:
 - You're in a hurry (rushing guarantees rework)
 - Manager wants it fixed NOW (systematic is faster than thrashing)
 
+## Focused path
+
+Use this shorter path when **all** are true:
+
+- A single failing test or assertion is identified (e.g. from CI logs)
+- You can reproduce it locally and stably
+- The change surface is clear (e.g. files touched in the failing change)
+
+**Focused steps:**
+
+1. Read the failure and relevant diff/context (understand WHAT failed and WHY at the failing locus)
+2. Create or tighten a regression test (`wukong-code:test-driven-development`)
+3. Implement the fix at the root cause for that failure—no bundled unrelated changes
+4. Run focused checks, then the broader suite needed for the claim
+
+The Iron Law still holds: no fix before you understand the failing cause. Focused path skips the full multi-phase *narration*, not investigation.
+
+**Use the full Four Phases instead when:**
+
+- The failure crosses service/process boundaries
+- Root cause is unclear after one focused attempt
+- Reproduction is inconsistent
+
 ## The Four Phases
 
-You MUST complete each phase before proceeding to the next.
+When Focused path does not apply, you MUST complete each phase before proceeding to the next.
 
 ### Phase 1: Root Cause Investigation
 
@@ -112,8 +135,9 @@ If you catch yourself thinking:
 
 ## Quick Reference
 
-| Phase | Key Activities | Success Criteria |
-|-------|---------------|------------------|
+| Path / Phase | Key Activities | Success Criteria |
+|--------------|----------------|------------------|
+| **Focused** | Single fail + stable repro + clear surface → regress test → fix → focused + needed suite | Bug resolved without full phase narration |
 | **1. Root Cause** | Read errors, reproduce, check changes, gather evidence | Understand WHAT and WHY |
 | **2. Pattern** | Find working examples, compare | Identify differences |
 | **3. Hypothesis** | Form theory, test minimally | Confirmed or new hypothesis |
