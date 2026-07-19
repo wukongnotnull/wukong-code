@@ -47,14 +47,7 @@ IF any item is unclear:
 WHY: Items may be related. Partial understanding = wrong implementation.
 ```
 
-**Example:**
-```
-your human partner: "Fix 1-6"
-You understand 1,2,3,6. Unclear on 4,5.
-
-❌ WRONG: Implement 1,2,3,6 now, ask about 4,5 later
-✅ RIGHT: "I understand items 1,2,3,6. Need clarification on 4 and 5 before proceeding."
-```
+**Example:** understand items 1,2,3,6 but not 4,5 → clarify 4 and 5 **before** implementing any of them. Do not implement the clear ones first.
 
 ## Source-Specific Handling
 
@@ -65,35 +58,16 @@ You understand 1,2,3,6. Unclear on 4,5.
 - **Skip to action** or technical acknowledgment
 
 ### From External Reviewers
-```
-BEFORE implementing:
-  1. Check: Technically correct for THIS codebase?
-  2. Check: Breaks existing functionality?
-  3. Check: Reason for current implementation?
-  4. Check: Works on all platforms/versions?
-  5. Check: Does reviewer understand full context?
-
-IF suggestion seems wrong:
-  Push back with technical reasoning
-
-IF can't easily verify:
-  Say so: "I can't verify this without [X]. Should I [investigate/ask/proceed]?"
-
-IF conflicts with your human partner's prior decisions:
-  Stop and discuss with your human partner first
-```
+Be skeptical: verify technical fit for THIS codebase, regressions, why current code exists, platform coverage, and whether the reviewer has full context. Push back with technical reasoning when wrong; if you can't verify, say what you need; if it conflicts with your human partner's prior decisions, stop and discuss with them first.
 
 **your human partner's rule:** "External feedback - be skeptical, but check carefully"
 
+Full checklist:
+`skills/receiving-code-review/references/external-review-and-yagni.md`
+
 ## YAGNI Check for "Professional" Features
 
-```
-IF reviewer suggests "implementing properly":
-  grep codebase for actual usage
-
-  IF unused: "This endpoint isn't called. Remove it (YAGNI)?"
-  IF used: Then implement properly
-```
+If a reviewer says "implement properly," grep for actual usage. Unused → propose remove (YAGNI). Used → implement properly.
 
 **your human partner's rule:** "You and reviewer both report to me. If we don't need this feature, don't add it."
 
@@ -120,11 +94,7 @@ Push back when:
 - Legacy/compatibility reasons exist
 - Conflicts with your human partner's architectural decisions
 
-**How to push back:**
-- Use technical reasoning, not defensiveness
-- Ask specific questions
-- Reference working tests/code
-- Involve your human partner if architectural
+**How:** technical reasoning, not defensiveness; ask specific questions; reference working tests/code; involve your human partner if architectural.
 
 **If you're uncomfortable pushing back out loud:** Name that tension, then tell your partner about the issue you've seen. They'll appreciate your honesty.
 
@@ -143,23 +113,13 @@ When feedback IS correct:
 ❌ ANY gratitude expression
 ```
 
-**Why no thanks:** Actions speak. Just fix it. The code itself shows you heard the feedback.
+**Why no thanks:** Actions speak. Just fix it.
 
 **If you catch yourself about to write "Thanks":** DELETE IT. State the fix instead.
 
 ## Gracefully Correcting Your Pushback
 
-If you pushed back and were wrong:
-```
-✅ "You were right - I checked [X] and it does [Y]. Implementing now."
-✅ "Verified this and you're correct. My initial understanding was wrong because [reason]. Fixing."
-
-❌ Long apology
-❌ Defending why you pushed back
-❌ Over-explaining
-```
-
-State the correction factually and move on.
+If you pushed back and were wrong: state the correction factually ("You were right — I checked X…") and implement. No long apology, no defending the original pushback.
 
 ## Common Mistakes
 
@@ -175,30 +135,8 @@ State the correction factually and move on.
 
 ## Real Examples
 
-**Performative Agreement (Bad):**
-```
-Reviewer: "Remove legacy code"
-❌ "You're absolutely right! Let me remove that..."
-```
-
-**Technical Verification (Good):**
-```
-Reviewer: "Remove legacy code"
-✅ "Checking... build target is 10.15+, this API needs 13+. Need legacy for backward compat. Current impl has wrong bundle ID - fix it or drop pre-13 support?"
-```
-
-**YAGNI (Good):**
-```
-Reviewer: "Implement proper metrics tracking with database, date filters, CSV export"
-✅ "Grepped codebase - nothing calls this endpoint. Remove it (YAGNI)? Or is there usage I'm missing?"
-```
-
-**Unclear Item (Good):**
-```
-your human partner: "Fix items 1-6"
-You understand 1,2,3,6. Unclear on 4,5.
-✅ "Understand 1,2,3,6. Need clarification on 4 and 5 before implementing."
-```
+Worked dialogues (performative vs verify, YAGNI, unclear items):
+`skills/receiving-code-review/references/examples.md`
 
 ## GitHub Thread Replies
 

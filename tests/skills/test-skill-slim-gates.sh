@@ -60,6 +60,31 @@ assert_contains skills/subagent-driven-development/SKILL.md "never pre-judge"
 assert_contains skills/subagent-driven-development/references/constructing-reviewer-prompts.md "do not flag"
 assert_max_lines skills/subagent-driven-development/SKILL.md 300
 
+echo "=== test-driven-development slim gates ==="
+assert_file skills/test-driven-development/SKILL.md
+assert_file skills/test-driven-development/references/red-green-refactor-depth.md
+assert_file skills/test-driven-development/references/rationalizations-and-examples.md
+assert_file skills/test-driven-development/testing-anti-patterns.md
+assert_contains skills/test-driven-development/SKILL.md "NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST"
+assert_contains skills/test-driven-development/SKILL.md "Red Flags - STOP and Start Over"
+assert_contains skills/test-driven-development/SKILL.md "Verification Checklist"
+assert_contains skills/test-driven-development/SKILL.md "human partner"
+assert_contains skills/test-driven-development/references/red-green-refactor-depth.md "retries failed operations 3 times"
+assert_contains skills/test-driven-development/references/rationalizations-and-examples.md "I'll write tests after"
+assert_max_lines skills/test-driven-development/SKILL.md 180
+
+echo "=== receiving-code-review slim gates ==="
+assert_file skills/receiving-code-review/SKILL.md
+assert_file skills/receiving-code-review/references/examples.md
+assert_file skills/receiving-code-review/references/external-review-and-yagni.md
+assert_contains skills/receiving-code-review/SKILL.md "You're absolutely right!"
+assert_contains skills/receiving-code-review/SKILL.md "human partner"
+assert_contains skills/receiving-code-review/SKILL.md "The Response Pattern"
+assert_contains skills/receiving-code-review/SKILL.md "Technical correctness over social comfort"
+assert_contains skills/receiving-code-review/references/examples.md "Performative Agreement"
+assert_contains skills/receiving-code-review/references/external-review-and-yagni.md "be skeptical, but check carefully"
+assert_max_lines skills/receiving-code-review/SKILL.md 160
+
 if (( fail )); then
   echo "STATUS: FAILED"
   exit 1
