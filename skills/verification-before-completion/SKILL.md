@@ -19,7 +19,7 @@ Claiming work is complete without verification is dishonesty, not efficiency.
 NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
 ```
 
-If you haven't run the verification command in this message, you cannot claim it passes.
+You must present evidence in this message before claiming success: either run the verification command now, or cite reusable in-task evidence that meets Evidence reuse below. Memory, confidence, or "should pass" is never evidence.
 
 ## The Gate Function
 
@@ -27,7 +27,9 @@ If you haven't run the verification command in this message, you cannot claim it
 BEFORE claiming any status or expressing satisfaction:
 
 1. IDENTIFY: What command proves this claim?
-2. RUN: Execute the FULL command (fresh, complete)
+2. RUN or REUSE:
+   - RUN: Execute the FULL command (complete output)
+   - REUSE: Only if Evidence reuse applies—cite that run's output (command, scope, HEAD, result)
 3. READ: Full output, check exit code, count failures
 4. VERIFY: Does output confirm the claim?
    - If NO: State actual status with evidence
@@ -37,11 +39,24 @@ BEFORE claiming any status or expressing satisfaction:
 Skip any step = lying, not verifying
 ```
 
+## Evidence reuse (same task)
+
+Reuse a prior verification run in this task instead of re-running solely because a later workflow stage repeats the same requirement, when **all** are true:
+
+- Same claim (same command and coverage scope)
+- `git rev-parse HEAD` unchanged since that run
+- Paths relevant to the claim unchanged since that run
+- Full command output from that run is still available in this conversation (cite it—do not rely on memory)
+
+**Must re-run when:** HEAD changed, relevant files changed, the claim changed, or the output is no longer in context.
+
+**CI** is an independent final gate. Do not treat local reuse as a substitute for CI, and do not skip CI polling rules when CI is part of the claim.
+
 ## Common Failures
 
 | Claim | Requires | Not Sufficient |
 |-------|----------|----------------|
-| Tests pass | Test command output: 0 failures | Previous run, "should pass" |
+| Tests pass | Test command output: 0 failures | Stale run after edits, "should pass", memory of a prior run |
 | Linter clean | Linter output: 0 errors | Partial check, extrapolation |
 | Build succeeds | Build command: exit 0 | Linter passing, logs look good |
 | Bug fixed | Test original symptom: passes | Code changed, assumed fixed |
@@ -58,7 +73,7 @@ Skip any step = lying, not verifying
 - Relying on partial verification
 - Thinking "just this once"
 - Tired and wanting work over
-- **ANY wording implying success without having run verification**
+- **ANY wording implying success without evidence (run or valid Evidence reuse)**
 
 ## Rationalization Prevention
 
@@ -134,6 +149,6 @@ From 24 failure memories:
 
 **No shortcuts for verification.**
 
-Run the command. Read the output. THEN claim the result.
+Run the command (or cite valid Evidence reuse). Read the output. THEN claim the result.
 
 This is non-negotiable.

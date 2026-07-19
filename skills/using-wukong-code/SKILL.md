@@ -47,6 +47,24 @@ for mechanical work.
 
 **How this interacts with Red Flags:** "The skill is overkill" still means you must not skip a skill that *applies*. Scope routing decides *which* skill applies. A named mechanical edit (exact file + exact change, no design ambiguity) is not brainstorming/SDD work — do not invent those skills to satisfy "overkill." Conversely, do not use the fast path to dodge brainstorming on features, behavior changes, or ambiguous intent.
 
+## Primary workflow
+
+Classify with Scope routing, then load skills.
+
+- Load **exactly one** primary process skill for the task: `brainstorming`, `systematic-debugging`, `executing-plans` / `subagent-driven-development`, or the Direct mechanical path (no process skill).
+- Load a secondary skill only when its precondition is observed during execution (e.g. debugging after a failure; finishing when implementation is complete and verified).
+- Do **not** reload a skill unchanged within the same task.
+- Do **not** preload multiple workflow skills because they "might" apply.
+
+**How this interacts with the 1% rule:** The 1% rule still requires you to check applicability and invoke the skill that **applies as primary**. It is not permission to cascade-read every vaguely related process skill up front.
+
+## Progress budget
+
+- Announce state transitions and meaningful milestones (or about once per 60 seconds of work)—not every tool invocation.
+- Summarize passing test output; show raw logs only for failures.
+- Poll CI with structured status and exponential backoff.
+- Emit one final integration summary when finishing work.
+
 ## Red Flags
 
 These thoughts mean STOP—you're rationalizing:
