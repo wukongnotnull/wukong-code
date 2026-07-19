@@ -60,6 +60,19 @@ assert_contains skills/subagent-driven-development/SKILL.md "never pre-judge"
 assert_contains skills/subagent-driven-development/references/constructing-reviewer-prompts.md "do not flag"
 assert_max_lines skills/subagent-driven-development/SKILL.md 300
 
+echo "=== test-driven-development slim gates ==="
+assert_file skills/test-driven-development/SKILL.md
+assert_file skills/test-driven-development/references/red-green-refactor-depth.md
+assert_file skills/test-driven-development/references/rationalizations-and-examples.md
+assert_file skills/test-driven-development/testing-anti-patterns.md
+assert_contains skills/test-driven-development/SKILL.md "NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST"
+assert_contains skills/test-driven-development/SKILL.md "Red Flags - STOP and Start Over"
+assert_contains skills/test-driven-development/SKILL.md "Verification Checklist"
+assert_contains skills/test-driven-development/SKILL.md "human partner"
+assert_contains skills/test-driven-development/references/red-green-refactor-depth.md "retries failed operations 3 times"
+assert_contains skills/test-driven-development/references/rationalizations-and-examples.md "I'll write tests after"
+assert_max_lines skills/test-driven-development/SKILL.md 180
+
 if (( fail )); then
   echo "STATUS: FAILED"
   exit 1
