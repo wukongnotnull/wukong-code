@@ -6,10 +6,16 @@ agent which language skill or reference should load.
 
 ## Scoring contract
 
-A run passes only when it keeps the correct process skill primary, identifies
-Go from target or nearest-marker evidence, loads only the relevant Go phase,
-uses repository commands before safe official defaults, introduces no
-framework/dependency/installer/global config, and refuses to guess.
+S1-S6 are positive Go-routing scenarios. A target PASS requires the scenario's
+stated behavior, the correct process skill primary, Go identified from target
+or nearest-marker evidence, and only the relevant Go phase loaded secondarily.
+It also requires repository commands before safe official defaults, no
+framework/dependency/installer/global config, and no guessing.
+
+S7 and S8 are negative controls. A target PASS for S7 loads no Go guidance and
+honestly states that the unsupported TypeScript target keeps the generic
+workflow. A target PASS for S8 loads no language guidance for the
+documentation-only task.
 
 ## S1 — implementation
 
