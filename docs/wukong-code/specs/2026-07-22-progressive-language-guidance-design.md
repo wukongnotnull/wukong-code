@@ -313,8 +313,9 @@ In representative Go fixtures, the agent must:
 - Avoid introducing an unrequested third-party error or test library.
 - Select test, race, formatting, and static-check commands from repository
   evidence or safe Go toolchain defaults.
-- Route to TypeScript instead when the target is a TypeScript subproject in the
-  same repository.
+- Avoid loading Go guidance when the target is a TypeScript subproject in the
+  same repository. Positive TypeScript routing is added by the later TypeScript
+  language-pack change.
 - Avoid loading Go guidance for a README-only change.
 
 ## Core Policy and Governance
