@@ -1,0 +1,6 @@
+interface:
+  display_name: "Language Guidance"
+  short_description: "Apply evidence-based language guidance to source work"
+  default_prompt: "Apply the relevant language guidance to this coding task."
+policy:
+  allow_implicit_invocation: true
