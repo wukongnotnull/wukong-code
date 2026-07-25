@@ -706,6 +706,12 @@ a substitute for that matrix.
 
 ### Task 3: Add automatic secondary routing
 
+> **Execution order (human-approved):** Complete Task 3 Steps 1-4 as the
+> static bootstrap-routing change, then execute Task 4 to package and install
+> an isolated candidate runtime. Resume Task 3 Steps 5-6 only in that fresh
+> runtime; the current session's installed skill catalog cannot discover an
+> uninstalled branch-local language-guidance skill.
+
 **Files:**
 - Modify: tests/skills/test-language-guidance.sh
 - Modify: skills/using-wukong-code/SKILL.md:50-59

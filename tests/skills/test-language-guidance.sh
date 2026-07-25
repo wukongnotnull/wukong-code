@@ -76,5 +76,11 @@ else
   pass "no installer commands"
 fi
 
+bootstrap=skills/using-wukong-code/SKILL.md
+assert_contains "$bootstrap" "## Secondary domain guidance"
+assert_contains "$bootstrap" "language-guidance"
+assert_contains "$bootstrap" "creating, modifying, testing, debugging, reviewing, or verifying source code"
+assert_contains "$bootstrap" "documentation-only"
+
 if (( failed )); then echo "STATUS: FAILED"; exit 1; fi
 echo "STATUS: PASSED"
