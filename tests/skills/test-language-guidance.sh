@@ -70,7 +70,7 @@ for phase in implementation testing debugging review verification; do
   [[ -f "$file" ]] && assert_max_lines "$file" 200
 done
 
-if rg -n 'curl.*\|[[:space:]]*(sh|bash)|go install[[:space:]]|brew install|apt(-get)? install' skills/language-guidance; then
+if grep -R -nE '((curl|wget).*[|][[:space:]]*(sh|bash)|(^|[[:space:]])(go[[:space:]]+install|npm[[:space:]]+install|pnpm[[:space:]]+(install|add)|yarn[[:space:]]+(install|add)|pip3?[[:space:]]+install|brew[[:space:]]+install|apt(-get)?[[:space:]]+install|apk[[:space:]]+add|dnf[[:space:]]+install|yum[[:space:]]+install|cargo[[:space:]]+install|gem[[:space:]]+install|composer[[:space:]]+require|bundle[[:space:]]+add))' skills/language-guidance; then
   fail "installer command found"
 else
   pass "no installer commands"

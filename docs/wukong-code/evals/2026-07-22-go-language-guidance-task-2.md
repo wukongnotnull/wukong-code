@@ -32,6 +32,19 @@ kept the standard library, made goroutine ownership/cancellation explicit, and
 reported focused RED/GREEN plus Go verification. Their complete chronological
 transcripts are retained outside the repository for the controller record.
 
+## Official sources used
+
+- [testing package](https://pkg.go.dev/testing): informed `t.Cleanup` and the
+  testing guidance.
+- [Go Concurrency Patterns: Context](https://go.dev/blog/context): informed
+  context propagation and cancellation guidance.
+- [Contexts and structs](https://go.dev/blog/context-and-structs): informed
+  context-first parameters and avoiding context storage in structs.
+- [Data Race Detector](https://go.dev/doc/articles/race_detector): informed
+  `-race` usage and its executed-path limitation.
+- [Security Best Practices for Go Developers](https://go.dev/doc/security/best-practices):
+  informed the Go tooling and security posture.
+
 ## Limitations
 
 The standalone-pack behavior campaign was deliberately not completed. Repeated

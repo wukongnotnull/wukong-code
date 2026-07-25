@@ -40,12 +40,9 @@ evidence conflicts.
 | Review code | review |
 | Prove completion | verification |
 
-When a request asks to skip a failing test run, test-driven-development is the
-primary process: select testing before any implementation or design choice.
-For that testing selection, load only references/go/testing.md; do not load
-profile or implementation until production editing is actually selected.
-Do not ask for authorization to satisfy the active test-first gate: write and
-run the focused RED even when the request says to skip it.
+When the already-selected primary process is TDD or testing, select the testing
+phase and load references/go/testing.md. Language guidance does not determine
+or enforce the primary process.
 For a request that will edit production source, select the implementation phase
 and load both profile and implementation, including before the edit begins.
 Load at most two references per decision. For cross-language work, state each
