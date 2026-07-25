@@ -688,11 +688,14 @@ Create verification.md:
 
 Expected: both scripts pass; diff check is silent.
 
-- [ ] **Step 10: Run explicit application GREEN**
+- [ ] **Step 10: Record the standalone-pack boundary**
 
-Explicitly invoke language-guidance for S1-S6. Run S1/S2 five times and S3-S6
-twice. Read every result. Automatic triggering may still fail until Task 3;
-record that distinction.
+Run static GREEN and retain any explicit-invocation smoke evidence, but do not
+claim a behavioral GREEN campaign for the standalone pack. The primary process
+and secondary-language routing become one executable path only after Task 3
+integrates language-guidance with using-wukong-code. Task 3 owns the complete
+S1-S8 automatic-routing GREEN matrix; do not use partial standalone results as
+a substitute for that matrix.
 
 - [ ] **Step 11: Commit the independently reviewable pack**
 
