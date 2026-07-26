@@ -973,6 +973,13 @@ Add:
 
 ### Task 6: Full regression, evidence finalization, and human gate
 
+**Approved contract amendment — 2026-07-26:** Automatic language selection is
+advisory rather than guaranteed. The human partner approved strict behavior
+only for an explicit `$language-guidance` invocation. This supersedes Task 6
+Step 2's former requirement for automatic discovery to pass a behavior matrix;
+final evidence must preserve automatic failures and the one-run scope of the
+explicit strict probe rather than claim an automatic pass.
+
 **Files:**
 - Modify: docs/wukong-code/evals/2026-07-22-go-language-guidance.md
 - Modify other files only for verified failures
@@ -997,13 +1004,16 @@ Add:
 Expected: every command exits 0. Missing platform tools are explicit unverified
 limits, not passes.
 
-- [ ] **Step 2: Run final behavior matrix**
+- [ ] **Step 2: Finalize behavior evidence for the approved contract**
 
-Repeat S1, S2, S6, S7, S8 five times; S3-S5 twice. At least one supported
-Harness must discover the skill automatically. Re-run the todo-list prompt.
+Retain the automatic-path failures and advisory limitation. Confirm the saved
+explicit `$language-guidance` probe has a clean-session transcript, three
+visible decision lines, and one or two selected reference paths. Re-run it only
+if later edits touch the strict contract. Do not claim automatic-matrix success
+or an unsupported pack.
 
-Expected: key repetitions converge; all other runs pass; no unsupported pack is
-claimed.
+Expected: the evidence distinguishes the verified explicit strict probe from
+the advisory automatic path and names every remaining limitation.
 
 - [ ] **Step 3: Finalize evidence without placeholders**
 
