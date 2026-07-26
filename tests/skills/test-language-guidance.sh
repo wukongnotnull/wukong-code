@@ -16,6 +16,21 @@ assert_contains() {
   if grep -qF "$2" "$1"; then pass "$1 contains $2"; else fail "$1 missing $2"; fi
 }
 
+assert_visible_decision_template() {
+  if awk '
+    /^    Detected: <language and evidence>$/ {
+      getline phase
+      getline loaded
+      if (phase == "    Phase: <one primary phase>" && loaded == "    Loaded: <one or two reference paths>") found = 1
+    }
+    END { exit(found ? 0 : 1) }
+  ' "$1"; then
+    pass "$1 has ordered visible decision template"
+  else
+    fail "$1 missing ordered visible decision template"
+  fi
+}
+
 assert_max_lines() {
   lines="$(wc -l < "$1" | tr -d ' ')"
   if (( lines <= $2 )); then pass "$1: $lines lines"; else fail "$1: $lines lines, max $2"; fi
@@ -81,9 +96,13 @@ assert_contains "$bootstrap" "## Secondary domain guidance"
 assert_contains "$bootstrap" "language-guidance"
 assert_contains "$bootstrap" "creating, modifying, testing, debugging, reviewing, or verifying source code"
 assert_contains "$bootstrap" "prioritize language-guidance as secondary domain guidance"
+assert_contains "$bootstrap" "automatic selection is advisory rather than a guarantee."
 assert_contains "$skill" 'When your human partner explicitly invokes `$language-guidance`, strict execution is required.'
+assert_contains "$skill" "Before the first substantive technical response, edit, or verification command"
 assert_contains "$skill" 'Print each field on its own line exactly as shown. Do not combine, paraphrase, or rename any label.'
 assert_contains "$skill" 'List only selected reference paths after `Loaded:`; never use pending, next, or future-tense wording.'
+assert_contains "$skill" "automatic selection does not promise invocation or visible output."
+assert_visible_decision_template "$skill"
 assert_contains "$bootstrap" "documentation-only"
 
 if (( failed )); then echo "STATUS: FAILED"; exit 1; fi

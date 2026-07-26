@@ -57,7 +57,7 @@ Do not introduce frameworks, dependencies, installers, or global config.
 ## Visible Decision
 
 When your human partner explicitly invokes `$language-guidance`, strict execution is required.
-Before a response, edit, or verification command, detect the language using
+Before the first substantive technical response, edit, or verification command, detect the language using
 the ordered evidence above, select the phase, select one or two references,
 and state this decision:
 

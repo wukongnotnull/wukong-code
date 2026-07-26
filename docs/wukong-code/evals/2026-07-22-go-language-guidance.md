@@ -100,7 +100,8 @@ full automatic matrix.
 - Result: PASS for the explicit strict path. The fresh session injected
   `wukong-code:language-guidance` and emitted three independent decision lines:
   `Detected: Go ...`, `Phase: implementation`, and `Loaded:` with the selected
-  `references/go/profile.md` and `references/go/implementation.md` paths.
+  `references/go/profile.md` and `references/go/implementation.md` paths; see
+  the [sanitized transcript](raw/2026-07-26-explicit-language-guidance.md).
 
 This verifies the explicit invocation contract once. It does not change the
 automatic path from advisory to guaranteed, and it is not a full behavior-matrix
