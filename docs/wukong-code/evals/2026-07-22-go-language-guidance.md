@@ -183,9 +183,10 @@ Result: **TARGET PASS for the reference-set invariant in this one run**. The
 session read `references/go/profile.md`, inspected the fixture, and returned
 concrete Go advice. It did not load `references/go/implementation.md` or any
 other language reference after the decision, so every language reference read
-was declared in the visible `Loaded:` line. The process exited 0. This focused
-pass does not erase the preceding `d7f4285` failure or establish a full
-automatic or explicit behavior matrix.
+was declared in the visible `Loaded:` line; see the [sanitized complete ordered
+transcript](raw/2026-07-26-explicit-language-guidance-post-fix.md). The process
+exited 0. This focused pass does not erase the preceding `d7f4285` failure or
+establish a full automatic or explicit behavior matrix.
 
 ### Before/after and unsupported-language boundary
 
