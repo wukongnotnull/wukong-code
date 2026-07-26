@@ -68,3 +68,15 @@ S1-S6 are positive Go-routing cases: a pass requires the stated behavior, correc
 ## Conclusion
 
 The clean replacement set contains **31/31 complete responses**: **8 TARGET PASS** and **23 TARGET FAIL**. No complete response cites the main worktree’s scenario file, plan, RED/GREEN status, or rubric, and no response uses an S label obtained from a child task name (all child task names were neutral sequential identifiers). The outcomes are not combined with the contaminated `7c24b81` controls.
+
+## Fresh pre-fix S1 probe — 2026-07-26
+
+- Environment: fresh candidate runtime from
+  `/private/tmp/wukong-lg-task3-green.OrbOyc/eval/go-basic`.
+- Raw output: `/private/tmp/wukong-lg-task3-green.OrbOyc/s1-run-1.txt`.
+- Result: TARGET FAIL. The response gave a semantically plausible Go
+  concurrency approach, including `context.WithCancel`, `sync`, ordered
+  results, and focused tests, but did not visibly invoke `language-guidance`
+  or state the required `Detected:`, `Phase:`, and `Loaded:` decision.
+
+This is one failed pre-fix S1 probe; it does not establish a full-matrix result.

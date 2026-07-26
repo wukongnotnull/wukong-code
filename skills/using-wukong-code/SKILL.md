@@ -65,6 +65,10 @@ domain skill when the task is creating, modifying, testing, debugging, reviewing
 from explicit target or repository evidence. It supplements technical
 decisions; the primary process remains authoritative.
 
+For every qualifying task, you **MUST invoke** `language-guidance` after the primary process is selected. Before any other response or action,
+`language-guidance` must state its `Detected:`, `Phase:`, and `Loaded:`
+decision using the selected language reference path.
+
 Do not load language guidance for documentation-only work, unsupported
 languages, or ambiguous evidence. Do not preload every language or phase.
 Let language-guidance select the smallest relevant reference set.
