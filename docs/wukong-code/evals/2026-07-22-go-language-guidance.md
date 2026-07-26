@@ -74,7 +74,8 @@ The clean replacement set contains **31/31 complete responses**: **8 TARGET PASS
 - Checked-in fixture: [`tests/skills/fixtures/language-guidance/go-basic/`](../../../tests/skills/fixtures/language-guidance/go-basic/), containing `fetch.go`, `fetch_test.go`, and the `go.mod` nearest marker.
 - Fixture module marker: `module example.com/language-guidance-fixture`; its declared language version is `go 1.22`.
 - Verified local toolchain: `go version go1.26.1 darwin/arm64` on 2026-07-26.
-- Focused fixture verification: `go test ./...` in that fixture passed (`ok example.com/language-guidance-fixture`); the sandbox denied Go build-cache trimming after the successful test.
+- Focused fixture verification: `env GOCACHE=/private/tmp/wukong-language-guidance-go-cache go test ./...` in that fixture exited 0 and printed `ok example.com/language-guidance-fixture 2.351s`.
+- Default-cache context: the earlier `go test ./...` printed successful package output, then the sandbox denied Go build-cache trimming and that command exited 1. It is not counted as a passing command.
 - Environment: fresh candidate runtime from
   `/private/tmp/wukong-lg-task3-green.OrbOyc/eval/go-basic`.
 - Raw output: `/private/tmp/wukong-lg-task3-green.OrbOyc/s1-run-1.txt`.
