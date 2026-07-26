@@ -106,3 +106,8 @@ full automatic matrix.
 This verifies the explicit invocation contract once. It does not change the
 automatic path from advisory to guaranteed, and it is not a full behavior-matrix
 pass claim.
+
+## Maintenance responsibility
+
+Wukong Code language-guidance maintainers; stable status requires review by a
+human familiar with Go.

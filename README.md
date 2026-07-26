@@ -174,6 +174,27 @@ The Pi package loads the Wukong Code skills and a small extension that injects t
 
 **The agent checks for relevant skills before any task.** Mandatory workflows, not suggestions.
 
+## Language Guidance
+
+Wukong Code keeps methodology language-agnostic, then loads concrete language
+guidance when target files and nearby markers provide evidence. Only the current
+language and phase load; unsupported or ambiguous work keeps the generic
+workflow. Automatic selection is advisory rather than guaranteed.
+
+| Language | Status | Implementation | Testing | Debugging | Review | Verification | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Go | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-07-22-go-language-guidance.md) |
+| Java | Planned | — | — | — | — | — | — |
+| TypeScript | Planned | — | — | — | — | — | — |
+| Swift | Planned | — | — | — | — | — | — |
+
+Experimental means initial behavior evals exist but real-project evidence is
+still accumulating. Packs never install tools or override repository commands.
+Framework guidance remains outside core. The Go [eval report](docs/wukong-code/evals/2026-07-22-go-language-guidance.md)
+records the verified fixture and toolchain, eval date, known limitations, and
+the language-guidance maintenance responsibility. Do not publish Experimental
+status until those fields contain real evidence.
+
 ## What's Inside
 
 ### Skills Library
@@ -184,6 +205,9 @@ The Pi package loads the Wukong Code skills and a small extension that injects t
 **Debugging**
 - **systematic-debugging** - 4-phase root cause process (includes root-cause-tracing, defense-in-depth, condition-based-waiting techniques)
 - **verification-before-completion** - Ensure it's actually fixed
+
+**Language implementation**
+- **language-guidance** - Experimental, evidence-based guidance for supported languages and phases
 
 **Collaboration** 
 - **brainstorming** - Socratic design refinement

@@ -115,6 +115,20 @@ paste the complete transcript here
 <!-- "It works" is not evaluation. Describe the before/after difference
      you observed across multiple sessions. -->
 
+## Language-pack evidence
+
+- Language and support status:
+- Real failure generic methodology handled incorrectly:
+- Project markers and toolchain versions:
+- Official sources:
+- No-guidance repetitions and failures:
+- With-guidance repetitions and results:
+- Monorepo, unsupported-language, and docs-only controls:
+- Human reviewer familiar with the language:
+- Frameworks or third-party preferences introduced:
+
+<!-- The final line must be "none" for a core language pack. -->
+
 ## Rigor
 
 - [ ] If this is a skills change: I used `wukong-code:writing-skills` and

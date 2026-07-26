@@ -104,6 +104,11 @@ assert_contains "$skill" 'List only selected reference paths after `Loaded:`; ne
 assert_contains "$skill" "automatic selection does not promise invocation or visible output."
 assert_visible_decision_template "$skill"
 assert_contains "$bootstrap" "documentation-only"
+assert_contains README.md "## Language Guidance"
+assert_contains README.md "| Go | Experimental |"
+assert_contains CLAUDE.md "### Language-level skills"
+assert_contains .github/PULL_REQUEST_TEMPLATE.md "## Language-pack evidence"
+assert_contains docs/testing.md "test-language-guidance.sh"
 
 if (( failed )); then echo "STATUS: FAILED"; exit 1; fi
 echo "STATUS: PASSED"
