@@ -139,6 +139,7 @@ tar_archive="$TEST_ROOT/wukong-code.tar.gz"
 extracted="$TEST_ROOT/extracted"
 tar_extracted="$TEST_ROOT/tar-extracted"
 write_metadata_fixture "$metadata_source"
+rm -rf "$metadata_source/skills/language-guidance"
 
 source_hooks="$(python3 -c 'import json; print(json.load(open("'"$REPO_ROOT"'/.codex-plugin/plugin.json")).get("hooks"))')"
 assert_equals "$source_hooks" "{}" "source Codex manifest suppresses local hook auto-discovery"
@@ -168,6 +169,9 @@ assert_not_matches "$archive_paths" "$unexpected_pattern" "archive excludes sour
 assert_contains "$archive_paths" ".codex-plugin/plugin.json" "archive includes Codex manifest"
 assert_contains "$archive_paths" "skills/brainstorming/SKILL.md" "archive includes skills"
 assert_contains "$archive_paths" "skills/brainstorming/agents/openai.yaml" "archive includes OpenAI skill metadata"
+assert_contains "$archive_paths" "skills/language-guidance/agents/openai.yaml" "archive keeps source metadata"
+language_metadata="$(read_archive_file "$archive" skills/language-guidance/agents/openai.yaml)"
+assert_contains "$language_metadata" "display_name: \"Language Guidance\"" "uses source metadata"
 assert_contains "$archive_paths" "assets/app-icon.png" "archive includes app icon"
 assert_contains "$archive_paths" "assets/wukong-code-small.svg" "archive includes composer icon"
 
