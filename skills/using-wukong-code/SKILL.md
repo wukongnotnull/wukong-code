@@ -58,6 +58,19 @@ Classify with Scope routing, then load skills.
 
 **How this interacts with the 1% rule:** The 1% rule still requires you to check applicability and invoke the skill that **applies as primary**. It is not permission to cascade-read every vaguely related process skill up front.
 
+## Secondary domain guidance
+
+After selecting the primary process, load language-guidance as a secondary
+domain skill when the task is creating, modifying, testing, debugging, reviewing, or verifying source code and a supported language is established
+from explicit target or repository evidence. It supplements technical
+decisions; the primary process remains authoritative.
+
+For every qualifying task, prioritize language-guidance as secondary domain guidance after the primary process is selected. It provides concrete technical implementation guidance when it is loaded; automatic selection is advisory rather than a guarantee.
+
+Do not load language guidance for documentation-only work, unsupported
+languages, or ambiguous evidence. Do not preload every language or phase.
+Let language-guidance select the smallest relevant reference set.
+
 ## Progress budget
 
 - Announce state transitions and meaningful milestones (or about once per 60 seconds of work)—not every tool invocation.

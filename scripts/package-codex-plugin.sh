@@ -257,17 +257,20 @@ OUTPUT="$(cd "$(dirname "$OUTPUT")" && pwd)/$(basename "$OUTPUT")"
 
 missing_metadata=0
 while IFS= read -r skill_dir; do
-  skill_name="${skill_dir##*/}"
-  metadata_file="$METADATA_ROOT/skills/$skill_name/agents/openai.yaml"
+  skill_name="$(basename "$skill_dir")"
+  source_metadata="$skill_dir/agents/openai.yaml"
+  fallback_metadata="$METADATA_ROOT/skills/$skill_name/agents/openai.yaml"
 
-  if [[ ! -f "$metadata_file" ]]; then
+  if [[ -f "$source_metadata" ]]; then
+    continue
+  fi
+  if [[ ! -f "$fallback_metadata" ]]; then
     echo "Missing OpenAI agent metadata for skill: $skill_name" >&2
     missing_metadata=1
     continue
   fi
-
   mkdir -p "$skill_dir/agents"
-  cp "$metadata_file" "$skill_dir/agents/openai.yaml"
+  cp "$fallback_metadata" "$skill_dir/agents/openai.yaml"
 done < <(find "$STAGE/skills" -mindepth 1 -maxdepth 1 -type d -print | sort)
 
 if [[ "$missing_metadata" -ne 0 ]]; then

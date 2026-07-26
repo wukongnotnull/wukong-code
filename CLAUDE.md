@@ -13,7 +13,7 @@ Before you open a PR against this repo, you MUST:
 1. **Read the entire PR template** at `.github/PULL_REQUEST_TEMPLATE.md` and fill in every section with real, specific answers. Not summaries. Not placeholders.
 2. **Search for existing PRs** — open AND closed — that address the same problem. If duplicates exist, STOP and tell your human partner. Do not open another duplicate.
 3. **Verify this is a real problem.** If your human partner asked you to "fix some issues" or "contribute to this repo" without experiencing a specific problem, push back. Ask them what broke, what failed, what the user experience was.
-4. **Confirm the change belongs in core.** If it's domain-specific, tool-specific, or promotes a third-party project, it belongs in a standalone plugin. Tell your human partner.
+4. **Confirm the change belongs in core.** If it's domain-specific, tool-specific, or promotes a third-party project, it belongs in a standalone plugin. Language-level implementation guidance may use the narrow exception below; otherwise, tell your human partner.
 5. **Identify yourself.** Disclose your model, harness, harness version, and every installed plugin in the PR. Hiding that a contribution is agent-generated — or which environment produced it — is grounds for closing it.
 6. **Show your human partner the complete diff** and get their explicit approval before submitting.
 
@@ -56,6 +56,18 @@ Every PR must solve a real problem that someone actually experienced. "My review
 ### Domain-specific skills
 
 Wukong Code core contains general-purpose skills that benefit all users regardless of their project. Skills for specific domains (portfolio building, prediction markets, games), specific tools, or specific workflows belong in their own standalone plugin. Ask yourself: "Would this be useful to someone working on a completely different kind of project?" If not, publish it separately.
+
+### Language-level skills
+
+Language-level implementation guidance is the narrow exception to the
+domain-specific rule. It may live in core only when broadly applicable across
+projects in that language, based on official toolchains or tools already
+present, zero-dependency, composable with process skills, and backed by failing
+controls plus repeated behavior evals.
+
+Frameworks, cloud services, databases, business domains, and team standards
+remain standalone plugins. Packs start experimental and need a human reviewer
+familiar with the language before stable status.
 
 ### Fork-specific changes
 

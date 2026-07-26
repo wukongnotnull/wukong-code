@@ -21,6 +21,19 @@ Live in `tests/`. Currently:
 
 Run plugin tests via the relevant directory's `run-*.sh` or `npm test`.
 
+### Language guidance
+
+Run static contracts with:
+
+```bash
+bash tests/skills/test-language-guidance.sh
+```
+
+Behavior prompts live in `tests/skills/language-guidance-scenarios.md`.
+Run no-guidance controls before edits, repeat candidate prompts in fresh
+sessions, and record harness, model, repetitions, full failures, and verdicts
+in `docs/wukong-code/evals`. Static strings are not behavior evidence.
+
 ## Skill behavior evals
 
 Live in `evals/`. Drill is the harness; scenarios live at `evals/scenarios/*.yaml`. See `evals/README.md` for setup. Quick start:

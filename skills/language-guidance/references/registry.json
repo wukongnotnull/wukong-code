@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "languages": {
+    "go": {
+      "status": "experimental",
+      "extensions": [".go"],
+      "markers": ["go.mod", "go.work"],
+      "phases": {
+        "profile": "go/profile.md",
+        "implementation": "go/implementation.md",
+        "testing": "go/testing.md",
+        "debugging": "go/debugging.md",
+        "review": "go/review.md",
+        "verification": "go/verification.md"
+      }
+    }
+  }
+}
