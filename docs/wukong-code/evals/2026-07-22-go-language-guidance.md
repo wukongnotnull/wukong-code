@@ -71,6 +71,10 @@ The clean replacement set contains **31/31 complete responses**: **8 TARGET PASS
 
 ## Fresh pre-fix S1 probe — 2026-07-26
 
+- Checked-in fixture: [`tests/skills/fixtures/language-guidance/go-basic/`](../../../tests/skills/fixtures/language-guidance/go-basic/), containing `fetch.go`, `fetch_test.go`, and the `go.mod` nearest marker.
+- Fixture module marker: `module example.com/language-guidance-fixture`; its declared language version is `go 1.22`.
+- Verified local toolchain: `go version go1.26.1 darwin/arm64` on 2026-07-26.
+- Focused fixture verification: `go test ./...` in that fixture passed (`ok example.com/language-guidance-fixture`); the sandbox denied Go build-cache trimming after the successful test.
 - Environment: fresh candidate runtime from
   `/private/tmp/wukong-lg-task3-green.OrbOyc/eval/go-basic`.
 - Raw output: `/private/tmp/wukong-lg-task3-green.OrbOyc/s1-run-1.txt`.
