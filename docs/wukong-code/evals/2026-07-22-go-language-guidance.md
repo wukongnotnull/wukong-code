@@ -80,3 +80,10 @@ The clean replacement set contains **31/31 complete responses**: **8 TARGET PASS
   or state the required `Detected:`, `Phase:`, and `Loaded:` decision.
 
 This is one failed pre-fix S1 probe; it does not establish a full-matrix result.
+
+## Post-install runtime result — 2026-07-26
+
+Both the pre-fix and mandatory-wording S1 probes returned plausible Go
+guidance but omitted the visible `Detected:`, `Phase:`, and `Loaded:` decision;
+therefore the automatic path is advisory. This is not a pass claim for the
+full automatic matrix.

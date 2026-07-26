@@ -56,12 +56,17 @@ Do not introduce frameworks, dependencies, installers, or global config.
 
 ## Visible Decision
 
-After selecting the primary process and loading references, state this before a
-design question, file edit, or verification command:
+When your human partner explicitly invokes `$language-guidance`, strict execution is required.
+Before a response, edit, or verification command, detect the language using
+the ordered evidence above, select the phase, select one or two references,
+and state this decision:
 
     Detected: <language and evidence>
     Phase: <one primary phase>
     Loaded: <one or two reference paths>
+
+For automatic selection, language-guidance may provide this decision when
+loaded; automatic selection does not promise invocation or visible output.
 
 If no registered language matches, keep the generic workflow and do not claim
 guidance was loaded.
