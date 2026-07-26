@@ -112,6 +112,103 @@ This verifies the explicit invocation contract once. It does not change the
 automatic path from advisory to guaranteed, and it is not a full behavior-matrix
 pass claim.
 
+## Final-candidate regression and explicit rerun — 2026-07-26
+
+- Candidate implementation commit under test: `d7f4285ce8718bdd07c9317e4e1149a85a1eb9e1`.
+- Finalizer harness: Codex desktop; harness version and model identifier were
+  not exposed to this report-writing session.
+- Explicit rerun harness: Codex CLI `0.135.0`, model `gpt-5.5`, read-only
+  sandbox. A fresh temporary `CODEX_HOME` installed only
+  `wukong-code@wukong-code-dev` version `6.2.1` from the candidate checkout.
+
+### Fresh local command summary
+
+| Command | Exit | Result |
+| --- | ---: | --- |
+| `bash tests/skills/test-language-guidance.sh` | 0 | Static language-pack, bootstrap, metadata, and documentation contracts passed. |
+| `bash tests/skills/test-skill-slim-gates.sh` | 0 | All four skill size gates passed. |
+| `bash tests/hooks/test-session-start.sh` | 0 | All seven hook assertions passed. |
+| `bash tests/opencode/run-tests.sh` | 0 | 2 passed, 0 failed; integration tests were not run. |
+| `bash tests/kimi/run-tests.sh` | 0 | Kimi plugin manifest check passed. |
+| `node --test tests/pi/test-pi-extension.mjs` | 0 | 7 passed, 0 failed. |
+| `bash tests/codex/test-package-codex-plugin.sh` | 9 | Linked-worktree checkout guard failed before archive assertions. |
+| same package test in an isolated normal clone at `d7f4285` | 1 | Archive behavior passed except the two known timezone-sensitive timestamp assertions: ZIP expected midnight but observed 08:00, and tar expected Dec 31 1969 but observed Jan 1 1970. |
+| `bash tests/codex-plugin-sync/test-sync-to-codex-plugin.sh` | 0 | All sync regression assertions passed. |
+| `bash scripts/lint-shell.sh` | 1 | Unverified: required `shellcheck` executable was not on `PATH`. |
+| `git diff --check` | 0 | No whitespace errors before this evidence-only edit. |
+
+Missing `shellcheck` is an unverified limit, not a lint pass. The linked-worktree
+package result is also not a pass; the normal-clone rerun separates that guard
+from the two reproduced timezone-sensitive failures.
+
+### Final-candidate explicit strict probe
+
+The exact saved prompt was rerun because `47a95a6` changed the strict timing
+sentence after the earlier `cf597a0` probe. The candidate bootstrap injected
+both `wukong-code:using-wukong-code` and `wukong-code:language-guidance`. Before
+inspecting the fixture, the response emitted these three visible lines:
+
+```text
+Detected: Go from the user’s explicit target and the local fixture path `go-basic`.
+Phase: profile
+Loaded: `/private/tmp/.../skills/language-guidance/references/go/profile.md`
+```
+
+The response later said, `I’m also loading the Go implementation reference`,
+and only then read `references/go/implementation.md`. Verdict: **TARGET FAIL**
+for the final-candidate strict path. Although all three labels were visible,
+the same implementation-approach prompt that selected `Phase: implementation`
+and both references in the saved passing run instead selected `profile` and one
+reference initially, then expanded the loaded set after substantive inspection.
+The process exited 0 and produced sound Go advice, but exit status is not
+behavioral-contract evidence.
+
+### Post-fix explicit reference-set probe
+
+- Candidate fix commit: `10dc86f` (`fix: keep explicit language references declared`).
+- Isolation and exact prompt: a new temporary `CODEX_HOME` installed only the
+  candidate plugin, then Codex CLI `0.135.0` with model `gpt-5.5` and a
+  read-only sandbox received the same explicit prompt shown above.
+- Installed-skill check: the isolated cache contained the new prohibition on
+  loading another language reference without a new complete decision.
+- Visible decision:
+
+```text
+Detected: Go, from explicit user request and `go-basic` fixture path
+Phase: profile
+Loaded: `/private/tmp/.../skills/language-guidance/references/go/profile.md`
+```
+
+Result: **TARGET PASS for the reference-set invariant in this one run**. The
+session read `references/go/profile.md`, inspected the fixture, and returned
+concrete Go advice. It did not load `references/go/implementation.md` or any
+other language reference after the decision, so every language reference read
+was declared in the visible `Loaded:` line. The process exited 0. This focused
+pass does not erase the preceding `d7f4285` failure or establish a full
+automatic or explicit behavior matrix.
+
+### Before/after and unsupported-language boundary
+
+- Sanitized no-guidance baseline: 31/31 runs completed, with 8 TARGET PASS and
+  23 TARGET FAIL; all 21 positive S1-S6 Go-routing controls failed.
+- Automatic candidate path: the retained S1 probes omitted the visible decision,
+  so automatic selection remains advisory and no automatic matrix pass is claimed.
+- Explicit path: one isolated run at `cf597a0` passed; the `d7f4285` rerun
+  failed as described above; and the focused reference-set rerun at `10dc86f`
+  passed once. This establishes the corrected reference-set behavior for one
+  post-fix run, not a full explicit behavior matrix.
+- No positive TypeScript routing run was performed or passed. TypeScript remains
+  unsupported/planned. The two inconsistent S7 baseline excerpts remain fully
+  preserved in the raw evidence: run 2 invented TypeScript `profile.md` and
+  `implementation.md` guidance, while run 4 said TypeScript guidance applies
+  despite also reporting no installed language-specific skill.
+
+The evidence supports the Go pack's static structure, one historical strict
+explicit success, and one focused post-fix reference-set success. It does not
+support guaranteed automatic routing, a positive TypeScript pack, a pristine
+full local regression, or a full explicit behavior matrix. Human review by
+someone familiar with Go remains a release gate for the reference content.
+
 ## Maintenance responsibility
 
 Wukong Code language-guidance maintainers; stable status requires review by a
