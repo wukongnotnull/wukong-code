@@ -67,6 +67,7 @@ and state this decision:
 
 Print each field on its own line exactly as shown. Do not combine, paraphrase, or rename any label.
 List only selected reference paths after `Loaded:`; never use pending, next, or future-tense wording.
+After emitting a decision, do not load another language reference unless you first emit a new complete `Detected:`, `Phase:`, and `Loaded:` decision listing the replacement set.
 
 For automatic selection, language-guidance may provide this decision when
 loaded; automatic selection does not promise invocation or visible output.

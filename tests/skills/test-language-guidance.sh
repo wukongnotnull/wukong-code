@@ -101,6 +101,7 @@ assert_contains "$skill" 'When your human partner explicitly invokes `$language-
 assert_contains "$skill" "Before the first substantive technical response, edit, or verification command"
 assert_contains "$skill" 'Print each field on its own line exactly as shown. Do not combine, paraphrase, or rename any label.'
 assert_contains "$skill" 'List only selected reference paths after `Loaded:`; never use pending, next, or future-tense wording.'
+assert_contains "$skill" 'After emitting a decision, do not load another language reference unless you first emit a new complete `Detected:`, `Phase:`, and `Loaded:` decision listing the replacement set.'
 assert_contains "$skill" "automatic selection does not promise invocation or visible output."
 assert_visible_decision_template "$skill"
 assert_contains "$bootstrap" "documentation-only"
