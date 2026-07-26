@@ -87,3 +87,21 @@ Both the pre-fix and mandatory-wording S1 probes returned plausible Go
 guidance but omitted the visible `Detected:`, `Phase:`, and `Loaded:` decision;
 therefore the automatic path is advisory. This is not a pass claim for the
 full automatic matrix.
+
+## Explicit strict runtime probe — 2026-07-26
+
+- Candidate commit: `cf597a0`.
+- Harness: Codex CLI `0.135.0`, model `gpt-5.5`, read-only sandbox.
+- Isolation: a fresh temporary `CODEX_HOME` installed only the candidate
+  marketplace; the normal Codex configuration was restored byte-for-byte
+  afterward.
+- Prompt: `$language-guidance: Inspect FetchAll and explain the concrete Go
+  implementation approach. Do not edit files.`
+- Result: PASS for the explicit strict path. The fresh session injected
+  `wukong-code:language-guidance` and emitted three independent decision lines:
+  `Detected: Go ...`, `Phase: implementation`, and `Loaded:` with the selected
+  `references/go/profile.md` and `references/go/implementation.md` paths.
+
+This verifies the explicit invocation contract once. It does not change the
+automatic path from advisory to guaranteed, and it is not a full behavior-matrix
+pass claim.
