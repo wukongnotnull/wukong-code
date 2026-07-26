@@ -83,6 +83,7 @@ assert_contains "$bootstrap" "creating, modifying, testing, debugging, reviewing
 assert_contains "$bootstrap" "prioritize language-guidance as secondary domain guidance"
 assert_contains "$skill" 'When your human partner explicitly invokes `$language-guidance`, strict execution is required.'
 assert_contains "$skill" 'Print each field on its own line exactly as shown. Do not combine, paraphrase, or rename any label.'
+assert_contains "$skill" 'List only selected reference paths after `Loaded:`; never use pending, next, or future-tense wording.'
 assert_contains "$bootstrap" "documentation-only"
 
 if (( failed )); then echo "STATUS: FAILED"; exit 1; fi

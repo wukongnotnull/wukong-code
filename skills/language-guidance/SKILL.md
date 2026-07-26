@@ -66,6 +66,7 @@ and state this decision:
     Loaded: <one or two reference paths>
 
 Print each field on its own line exactly as shown. Do not combine, paraphrase, or rename any label.
+List only selected reference paths after `Loaded:`; never use pending, next, or future-tense wording.
 
 For automatic selection, language-guidance may provide this decision when
 loaded; automatic selection does not promise invocation or visible output.
