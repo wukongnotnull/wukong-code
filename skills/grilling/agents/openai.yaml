@@ -1,0 +1,6 @@
+interface:
+  display_name: "Grilling"
+  short_description: "Resolve programming decisions one question at a time"
+  default_prompt: "Use $grilling to question me one decision at a time until this programming task is implementation-ready."
+policy:
+  allow_implicit_invocation: true
