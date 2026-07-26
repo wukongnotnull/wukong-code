@@ -65,6 +65,8 @@ and state this decision:
     Phase: <one primary phase>
     Loaded: <one or two reference paths>
 
+Print each field on its own line exactly as shown. Do not combine, paraphrase, or rename any label.
+
 For automatic selection, language-guidance may provide this decision when
 loaded; automatic selection does not promise invocation or visible output.
 
