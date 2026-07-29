@@ -77,6 +77,94 @@ The controls demonstrate three concrete needs for the candidate pack:
 3. verification derived from manifest/repository evidence rather than ritual
    `all-features`, unavailable toolchains, or optional components.
 
+## Candidate implementation and refinement
+
+The registered Rust candidate was introduced at `8b7212a`. The evaluated
+cohorts then produced these measured routing/content repairs:
+
+| Commit | Observed failure | Minimal repair |
+| --- | --- | --- |
+| `4c7500e` | Explicit inspect-only probe selected implementation | Preserve strict explicit profile routing |
+| `3151a7a` | TDD pressure accepted skipped RED; verification scope expanded | Require testing phase/RED and evidence-bounded verification |
+| `026e754` | Missing concurrent revision still produced a leading cause | Forbid ranked causes without the target revision/log |
+| `b1f4386` | Missing-evidence diagnosis collapsed distinct branches; no-command verification skipped its reference | Preserve concurrency hypotheses; strengthen verification trigger |
+| `38726e1` | No-command verification sometimes bypassed bootstrap routing | Put unsupported-claim routing in the bootstrap description |
+| `81dbbaf` | Experimental change outside the approved Task 3 file set | Superseded and reverted; no net process-skill change |
+| `c366755` | Final frozen candidate | Net candidate used for the interrupted final cohort |
+
+The complete superseded `4c7500e` cohort scored 27/31 ordinary and 3/9
+adversarial passes. Failures were not discarded: they drove the focused
+repairs above. The final frozen `c366755` cohort completed only four sessions,
+all R1 passes, before `codex-cli` returned an account usage-limit error. The
+runner was stopped; remaining sessions are `INCONCLUSIVE` and no superseded
+pass was carried forward.
+
+Complete agent-message transcripts, session IDs, and per-run verdicts are in
+the [candidate raw index](raw/2026-07-29-rust-language-guidance/candidate.md).
+
+## Candidate source and semantic boundaries
+
+The six references retain only conditional, repository-first guidance from
+the ECC inventory:
+
+- `rust/profile.md`: Cargo ownership, workspace/target evidence, MSRV,
+  edition, toolchain, features, generated inputs, and target uncertainty;
+- `rust/implementation.md`: ownership/API boundaries, typed errors,
+  concurrency completion/order/error contracts, async runtime preservation,
+  and unsafe invariants;
+- `rust/testing.md`: valid runtime and compile-fail RED, focused-to-broad Cargo
+  checks, deterministic concurrency tests, and conditional optional tools;
+- `rust/debugging.md`: exact compiler/Cargo/test/build evidence, distinct hang
+  hypotheses, and invariant-first unsafe diagnosis;
+- `rust/review.md`: reachable correctness mechanisms, tight locations, zero
+  findings, and rejection of style-as-defect review;
+- `rust/verification.md`: repository-defined scope, safe Cargo defaults,
+  explicit missing/unknown checks, and no tool installation.
+
+Semantic claims were checked against the official
+[Cargo manifest reference](https://doc.rust-lang.org/cargo/reference/manifest.html),
+[Rust `Send` and `Sync` guidance](https://doc.rust-lang.org/nomicon/send-and-sync.html),
+[`std::thread::scope`](https://doc.rust-lang.org/std/thread/fn.scope.html), and
+[Cargo command reference](https://doc.rust-lang.org/cargo/commands/index.html).
+The fixture's `rust-version = "1.63"` is compatibility evidence; the installed
+Rust 1.97 host is not.
+
+## Candidate static, Cargo, and package evidence
+
+After the measured repairs:
+
+| Check | Result |
+| --- | --- |
+| `bash tests/skills/test-language-guidance.sh` | PASS |
+| `bash tests/skills/test-skill-slim-gates.sh` | PASS |
+| Rust focused tests and `cargo test --all-targets` | PASS |
+| Rust `cargo check` and `cargo fmt --check` | PASS |
+| six Rust files in Codex ZIP archive | PASS in ordinary temporary clone |
+| six Rust files in Codex tar.gz archive | PASS in ordinary temporary clone |
+| full Codex package suite | retains only the two approved timezone-sensitive ZIP/tar timestamp failures |
+
+The full non-Rust repository regressions and final package rerun are recorded
+again during final local verification below. None substitutes for the missing
+final behavior cohort.
+
+## Final local verification at `c366755`
+
+| Command | Result |
+| --- | --- |
+| `bash tests/skills/test-language-guidance.sh` | PASS |
+| `bash tests/skills/test-skill-slim-gates.sh` | PASS |
+| `bash tests/opencode/run-tests.sh` | PASS — 2 passed, 0 failed |
+| `bash tests/kimi/run-tests.sh` | PASS — manifest valid |
+| `cargo test --all-targets && cargo check && cargo fmt --check` in `rust-basic` | PASS — 2 integration tests |
+| same Cargo sequence in `monorepo/rust-worker` | PASS |
+| `git diff --check` | PASS before evidence write; rerun required after final evidence commit |
+| Codex package test in a new ordinary clone with `TZ=Asia/Shanghai` | Rust ZIP/tar assertions PASS; suite status 1 only because the two approved timestamp checks fail |
+
+Because common bootstrap/router wording changed, the plan requires fresh Go,
+Swift, S7, and S8 behavior probes. They could not start after the account quota
+error and remain `INCONCLUSIVE`; static contracts and harness tests passing do
+not replace those probes.
+
 ## ECC source inventory
 
 ECC candidate material is pinned to
@@ -105,6 +193,11 @@ English assets control the inventory.
   failures. They predate this Rust work and are not fixed here.
 - RED results cannot establish candidate quality. Candidate and adversarial
   cohorts must use a frozen committed Rust pack and new sessions.
+- The final `c366755` behavior cohort is incomplete because the evaluator
+  account reached its usage limit. It must be rerun in full after the limit
+  resets; superseded or focused results cannot be averaged into it.
+- No Rust-aware human reviewer has signed off on the exact final commit and
+  scope.
 
 README status remains `Planned`. Experimental publication still requires the
 candidate matrix, adversarial repetitions, Rust archive assertions, repository
