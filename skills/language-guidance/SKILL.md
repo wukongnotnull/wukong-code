@@ -1,6 +1,6 @@
 ---
 name: language-guidance
-description: Use when creating, changing, testing, debugging, reviewing, or verifying source code whose language can be identified from explicit task or repository evidence
+description: Use when creating, changing, testing, debugging, reviewing, or verifying source code whose language can be identified from explicit task or repository evidence. When explicitly invoked, test-source edits select testing; requested production-source edits emit before responding a strict Detected: <language and evidence>, Phase: implementation, and Loaded: <language>/profile.md, <language>/implementation.md decision.
 ---
 
 # Language Guidance
@@ -33,18 +33,18 @@ evidence conflicts.
 
 | Work | Phase |
 | --- | --- |
-| Design or plan for known language | profile |
-| Edit production source | profile and implementation |
+| Design or plan with no requested source edit | profile |
+| Requested production-source edit, including brainstorming or pre-edit analysis | implementation |
 | Write or run tests | testing |
 | Investigate failure | debugging |
 | Review code | review |
 | Prove completion | verification |
 
-When the already-selected primary process is TDD or testing, select the testing
-phase and load references/go/testing.md. Language guidance does not determine
-or enforce the primary process.
-For a request that will edit production source, select the implementation phase
-and load both profile and implementation, including before the edit begins.
+A requested test-source edit selects the testing phase even when the task also requests a production-source edit. When the already-selected primary process is TDD or testing, select the testing phase and load the selected language's `testing.md` reference. Language guidance does not determine or enforce the primary process.
+For a requested production-source edit, select the implementation phase and
+load both profile and implementation before discussing the approach. This
+remains true when brainstorming or an instruction to explain first actions
+delays the edit.
 Load at most two references per decision. For cross-language work, state each
 target scope and process scopes separately when the limit would be exceeded.
 
