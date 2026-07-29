@@ -1,6 +1,6 @@
 ---
 name: language-guidance
-description: Use when creating, changing, testing, debugging, reviewing, or verifying source code whose language can be identified from explicit task or repository evidence
+description: Use when creating, changing, testing, debugging, reviewing, or verifying source code whose language can be identified from explicit task or repository evidence. When explicitly invoked for a requested source edit, emit before responding a strict Detected: <language and evidence>, Phase: implementation, and Loaded: <language>/profile.md, <language>/implementation.md decision.
 ---
 
 # Language Guidance

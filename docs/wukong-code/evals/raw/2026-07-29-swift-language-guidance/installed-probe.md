@@ -199,3 +199,57 @@ it does not prove physical-device provisioning or distribution signing. The
 tested host reported Xcode 26.6 (build 17F113). This project-specific result
 does not replace the SwiftPM fixture matrix or establish support for projects
 without a supplied scheme and simulator destination.
+
+## Post-restart writing-skills revalidation
+
+The evaluator read `wukong-code:writing-skills` and its required
+`wukong-code:test-driven-development` background before this deployment
+revalidation. It then used one variable at a time.
+
+| Environment | Session ID | Prompt/result | Verdict |
+| --- | --- | --- | --- |
+| Restored `wukong-code-dev` | `019fad10-98d4-79e0-85da-c7ceb85c07f8` | Minimal `Reply with exactly: control-ok` returned `control-ok`. | Control pass: CLI itself was responsive. |
+| Candidate local marketplace | `019fad11-4b54-7073-a567-c7e62841900b` | The same minimal prompt returned `control-ok`. | Control pass: candidate marketplace installation was live. |
+| Candidate local marketplace | `019fad11-eb85-7ca1-9258-0a1ad2ae7fcd` | Explicit `$language-guidance` strict Swift probe returned `Detected: Swift`, `Phase: source`, `Loaded: Swift source guidance`. | GREEN FAIL: this does not match the candidate's required `implementation` decision or selected Swift reference paths. |
+
+The candidate cache was independently inspected and did contain the Swift
+registry entry plus the strict visible-decision template, so this is not a
+missing-file result. Other fresh candidate sessions
+`019facfe-5b8d-74c0-bc3d-476c65e60aed`,
+`019facff-266f-7140-bf32-f3e8c7f8396f`,
+`019fad00-7ebc-7ed1-83a5-5b5fbcfa59e2`, and
+`019fad0d-a8ee-7cf2-a77a-8bdd2adc69fc` ended after initialization without a
+model answer; they are inconclusive and are not scored as passes.
+
+A fresh restored-plugin RED session, `019facfc-deda-7b31-9832-cb264d50ed4b`,
+read a language registry containing only Go. This preserves the no-Swift-pack
+baseline condition but did not produce a final model answer, so it is retained
+as configuration evidence rather than counted in the historical 31-run matrix.
+
+This initial revalidation failed the writing-skills GREEN gate. The following
+controlled repair and reruns supersede that narrow result while preserving the
+failure as before-state evidence.
+
+## Post-restart routing-metadata repair and rerun
+
+`codex debug prompt-input` established that the installed skill's frontmatter
+description is present in model-visible input. The old description named the
+task class but did not state the strict source-edit decision. The test script
+was first changed to require that decision in the description and failed; the
+frontmatter was then updated and `bash tests/skills/test-language-guidance.sh`
+passed. The candidate was removed and re-added from the same isolated local
+marketplace before each runtime rerun.
+
+| Scenario | Session ID | Prompt/result | Verdict |
+| --- | --- | --- | --- |
+| Canonical explicit invocation before repair | `019fad18-82b1-72b3-adbb-98b152268df6` | `$wukong-code:language-guidance` returned `Detected: Swift`, `Phase: source work`, `Loaded: Swift guidance`. | FAIL: the canonical plugin name alone did not select the strict source-edit decision. |
+| First rerun after generic metadata wording | `019fad1a-423f-7512-aab7-38e93039e210` | No model answer after the user message. | Inconclusive; not scored as a pass. |
+| Second rerun after generic metadata wording | `019fad1a-da03-79e3-9e9b-599103562e75` | Returned `Detected: Swift`, `Phase: source`, `Loaded: Swift source guidance`. | FAIL: the generic wording was insufficient. |
+| Strict source-edit probe after repaired description | `019fad1b-cf7c-7921-911c-b9f7b458d9d9` | Returned `Detected: Swift (Sources/Fetcher/Fetcher.swift)`, `Phase: implementation`, `Loaded: swift/profile.md, swift/implementation.md`. | PASS. |
+| Independent strict source-edit repeat | `019fad1c-4236-7691-b417-6b3cff9700a3` | Returned `Detected: Swift — Sources/Fetcher/Fetcher.swift`, `Phase: implementation`, `Loaded: swift/profile.md, swift/implementation.md`. | PASS. |
+| Adversarial source-edit pressure | `019fad1c-c5e4-7ce0-8045-345dcfcf1238` | Made the same strict decision; rejected skipping RED, ignoring `Package.swift`, and host-version-only `@concurrent`; made no edits. | PASS. |
+
+The repaired description is deliberately limited to explicit requested
+source-edit invocation. It does not change the existing testing, debugging,
+review, or verification phase rules, and it does not turn the previous
+inconclusive sessions into successes.

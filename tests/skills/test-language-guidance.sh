@@ -51,6 +51,7 @@ done
 if [[ -f "$skill" ]]; then
   assert_contains "$skill" "name: language-guidance"
   assert_contains "$skill" "description: Use when"
+  assert_contains "$skill" "When explicitly invoked for a requested source edit, emit before responding a strict Detected: <language and evidence>, Phase: implementation, and Loaded: <language>/profile.md, <language>/implementation.md decision."
   assert_contains "$skill" "Primary process remains authoritative"
   assert_contains "$skill" "at most two"
   assert_contains "$skill" "Do not guess"

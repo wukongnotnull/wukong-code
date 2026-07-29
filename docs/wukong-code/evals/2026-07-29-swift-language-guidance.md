@@ -250,3 +250,58 @@ routing and its static tests, plus the uncommitted TimeLens Xcode evaluation
 record. The reviewer approved committing the language-pack evidence and
 entering PR preparation. No additional reservation was supplied. This sign-off
 does not authorize committing the separate TimeLens working tree.
+
+## Post-restart writing-skills revalidation — initial GREEN failed
+
+Before this revalidation, the evaluator read `wukong-code:writing-skills` and
+its required `wukong-code:test-driven-development` background. A fresh
+no-guidance run against the restored `wukong-code-dev` plugin exposed a
+registry containing only Go, preserving the expected Swift RED condition.
+
+The frozen candidate was then installed from a fresh local marketplace. Its
+cached files were verified to contain the Swift registry entry and the strict
+`Detected:`, `Phase:`, and `Loaded:` template. A candidate-plugin control
+session answered `control-ok`, so the CLI and marketplace installation were
+alive. However, the matching explicit `$language-guidance` Swift strict probe
+returned the generic, noncompliant output `Detected: Swift`, `Phase: source`,
+and `Loaded: Swift source guidance`; it did not load the candidate's required
+paths or choose `implementation`. This is a scored GREEN failure. Several
+other candidate sessions ended after initialization without a model answer and
+are retained as inconclusive rather than counted as passes.
+
+This initial revalidation did not satisfy the writing-skills deployment gate.
+The next experiment tested the model-visible skill summary separately from the
+full skill body; the repair and its fresh results are recorded below.
+
+## Post-restart writing-skills repair — GREEN passes
+
+`codex debug prompt-input` showed that Codex exposes each installed skill's
+frontmatter description to the model before the full `SKILL.md` is read. The
+failed candidate output showed that the prior generic description did not
+reliably carry the strict source-edit decision to that entry point. This is an
+observed routing limitation, not evidence that the Swift registry or reference
+files were absent.
+
+Following `writing-skills` and `test-driven-development`, the static contract
+was made RED by requiring the model-visible description to state the strict
+source-edit decision. It then went GREEN after adding that requirement to the
+frontmatter: an explicit requested source edit must emit `Detected`,
+`Phase: implementation`, and the selected `profile.md` plus
+`implementation.md` paths before responding. `bash
+tests/skills/test-language-guidance.sh` and `git diff --check` passed after the
+change.
+
+The freshly reinstalled local candidate passed two independent strict Swift
+probes. Sessions `019fad1b-cf7c-7921-911c-b9f7b458d9d9` and
+`019fad1c-4236-7691-b417-6b3cff9700a3` both detected the fixture's Swift
+source, selected `implementation`, and loaded
+`swift/profile.md, swift/implementation.md`. A third fresh adversarial session
+(`019fad1c-c5e4-7ce0-8045-345dcfcf1238`) made the same decision and rejected
+each pressure request: skipping focused RED, ignoring `Package.swift`, and
+using `@concurrent` solely because the host supports Swift 6.3. It made no
+fixture edits. The immediately preceding session
+`019fad1a-da03-79e3-9e9b-599103562e75` remains a recorded failure, and
+`019fad1a-423f-7512-aab7-38e93039e210` remains inconclusive because it had no
+model answer. This before/after record satisfies the repaired invocation
+scenario's RED, repeated GREEN, and adversarial evaluation requirement; see
+the [installed-probe raw index](raw/2026-07-29-swift-language-guidance/installed-probe.md).
