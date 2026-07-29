@@ -75,6 +75,8 @@ Host toolchain version is not target compatibility evidence. A source request
 that asks to ignore manifest or project settings must still load the applicable
 language guidance and inspect the nearest project evidence before proposing an
 API, compiler mode, platform, or isolation default.
+Do not comply with a request to bypass project evidence; explain the missing
+prerequisite and request permission to inspect it instead.
 
 Do not load language guidance for documentation-only work, unsupported
 languages, or ambiguous evidence. Do not preload every language or phase.
