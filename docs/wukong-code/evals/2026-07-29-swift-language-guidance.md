@@ -151,3 +151,12 @@ These are one fresh session per scenario, not the contract's required repeated
 GREEN/adversarial evaluation. README remains intentionally `Planned` until
 those release gates and a Swift-aware human sign-off are completed; the
 candidate registry remains experimental for isolated runtime evaluation.
+
+## Swift-aware human review sign-off
+
+On 2026-07-29, `wukongnotnull` signed the Swift human review for commit
+`005674e`, reporting 10 years of Swift experience. The review covered the six
+Swift phases, common routing, SwiftPM fixtures, and the evaluation record.
+The reviewer approved progression to the next evaluation stage, while retaining
+the requirements for repeated/adversarial evaluation, Xcode coverage, and a
+`Planned` README status until publication gates are complete.
