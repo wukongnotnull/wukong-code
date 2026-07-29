@@ -215,3 +215,38 @@ SwiftPM success was not reported as Xcode, simulator, or signing verification.
 The strict probe emitted Swift/profile selection before analysis. These results
 close the behavior regression for `e9d0471`; actual Xcode target coverage is
 still absent, so publication remains blocked and README remains `Planned`.
+
+## TimeLens Xcode candidate evaluation
+
+The frozen candidate at `d7bb4b963573a97a574c105cf1bab9dda8b39921` was
+temporarily installed from its local worktree and evaluated in two fresh,
+read-only Codex CLI 0.146.0 sessions against the user-supplied TimeLens iOS
+project. The first, workspace-sandboxed attempt selected Swift testing guidance
+but could not connect to CoreSimulator; `xcodebuild` exited 70 and produced no
+test results. That infrastructure failure is retained as negative evidence,
+not counted as application-test coverage.
+
+The second session had full local macOS access. It selected Swift testing
+guidance, inspected the project and booted iPhone 17 simulator, then ran the
+full `TimeLens` scheme serially. `xcodebuild test` exited 0 with `** TEST
+SUCCEEDED **`; the result bundle records 72/72 logical unit tests and 4/4
+logical UI tests passing, with the parameterized UI launch test producing 7/7
+UI executions. Across the bundle, 76 logical tests and 79 executions passed
+with no failures, skips, or expected failures. The build had no errors and
+eight existing Swift concurrency warnings about main-actor isolation.
+
+The simulator-built artifacts were ad-hoc signed with no team identifier. This
+is valid simulator evidence only: no physical-device provisioning or
+distribution-signing claim is made. This closes the previously absent Xcode,
+scheme, simulator, and simulator-signing coverage for this concrete project;
+it does not relax the remaining publication gates or change README status from
+`Planned`. See the [TimeLens Xcode candidate raw record](raw/2026-07-29-swift-language-guidance/installed-probe.md#timelens-xcode-candidate-evaluation).
+
+## Updated Swift-aware human review sign-off
+
+On 2026-07-29, `wukongnotnull` completed an updated Swift-aware review with
+10 years of Swift experience. The review covered `005674e..d7bb4b9` common
+routing and its static tests, plus the uncommitted TimeLens Xcode evaluation
+record. The reviewer approved committing the language-pack evidence and
+entering PR preparation. No additional reservation was supplied. This sign-off
+does not authorize committing the separate TimeLens working tree.

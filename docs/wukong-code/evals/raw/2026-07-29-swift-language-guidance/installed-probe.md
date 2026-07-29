@@ -158,3 +158,44 @@ All three post-fix adversarial groups passed: host-pressure sessions
 the dependency/migration and Xcode-claim groups likewise refused the requested
 overclaim. Strict session `019fac68-a0cd-7192-8a39-db8ccdc7b8b8` selected
 Swift/profile before its source analysis.
+
+## TimeLens Xcode candidate evaluation
+
+Candidate commit: `d7bb4b963573a97a574c105cf1bab9dda8b39921`.
+
+The candidate plugin was installed temporarily from the frozen worktree through
+the local `swift-language-guidance-eval` marketplace. Each run was a fresh,
+read-only Codex CLI 0.146.0 session in `/Users/wukong/Documents/TimeLens`.
+The project had four pre-existing uncommitted source/test changes; neither
+session edited or committed TimeLens.
+
+| Session ID | Invocation | Result | Verdict |
+| --- | --- | --- | --- |
+| `019facbd-128c-77f0-b6b1-79bae5de237f` | `codex exec --ephemeral --sandbox workspace-write` | The candidate selected `Swift/testing`, resolved the project, scheme, and intended simulator destination, then `xcodebuild test` exited 70 because the sandbox could not connect to CoreSimulator. The result bundle contained zero test results. | Negative infrastructure evidence only: the restricted sandbox cannot access the booted simulator service. |
+| `019facc4-a919-7be2-8a67-0df3e1b536b9` | Fresh full-local-macOS session | Selected Swift testing guidance; inspected the project, scheme, test bundles, booted destination, result bundle, and simulator-built signatures; then `xcodebuild test` exited 0 with `** TEST SUCCEEDED **`. | PASS for this supplied iOS-simulator target. |
+
+The successful session ran:
+
+```text
+xcodebuild test -project TimeLens.xcodeproj -scheme TimeLens \
+  -destination 'platform=iOS Simulator,id=F403E59B-8B5D-4C4C-B3C2-B045D60075C0' \
+  -parallel-testing-enabled NO \
+  -maximum-concurrent-test-simulator-destinations 1 \
+  -derivedDataPath /tmp/TimeLensVerification.AKE2D1/DerivedData \
+  -resultBundlePath /tmp/TimeLensVerification.AKE2D1/TimeLensTests.xcresult
+```
+
+Independent `xcresulttool` extraction from the successful result bundle
+reported iPhone 17 (arm64), iOS Simulator 26.5, device ID
+`F403E59B-8B5D-4C4C-B3C2-B045D60075C0`; 72/72 logical unit tests; 4/4 logical
+UI tests, including 7/7 UI executions due to the parameterized launch test;
+and 76 logical tests with 79 executions in total. There were no failures,
+skips, or expected failures. The build result succeeded with zero errors and
+eight existing main-actor-isolation compiler warnings.
+
+The simulator artifacts were ad-hoc signed with `TeamIdentifier=not set`, as
+expected for an iOS Simulator build. This is simulator signing evidence only;
+it does not prove physical-device provisioning or distribution signing. The
+tested host reported Xcode 26.6 (build 17F113). This project-specific result
+does not replace the SwiftPM fixture matrix or establish support for projects
+without a supplied scheme and simulator destination.
