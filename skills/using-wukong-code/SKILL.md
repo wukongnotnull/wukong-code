@@ -1,6 +1,6 @@
 ---
 name: using-wukong-code
-description: Use when starting any conversation - establishes how to find and use skills, requiring skill invocation before ANY response including clarifying questions
+description: Use when starting any conversation - establishes how to find and use skills, requiring skill invocation before ANY response including clarifying questions. Verification claims about checks not run require verification-before-completion; no-command prompts must not install tools or invent scope.
 ---
 
 <SUBAGENT-STOP>

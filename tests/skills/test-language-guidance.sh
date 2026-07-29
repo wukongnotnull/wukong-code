@@ -177,6 +177,7 @@ else
 fi
 
 bootstrap=skills/using-wukong-code/SKILL.md
+assert_contains "$bootstrap" "Verification claims about checks not run require verification-before-completion; no-command prompts must not install tools or invent scope."
 assert_contains "$bootstrap" "## Secondary domain guidance"
 assert_contains "$bootstrap" "language-guidance"
 assert_contains "$bootstrap" "creating, modifying, testing, debugging, reviewing, or verifying source code"
