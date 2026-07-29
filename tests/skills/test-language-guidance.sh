@@ -121,6 +121,8 @@ assert_contains "$bootstrap" "language-guidance"
 assert_contains "$bootstrap" "creating, modifying, testing, debugging, reviewing, or verifying source code"
 assert_contains "$bootstrap" "prioritize language-guidance as secondary domain guidance"
 assert_contains "$bootstrap" "automatic selection is advisory rather than a guarantee."
+assert_contains "$bootstrap" "A request to skip, defer, or bypass a failing test for a source change uses \`test-driven-development\` first."
+assert_contains "$bootstrap" "Testing-pressure routing takes precedence over the behavior-change brainstorming route."
 assert_contains "$skill" 'When your human partner explicitly invokes `$language-guidance`, strict execution is required.'
 assert_contains "$skill" "Before the first substantive technical response, edit, or verification command"
 assert_contains "$skill" 'Print each field on its own line exactly as shown. Do not combine, paraphrase, or rename any label.'

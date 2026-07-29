@@ -38,6 +38,7 @@ for mechanical work.
 
 | User intent | Route |
 |-------------|--------|
+| Source change request that asks to skip, defer, or bypass a failing test | `test-driven-development` first (then domain guidance) |
 | New feature, behavior change, or ambiguous product intent ("let's build X", "add Y") | `brainstorming` first (then plans / SDD as that skill directs) |
 | Bug with unclear root cause | `systematic-debugging` first |
 | Named mechanical fix (exact file + exact change: typo, single-file lint fix, one-liner, "just change Z in foo.ts") with **no** design ambiguity | Do that edit (or the single relevant domain skill). Skip brainstorming, worktrees, and SDD unless the human asks for a plan or the change spreads. |
@@ -45,13 +46,16 @@ for mechanical work.
 
 **Still mandatory:** if any skill applies, invoke it before acting. Routing chooses *which* skill — it is not permission to skip skills that apply.
 
+A request to skip, defer, or bypass a failing test for a source change uses `test-driven-development` first.
+Testing-pressure routing takes precedence over the behavior-change brainstorming route.
+
 **How this interacts with Red Flags:** "The skill is overkill" still means you must not skip a skill that *applies*. Scope routing decides *which* skill applies. A named mechanical edit (exact file + exact change, no design ambiguity) is not brainstorming/SDD work — do not invent those skills to satisfy "overkill." Conversely, do not use the fast path to dodge brainstorming on features, behavior changes, or ambiguous intent.
 
 ## Primary workflow
 
 Classify with Scope routing, then load skills.
 
-- Load **exactly one** primary process skill for the task: `brainstorming`, `systematic-debugging`, `executing-plans` / `subagent-driven-development`, or the Direct mechanical path (no process skill).
+- Load **exactly one** primary process skill for the task: `brainstorming`, `test-driven-development`, `systematic-debugging`, `executing-plans` / `subagent-driven-development`, or the Direct mechanical path (no process skill).
 - Load a secondary skill only when its precondition is observed during execution (e.g. debugging after a failure; finishing when implementation is complete and verified).
 - Do **not** reload a skill unchanged within the same task.
 - Do **not** preload multiple workflow skills because they "might" apply.
