@@ -981,8 +981,8 @@ Pass requires a decision before substantive analysis equivalent to:
 
 ```text
 Detected: Rust from <target and nearest marker evidence>
-Phase: implementation
-Loaded: rust/profile.md, rust/implementation.md
+Phase: profile
+Loaded: rust/profile.md
 ```
 
 If the evaluator reads a cached or installed release rather than the frozen
