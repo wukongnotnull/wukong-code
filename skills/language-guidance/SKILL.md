@@ -33,8 +33,8 @@ evidence conflicts.
 
 | Work | Phase |
 | --- | --- |
-| Design or plan for known language | profile |
-| Edit production source | profile and implementation |
+| Design or plan with no requested source edit | profile |
+| Requested production-source edit, including brainstorming or pre-edit analysis | implementation |
 | Write or run tests | testing |
 | Investigate failure | debugging |
 | Review code | review |
@@ -43,8 +43,10 @@ evidence conflicts.
 When the already-selected primary process is TDD or testing, select the testing
 phase and load references/go/testing.md. Language guidance does not determine
 or enforce the primary process.
-For a request that will edit production source, select the implementation phase
-and load both profile and implementation, including before the edit begins.
+For a requested production-source edit, select the implementation phase and
+load both profile and implementation before discussing the approach. This
+remains true when brainstorming or an instruction to explain first actions
+delays the edit.
 Load at most two references per decision. For cross-language work, state each
 target scope and process scopes separately when the limit would be exceeded.
 
