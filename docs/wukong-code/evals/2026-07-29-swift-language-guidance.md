@@ -93,3 +93,22 @@ model cache, and the bundled `codex-cli 0.146.0-alpha.3.1` ended after session
 initialization without writing its requested last-message file. These runs do
 not establish a routing result. Their environment output is retained in the
 [installed-probe raw index](raw/2026-07-29-swift-language-guidance/installed-probe.md).
+
+## Installed-plugin rerun — route resolved, implementation gate still fails
+
+After the user updated the standalone CLI to `0.146.0`, the candidate was
+installed again from the frozen worktree and the original Git marketplace was
+restored after the runs. Persistent read-only CLI transcripts now establish
+that the installed plugin resolves Swift references. The explicit strict probe
+passed: it emitted `Detected: Swift`, `Phase: profile`, and
+`Loaded: swift/profile.md` before inspecting the fixture.
+
+The same installed candidate then ran SW1 once. It detected Swift from
+`Fetcher.swift` and the nearest `Package.swift`, but emitted only
+`Phase: profile` and `Loaded: swift/profile.md`. Its proposed use of a throwing
+task group, indexed result storage, first-observed error handling, and
+cooperative cancellation was technically responsive, but it did not load the
+required implementation guidance for a requested production-source change.
+SW1 is therefore a TARGET FAIL. The updated raw index preserves both runs and
+their persistent session identifiers. This confirms the remaining failure is
+phase selection, not plugin installation or Swift detection.
