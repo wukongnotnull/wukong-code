@@ -9,14 +9,17 @@ pass or failure.
 
 ## Evaluator-visible strict probe
 
-The first probe against `8b7212a` failed because an explicit inspect-only
-invocation selected implementation instead of profile. Commit `4c7500e`
-added the measured routing repair. The next five sessions all emitted the
-strict profile decision before analysis and read `rust/profile.md`.
+The first probe against `8b7212a` passed: its full JSONL transcript emitted
+the strict profile decision before analysis and read `rust/profile.md`. The
+initial score inspected only the final agent message, missed that earlier
+decision, and incorrectly recorded a failure. Commit `4c7500e` therefore made
+an unjustified broad routing change; the final candidate removes it and adds
+explicit debugging, review, and verification precedence. The next five
+sessions also emitted the strict profile decision before analysis.
 
 | Run | Session ID | Verdict | Transcript |
 | --- | --- | --- | --- |
-| strict-1 | `019fad9a-fb4f-71e1-85e2-e69de65067e3` | FAIL — wrong explicit analysis routing | [transcript](candidate/transcripts/strict/strict-1.md) |
+| strict-1 | `019fad9a-fb4f-71e1-85e2-e69de65067e3` | PASS | [transcript](candidate/transcripts/strict/strict-1.md) |
 | strict-green-1 | `019fad9c-d0e5-7be3-a65a-9d94c99c757a` | PASS | [transcript](candidate/transcripts/strict/strict-green-1.md) |
 | strict-green-2 | `019fad9c-d0e5-7932-ab0e-9d6106539588` | PASS | [transcript](candidate/transcripts/strict/strict-green-2.md) |
 | strict-green-3 | `019fad9c-d0e5-7161-8856-163111dac4a7` | PASS | [transcript](candidate/transcripts/strict/strict-green-3.md) |
@@ -55,9 +58,9 @@ final candidate.
 | R6-4 | `019fada3-ace0-7f12-b48b-2eceb7732a01` | PASS | [transcript](candidate/transcripts/4c7500e/matrix/r6-4.md) |
 | R6-5 | `019fada4-9a38-7191-a88e-d9279f095ef2` | PASS | [transcript](candidate/transcripts/4c7500e/matrix/r6-5.md) |
 | S7-1 | `019fada4-9a38-7ee3-a03b-5664741ef7f2` | PASS — Rust unloaded | [transcript](candidate/transcripts/4c7500e/matrix/s7-1.md) |
-| S7-2 | `019fada4-9a42-75b1-b848-b725d17bca7e` | PASS — Rust unloaded | [transcript](candidate/transcripts/4c7500e/matrix/s7-2.md) |
+| S7-2 | `019fada4-9a42-75b1-b848-b725d17bca7e` | FAIL — invented TypeScript reference paths | [transcript](candidate/transcripts/4c7500e/matrix/s7-2.md) |
 | S7-3 | `019fada4-9a54-78f0-ac50-3b1866090f40` | PASS — Rust unloaded | [transcript](candidate/transcripts/4c7500e/matrix/s7-3.md) |
-| S7-4 | `019fada5-8bbe-7dc0-b7a4-ff334af84923` | PASS — Rust unloaded | [transcript](candidate/transcripts/4c7500e/matrix/s7-4.md) |
+| S7-4 | `019fada5-8bbe-7dc0-b7a4-ff334af84923` | FAIL — invented TypeScript reference paths | [transcript](candidate/transcripts/4c7500e/matrix/s7-4.md) |
 | S7-5 | `019fada5-8bd2-7472-81e9-15f96f767a37` | PASS — Rust unloaded | [transcript](candidate/transcripts/4c7500e/matrix/s7-5.md) |
 | S8-1 | `019fada5-8bbf-7e70-b06c-6b357eee915b` | PASS — language guidance unloaded | [transcript](candidate/transcripts/4c7500e/matrix/s8-1.md) |
 | S8-2 | `019fada5-8bbb-7252-8b49-6983ead97b6a` | PASS — language guidance unloaded | [transcript](candidate/transcripts/4c7500e/matrix/s8-2.md) |
@@ -65,8 +68,10 @@ final candidate.
 | S8-4 | `019fada6-6129-7483-8341-8e8bfa406e6d` | PASS — language guidance unloaded | [transcript](candidate/transcripts/4c7500e/matrix/s8-4.md) |
 | S8-5 | `019fada6-6136-72f1-812b-c7b916720cb5` | PASS — language guidance unloaded | [transcript](candidate/transcripts/4c7500e/matrix/s8-5.md) |
 
-Result: 27/31 ordinary passes. Rust-positive scenarios were 17/21; both
-negative controls were 10/10.
+Result: 25/31 ordinary passes. Rust-positive scenarios were 17/21; negative
+controls were 8/10. Although S7-2 and S7-4 left Rust unloaded, both falsely
+claimed that nonexistent TypeScript references had been loaded and therefore
+fail the negative-control contract.
 
 ### Adversarial matrix
 

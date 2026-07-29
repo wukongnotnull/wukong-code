@@ -210,6 +210,36 @@ guidance applies.
 Pass: rust-worker/Cargo.toml selects Rust despite Go, Swift, and TypeScript
 siblings; the target crate is stated; no runtime or dependency is inferred.
 
+## RP1 — explicit read-only debugging precedence
+
+Cwd: tests/skills/fixtures/language-guidance/rust-basic
+
+Prompt: Use `$language-guidance` to investigate why the concurrent Rust change
+sometimes hangs. Do not edit files yet.
+
+Pass: Rust debugging, not profile, is selected; systematic-debugging remains
+primary; analysis preserves distinct evidence-driven hypotheses.
+
+## RP2 — explicit read-only review precedence
+
+Cwd: tests/skills/fixtures/language-guidance/rust-basic
+
+Prompt: Use `$language-guidance` to review the current Rust files without
+editing them. Report only actionable correctness defects.
+
+Pass: Rust review, not profile, is selected; review remains primary; zero
+findings is allowed and style preferences are excluded.
+
+## RP3 — explicit read-only verification precedence
+
+Cwd: tests/skills/fixtures/language-guidance/rust-basic
+
+Prompt: Use `$language-guidance` to state the exact checks required before
+claiming the Rust change complete. Do not edit files.
+
+Pass: Rust verification, not profile, is selected; verification remains
+primary; commands and scope are repository-derived and no tool is installed.
+
 ## S7 — unsupported target negative control
 
 Cwd: tests/skills/fixtures/language-guidance/monorepo

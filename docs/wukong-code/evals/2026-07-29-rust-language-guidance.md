@@ -84,20 +84,29 @@ cohorts then produced these measured routing/content repairs:
 
 | Commit | Observed failure | Minimal repair |
 | --- | --- | --- |
-| `4c7500e` | Explicit inspect-only probe selected implementation | Preserve strict explicit profile routing |
+| `4c7500e` | Initial final-message-only score misread a passing strict probe | Unjustified broad profile routing; removed after full JSONL review |
 | `3151a7a` | TDD pressure accepted skipped RED; verification scope expanded | Require testing phase/RED and evidence-bounded verification |
 | `026e754` | Missing concurrent revision still produced a leading cause | Forbid ranked causes without the target revision/log |
 | `b1f4386` | Missing-evidence diagnosis collapsed distinct branches; no-command verification skipped its reference | Preserve concurrency hypotheses; strengthen verification trigger |
 | `38726e1` | No-command verification sometimes bypassed bootstrap routing | Put unsupported-claim routing in the bootstrap description |
 | `81dbbaf` | Experimental change outside the approved Task 3 file set | Superseded and reverted; no net process-skill change |
-| `c366755` | Final frozen candidate | Net candidate used for the interrupted final cohort |
+| `c366755` | Frozen pre-review candidate | Net candidate used for the interrupted final cohort |
 
-The complete superseded `4c7500e` cohort scored 27/31 ordinary and 3/9
-adversarial passes. Failures were not discarded: they drove the focused
-repairs above. The final frozen `c366755` cohort completed only four sessions,
-all R1 passes, before `codex-cli` returned an account usage-limit error. The
-runner was stopped; remaining sessions are `INCONCLUSIVE` and no superseded
-pass was carried forward.
+The complete superseded `4c7500e` cohort scored 25/31 ordinary and 3/9
+adversarial passes. Its Rust-positive scenarios scored 17/21 and controls
+scored 8/10; two TypeScript controls invented nonexistent reference paths.
+Failures were not discarded: they drove the focused repairs above. The frozen
+`c366755` cohort completed only four sessions, all R1 passes, before
+`codex-cli` returned an account usage-limit error. The runner was stopped;
+remaining sessions are `INCONCLUSIVE` and no superseded pass was carried
+forward.
+
+Review of the complete strict-probe JSONL also corrected an earlier scoring
+error: `strict-1` emitted `Phase: profile` and loaded `rust/profile.md` before
+its final message, so it was a pass. The post-review candidate removes the
+unjustified generic no-edit profile rule and explicitly gives failure
+investigation, code review, and completion verification precedence. That
+behavior-changing correction requires a new complete cohort after quota reset.
 
 Complete agent-message transcripts, session IDs, and per-run verdicts are in
 the [candidate raw index](raw/2026-07-29-rust-language-guidance/candidate.md).
@@ -121,13 +130,24 @@ the ECC inventory:
 - `rust/verification.md`: repository-defined scope, safe Cargo defaults,
   explicit missing/unknown checks, and no tool installation.
 
-Semantic claims were checked against the official
-[Cargo manifest reference](https://doc.rust-lang.org/cargo/reference/manifest.html),
-[Rust `Send` and `Sync` guidance](https://doc.rust-lang.org/nomicon/send-and-sync.html),
-[`std::thread::scope`](https://doc.rust-lang.org/std/thread/fn.scope.html), and
-[Cargo command reference](https://doc.rust-lang.org/cargo/commands/index.html).
-The fixture's `rust-version = "1.63"` is compatibility evidence; the installed
-Rust 1.97 host is not.
+Each retained recommendation is conditional on repository evidence and maps
+to maintained official Rust documentation:
+
+| Recommendation | Applies when | Official sources |
+| --- | --- | --- |
+| Manifest, edition, MSRV, targets, profiles, and build inputs | `Cargo.toml`, workspace metadata, or nearby Cargo configuration establishes the crate scope | [manifest](https://doc.rust-lang.org/cargo/reference/manifest.html), [workspaces](https://doc.rust-lang.org/cargo/reference/workspaces.html), [features](https://doc.rust-lang.org/cargo/reference/features.html), [editions](https://doc.rust-lang.org/edition-guide/), [build scripts](https://doc.rust-lang.org/cargo/reference/build-scripts.html) |
+| Scoped threads and cross-thread value boundaries | Existing standard-library threaded code or the requested contract requires threads | [`thread::scope`](https://doc.rust-lang.org/std/thread/fn.scope.html), [`Send`](https://doc.rust-lang.org/std/marker/trait.Send.html), [`Sync`](https://doc.rust-lang.org/std/marker/trait.Sync.html) |
+| Async ownership and cancellation contracts | The repository already selects an async runtime or exposes a `Future` boundary | [`Future`](https://doc.rust-lang.org/std/future/trait.Future.html), [async blocks](https://doc.rust-lang.org/reference/expressions/block-expr.html#async-blocks) |
+| Unsafe invariants, pointer validity, provenance, and FFI boundaries | Existing code contains `unsafe`, raw pointers, or external blocks; guidance does not introduce them | [`unsafe`](https://doc.rust-lang.org/reference/unsafe-keyword.html), [undefined behavior](https://doc.rust-lang.org/reference/behavior-considered-undefined.html), [`std::ptr`](https://doc.rust-lang.org/std/ptr/index.html), [external blocks](https://doc.rust-lang.org/reference/items/external-blocks.html) |
+| Runtime and compile-fail tests | The repository has Cargo tests or an established rustdoc compile-fail oracle | [`cargo test`](https://doc.rust-lang.org/cargo/commands/cargo-test.html), [rustdoc tests](https://doc.rust-lang.org/rustdoc/write-documentation/documentation-tests.html) |
+| Exact compiler, Cargo, and build diagnosis | A captured error, failing command, build script, feature, or target supplies evidence | [error index](https://doc.rust-lang.org/error_codes/error-index.html), [`cargo check`](https://doc.rust-lang.org/cargo/commands/cargo-check.html), [build scripts](https://doc.rust-lang.org/cargo/reference/build-scripts.html) |
+| Focused-to-broad verification and optional formatting/lint checks | Repository scripts or installed official components establish the command and scope | [`cargo test`](https://doc.rust-lang.org/cargo/commands/cargo-test.html), [`cargo check`](https://doc.rust-lang.org/cargo/commands/cargo-check.html), [`cargo fmt`](https://doc.rust-lang.org/cargo/commands/cargo-fmt.html), [Clippy usage](https://doc.rust-lang.org/clippy/usage.html) |
+
+The fixture's `rust-version = "1.63"` is compatibility intent recorded in the
+manifest; the installed Rust 1.97 host does not prove that MSRV. Optional
+components and unexecuted feature or target combinations remain explicitly
+unverified. The Rustonomicon was useful background during source review but is
+not used as the primary authority for these recommendations.
 
 ## Candidate static, Cargo, and package evidence
 
@@ -147,7 +167,7 @@ The full non-Rust repository regressions and final package rerun are recorded
 again during final local verification below. None substitutes for the missing
 final behavior cohort.
 
-## Final local verification at `c366755`
+## Pre-review local verification at `c366755`
 
 | Command | Result |
 | --- | --- |
@@ -193,9 +213,12 @@ English assets control the inventory.
   failures. They predate this Rust work and are not fixed here.
 - RED results cannot establish candidate quality. Candidate and adversarial
   cohorts must use a frozen committed Rust pack and new sessions.
-- The final `c366755` behavior cohort is incomplete because the evaluator
+- The pre-review `c366755` behavior cohort is incomplete because the evaluator
   account reached its usage limit. It must be rerun in full after the limit
   resets; superseded or focused results cannot be averaged into it.
+- The post-review phase-precedence correction has no completed behavior cohort;
+  RP1-RP3 plus the ordinary, adversarial, Go, Swift, S7, and S8 regressions must
+  run after quota reset.
 - No Rust-aware human reviewer has signed off on the exact final commit and
   scope.
 
