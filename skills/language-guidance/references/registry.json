@@ -13,6 +13,19 @@
         "review": "go/review.md",
         "verification": "go/verification.md"
       }
+    },
+    "swift": {
+      "status": "experimental",
+      "extensions": [".swift"],
+      "markers": ["Package.swift", ".xcodeproj", ".xcworkspace"],
+      "phases": {
+        "profile": "swift/profile.md",
+        "implementation": "swift/implementation.md",
+        "testing": "swift/testing.md",
+        "debugging": "swift/debugging.md",
+        "review": "swift/review.md",
+        "verification": "swift/verification.md"
+      }
     }
   }
 }

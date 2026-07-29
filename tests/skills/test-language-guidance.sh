@@ -42,8 +42,10 @@ assert_file "$skill"
 assert_file "$registry"
 assert_file skills/language-guidance/references/shared/language-pack-contract.md
 
-for phase in profile implementation testing debugging review verification; do
-  assert_file "skills/language-guidance/references/go/$phase.md"
+for language in go swift; do
+  for phase in profile implementation testing debugging review verification; do
+    assert_file "skills/language-guidance/references/$language/$phase.md"
+  done
 done
 
 if [[ -f "$skill" ]]; then
@@ -64,25 +66,43 @@ import sys
 root = pathlib.Path("skills/language-guidance/references")
 data = json.loads(pathlib.Path(sys.argv[1]).read_text())
 assert data["version"] == 1
-assert set(data["languages"]) == {"go"}
-go = data["languages"]["go"]
-assert go["status"] == "experimental"
-assert go["extensions"] == [".go"]
-assert go["markers"] == ["go.mod", "go.work"]
-assert set(go["phases"]) == {
+assert set(data["languages"]) == {"go", "swift"}
+
+expected = {
+    "go": {
+        "status": "experimental",
+        "extensions": [".go"],
+        "markers": ["go.mod", "go.work"],
+    },
+    "swift": {
+        "status": "experimental",
+        "extensions": [".swift"],
+        "markers": ["Package.swift", ".xcodeproj", ".xcworkspace"],
+    },
+}
+
+required_phases = {
     "profile", "implementation", "testing", "debugging", "review", "verification"
 }
-for relative in go["phases"].values():
-    assert (root / relative).is_file(), relative
+for language, contract in expected.items():
+    entry = data["languages"][language]
+    assert entry["status"] == contract["status"]
+    assert entry["extensions"] == contract["extensions"]
+    assert entry["markers"] == contract["markers"]
+    assert set(entry["phases"]) == required_phases
+    for relative in entry["phases"].values():
+        assert (root / relative).is_file(), relative
 PY
   then pass "registry contract"; else fail "registry contract"; fi
 fi
 
-[[ -f skills/language-guidance/references/go/profile.md ]] &&
-  assert_max_lines skills/language-guidance/references/go/profile.md 160
-for phase in implementation testing debugging review verification; do
-  file="skills/language-guidance/references/go/$phase.md"
-  [[ -f "$file" ]] && assert_max_lines "$file" 200
+for language in go swift; do
+  profile="skills/language-guidance/references/$language/profile.md"
+  [[ -f "$profile" ]] && assert_max_lines "$profile" 160
+  for phase in implementation testing debugging review verification; do
+    file="skills/language-guidance/references/$language/$phase.md"
+    [[ -f "$file" ]] && assert_max_lines "$file" 200
+  done
 done
 
 if grep -R -nE '((curl|wget).*[|][[:space:]]*(sh|bash)|(^|[[:space:]])(go[[:space:]]+install|npm[[:space:]]+install|pnpm[[:space:]]+(install|add)|yarn[[:space:]]+(install|add)|pip3?[[:space:]]+install|brew[[:space:]]+install|apt(-get)?[[:space:]]+install|apk[[:space:]]+add|dnf[[:space:]]+install|yum[[:space:]]+install|cargo[[:space:]]+install|gem[[:space:]]+install|composer[[:space:]]+require|bundle[[:space:]]+add))' skills/language-guidance; then

@@ -168,6 +168,9 @@ unexpected_pattern='(^wukong-code/|^\.agents/|^hooks/|package\.json$|^\.git|^\.p
 assert_not_matches "$archive_paths" "$unexpected_pattern" "archive excludes source-only paths"
 assert_contains "$archive_paths" ".codex-plugin/plugin.json" "archive includes Codex manifest"
 assert_contains "$archive_paths" "skills/brainstorming/SKILL.md" "archive includes skills"
+assert_contains "$archive_paths" \
+  "skills/language-guidance/references/swift/implementation.md" \
+  "archive includes Swift language references"
 assert_contains "$archive_paths" "skills/brainstorming/agents/openai.yaml" "archive includes OpenAI skill metadata"
 assert_contains "$archive_paths" "skills/language-guidance/agents/openai.yaml" "archive keeps source metadata"
 language_metadata="$(read_archive_file "$archive" skills/language-guidance/agents/openai.yaml)"
