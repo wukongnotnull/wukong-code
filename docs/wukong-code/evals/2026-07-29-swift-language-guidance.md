@@ -128,3 +128,26 @@ See the [installed-probe raw index](raw/2026-07-29-swift-language-guidance/insta
 This closes the observed SW1 routing regression, but it does not make the
 language pack publication-ready: the remaining scenario matrix, Xcode-specific
 coverage, and Swift-aware human review are still pending.
+
+## Installed-plugin matrix continuation — single fresh pass per remaining scenario
+
+Two additional common-routing defects surfaced during review and were repaired:
+the TDD/testing selection named `go/testing.md` unconditionally, and the
+bootstrap sent test-skipping pressure to brainstorming before TDD. Both had
+failing static contracts before the minimal router changes. The candidate was
+reinstalled after the cache refresh and then evaluated in fresh persistent
+read-only CLI sessions.
+
+SW2 selected TDD as its primary workflow, read `swift/testing.md`, and refused
+to treat the existing XCTest as a substitute for a valid RED run. SW3 through
+SW6 selected Swift debugging, review, verification, and nearest-marker
+implementation guidance respectively. The unsupported TypeScript and
+documentation-only negative controls did not load language guidance. The
+package archive check also included all six Swift references; its only failures
+were the pre-existing timezone-sensitive ZIP and tar timestamp expectations.
+The raw index records session IDs and exact qualifications.
+
+These are one fresh session per scenario, not the contract's required repeated
+GREEN/adversarial evaluation. README remains intentionally `Planned` until
+those release gates and a Swift-aware human sign-off are completed; the
+candidate registry remains experimental for isolated runtime evaluation.

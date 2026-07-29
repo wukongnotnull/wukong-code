@@ -57,3 +57,31 @@ marketplace was restored afterward.
 | Scenario | Session ID | Result | Verdict |
 | --- | --- | --- | --- |
 | SW1 implementation after routing fix | `019fabfd-3bef-7062-a821-633f9ee9a20e` | Emitted `Detected: Swift` from `Package.swift` and target Swift files, `Phase: implementation`, and `Loaded: swift/profile.md, swift/implementation.md`; read both references, inspected the fixture, proposed a throwing task group with indexed ordering and cooperative cancellation, and made no edits. | PASS: required implementation guidance loaded before analysis. |
+
+## Matrix continuation after routing fixes
+
+Candidate commits: `055f895` (language-selected test reference) and `53e38fe`
+(testing-pressure TDD priority). The first SW2 run after the second change used
+the already-installed cache and therefore read the old bootstrap; it is not
+scored. The candidate was removed and re-added from the local marketplace
+before the scored sessions below. Every scored session used a fresh persistent
+read-only CLI session, and no fixture files were changed.
+
+| Scenario | Session ID | Result | Verdict |
+| --- | --- | --- | --- |
+| SW2 TDD pressure | `019fac18-9c66-7710-8e8d-14b3d34424a6` | Chose TDD over brainstorming, read `swift/testing.md`, said the existing XCTest cannot prove concurrency, and rejected the requested skip of RED. Its read-only attempt to add the test was denied. | PASS |
+| SW3 debugging | `019fac1a-bfd6-7da1-95ab-dca3bfa58d31` | Emitted `Phase: debugging`, loaded `swift/debugging.md`, and distinguished task-group cancellation, continuations, actor/synchronization cycles, and unrelated slow work without inventing a cause. | PASS |
+| SW4 review | `019fac1a-bfd6-7f80-84d0-8482151b8c22` | Emitted `Phase: review`, loaded `swift/review.md`, inspected the SwiftPM fixture, and reported no actionable defect. | PASS |
+| SW5 verification | `019fac1a-bfd6-7293-82ff-a758594af8fa` | Emitted `Phase: verification`, loaded `swift/verification.md`, listed manifest, focused/full test, build, and diff checks, and did not call SwiftPM proof of Xcode coverage. | PASS |
+| SW6 nearest marker | `019fac1c-cf6e-7cf3-a677-3785f595b6f2` | Selected Swift profile and implementation from `swift-tool/Package.swift`, not Go or TypeScript siblings, and requested a concrete change rather than inventing one. | PASS |
+| S7 unsupported TypeScript | `019fac1c-cf6e-7681-8735-d683b873232e` | Identified `.ts` as unsupported and retained generic workflow with no Go or Swift reference. | PASS |
+| S8 documentation-only | `019fac1c-cf78-7de2-abdc-f6e5dfa575c7` | Handled the README typo as documentation-only and did not announce or load language guidance. | PASS |
+
+The archive test was run from a temporary ordinary clone at `53e38fe`, because
+the packaging script rejects linked worktrees before packaging. It passed the
+six Swift-reference archive assertions. The suite still failed only its known
+timezone-sensitive timestamp assertions: ZIP expected `00:00` and observed
+`08:00`; tar expected `Dec 31 1969` and observed `Jan 1 1970`.
+
+This table is a single fresh pass per scenario. It does not replace repeated
+GREEN/adversarial coverage or a Swift-aware human review.

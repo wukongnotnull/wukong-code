@@ -109,6 +109,11 @@ for language in go swift; do
   done
 done
 
+assert_contains skills/language-guidance/references/swift/profile.md "SwiftPM success does not prove an"
+assert_contains skills/language-guidance/references/swift/implementation.md "Cancellation is cooperative"
+assert_contains skills/language-guidance/references/swift/testing.md "Valid RED reaches the new test"
+assert_contains skills/language-guidance/references/swift/verification.md "SwiftPM success is not Xcode"
+
 if grep -R -nE '((curl|wget).*[|][[:space:]]*(sh|bash)|(^|[[:space:]])(go[[:space:]]+install|npm[[:space:]]+install|pnpm[[:space:]]+(install|add)|yarn[[:space:]]+(install|add)|pip3?[[:space:]]+install|brew[[:space:]]+install|apt(-get)?[[:space:]]+install|apk[[:space:]]+add|dnf[[:space:]]+install|yum[[:space:]]+install|cargo[[:space:]]+install|gem[[:space:]]+install|composer[[:space:]]+require|bundle[[:space:]]+add))' skills/language-guidance; then
   fail "installer command found"
 else
