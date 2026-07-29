@@ -42,3 +42,18 @@ The strict-path run was read-only, so a sandbox denial prevented `swift --versio
 from creating its Xcode cache; the agent correctly reported that it could not
 verify the installed compiler from that session. The SW1 run likewise performed
 no edits or tests.
+
+## SW1 rerun after phase-routing fix
+
+Candidate commit: `8f018c8`.
+
+The common language router was changed so a requested production-source edit
+uses the implementation phase even while brainstorming or explaining first
+actions. Its static contract was red before this wording existed and green
+afterwards. The candidate plugin was then installed from the frozen worktree
+for the following persistent, read-only run; the original Git `dev`
+marketplace was restored afterward.
+
+| Scenario | Session ID | Result | Verdict |
+| --- | --- | --- | --- |
+| SW1 implementation after routing fix | `019fabfd-3bef-7062-a821-633f9ee9a20e` | Emitted `Detected: Swift` from `Package.swift` and target Swift files, `Phase: implementation`, and `Loaded: swift/profile.md, swift/implementation.md`; read both references, inspected the fixture, proposed a throwing task group with indexed ordering and cooperative cancellation, and made no edits. | PASS: required implementation guidance loaded before analysis. |

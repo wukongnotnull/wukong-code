@@ -94,7 +94,7 @@ initialization without writing its requested last-message file. These runs do
 not establish a routing result. Their environment output is retained in the
 [installed-probe raw index](raw/2026-07-29-swift-language-guidance/installed-probe.md).
 
-## Installed-plugin rerun — route resolved, implementation gate still fails
+## Installed-plugin rerun — Swift detection and strict routing work
 
 After the user updated the standalone CLI to `0.146.0`, the candidate was
 installed again from the frozen worktree and the original Git marketplace was
@@ -109,6 +109,22 @@ The same installed candidate then ran SW1 once. It detected Swift from
 task group, indexed result storage, first-observed error handling, and
 cooperative cancellation was technically responsive, but it did not load the
 required implementation guidance for a requested production-source change.
-SW1 is therefore a TARGET FAIL. The updated raw index preserves both runs and
-their persistent session identifiers. This confirms the remaining failure is
-phase selection, not plugin installation or Swift detection.
+SW1 was therefore a TARGET FAIL. The updated raw index preserves both runs and
+their persistent session identifiers. This isolated the failure to phase
+selection, not plugin installation or Swift detection.
+
+## Installed-plugin regression fix — SW1 phase gate passes
+
+Commit `8f018c8` narrows the common router so a requested production-source
+change selects implementation even when brainstorming or a request to explain
+first actions postpones editing. A new static contract first failed, then
+passed, for that rule. With the candidate plugin temporarily installed from
+the worktree, a persistent read-only SW1 rerun emitted `Phase: implementation`
+and `Loaded: swift/profile.md, swift/implementation.md` before inspecting the
+fixture. It then gave the expected structured-concurrency proposal and made no
+fixture edits. The original Git `dev` marketplace was restored after the run.
+See the [installed-probe raw index](raw/2026-07-29-swift-language-guidance/installed-probe.md).
+
+This closes the observed SW1 routing regression, but it does not make the
+language pack publication-ready: the remaining scenario matrix, Xcode-specific
+coverage, and Swift-aware human review are still pending.
