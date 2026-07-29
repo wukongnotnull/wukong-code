@@ -57,6 +57,7 @@ if [[ -f "$skill" ]]; then
   assert_contains "$skill" "| Design or plan with no requested source edit | profile |"
   assert_contains "$skill" "| Requested production-source edit, including brainstorming or pre-edit analysis | implementation |"
   assert_contains "$skill" "load both profile and implementation before discussing the approach."
+  assert_contains "$skill" "load the selected language's \`testing.md\` reference."
   assert_max_lines "$skill" 180
 fi
 

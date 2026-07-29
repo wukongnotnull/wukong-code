@@ -41,8 +41,8 @@ evidence conflicts.
 | Prove completion | verification |
 
 When the already-selected primary process is TDD or testing, select the testing
-phase and load references/go/testing.md. Language guidance does not determine
-or enforce the primary process.
+phase and load the selected language's `testing.md` reference. Language
+guidance does not determine or enforce the primary process.
 For a requested production-source edit, select the implementation phase and
 load both profile and implementation before discussing the approach. This
 remains true when brainstorming or an instruction to explain first actions
