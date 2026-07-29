@@ -21,6 +21,11 @@ Run cargo-audit, cargo-deny, cargo-llvm-cov, Miri, or another extension only
 when configured and available. Missing Cargo extensions are reported, never
 installed.
 
+An assumed cargo test pass proves only that stated scope. Do not turn it into
+formatting, lint, security, feature, target, Miri, or coverage evidence. Do not
+invent all-features or all-targets matrices; report unsupported or
+unconfigured checks as unverified without proposing installation.
+
 Report exact commands, exit codes, test counts when available, compiler,
 package, features, target, profile, formatting/lint output, skipped checks, and
 unverified combinations. For unsafe, FFI, generated code, proc macros, or cfg

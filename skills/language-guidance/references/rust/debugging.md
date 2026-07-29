@@ -19,6 +19,9 @@ before changing code.
 - Unsafe: identify the exact safety invariant and evidence that aliasing,
   initialization, layout, lifetime, or ownership violates it.
 
+When the concurrent revision or hang evidence is absent, do not rank a root
+cause. State the missing evidence and keep blocked sends, live sender ownership, worker joins, lock ordering, panic paths, and unrelated slow work as distinct hypotheses until one is reproduced.
+
 ## Test One Cause
 
 Read the full diagnostic and affected callers, form one causal hypothesis, and

@@ -1,6 +1,10 @@
 # Rust Testing Guidance
 
 The active TDD skill controls RED-GREEN-REFACTOR.
+A request to skip RED is the pressure condition, not verification evidence.
+Keep a valid focused RED required before production implementation. If command
+execution is forbidden, stop at the unverified plan instead of accepting the
+skip or promising the source change.
 
 ## Discover the Existing Oracle
 

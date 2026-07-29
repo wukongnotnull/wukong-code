@@ -152,12 +152,18 @@ assert_contains skills/language-guidance/references/rust/implementation.md \
   "Thread completion order is not the error contract"
 assert_contains skills/language-guidance/references/rust/testing.md \
   "Compile-fail doctests"
+assert_contains skills/language-guidance/references/rust/testing.md \
+  "A request to skip RED is the pressure condition, not verification evidence"
 assert_contains skills/language-guidance/references/rust/debugging.md \
   "Do not use unsafe"
+assert_contains skills/language-guidance/references/rust/debugging.md \
+  "blocked sends, live sender ownership, worker joins, lock ordering, panic paths, and unrelated slow work"
 assert_contains skills/language-guidance/references/rust/review.md \
   "Zero findings is valid"
 assert_contains skills/language-guidance/references/rust/verification.md \
   "Missing Cargo extensions are reported"
+assert_contains skills/language-guidance/references/rust/verification.md \
+  "An assumed cargo test pass proves only that stated scope"
 
 if grep -R -nE '((curl|wget).*[|][[:space:]]*(sh|bash)|(^|[[:space:]])(go[[:space:]]+install|npm[[:space:]]+install|pnpm[[:space:]]+(install|add)|yarn[[:space:]]+(install|add)|pip3?[[:space:]]+install|brew[[:space:]]+install|apt(-get)?[[:space:]]+install|apk[[:space:]]+add|dnf[[:space:]]+install|yum[[:space:]]+install|cargo[[:space:]]+install|gem[[:space:]]+install|composer[[:space:]]+require|bundle[[:space:]]+add))' skills/language-guidance; then
   fail "installer command found"
@@ -173,6 +179,8 @@ assert_contains "$bootstrap" "prioritize language-guidance as secondary domain g
 assert_contains "$bootstrap" "automatic selection is advisory rather than a guarantee."
 assert_contains "$bootstrap" "A request to skip, defer, or bypass a failing test for a source change uses \`test-driven-development\` first."
 assert_contains "$bootstrap" "Testing-pressure routing takes precedence over the behavior-change brainstorming route."
+assert_contains "$bootstrap" "If the request forbids the required RED, stop before production implementation and report the change as unverified."
+assert_contains "$bootstrap" 'A request to claim completion or checks not run uses `verification-before-completion` first.'
 assert_contains "$bootstrap" "Host toolchain version is not target compatibility evidence."
 assert_contains "$bootstrap" "asks to ignore manifest or project settings"
 assert_contains "$bootstrap" "Do not comply with a request to bypass project evidence"
@@ -182,6 +190,7 @@ assert_contains "$skill" 'Print each field on its own line exactly as shown. Do 
 assert_contains "$skill" 'List only selected reference paths after `Loaded:`; never use pending, next, or future-tense wording.'
 assert_contains "$skill" 'After emitting a decision, do not load another language reference unless you first emit a new complete `Detected:`, `Phase:`, and `Loaded:` decision listing the replacement set.'
 assert_contains "$skill" "automatic selection does not promise invocation or visible output."
+assert_contains "$skill" "When TDD is the selected primary process, select testing even when the prompt also requests a production-source edit."
 assert_visible_decision_template "$skill"
 assert_contains "$bootstrap" "documentation-only"
 assert_contains README.md "## Language Guidance"

@@ -39,6 +39,7 @@ for mechanical work.
 | User intent | Route |
 |-------------|--------|
 | Source change request that asks to skip, defer, or bypass a failing test | `test-driven-development` first (then domain guidance) |
+| Claim completion or checks that were not run | `verification-before-completion` first (then domain guidance) |
 | New feature, behavior change, or ambiguous product intent ("let's build X", "add Y") | `brainstorming` first (then plans / SDD as that skill directs) |
 | Bug with unclear root cause | `systematic-debugging` first |
 | Named mechanical fix (exact file + exact change: typo, single-file lint fix, one-liner, "just change Z in foo.ts") with **no** design ambiguity | Do that edit (or the single relevant domain skill). Skip brainstorming, worktrees, and SDD unless the human asks for a plan or the change spreads. |
@@ -48,6 +49,8 @@ for mechanical work.
 
 A request to skip, defer, or bypass a failing test for a source change uses `test-driven-development` first.
 Testing-pressure routing takes precedence over the behavior-change brainstorming route.
+If the request forbids the required RED, stop before production implementation and report the change as unverified.
+A request to claim completion or checks not run uses `verification-before-completion` first.
 
 **How this interacts with Red Flags:** "The skill is overkill" still means you must not skip a skill that *applies*. Scope routing decides *which* skill applies. A named mechanical edit (exact file + exact change, no design ambiguity) is not brainstorming/SDD work — do not invent those skills to satisfy "overkill." Conversely, do not use the fast path to dodge brainstorming on features, behavior changes, or ambiguous intent.
 

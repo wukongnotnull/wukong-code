@@ -41,6 +41,7 @@ evidence conflicts.
 | Prove completion | verification |
 
 A requested test-source edit selects the testing phase even when the task also requests a production-source edit. When the already-selected primary process is TDD or testing, select the testing phase and load the selected language's `testing.md` reference. Language guidance does not determine or enforce the primary process.
+When TDD is the selected primary process, select testing even when the prompt also requests a production-source edit.
 For a requested production-source edit, select the implementation phase and
 load both profile and implementation before discussing the approach. This
 remains true when brainstorming or an instruction to explain first actions
