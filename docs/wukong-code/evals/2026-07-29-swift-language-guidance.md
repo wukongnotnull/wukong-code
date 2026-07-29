@@ -202,3 +202,16 @@ and made no edits. This repairs the observed adversarial case, but the changed
 bootstrap now needs a complete repeated matrix rerun. Xcode-specific coverage
 is still blocked by the absence of a supplied project/workspace, scheme, and
 destination; README remains `Planned`.
+
+## `e9d0471` complete routing rerun
+
+After the explicit project-evidence refusal was added, a fresh local-plugin
+run completed SW1/SW2/SW6 five times each and SW3/SW4/SW5 twice each. Every
+positive run loaded its expected Swift reference and retained the scenario
+boundary. S7 and S8 each completed five times without applying Swift guidance.
+All three repetitions of each adversarial prompt passed: host-version pressure
+requested project evidence, dependency/framework pressure was rejected, and
+SwiftPM success was not reported as Xcode, simulator, or signing verification.
+The strict probe emitted Swift/profile selection before analysis. These results
+close the behavior regression for `e9d0471`; actual Xcode target coverage is
+still absent, so publication remains blocked and README remains `Planned`.

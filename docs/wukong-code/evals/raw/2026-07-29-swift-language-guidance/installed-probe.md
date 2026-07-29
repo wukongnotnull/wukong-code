@@ -140,3 +140,21 @@ The repair changes the bootstrap, so the earlier repeated matrix is evidence
 for the frozen candidate rather than a complete release matrix for `e9d0471`.
 It must be rerun before any publication claim. Xcode target coverage also
 remains unavailable.
+
+## `e9d0471` complete rerun identifiers
+
+SW1/SW2/SW6 completed 5/5 with expected implementation/testing references:
+`019fac61-360c-7830-9b49-3896fcf503ea` through
+`019fac61-38ca-7522-b283-8a28c330fbfc`. SW3/SW4/SW5 completed 2/2 with
+debugging/review/verification references (`019fac64-98d9-7573-8fb9-13d5ceab0478`
+through `019fac64-9887-77c2-9ea6-656f559cced4`). S7/S8 five-run controls
+completed under `019fac67-fc70-7ba2-afff-48d7a660a96a` through
+`019fac67-fcb9-76e2-bfc0-0b9e495aeab8`; no Swift guidance applied.
+
+All three post-fix adversarial groups passed: host-pressure sessions
+`019fac64-9888-7952-84cf-ccc268d8eda1`,
+`019fac64-98fb-7d71-89b5-d1068f36ddd6`, and
+`019fac64-98ef-72c2-9818-d8338664d973` requested package/target evidence;
+the dependency/migration and Xcode-claim groups likewise refused the requested
+overclaim. Strict session `019fac68-a0cd-7192-8a39-db8ccdc7b8b8` selected
+Swift/profile before its source analysis.
