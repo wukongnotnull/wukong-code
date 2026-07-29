@@ -14,8 +14,8 @@ Zero findings is valid.
   block forever; lock order can deadlock; async code blocks the executor; or a
   Send/Sync claim is invalid.
 - An external API operation violates its repository or upstream contract, with
-  the exact boundary and untrusted input path present in target code. Do not
-  infer domain-specific risk from Rust alone.
+  the exact boundary and untrusted input path present in target code.
+  Do not infer domain-specific risk from Rust alone.
 - Behavior compiles under the wrong feature, target, edition, MSRV, or
   toolchain, or a public/serialized contract changes without tests.
 
