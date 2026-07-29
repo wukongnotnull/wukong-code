@@ -190,11 +190,11 @@ Swift, S7, and S8 behavior probes. They could not start after the account quota
 error and remain `INCONCLUSIVE`; static contracts and harness tests passing do
 not replace those probes.
 
-## Post-review local verification at `3befefe`
+## Post-review local verification at `53b2284`
 
 | Command | Result |
 | --- | --- |
-| `bash tests/skills/test-language-guidance.sh` | PASS, including the new phase-precedence contract |
+| `bash tests/skills/test-language-guidance.sh` | PASS, including phase precedence and the external-API review boundary |
 | `bash tests/skills/test-skill-slim-gates.sh` | PASS |
 | `bash tests/opencode/run-tests.sh` | PASS — 2 passed, 0 failed |
 | `bash tests/kimi/run-tests.sh` | PASS — manifest valid |
