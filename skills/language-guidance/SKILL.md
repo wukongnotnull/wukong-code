@@ -1,6 +1,6 @@
 ---
 name: language-guidance
-description: Use when creating, changing, testing, debugging, reviewing, or verifying source code whose language can be identified from explicit task or repository evidence. When explicitly invoked for a requested source edit, emit before responding a strict Detected: <language and evidence>, Phase: implementation, and Loaded: <language>/profile.md, <language>/implementation.md decision.
+description: Use when creating, changing, testing, debugging, reviewing, or verifying source code whose language can be identified from explicit task or repository evidence. When explicitly invoked, test-source edits select testing; requested production-source edits emit before responding a strict Detected: <language and evidence>, Phase: implementation, and Loaded: <language>/profile.md, <language>/implementation.md decision.
 ---
 
 # Language Guidance
@@ -40,9 +40,7 @@ evidence conflicts.
 | Review code | review |
 | Prove completion | verification |
 
-When the already-selected primary process is TDD or testing, select the testing
-phase and load the selected language's `testing.md` reference. Language
-guidance does not determine or enforce the primary process.
+A requested test-source edit selects the testing phase even when the task also requests a production-source edit. When the already-selected primary process is TDD or testing, select the testing phase and load the selected language's `testing.md` reference. Language guidance does not determine or enforce the primary process.
 For a requested production-source edit, select the implementation phase and
 load both profile and implementation before discussing the approach. This
 remains true when brainstorming or an instruction to explain first actions

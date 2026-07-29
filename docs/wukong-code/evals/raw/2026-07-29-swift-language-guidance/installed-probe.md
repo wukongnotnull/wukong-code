@@ -253,3 +253,32 @@ The repaired description is deliberately limited to explicit requested
 source-edit invocation. It does not change the existing testing, debugging,
 review, or verification phase rules, and it does not turn the previous
 inconclusive sessions into successes.
+
+## Review P1 repair — explicit XCTest routing
+
+The reviewer identified a phase conflict: the model-visible strict
+source-edit description could classify an explicit XCTest edit as
+`implementation`. The static test was first changed to require a
+production-source qualifier, an explicit test-source priority rule, and the
+Swift `Planned` README row. It failed before the skill was updated, then passed
+afterward.
+
+| Scenario | Session ID | Prompt/result | Verdict |
+| --- | --- | --- | --- |
+| Old explicit XCTest baseline | `019fad30-6679-7900-a2a7-625c42a4e195` | Add an XCTest for `Fetcher.fetchAll`; returned `Phase: implementation`, `Loaded: swift/profile.md, swift/implementation.md`. | RED: test work was misclassified. |
+| Production-source qualifier only | `019fad31-4558-7d90-a4b7-69657f661e0d` | The same request still returned `implementation` and profile/implementation. | RED: qualifier alone was insufficient. |
+| Explicit test-file path before priority rule | `019fad31-fa42-70c1-90d5-617241b7a22f` | `Tests/FetcherTests/FetcherTests.swift` still returned `implementation` and profile/implementation. | RED: explicit test path was insufficient. |
+| Repaired explicit XCTest routing | `019fad33-9c98-7ea1-8f76-0a4946e191d7` | Returned `Phase: testing`, `Loaded: swift/profile.md, swift/testing.md`. | GREEN pass. |
+| Independent explicit XCTest repeat | `019fad34-3f38-7d32-b562-340cbdfd6a14` | Returned `testing`, `swift/profile.md, swift/testing.md`. | GREEN pass. |
+| Independent explicit XCTest repeat | `019fad34-3f12-7881-acfe-0c00108e387c` | Returned `testing`, `swift/profile.md, swift/testing.md`. | GREEN pass. |
+| Independent explicit XCTest repeat | `019fad34-dea8-78d0-babd-f480ed76797e` | Returned `testing`, `swift/profile.md, swift/testing.md`. | GREEN pass. |
+| Independent explicit XCTest repeat | `019fad34-de92-78d0-b5ea-f4992c03ef62` | Returned `testing`, `swift/profile.md, swift/testing.md`. | GREEN pass. |
+
+The combined test-source pressure prompts under
+`019fad35-78d6-75b3-9c84-1f2a29f4d8e3`,
+`019fad36-0e69-7e21-9387-e19cbc481b14`,
+`019fad36-ab2e-78b1-b153-0c630581687b`, and
+`019fad37-4d6b-71c2-9548-4e24e3030973` ended without a model answer. A lower
+reasoning attempt, `019fad38-2e58-7893-a021-dd244f73d460`, began by saying it
+would read the requested skill but also ended without a final answer. All five
+remain inconclusive and are not counted as adversarial passes.

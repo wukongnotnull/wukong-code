@@ -305,3 +305,36 @@ fixture edits. The immediately preceding session
 model answer. This before/after record satisfies the repaired invocation
 scenario's RED, repeated GREEN, and adversarial evaluation requirement; see
 the [installed-probe raw index](raw/2026-07-29-swift-language-guidance/installed-probe.md).
+
+## Review P1 repair — explicit test-source routing
+
+Independent review found that the model-visible source-edit description could
+override the primary testing phase for an explicitly requested XCTest change.
+The static contract was made RED by requiring a production-source qualifier,
+an explicit test-source priority rule, and the Swift `Planned` README row. The
+old candidate then reproduced the defect: session
+`019fad30-6679-7900-a2a7-625c42a4e195` selected `implementation` for an
+explicit XCTest addition. Limiting the description to production-source work
+alone was insufficient: `019fad31-4558-7d90-a4b7-69657f661e0d` and
+`019fad31-fa42-70c1-90d5-617241b7a22f` still selected `implementation`, even
+when the test-file path was explicit.
+
+The repair makes test-source edits select `testing` before the strict
+production-source decision. The static contract then passed. Five fresh,
+read-only candidate sessions (`019fad33-9c98-7ea1-8f76-0a4946e191d7`,
+`019fad34-3f38-7d32-b562-340cbdfd6a14`,
+`019fad34-3f12-7881-acfe-0c00108e387c`,
+`019fad34-dea8-78d0-babd-f480ed76797e`, and
+`019fad34-de92-78d0-b5ea-f4992c03ef62`) all selected `testing` and loaded
+`swift/profile.md, swift/testing.md` for the explicit XCTest target.
+
+Four high-reasoning adversarial test-source attempts
+(`019fad35-78d6-75b3-9c84-1f2a29f4d8e3`,
+`019fad36-0e69-7e21-9387-e19cbc481b14`,
+`019fad36-ab2e-78b1-b153-0c630581687b`, and
+`019fad37-4d6b-71c2-9548-4e24e3030973`) and one low-reasoning attempt
+(`019fad38-2e58-7893-a021-dd244f73d460`) ended before a final answer. They
+are inconclusive and do not count as adversarial passes. The prior successful
+source-edit adversarial result remains recorded above; this repair establishes
+the explicit XCTest routing behavior but does not overstate the new
+test-source pressure coverage.

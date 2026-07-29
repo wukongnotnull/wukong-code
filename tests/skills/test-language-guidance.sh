@@ -51,7 +51,7 @@ done
 if [[ -f "$skill" ]]; then
   assert_contains "$skill" "name: language-guidance"
   assert_contains "$skill" "description: Use when"
-  assert_contains "$skill" "When explicitly invoked for a requested source edit, emit before responding a strict Detected: <language and evidence>, Phase: implementation, and Loaded: <language>/profile.md, <language>/implementation.md decision."
+  assert_contains "$skill" "When explicitly invoked, test-source edits select testing; requested production-source edits emit before responding a strict Detected: <language and evidence>, Phase: implementation, and Loaded: <language>/profile.md, <language>/implementation.md decision."
   assert_contains "$skill" "Primary process remains authoritative"
   assert_contains "$skill" "at most two"
   assert_contains "$skill" "Do not guess"
@@ -59,6 +59,7 @@ if [[ -f "$skill" ]]; then
   assert_contains "$skill" "| Requested production-source edit, including brainstorming or pre-edit analysis | implementation |"
   assert_contains "$skill" "load both profile and implementation before discussing the approach."
   assert_contains "$skill" "load the selected language's \`testing.md\` reference."
+  assert_contains "$skill" "A requested test-source edit selects the testing phase even when the task also requests a production-source edit."
   assert_max_lines "$skill" 180
 fi
 
@@ -142,6 +143,7 @@ assert_visible_decision_template "$skill"
 assert_contains "$bootstrap" "documentation-only"
 assert_contains README.md "## Language Guidance"
 assert_contains README.md "| Go | Experimental |"
+assert_contains README.md "| Swift | Planned | — | — | — | — | — | — |"
 assert_contains CLAUDE.md "### Language-level skills"
 assert_contains .github/PULL_REQUEST_TEMPLATE.md "## Language-pack evidence"
 assert_contains docs/testing.md "test-language-guidance.sh"
