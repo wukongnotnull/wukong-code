@@ -20,7 +20,8 @@ before changing code.
   initialization, layout, lifetime, or ownership violates it.
 
 When the concurrent revision or hang evidence is absent, do not rank a root
-cause. State the missing evidence and keep blocked sends, live sender ownership, worker joins, lock ordering, panic paths, and unrelated slow work as distinct hypotheses until one is reproduced.
+cause; do not name a leading, likely, or most likely cause. State the missing
+evidence and keep blocked sends, live sender ownership, worker joins, lock ordering, panic paths, and unrelated slow work as distinct hypotheses until one is reproduced.
 
 ## Test One Cause
 

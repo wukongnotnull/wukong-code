@@ -46,6 +46,8 @@ For a requested production-source edit, select the implementation phase and
 load both profile and implementation before discussing the approach. This
 remains true when brainstorming or an instruction to explain first actions
 delays the edit.
+A no-command constraint blocks project verification commands, not loading the selected verification reference.
+Never install missing verification tools or invent feature and target matrices.
 Load at most two references per decision. For cross-language work, state each
 target scope and process scopes separately when the limit would be exceeded.
 

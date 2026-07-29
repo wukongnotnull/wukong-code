@@ -158,6 +158,8 @@ assert_contains skills/language-guidance/references/rust/debugging.md \
   "Do not use unsafe"
 assert_contains skills/language-guidance/references/rust/debugging.md \
   "blocked sends, live sender ownership, worker joins, lock ordering, panic paths, and unrelated slow work"
+assert_contains skills/language-guidance/references/rust/debugging.md \
+  "do not name a leading, likely, or most likely cause"
 assert_contains skills/language-guidance/references/rust/review.md \
   "Zero findings is valid"
 assert_contains skills/language-guidance/references/rust/verification.md \
@@ -191,6 +193,8 @@ assert_contains "$skill" 'List only selected reference paths after `Loaded:`; ne
 assert_contains "$skill" 'After emitting a decision, do not load another language reference unless you first emit a new complete `Detected:`, `Phase:`, and `Loaded:` decision listing the replacement set.'
 assert_contains "$skill" "automatic selection does not promise invocation or visible output."
 assert_contains "$skill" "When TDD is the selected primary process, select testing even when the prompt also requests a production-source edit."
+assert_contains "$skill" "A no-command constraint blocks project verification commands, not loading the selected verification reference."
+assert_contains "$skill" "Never install missing verification tools or invent feature and target matrices."
 assert_visible_decision_template "$skill"
 assert_contains "$bootstrap" "documentation-only"
 assert_contains README.md "## Language Guidance"
