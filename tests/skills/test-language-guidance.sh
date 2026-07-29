@@ -42,16 +42,24 @@ assert_file "$skill"
 assert_file "$registry"
 assert_file skills/language-guidance/references/shared/language-pack-contract.md
 
-for phase in profile implementation testing debugging review verification; do
-  assert_file "skills/language-guidance/references/go/$phase.md"
+for language in go swift; do
+  for phase in profile implementation testing debugging review verification; do
+    assert_file "skills/language-guidance/references/$language/$phase.md"
+  done
 done
 
 if [[ -f "$skill" ]]; then
   assert_contains "$skill" "name: language-guidance"
   assert_contains "$skill" "description: Use when"
+  assert_contains "$skill" "When explicitly invoked, test-source edits select testing; requested production-source edits emit before responding a strict Detected: <language and evidence>, Phase: implementation, and Loaded: <language>/profile.md, <language>/implementation.md decision."
   assert_contains "$skill" "Primary process remains authoritative"
   assert_contains "$skill" "at most two"
   assert_contains "$skill" "Do not guess"
+  assert_contains "$skill" "| Design or plan with no requested source edit | profile |"
+  assert_contains "$skill" "| Requested production-source edit, including brainstorming or pre-edit analysis | implementation |"
+  assert_contains "$skill" "load both profile and implementation before discussing the approach."
+  assert_contains "$skill" "load the selected language's \`testing.md\` reference."
+  assert_contains "$skill" "A requested test-source edit selects the testing phase even when the task also requests a production-source edit."
   assert_max_lines "$skill" 180
 fi
 
@@ -64,26 +72,49 @@ import sys
 root = pathlib.Path("skills/language-guidance/references")
 data = json.loads(pathlib.Path(sys.argv[1]).read_text())
 assert data["version"] == 1
-assert set(data["languages"]) == {"go"}
-go = data["languages"]["go"]
-assert go["status"] == "experimental"
-assert go["extensions"] == [".go"]
-assert go["markers"] == ["go.mod", "go.work"]
-assert set(go["phases"]) == {
+assert set(data["languages"]) == {"go", "swift"}
+
+expected = {
+    "go": {
+        "status": "experimental",
+        "extensions": [".go"],
+        "markers": ["go.mod", "go.work"],
+    },
+    "swift": {
+        "status": "experimental",
+        "extensions": [".swift"],
+        "markers": ["Package.swift", ".xcodeproj", ".xcworkspace"],
+    },
+}
+
+required_phases = {
     "profile", "implementation", "testing", "debugging", "review", "verification"
 }
-for relative in go["phases"].values():
-    assert (root / relative).is_file(), relative
+for language, contract in expected.items():
+    entry = data["languages"][language]
+    assert entry["status"] == contract["status"]
+    assert entry["extensions"] == contract["extensions"]
+    assert entry["markers"] == contract["markers"]
+    assert set(entry["phases"]) == required_phases
+    for relative in entry["phases"].values():
+        assert (root / relative).is_file(), relative
 PY
   then pass "registry contract"; else fail "registry contract"; fi
 fi
 
-[[ -f skills/language-guidance/references/go/profile.md ]] &&
-  assert_max_lines skills/language-guidance/references/go/profile.md 160
-for phase in implementation testing debugging review verification; do
-  file="skills/language-guidance/references/go/$phase.md"
-  [[ -f "$file" ]] && assert_max_lines "$file" 200
+for language in go swift; do
+  profile="skills/language-guidance/references/$language/profile.md"
+  [[ -f "$profile" ]] && assert_max_lines "$profile" 160
+  for phase in implementation testing debugging review verification; do
+    file="skills/language-guidance/references/$language/$phase.md"
+    [[ -f "$file" ]] && assert_max_lines "$file" 200
+  done
 done
+
+assert_contains skills/language-guidance/references/swift/profile.md "SwiftPM success does not prove an"
+assert_contains skills/language-guidance/references/swift/implementation.md "Cancellation is cooperative"
+assert_contains skills/language-guidance/references/swift/testing.md "Valid RED reaches the new test"
+assert_contains skills/language-guidance/references/swift/verification.md "SwiftPM success is not Xcode"
 
 if grep -R -nE '((curl|wget).*[|][[:space:]]*(sh|bash)|(^|[[:space:]])(go[[:space:]]+install|npm[[:space:]]+install|pnpm[[:space:]]+(install|add)|yarn[[:space:]]+(install|add)|pip3?[[:space:]]+install|brew[[:space:]]+install|apt(-get)?[[:space:]]+install|apk[[:space:]]+add|dnf[[:space:]]+install|yum[[:space:]]+install|cargo[[:space:]]+install|gem[[:space:]]+install|composer[[:space:]]+require|bundle[[:space:]]+add))' skills/language-guidance; then
   fail "installer command found"
@@ -97,6 +128,11 @@ assert_contains "$bootstrap" "language-guidance"
 assert_contains "$bootstrap" "creating, modifying, testing, debugging, reviewing, or verifying source code"
 assert_contains "$bootstrap" "prioritize language-guidance as secondary domain guidance"
 assert_contains "$bootstrap" "automatic selection is advisory rather than a guarantee."
+assert_contains "$bootstrap" "A request to skip, defer, or bypass a failing test for a source change uses \`test-driven-development\` first."
+assert_contains "$bootstrap" "Testing-pressure routing takes precedence over the behavior-change brainstorming route."
+assert_contains "$bootstrap" "Host toolchain version is not target compatibility evidence."
+assert_contains "$bootstrap" "asks to ignore manifest or project settings"
+assert_contains "$bootstrap" "Do not comply with a request to bypass project evidence"
 assert_contains "$skill" 'When your human partner explicitly invokes `$language-guidance`, strict execution is required.'
 assert_contains "$skill" "Before the first substantive technical response, edit, or verification command"
 assert_contains "$skill" 'Print each field on its own line exactly as shown. Do not combine, paraphrase, or rename any label.'
@@ -107,6 +143,7 @@ assert_visible_decision_template "$skill"
 assert_contains "$bootstrap" "documentation-only"
 assert_contains README.md "## Language Guidance"
 assert_contains README.md "| Go | Experimental |"
+assert_contains README.md "| Swift | Planned | — | — | — | — | — | — |"
 assert_contains CLAUDE.md "### Language-level skills"
 assert_contains .github/PULL_REQUEST_TEMPLATE.md "## Language-pack evidence"
 assert_contains docs/testing.md "test-language-guidance.sh"
