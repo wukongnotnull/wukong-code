@@ -187,6 +187,7 @@ workflow. Automatic selection is advisory rather than guaranteed.
 | Java | Planned | — | — | — | — | — | — |
 | TypeScript | Planned | — | — | — | — | — | — |
 | Swift | Planned | — | — | — | — | — | — |
+| Rust | Planned | — | — | — | — | — | — |
 
 Experimental means initial behavior evals exist but real-project evidence is
 still accumulating. Packs never install tools or override repository commands.

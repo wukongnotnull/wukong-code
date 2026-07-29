@@ -42,7 +42,7 @@ assert_file "$skill"
 assert_file "$registry"
 assert_file skills/language-guidance/references/shared/language-pack-contract.md
 
-for language in go swift; do
+for language in go swift rust; do
   for phase in profile implementation testing debugging review verification; do
     assert_file "skills/language-guidance/references/$language/$phase.md"
   done
@@ -72,7 +72,7 @@ import sys
 root = pathlib.Path("skills/language-guidance/references")
 data = json.loads(pathlib.Path(sys.argv[1]).read_text())
 assert data["version"] == 1
-assert set(data["languages"]) == {"go", "swift"}
+assert set(data["languages"]) == {"go", "swift", "rust"}
 
 expected = {
     "go": {
@@ -84,6 +84,16 @@ expected = {
         "status": "experimental",
         "extensions": [".swift"],
         "markers": ["Package.swift", ".xcodeproj", ".xcworkspace"],
+    },
+    "rust": {
+        "status": "experimental",
+        "extensions": [".rs"],
+        "markers": [
+            "Cargo.toml",
+            "Cargo.lock",
+            "rust-toolchain.toml",
+            "rust-toolchain",
+        ],
     },
 }
 
@@ -102,7 +112,7 @@ PY
   then pass "registry contract"; else fail "registry contract"; fi
 fi
 
-for language in go swift; do
+for language in go swift rust; do
   profile="skills/language-guidance/references/$language/profile.md"
   [[ -f "$profile" ]] && assert_max_lines "$profile" 160
   for phase in implementation testing debugging review verification; do
@@ -115,6 +125,38 @@ assert_contains skills/language-guidance/references/swift/profile.md "SwiftPM su
 assert_contains skills/language-guidance/references/swift/implementation.md "Cancellation is cooperative"
 assert_contains skills/language-guidance/references/swift/testing.md "Valid RED reaches the new test"
 assert_contains skills/language-guidance/references/swift/verification.md "SwiftPM success is not Xcode"
+
+assert_file tests/skills/fixtures/language-guidance/rust-basic/Cargo.toml
+assert_file tests/skills/fixtures/language-guidance/rust-basic/src/lib.rs
+assert_file tests/skills/fixtures/language-guidance/rust-basic/tests/batch.rs
+assert_file tests/skills/fixtures/language-guidance/monorepo/rust-worker/Cargo.toml
+assert_file tests/skills/fixtures/language-guidance/monorepo/rust-worker/src/lib.rs
+
+for manifest in \
+  tests/skills/fixtures/language-guidance/rust-basic/Cargo.toml \
+  tests/skills/fixtures/language-guidance/monorepo/rust-worker/Cargo.toml; do
+  assert_contains "$manifest" 'edition = "2021"'
+  assert_contains "$manifest" 'rust-version = "1.63"'
+  assert_contains "$manifest" 'publish = false'
+  if grep -qE '^\[[^]]*dependencies([.]|\])' "$manifest"; then
+    fail "$manifest declares dependencies"
+  else
+    pass "$manifest declares no dependency table"
+  fi
+done
+
+assert_contains skills/language-guidance/references/rust/profile.md \
+  "Cargo.toml is the ownership source"
+assert_contains skills/language-guidance/references/rust/implementation.md \
+  "Thread completion order is not the error contract"
+assert_contains skills/language-guidance/references/rust/testing.md \
+  "Compile-fail doctests"
+assert_contains skills/language-guidance/references/rust/debugging.md \
+  "Do not use unsafe"
+assert_contains skills/language-guidance/references/rust/review.md \
+  "Zero findings is valid"
+assert_contains skills/language-guidance/references/rust/verification.md \
+  "Missing Cargo extensions are reported"
 
 if grep -R -nE '((curl|wget).*[|][[:space:]]*(sh|bash)|(^|[[:space:]])(go[[:space:]]+install|npm[[:space:]]+install|pnpm[[:space:]]+(install|add)|yarn[[:space:]]+(install|add)|pip3?[[:space:]]+install|brew[[:space:]]+install|apt(-get)?[[:space:]]+install|apk[[:space:]]+add|dnf[[:space:]]+install|yum[[:space:]]+install|cargo[[:space:]]+install|gem[[:space:]]+install|composer[[:space:]]+require|bundle[[:space:]]+add))' skills/language-guidance; then
   fail "installer command found"
@@ -144,6 +186,7 @@ assert_contains "$bootstrap" "documentation-only"
 assert_contains README.md "## Language Guidance"
 assert_contains README.md "| Go | Experimental |"
 assert_contains README.md "| Swift | Planned | — | — | — | — | — | — |"
+assert_contains README.md "| Rust | Planned | — | — | — | — | — | — |"
 assert_contains CLAUDE.md "### Language-level skills"
 assert_contains .github/PULL_REQUEST_TEMPLATE.md "## Language-pack evidence"
 assert_contains docs/testing.md "test-language-guidance.sh"
