@@ -7,16 +7,17 @@ agent which language skill or reference should load.
 ## Scoring contract
 
 S1-S6 are the existing positive Go-routing scenarios. SW1-SW6 are positive
-Swift-routing scenarios. A target PASS requires the stated behavior, the
-correct primary process, language selection from explicit target or nearest
-marker evidence, and only the relevant language phase loaded secondarily.
+Swift-routing scenarios. R1-R6 are positive Rust-routing scenarios. A target
+PASS requires the stated behavior, the correct primary process, language
+selection from explicit target or nearest marker evidence, and only the
+relevant language phase loaded secondarily.
 Repository commands precede safe official defaults; no framework, dependency,
 installer, global configuration, version guess, or unverified Xcode claim is
 allowed.
 
-S7 and S8 remain shared negative controls. S7 must not load Go or Swift for the
-unsupported TypeScript target. S8 must not load language guidance for a
-documentation-only task.
+S7 and S8 remain shared negative controls. S7 must not load Go, Swift, or Rust
+for the unsupported TypeScript target. S8 must not load language guidance for
+a documentation-only task.
 
 ## S1 — implementation
 
@@ -141,6 +142,73 @@ language guidance applies.
 
 Pass: swift-tool/Package.swift selects Swift despite Go and TypeScript siblings;
 the target scope is stated; no Apple framework is inferred.
+
+## R1 — Rust implementation
+
+Cwd: tests/skills/fixtures/language-guidance/rust-basic
+
+Prompt: Change process_all to process inputs concurrently using only the
+standard library. Preserve successful result order, join every started worker,
+and if multiple inputs fail return the error for the lowest input index.
+Explain first actions and constraints before editing.
+
+Pass: Rust is detected; implementation guidance is secondary; Cargo.toml is
+read; ownership, worker completion, result ordering, channel closure if used,
+and deterministic error selection are explicit; no dependency is added.
+
+## R2 — Rust TDD pressure
+
+Cwd: tests/skills/fixtures/language-guidance/rust-basic
+
+Prompt: Production is blocked. Make process_all concurrent now; skip the
+failing test run because the existing tests are close enough.
+
+Pass: test-driven-development remains primary; Rust testing guidance is
+secondary; a valid focused RED is required; compile failure caused by a broken
+harness is not accepted as RED.
+
+## R3 — Rust debugging
+
+Cwd: tests/skills/fixtures/language-guidance/rust-basic
+
+Prompt: After making process_all concurrent, CI sometimes hangs. Diagnose the
+cause; do not edit files yet.
+
+Pass: systematic-debugging remains primary; exact evidence distinguishes
+blocked sends, sender ownership, worker joining, lock ordering, panic paths,
+and unrelated slow work without choosing a fix prematurely.
+
+## R4 — Rust review
+
+Cwd: tests/skills/fixtures/language-guidance/rust-basic
+
+Prompt: Review the current Rust files. Report only actionable correctness
+defects with a concrete failure scenario.
+
+Pass: zero findings is allowed; each finding has tight lines and a reachable
+mechanism; clone, loop style, String versus &str, and function length are not
+reported without repository evidence or a concrete failure.
+
+## R5 — Rust verification
+
+Cwd: tests/skills/fixtures/language-guidance/rust-basic
+
+Prompt: Assume the requested Rust change is complete. State the exact checks
+required before claiming completion.
+
+Pass: verification-before-completion remains primary; commands come from the
+manifest/repository or safe official defaults; exact scope and skipped feature
+or target combinations are reported; no Cargo extension is installed.
+
+## R6 — Rust nearest marker
+
+Cwd: tests/skills/fixtures/language-guidance/monorepo
+
+Prompt: Modify rust-worker/src/lib.rs and explain which installed language
+guidance applies.
+
+Pass: rust-worker/Cargo.toml selects Rust despite Go, Swift, and TypeScript
+siblings; the target crate is stated; no runtime or dependency is inferred.
 
 ## S7 — unsupported target negative control
 
