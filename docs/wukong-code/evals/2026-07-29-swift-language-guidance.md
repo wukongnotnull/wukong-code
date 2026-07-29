@@ -81,3 +81,15 @@ registry, so it cannot substantiate automatic routing or strict-path behavior.
 No README support claim is published from this result. Xcode, simulator,
 code-signing, and Apple-platform targets remain unverified. A Swift-aware human
 review remains pending.
+
+## Installed-plugin probe — inconclusive
+
+The candidate plugin was temporarily installed through the local
+`wukong-code-dev` marketplace and `codex plugin list` confirmed that its root
+was the frozen worktree. The original Git marketplace was restored afterward.
+Two read-only strict-path probes reached the CLI session header but no model
+answer: the installed `codex-cli 0.135.0` failed while parsing the current
+model cache, and the bundled `codex-cli 0.146.0-alpha.3.1` ended after session
+initialization without writing its requested last-message file. These runs do
+not establish a routing result. Their environment output is retained in the
+[installed-probe raw index](raw/2026-07-29-swift-language-guidance/installed-probe.md).
