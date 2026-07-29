@@ -22,6 +22,8 @@ before changing code.
 When the concurrent revision or hang evidence is absent, do not rank a root
 cause; do not name a leading, likely, or most likely cause. State the missing
 evidence and keep blocked sends, live sender ownership, worker joins, lock ordering, panic paths, and unrelated slow work as distinct hypotheses until one is reproduced.
+The response must preserve every branch in that checklist; missing evidence is
+not permission to collapse it to a generic concurrency category.
 
 ## Test One Cause
 

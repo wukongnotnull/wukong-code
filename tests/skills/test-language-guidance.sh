@@ -53,6 +53,7 @@ if [[ -f "$skill" ]]; then
   assert_contains "$skill" "description: Use when"
   assert_contains "$skill" "When explicitly invoked for analysis with no requested source edit, emit before responding a strict Detected: <language and evidence>, Phase: profile, and Loaded: <language>/profile.md decision."
   assert_contains "$skill" "When explicitly invoked, test-source edits select testing; requested production-source edits emit before responding a strict Detected: <language and evidence>, Phase: implementation, and Loaded: <language>/profile.md, <language>/implementation.md decision."
+  assert_contains "$skill" "Verification claims, including no-command prompts, select verification, load <language>/verification.md, never install missing tools, and never invent feature or target scope."
   assert_contains "$skill" "Primary process remains authoritative"
   assert_contains "$skill" "at most two"
   assert_contains "$skill" "Do not guess"
@@ -160,6 +161,8 @@ assert_contains skills/language-guidance/references/rust/debugging.md \
   "blocked sends, live sender ownership, worker joins, lock ordering, panic paths, and unrelated slow work"
 assert_contains skills/language-guidance/references/rust/debugging.md \
   "do not name a leading, likely, or most likely cause"
+assert_contains skills/language-guidance/references/rust/debugging.md \
+  "The response must preserve every branch in that checklist"
 assert_contains skills/language-guidance/references/rust/review.md \
   "Zero findings is valid"
 assert_contains skills/language-guidance/references/rust/verification.md \
