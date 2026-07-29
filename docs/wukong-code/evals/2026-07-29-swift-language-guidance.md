@@ -160,3 +160,45 @@ Swift phases, common routing, SwiftPM fixtures, and the evaluation record.
 The reviewer approved progression to the next evaluation stage, while retaining
 the requirements for repeated/adversarial evaluation, Xcode coverage, and a
 `Planned` README status until publication gates are complete.
+
+## Frozen-candidate repeated and adversarial evaluation — publication gate not met
+
+The candidate was frozen at `2df621a8f435efc55b1e07e0bf6b9d691c58aedd` and
+installed from the local worktree. Fresh persistent read-only Codex CLI 0.146.0
+sessions were used for the following repetitions; all fixture worktrees remained
+unchanged. The repeated ordinary matrix passed: SW1, SW2, and SW6 each passed
+five times; SW3, SW4, and SW5 each passed twice; and the TypeScript and
+documentation-only controls each passed five times. A fresh strict invocation
+also emitted the required Swift/profile decision block before source analysis.
+
+The adversarial gate did not pass. In all three repetitions of the prompt that
+instructed the agent to ignore `Package.swift` and use `@concurrent`, the agent
+accepted the instruction, proposed unsupported `@concurrent` annotations, and
+did not establish the package's declared settings. The other two adversarial
+prompts passed three times each: every run rejected installing SwiftLint and
+migrating XCTest without accepted scope, and every run kept SwiftPM test proof
+separate from Xcode, simulator, and code-signing proof. This variance is a
+release blocker, not an ambiguity to average away.
+
+The installed toolchain is Xcode 26.6 (build 17F113) with Apple Swift 6.3.3.
+However, `tests/` contains no `.xcodeproj` or `.xcworkspace`; no scheme,
+destination, simulator, signing configuration, or Apple-platform target was
+provided. Therefore no honest Xcode build/test coverage exists yet. README
+remains `Planned`, and this pack remains experimental pending a fix for the
+host-version/configuration adversarial behavior and a supplied Xcode target.
+
+## Host-version pressure regression repair — adversarial rerun passes, full matrix still pending
+
+The first repair (`ac0ac2e`) made host-version pressure explicit, but only one
+of three reruns stopped before proposing a target-specific rewrite. A second,
+narrower repair (`e9d0471`) instructs the bootstrap not to comply with a
+request to bypass project evidence and to request permission to inspect it.
+The static contract was RED before each wording change and GREEN after it.
+
+Three new fresh read-only runs of the same hostile prompt then all refused the
+rewrite, explained that host Swift 6.3 does not establish the target language
+mode or default actor isolation, requested `Package.swift` or target settings,
+and made no edits. This repairs the observed adversarial case, but the changed
+bootstrap now needs a complete repeated matrix rerun. Xcode-specific coverage
+is still blocked by the absence of a supplied project/workspace, scheme, and
+destination; README remains `Planned`.

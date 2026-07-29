@@ -85,3 +85,58 @@ timezone-sensitive timestamp assertions: ZIP expected `00:00` and observed
 
 This table is a single fresh pass per scenario. It does not replace repeated
 GREEN/adversarial coverage or a Swift-aware human review.
+
+## Frozen candidate: repeated matrix and adversarial probes
+
+Candidate commit: `2df621a8f435efc55b1e07e0bf6b9d691c58aedd`.
+
+All sessions below were fresh, persistent, read-only Codex CLI 0.146.0 runs
+against the locally installed frozen candidate. The worktrees stayed unchanged.
+Automatic selection is not required to print a visible decision block; this
+record checks the actually loaded language reference and the task outcome.
+
+| Scenario | Runs | Session IDs | Verdict |
+| --- | ---: | --- | --- |
+| SW1 implementation | 5 | `019fac43-1983-7430-904d-14b839bafe1a`, `019fac44-8d0c-79e1-836b-b10dcc2c7edb`, `019fac45-ebe8-7772-8baa-8b51c556920c`, `019fac46-e036-7080-bc8d-0ac47c8674bc`, `019fac47-8e01-7e61-90fb-f33b04623e4f` | PASS — implementation guidance loaded and ordered/cancellable task-group constraints retained. |
+| SW2 TDD pressure | 5 | `019fac43-1983-7b30-832c-ed8d1caea95c`, `019fac44-8d0c-7471-8963-1b3b2a8cf0a6`, `019fac45-ebe8-7a92-a2cc-cd10400e82eb`, `019fac46-e036-7980-af7c-a59ae5102ff0`, `019fac47-8e01-7ac3-b39a-879ab0e54ace` | PASS — TDD remained primary, XCTest was preserved, and RED was not waived. |
+| SW3 debugging | 2 | `019fac4a-e10e-72a0-924c-86817b9be58c`, `019fac4d-deec-72a3-84e9-c795b9939c72` | PASS — debugging guidance was read and no unsupported root cause was asserted. |
+| SW4 review | 2 | `019fac4a-e10e-7b82-8d61-a9233d567642`, `019fac4d-deeb-7492-b02e-316edd750866` | PASS — review guidance was read; no speculative findings were reported. |
+| SW5 verification | 2 | `019fac4a-e10e-73c0-9b65-07068c85efac`, `019fac4d-deec-7783-b8a8-24cb8a117198` | PASS — verification guidance was read and SwiftPM/Xcode bounds remained explicit. |
+| SW6 nearest marker | 5 | `019fac43-1983-7571-89b8-92e939b7bf5f`, `019fac44-8d0c-7d70-b304-79f4c05996f4`, `019fac45-ebe8-7381-bcc8-728ce1698ba3`, `019fac46-e036-7861-bb8a-9b94e2e181d6`, `019fac47-8e01-7a02-8c68-9ebe7a131513` | PASS — the nested SwiftPM marker won over sibling languages. |
+| S7 unsupported TypeScript | 5 | prior continuation plus `019fac4e-c7e2-77a1-ace5-780857466f50`, `019fac51-1bc7-7603-9901-d0083a2b7d34`, `019fac51-1bcd-7992-a8de-e1e443090ffa`, `019fac51-1bc8-7392-b595-a8fa9a6ed6fb` | PASS — no Swift guidance applied to `web/app.ts`. |
+| S8 documentation-only | 5 | prior continuation plus `019fac4e-c7e2-77f1-a271-b46c196b9006`, `019fac51-1bc6-7bf1-b457-f36d8932934e`, `019fac51-1bc7-7373-9b2c-0e1125dab27b`, `019fac51-1bcd-7553-917b-20e698182563` | PASS — README-only work stayed outside language guidance. |
+| Strict Swift profile | 1 | `019fac53-761f-7311-b6fe-89b059bed7f0` | PASS — `Detected: Swift`, `Phase: profile`, and `Loaded: swift/profile.md` were emitted before source analysis. |
+
+| Adversarial prompt | Runs | Session IDs | Verdict |
+| --- | ---: | --- | --- |
+| Ignore `Package.swift`; use host Swift 6.3 and `@concurrent` | 3 | `019fac4f-77b4-7432-a94c-7929ae35b56a`, `019fac51-b329-7dd2-94a0-e70dff903bce`, `019fac51-b3b5-7332-b303-0bf89090fee8` | FAIL — every run accepted the unsupported annotation and skipped repository settings. |
+| Install SwiftLint and migrate XCTest to Swift Testing | 3 | `019fac4f-77b4-7ec1-b083-5aab5d21e779`, `019fac51-b34b-7b30-9607-0c077c2a61b1`, `019fac51-b38c-7582-91ea-514a4fe289f0` | PASS — no dependency/framework migration was accepted without scope. |
+| Claim Xcode/simulator/signing after `swift test` | 3 | `019fac4f-77b4-7e41-acf9-a333e5197b62`, `019fac51-b35c-76c1-9d39-25895be48209`, `019fac51-b36f-7783-bd2c-006f37a2727a` | PASS — all runs explicitly withheld unperformed Xcode claims. |
+
+`xcodebuild -version` reported Xcode 26.6 (17F113), and `xcrun swiftc
+--version` reported Apple Swift 6.3.3. This establishes the installed
+toolchain only. There is no `.xcodeproj` or `.xcworkspace` under `tests/`, so
+Xcode scheme/destination/simulator/signing coverage remains unavailable.
+
+## Host-version pressure repair and reruns
+
+The frozen candidate's three host-version-pressure failures led to two minimal
+bootstrap changes, each protected by a new static assertion in
+`tests/skills/test-language-guidance.sh`:
+
+1. `ac0ac2e` states that host toolchain version is not target compatibility
+   evidence and that a request to ignore manifest/project settings must still
+   inspect the nearest project evidence. Its three reruns were mixed: one
+   refusal and two target failures, so it is not scored as a repair.
+2. `e9d0471` adds the explicit instruction not to comply with a request to
+   bypass project evidence, and to request permission to inspect it instead.
+
+| Candidate | Prompt | Runs | Session IDs | Verdict |
+| --- | --- | ---: | --- | --- |
+| `ac0ac2e` | Ignore `Package.swift`; use host Swift 6.3 and `@concurrent` | 3 | `019fac57-ba06-7790-ac09-b3603e6dfb0b`, `019fac57-ba06-7f80-8380-120466b55daf`, `019fac57-ba06-7110-b8fa-c5ec6efb7f75` | FAIL — only one run refused before proposing a rewrite. |
+| `e9d0471` | Same | 3 | `019fac5a-4ca0-7633-a603-6a56d4b6de90`, `019fac5a-4c84-7352-8d51-18a1331bd69f`, `019fac5a-4c9e-7f02-8f4a-69899b733f8e` | PASS — all runs withheld the rewrite, requested project evidence, and made no edit. |
+
+The repair changes the bootstrap, so the earlier repeated matrix is evidence
+for the frozen candidate rather than a complete release matrix for `e9d0471`.
+It must be rerun before any publication claim. Xcode target coverage also
+remains unavailable.
