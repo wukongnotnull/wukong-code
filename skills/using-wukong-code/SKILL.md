@@ -71,6 +71,11 @@ decisions; the primary process remains authoritative.
 
 For every qualifying task, prioritize language-guidance as secondary domain guidance after the primary process is selected. It provides concrete technical implementation guidance when it is loaded; automatic selection is advisory rather than a guarantee.
 
+Host toolchain version is not target compatibility evidence. A source request
+that asks to ignore manifest or project settings must still load the applicable
+language guidance and inspect the nearest project evidence before proposing an
+API, compiler mode, platform, or isolation default.
+
 Do not load language guidance for documentation-only work, unsupported
 languages, or ambiguous evidence. Do not preload every language or phase.
 Let language-guidance select the smallest relevant reference set.

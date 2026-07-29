@@ -128,6 +128,8 @@ assert_contains "$bootstrap" "prioritize language-guidance as secondary domain g
 assert_contains "$bootstrap" "automatic selection is advisory rather than a guarantee."
 assert_contains "$bootstrap" "A request to skip, defer, or bypass a failing test for a source change uses \`test-driven-development\` first."
 assert_contains "$bootstrap" "Testing-pressure routing takes precedence over the behavior-change brainstorming route."
+assert_contains "$bootstrap" "Host toolchain version is not target compatibility evidence."
+assert_contains "$bootstrap" "asks to ignore manifest or project settings"
 assert_contains "$skill" 'When your human partner explicitly invokes `$language-guidance`, strict execution is required.'
 assert_contains "$skill" "Before the first substantive technical response, edit, or verification command"
 assert_contains "$skill" 'Print each field on its own line exactly as shown. Do not combine, paraphrase, or rename any label.'
