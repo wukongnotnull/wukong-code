@@ -200,9 +200,12 @@ patterns, and repository patterns remain contextual design choices.
 existing unit, integration, documentation, async, property, mock, and benchmark
 tests before selecting techniques.
 
-A valid RED must compile far enough to execute the intended new test and fail
-because requested behavior is missing. Syntax errors, borrow-checker errors in
-the test, unavailable tools, feature-resolution failures, and unrelated test
+A valid RED must reach the repository's intended test oracle and fail for the
+missing contract. Runtime tests must compile and execute the intended test.
+Compile-fail doctests, UI tests, and compiler-diagnostic tests are also valid
+when the established harness reaches its compile assertion and observes the
+expected missing or mismatched diagnostic. Syntax errors in the harness,
+unavailable tools, unrelated feature-resolution failures, and unrelated test
 failures are invalid RED evidence.
 
 Focused commands are derived from repository evidence and may use Cargo
@@ -290,11 +293,17 @@ or closure supplied by the caller. The implementation scenario asks the agent
 to process independent inputs concurrently with the standard library while:
 
 - preserving input order in successful results;
-- returning an error according to a stated first-observed contract;
+- collecting every started worker outcome and, when multiple inputs fail,
+  returning the error associated with the lowest input index;
 - joining all started work before return;
 - avoiding detached threads and blocked channel sends;
 - making ownership of inputs, results, and channel closure explicit;
 - adding no dependency.
+
+The lowest-input-index rule is the fixture's deterministic test oracle; thread
+completion order is intentionally not observable API behavior. Other target
+repositories may choose first-observed, fail-fast, aggregate, or partial-result
+semantics only when their own contract and tests establish that choice.
 
 The checked-in fixture remains simple and passing. Scenarios request a proposed
 or implemented change without storing the completed concurrent solution in the
@@ -326,7 +335,7 @@ implementation. Existing assertions must be extended rather than weakened.
 Fresh-session scenarios cover:
 
 1. Rust production implementation with ordering, joining, ownership, and
-   errors.
+   deterministic error selection.
 2. TDD pressure to skip a valid RED run.
 3. Diagnosis of an intermittent hang, deadlock, non-`Send` future, or borrow
    failure without premature editing.
@@ -364,14 +373,20 @@ ECC candidate material is pinned to commit
 map retained topics back to the inspected ECC files without copying their
 large examples or behavior-shaping wording.
 
-Normative semantic checks use primary Rust sources, including:
+Semantic checks prioritize maintained primary Rust sources:
 
 - The Rust Reference and standard library documentation;
 - The Cargo Book and Cargo command documentation;
 - The Rust Edition Guide and rustc error-code explanations;
-- official rustfmt and Clippy documentation;
-- The Rustonomicon and Unsafe Code Guidelines where applicable;
-- official Rust testing, concurrency, async, and FFI documentation.
+- official rustfmt, Clippy, rustdoc, testing, concurrency, async, and FFI
+  documentation.
+
+The Rustonomicon and Unsafe Code Guidelines may supply unsafe-code background,
+but they are non-normative supporting material: the Nomicon is incomplete and
+may contain outdated sections, while the Unsafe Code Guidelines reference is a
+largely abandoned effort whose recommendations remain subject to change. When
+these materials disagree with the Rust Reference or standard-library API
+contracts, the maintained Reference and API contracts take precedence.
 
 Optional third-party behavior is sourced from that tool or crate's primary
 documentation only when repository evidence makes it applicable. Executable
