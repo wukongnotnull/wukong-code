@@ -13,8 +13,9 @@ Zero findings is valid.
 - Shared state lacks required synchronization; tasks or threads leak; sends can
   block forever; lock order can deadlock; async code blocks the executor; or a
   Send/Sync claim is invalid.
-- SQL, command, path, secret, or untrusted-deserialization handling violates a
-  concrete boundary when that operation is present.
+- An external API operation violates its repository or upstream contract, with
+  the exact boundary and untrusted input path present in target code. Do not
+  infer domain-specific risk from Rust alone.
 - Behavior compiles under the wrong feature, target, edition, MSRV, or
   toolchain, or a public/serialized contract changes without tests.
 

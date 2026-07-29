@@ -130,17 +130,22 @@ the ECC inventory:
 - `rust/verification.md`: repository-defined scope, safe Cargo defaults,
   explicit missing/unknown checks, and no tool installation.
 
-Each retained recommendation is conditional on repository evidence and maps
-to maintained official Rust documentation:
+The main Rust semantic and toolchain boundaries are conditional on repository
+evidence and map to the maintained primary sources below. Project-specific
+external APIs instead require the owning repository or upstream API contract;
+the pack does not infer domain-specific risk from Rust alone.
 
-| Recommendation | Applies when | Official sources |
+| Recommendation | Applies when | Authority/source |
 | --- | --- | --- |
 | Manifest, edition, MSRV, targets, profiles, and build inputs | `Cargo.toml`, workspace metadata, or nearby Cargo configuration establishes the crate scope | [manifest](https://doc.rust-lang.org/cargo/reference/manifest.html), [workspaces](https://doc.rust-lang.org/cargo/reference/workspaces.html), [features](https://doc.rust-lang.org/cargo/reference/features.html), [editions](https://doc.rust-lang.org/edition-guide/), [build scripts](https://doc.rust-lang.org/cargo/reference/build-scripts.html) |
+| Ownership, borrowing, visibility, error propagation, and API types | Target signatures, callers, and established error/module boundaries require the choice; borrowing or abstraction is not prescribed ritually | [references and borrowing](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html), [`Result`](https://doc.rust-lang.org/std/result/index.html), [visibility](https://doc.rust-lang.org/reference/visibility-and-privacy.html), [generics](https://doc.rust-lang.org/reference/items/generics.html), [dyn compatibility](https://doc.rust-lang.org/reference/items/traits.html#dyn-compatibility) |
 | Scoped threads and cross-thread value boundaries | Existing standard-library threaded code or the requested contract requires threads | [`thread::scope`](https://doc.rust-lang.org/std/thread/fn.scope.html), [`Send`](https://doc.rust-lang.org/std/marker/trait.Send.html), [`Sync`](https://doc.rust-lang.org/std/marker/trait.Sync.html) |
 | Async ownership and cancellation contracts | The repository already selects an async runtime or exposes a `Future` boundary | [`Future`](https://doc.rust-lang.org/std/future/trait.Future.html), [async blocks](https://doc.rust-lang.org/reference/expressions/block-expr.html#async-blocks) |
 | Unsafe invariants, pointer validity, provenance, and FFI boundaries | Existing code contains `unsafe`, raw pointers, or external blocks; guidance does not introduce them | [`unsafe`](https://doc.rust-lang.org/reference/unsafe-keyword.html), [undefined behavior](https://doc.rust-lang.org/reference/behavior-considered-undefined.html), [`std::ptr`](https://doc.rust-lang.org/std/ptr/index.html), [external blocks](https://doc.rust-lang.org/reference/items/external-blocks.html) |
-| Runtime and compile-fail tests | The repository has Cargo tests or an established rustdoc compile-fail oracle | [`cargo test`](https://doc.rust-lang.org/cargo/commands/cargo-test.html), [rustdoc tests](https://doc.rust-lang.org/rustdoc/write-documentation/documentation-tests.html) |
+| Runtime and compile-fail tests | The repository has Cargo tests, rustdoc compile-fail tests, or an already-established compiler/UI diagnostic harness; the pack does not introduce `compiletest` | [`cargo test`](https://doc.rust-lang.org/cargo/commands/cargo-test.html), [rustdoc tests](https://doc.rust-lang.org/rustdoc/write-documentation/documentation-tests.html), [rustc UI tests](https://rustc-dev-guide.rust-lang.org/tests/ui.html) |
 | Exact compiler, Cargo, and build diagnosis | A captured error, failing command, build script, feature, or target supplies evidence | [error index](https://doc.rust-lang.org/error_codes/error-index.html), [`cargo check`](https://doc.rust-lang.org/cargo/commands/cargo-check.html), [build scripts](https://doc.rust-lang.org/cargo/reference/build-scripts.html) |
+| Correctness review boundaries | Target code exposes recoverable errors, ownership/drop behavior, unsafe, concurrency, or a public compatibility surface | [`Result`](https://doc.rust-lang.org/std/result/index.html), [destructors and drop scopes](https://doc.rust-lang.org/reference/destructors.html), [undefined behavior](https://doc.rust-lang.org/reference/behavior-considered-undefined.html), [`Send`](https://doc.rust-lang.org/std/marker/trait.Send.html), [`Sync`](https://doc.rust-lang.org/std/marker/trait.Sync.html), [Cargo SemVer guidance](https://doc.rust-lang.org/cargo/reference/semver.html) |
+| Project-specific external API review | The exact external operation and untrusted input path are present in target code | Owning repository rules and upstream API documentation; no Rust-only SQL, command, path, secret, or deserialization finding |
 | Focused-to-broad verification and optional formatting/lint checks | Repository scripts or installed official components establish the command and scope | [`cargo test`](https://doc.rust-lang.org/cargo/commands/cargo-test.html), [`cargo check`](https://doc.rust-lang.org/cargo/commands/cargo-check.html), [`cargo fmt`](https://doc.rust-lang.org/cargo/commands/cargo-fmt.html), [Clippy usage](https://doc.rust-lang.org/clippy/usage.html) |
 
 The fixture's `rust-version = "1.63"` is compatibility intent recorded in the
@@ -184,6 +189,22 @@ Because common bootstrap/router wording changed, the plan requires fresh Go,
 Swift, S7, and S8 behavior probes. They could not start after the account quota
 error and remain `INCONCLUSIVE`; static contracts and harness tests passing do
 not replace those probes.
+
+## Post-review local verification at `3befefe`
+
+| Command | Result |
+| --- | --- |
+| `bash tests/skills/test-language-guidance.sh` | PASS, including the new phase-precedence contract |
+| `bash tests/skills/test-skill-slim-gates.sh` | PASS |
+| `bash tests/opencode/run-tests.sh` | PASS — 2 passed, 0 failed |
+| `bash tests/kimi/run-tests.sh` | PASS — manifest valid |
+| `cargo test --all-targets && cargo check && cargo fmt --check` in `rust-basic` | PASS — 2 integration tests |
+| same Cargo sequence in `monorepo/rust-worker` | PASS |
+| `git diff --check` | PASS |
+| Codex package test in a new ordinary clone with `TZ=Asia/Shanghai` | all six Rust ZIP/tar assertions PASS; status 1 only for the two pre-existing timezone-sensitive timestamp assertions |
+
+These checks validate the static contracts, fixtures, harness manifests, and
+archive contents. They do not replace the missing post-review behavior cohort.
 
 ## ECC source inventory
 

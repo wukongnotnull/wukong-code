@@ -165,6 +165,8 @@ assert_contains skills/language-guidance/references/rust/debugging.md \
   "The response must preserve every branch in that checklist"
 assert_contains skills/language-guidance/references/rust/review.md \
   "Zero findings is valid"
+assert_contains skills/language-guidance/references/rust/review.md \
+  "Do not infer domain-specific risk from Rust alone"
 assert_contains skills/language-guidance/references/rust/verification.md \
   "Missing Cargo extensions are reported"
 assert_contains skills/language-guidance/references/rust/verification.md \
