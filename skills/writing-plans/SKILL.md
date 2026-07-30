@@ -15,7 +15,8 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 
 **Context:** If working in an isolated worktree, it should have been created via the `wukong-code:using-git-worktrees` skill at execution time.
 
-**Save plans to:** `docs/wukong-code/plans/YYYY-MM-DD-<feature-name>.md`
+**Save plans to:** `docs/wukong-code/plans/YYYY-MM-DD-HHmm-<feature-name>.md`
+- `HHmm` is 24-hour local time to the minute (e.g. `2026-07-30-1425-auth-system.md`)
 - (User preferences for plan location override this default)
 
 ## Scope Check
