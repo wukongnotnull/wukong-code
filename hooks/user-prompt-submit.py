@@ -11,6 +11,7 @@ from typing import Any
 
 
 SUPPORTED_EXTENSIONS = {".rs": "rust", ".go": "go", ".swift": "swift"}
+DOCUMENTATION_EXTENSIONS = {".adoc", ".md", ".rst", ".txt"}
 SOURCE_EXTENSION = re.compile(r"(?<![\w.])([\w./-]+\.[A-Za-z0-9]+)\b")
 LANGUAGE_NAME = re.compile(r"\b(rust|go|swift)\b", re.IGNORECASE)
 
@@ -68,6 +69,16 @@ def target_language(prompt: str, cwd: Path, languages: dict[str, Any]) -> tuple[
     return candidates[0] if len(candidates) == 1 else None
 
 
+def unregistered_source_extension(prompt: str) -> str | None:
+    source_matches = SOURCE_EXTENSION.findall(prompt)
+    if not source_matches:
+        return None
+    extension = Path(source_matches[-1]).suffix.lower()
+    if extension in SUPPORTED_EXTENSIONS or extension in DOCUMENTATION_EXTENSIONS:
+        return None
+    return extension
+
+
 def phase_for(prompt: str) -> str | None:
     prompt = prompt.lower()
     if re.search(r"\b(diagnos|hang|deadlock|investigat|failure)\w*", prompt):
@@ -111,6 +122,26 @@ def main() -> None:
         cwd = Path(payload["cwd"]).resolve(strict=False)
         selection = target_language(payload["prompt"], cwd, languages)
         phase = phase_for(payload["prompt"])
+        unsupported_extension = unregistered_source_extension(payload["prompt"])
+        if not selection and unsupported_extension and phase:
+            context = (
+                "Deterministic Codex language routing\n\n"
+                f"No installed language guidance is registered for {unsupported_extension}.\n"
+                "Do not invoke language-guidance, emit a language decision, or invent a language pack, "
+                "reference path, or phase. Keep the generic workflow.\n"
+            )
+            print(
+                json.dumps(
+                    {
+                        "hookSpecificOutput": {
+                            "hookEventName": "UserPromptSubmit",
+                            "additionalContext": context,
+                        }
+                    },
+                    ensure_ascii=False,
+                )
+            )
+            return
         if not selection or not phase:
             return
         language, owner = selection

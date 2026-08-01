@@ -273,9 +273,11 @@ assert_prompt_router_output \
     "rust/verification.md"$'\037'"go/verification.md" \
     "$router_home"
 
-assert_prompt_router_empty \
-    "TypeScript source request does not inject language guidance" \
+assert_prompt_router_output \
+    "TypeScript source request explicitly rejects unregistered language guidance" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify web/src/app.ts to fix the button state.\"}" \
+    "No installed language guidance is registered for .ts." \
+    "# Rust Implementation Guidance"$'\037'"# Go Implementation Guidance"$'\037'"# Swift Implementation Guidance" \
     "$router_home"
 
 assert_prompt_router_empty \
