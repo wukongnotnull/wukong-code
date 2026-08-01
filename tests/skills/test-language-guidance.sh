@@ -64,6 +64,7 @@ done
 if [[ -f "$skill" ]]; then
   assert_contains "$skill" "name: language-guidance"
   assert_contains "$skill" "description: Use when"
+  assert_contains "$skill" "language is established in the installed registry"
   assert_contains "$skill" "When explicitly invoked, test-source edits select testing; requested production-source edits emit before responding a strict Detected: <language and evidence>, Phase: implementation, and Loaded: <language>/profile.md, <language>/implementation.md decision."
   assert_contains "$skill" "Verification claims, including no-command prompts, select verification, load <language>/verification.md, never install missing tools, and never invent feature or target scope."
   assert_contains "$skill" "Primary process remains authoritative"
