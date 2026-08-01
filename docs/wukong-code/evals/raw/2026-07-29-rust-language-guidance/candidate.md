@@ -1,5 +1,19 @@
 # Rust language-guidance candidate raw index — 2026-07-29
 
+## Codex UserPromptSubmit router pilot at `14c7aaf`
+
+The deterministic prompt-router pilot exercised Rust implementation/review,
+Go review, Swift verification, and the TypeScript and documentation negative
+controls. It records six fresh-session final responses and the exact runtime
+configuration. The candidate's hook output itself is covered by deterministic
+JSON tests; the captured Codex session JSONL did not echo developer context.
+This is not the required 12-session focused gate and does not alter
+the Rust pack's `Planned` status.
+
+| Result | Transcript |
+| --- | --- |
+| 6-session pilot | [captured final responses](candidate/transcripts/14c7aaf/prompt-router/pilot.md) |
+
 All completed entries are full agent-message transcripts from fresh,
 ephemeral, read-only `codex-cli 0.146.0` sessions using
 `gpt-5.6-terra`, low reasoning effort, and an empty per-run MCP

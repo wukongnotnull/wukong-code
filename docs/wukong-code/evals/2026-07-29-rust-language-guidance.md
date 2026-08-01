@@ -335,6 +335,30 @@ The documented gate forbids a second wording variation after any strict
 failure, so no further repair or complete cohort was attempted. Rust remains
 `Planned`; no PR is opened.
 
+## Deterministic Codex prompt-router pilot at `14c7aaf`
+
+Commit `14c7aafc1665118f4f7389859c75063b3806d01b` adds a Codex-only
+`UserPromptSubmit` hook. Rather than asking the model to choose and read a
+language reference, the hook parses the prompt and cwd, selects at most one
+supported reference from repository evidence, and supplies that reference body
+as developer context. It fails open for malformed, unsupported, conflicting,
+and documentation-only inputs. This delivery mechanism does not claim to
+invoke a Codex Skill or force an on-disk file read.
+
+The required static controls were first observed RED, then green. They cover
+Rust implementation and review, Go review, Swift verification, TypeScript,
+documentation-only, malformed input, manifest shape, and the packaged
+artifact. A six-session read-only pilot used a locally installed candidate,
+`codex-cli 0.146.0`, `gpt-5.6-terra` low reasoning effort, and the one-time
+hook-trust bypass. Each CLI invocation reported that enabled hooks were
+permitted via that bypass; the captured observations are in the [candidate raw
+index](raw/2026-07-29-rust-language-guidance/candidate.md).
+
+The pilot is deliberately below the planned five-R1/two-R4/Go/Swift/two-negative
+focused gate. It provides delivery evidence only and does not permit a full
+48-session cohort, a README status change, experimental publication, or a PR.
+The normal remote `dev` marketplace was restored immediately after the pilot.
+
 ## ECC source inventory
 
 ECC candidate material is pinned to

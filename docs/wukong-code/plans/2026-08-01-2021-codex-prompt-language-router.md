@@ -22,7 +22,7 @@
 
 ---
 
-### Task 1: Write failing prompt-router controls
+### Task 1: Write failing prompt-router controls — complete
 
 **Files:**
 
@@ -35,7 +35,7 @@
 - Consumes: `hooks/hooks-codex.json`, the existing dispatcher, and a command hook JSON event on stdin.
 - Produces: failing checks for an exact UserPromptSubmit handler, packaged router, and language/phase selection outputs.
 
-- [ ] **Step 1: Add manifest and package RED assertions**
+- [x] **Step 1: Add manifest and package RED assertions**
 
 Require exactly one `UserPromptSubmit` command handler with:
 
@@ -45,7 +45,7 @@ Require exactly one `UserPromptSubmit` command handler with:
 
 Require `hooks/user-prompt-submit` in the archive while retaining the existing cross-harness exclusions.
 
-- [ ] **Step 2: Add hook behavior RED assertions**
+- [x] **Step 2: Add hook behavior RED assertions**
 
 Provide JSON input directly to the dispatcher and validate Codex nested `hookSpecificOutput.additionalContext` for:
 
@@ -57,7 +57,7 @@ Swift verification + swift-basic cwd -> Swift verification and swift/verificatio
 TypeScript target, README typo, malformed JSON -> exit 0 with no context
 ```
 
-- [ ] **Step 3: Observe RED**
+- [x] **Step 3: Observe RED**
 
 Run:
 
@@ -69,7 +69,7 @@ PATH=/usr/local/bin:$PATH bash tests/codex/test-package-codex-plugin.sh
 
 Expected: new prompt-router assertions fail because no router exists; existing SessionStart assertions remain green.
 
-### Task 2: Implement the smallest Codex-only router
+### Task 2: Implement the smallest Codex-only router — complete
 
 **Files:**
 
@@ -83,17 +83,17 @@ Expected: new prompt-router assertions fail because no router exists; existing S
 - Positive output: nested `UserPromptSubmit` `additionalContext` JSON.
 - No-selection output: empty stdout and exit zero.
 
-- [ ] **Step 1: Add the event configuration**
+- [x] **Step 1: Add the event configuration**
 
 Add one `UserPromptSubmit` command handler to `hooks/hooks-codex.json`. It uses the `PLUGIN_ROOT` dispatcher and no matcher because Codex ignores matchers for this event.
 
-- [ ] **Step 2: Parse event and resolve target evidence**
+- [x] **Step 2: Parse event and resolve target evidence**
 
 Create executable Bash entry point `hooks/user-prompt-submit` and adjacent standard-library implementation `hooks/user-prompt-submit.py`. The entry point forwards stdin directly to Python, avoiding user-prompt serialization through shell arguments or environment variables. It returns no output unless `hook_event_name == "UserPromptSubmit"` and `cwd`/`prompt` are strings. It rejects a documentation-only README/docs typo when no supported source target is explicit.
 
 The Python code extracts an explicit `.rs`, `.go`, or `.swift` target. Without one, it accepts a named language only when the cwd has that language's nearest marker. It walks upward only from the target parent (or cwd) for Rust `Cargo.toml`, Go `go.mod`/`go.work`, or Swift `Package.swift`; it returns no selection for TypeScript-only, unsupported, conflicting, or unresolvable evidence.
 
-- [ ] **Step 3: Select one phase and inject its body**
+- [x] **Step 3: Select one phase and inject its body**
 
 Classify lowercase prompt text in this exact priority order:
 
@@ -108,7 +108,7 @@ otherwise -> no selection
 
 Resolve one path under `skills/language-guidance/references/<language>/<phase>.md`, reject resolution outside that directory, then read and inject its body. The context must state: `This hook has already delivered the sole selected language guidance for this turn; do not select another language or phase unless new user evidence supersedes it.`
 
-- [ ] **Step 4: Verify GREEN and commit**
+- [x] **Step 4: Verify GREEN and commit**
 
 Run the Task 1 checks. Expected: all pass, malformed input fails open, and only the selected reference is injected. Then commit:
 
