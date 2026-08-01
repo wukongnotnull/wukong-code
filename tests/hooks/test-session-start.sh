@@ -163,6 +163,17 @@ assert_command_output \
     CLAUDE_PLUGIN_ROOT="$REPO_ROOT" \
     bash "$WRAPPER_UNDER_TEST" session-start
 
+codex_home="$(make_home codex)"
+assert_command_output \
+    "Codex emits nested SessionStart additionalContext" \
+    "nested" \
+    "You have wukong-code" \
+    "" \
+    "$codex_home" \
+    PLUGIN_ROOT="$REPO_ROOT" \
+    CLAUDE_PLUGIN_ROOT="$REPO_ROOT" \
+    bash "$WRAPPER_UNDER_TEST" session-start
+
 cursor_home="$(make_home cursor)"
 assert_command_output \
     "Cursor emits top-level additional_context only" \

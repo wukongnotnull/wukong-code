@@ -142,7 +142,7 @@ write_metadata_fixture "$metadata_source"
 rm -rf "$metadata_source/skills/language-guidance"
 
 source_hooks="$(python3 -c 'import json; print(json.load(open("'"$REPO_ROOT"'/.codex-plugin/plugin.json")).get("hooks"))')"
-assert_equals "$source_hooks" "{}" "source Codex manifest suppresses local hook auto-discovery"
+assert_equals "$source_hooks" "./hooks/hooks-codex.json" "source Codex manifest declares its SessionStart hook"
 
 if output="$("$SCRIPT_UNDER_TEST" --allow-dirty --metadata-source "$metadata_source" --output "$archive" 2>&1)"; then
   pass "package script exits successfully"
@@ -164,9 +164,17 @@ assert_contains "$output" "SHA-256:" "reports archive checksum"
 extract_archive "$archive" "$extracted"
 
 archive_paths="$(list_archive "$archive" | normalize_archive_paths)"
-unexpected_pattern='(^wukong-code/|^\.agents/|^hooks/|package\.json$|^\.git|^\.pytest_cache|^\.ruff_cache|^scripts/|^tests/|^docs/|^evals/|^lib/|^\.claude|^\.cursor|^\.kimi|^\.opencode|^\.pi|^AGENTS\.md$|^CLAUDE\.md$|^GEMINI\.md$|^RELEASE-NOTES\.md$|^CHANGELOG\.md$)'
+unexpected_pattern='(^wukong-code/|^\.agents/|package\.json$|^\.git|^\.pytest_cache|^\.ruff_cache|^scripts/|^tests/|^docs/|^evals/|^lib/|^\.claude|^\.cursor|^\.kimi|^\.opencode|^\.pi|^AGENTS\.md$|^CLAUDE\.md$|^GEMINI\.md$|^RELEASE-NOTES\.md$|^CHANGELOG\.md$)'
 assert_not_matches "$archive_paths" "$unexpected_pattern" "archive excludes source-only paths"
 assert_contains "$archive_paths" ".codex-plugin/plugin.json" "archive includes Codex manifest"
+assert_contains "$archive_paths" "hooks/hooks-codex.json" "archive includes Codex hook configuration"
+assert_contains "$archive_paths" "hooks/run-hook.cmd" "archive includes Codex hook dispatcher"
+assert_contains "$archive_paths" "hooks/session-start" "archive includes Codex SessionStart script"
+if printf '%s' "$archive_paths" | grep -Fxq "hooks/hooks.json"; then
+  fail "archive excludes cross-harness hook configuration"
+else
+  pass "archive excludes cross-harness hook configuration"
+fi
 assert_contains "$archive_paths" "skills/brainstorming/SKILL.md" "archive includes skills"
 for swift_phase in profile implementation testing debugging review verification; do
   assert_contains "$archive_paths" \
@@ -224,8 +232,15 @@ assert_equals "$tar_archive_paths" "$archive_paths" "zip and tar.gz archives con
 tar_task_brief_mode="$(tar -tzvf "$tar_archive" skills/subagent-driven-development/scripts/task-brief | awk '{print $1}')"
 assert_equals "$tar_task_brief_mode" "-rwxr-xr-x" "tar.gz archive preserves executable script mode"
 
-tar_metadata_times="$(tar -tzvf "$tar_archive" | awk '{print $6, $7, $8}' | sort -u)"
-assert_equals "$tar_metadata_times" "Dec 31 1969" "tar.gz archive normalizes entry timestamps"
+tar_metadata_times="$(python3 - "$tar_archive" <<'PY'
+import sys
+import tarfile
+
+with tarfile.open(sys.argv[1], "r:gz") as archive:
+    print("\\n".join(sorted({str(member.mtime) for member in archive.getmembers()})))
+PY
+)"
+assert_equals "$tar_metadata_times" "0" "tar.gz archive normalizes entry timestamps"
 
 metadata_archive="$TEST_ROOT/metadata-source.tar.gz"
 metadata_zip="$TEST_ROOT/metadata-source.zip"
