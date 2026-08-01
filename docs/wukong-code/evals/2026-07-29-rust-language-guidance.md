@@ -359,6 +359,19 @@ focused gate. It provides delivery evidence only and does not permit a full
 48-session cohort, a README status change, experimental publication, or a PR.
 The normal remote `dev` marketplace was restored immediately after the pilot.
 
+## Prompt-router focused gate failure at `14c7aaf`
+
+The subsequent focused gate stopped at S7, the TypeScript negative control.
+Session `019fbd7c-5299-7913-95f9-7187bad4bb48` completed both Codex hooks but
+then claimed an installed TypeScript language pack and invented TypeScript
+profile/implementation paths. TypeScript is unsupported and the deterministic
+router emitted no language context for `.ts` input. The raw final response is
+preserved in the [candidate raw index](raw/2026-07-29-rust-language-guidance/candidate.md).
+
+This is a focused-gate failure, so no README negative-control retry or
+48-session cohort was run. The normal remote `dev` marketplace was restored.
+Rust remains `Planned`; no publication or PR is permitted from this candidate.
+
 ## ECC source inventory
 
 ECC candidate material is pinned to

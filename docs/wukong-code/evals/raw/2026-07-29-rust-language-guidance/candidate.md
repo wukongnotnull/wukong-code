@@ -14,6 +14,16 @@ the Rust pack's `Planned` status.
 | --- | --- |
 | 6-session pilot | [captured final responses](candidate/transcripts/14c7aaf/prompt-router/pilot.md) |
 
+## Prompt-router focused gate at `14c7aaf`
+
+The focused gate stopped at the S7 TypeScript negative control. Its final
+response invented an installed TypeScript pack and loaded paths even though the
+static router emitted no language context for that unsupported extension.
+
+| Run | Session ID | Verdict | Transcript |
+| --- | --- | --- | --- |
+| S7 | `019fbd7c-5299-7913-95f9-7187bad4bb48` | FAIL — invented unsupported TypeScript guidance | [transcript](candidate/transcripts/14c7aaf/prompt-router/focused-s7-failure.md) |
+
 All completed entries are full agent-message transcripts from fresh,
 ephemeral, read-only `codex-cli 0.146.0` sessions using
 `gpt-5.6-terra`, low reasoning effort, and an empty per-run MCP
