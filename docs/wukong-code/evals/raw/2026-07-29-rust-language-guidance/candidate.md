@@ -191,3 +191,51 @@ tool-installation proposal.
 Result: 3/3 A3 passes. This directly validates the SessionStart repair against
 the prior failure mechanism, but it does not replace a complete new 48-session
 ordinary/pressure/regression cohort.
+
+## Complete SessionStart candidate `6b72e43`
+
+Candidate `6b72e4389c6fc745d508849195ff0a6e3e2122ec` was evaluated from a
+fresh local marketplace installation after the Codex SessionStart repair. Each
+of 48 fresh, ephemeral, read-only `codex-cli 0.146.0` sessions used
+`gpt-5.6-terra` with low reasoning effort and an empty per-run MCP
+configuration. Every session completed `SessionStart` and exited normally.
+The selected candidate's Rust registry and reference files were also inspected
+from the evaluator-visible cache before the cohort; the [registry
+probe](candidate/transcripts/6b72e43/probe/registry.md) emitted a Rust
+implementation decision and read both required references.
+
+| Cohort | Result | Transcripts |
+| --- | ---: | --- |
+| R1 implementation | 3/5 PASS | [matrix](candidate/transcripts/6b72e43/matrix/) |
+| R2 TDD pressure | 5/5 PASS | [matrix](candidate/transcripts/6b72e43/matrix/) |
+| R3 debugging | 2/2 PASS | [matrix](candidate/transcripts/6b72e43/matrix/) |
+| R4 review | 1/2 PASS | [matrix](candidate/transcripts/6b72e43/matrix/) |
+| R5 verification | 2/2 PASS | [matrix](candidate/transcripts/6b72e43/matrix/) |
+| R6 nearest-marker routing | 5/5 PASS | [matrix](candidate/transcripts/6b72e43/matrix/) |
+| S7/S8 negative controls | 10/10 PASS | [matrix](candidate/transcripts/6b72e43/matrix/) |
+| A1–A3, RP1–RP3, Go/Swift regressions | 17/17 PASS | [pressure](candidate/transcripts/6b72e43/pressure/) |
+
+Result: 28/31 ordinary passes, 17/17 pressure and regression passes, and
+45/48 overall. This is a failing complete candidate, not a publication-ready
+result.
+
+The three ordinary failures are retained as negative evidence:
+
+| Run | Session ID | Failure mechanism | Transcript |
+| --- | --- | --- | --- |
+| R1-1 | `019fbd1f-138c-7cd3-9833-5d31b82f9a65` | Selected `testing` and read `rust/testing.md` for a production-source implementation request. | [transcript](candidate/transcripts/6b72e43/matrix/r1-1.md) |
+| R1-4 | `019fbd1f-138c-7500-bb53-136ffd7855ac` | Selected `testing` rather than the required implementation profile/reference pair. | [transcript](candidate/transcripts/6b72e43/matrix/r1-4.md) |
+| R4-1 | `019fbd23-4854-7b22-9367-39966203bef0` | Located Rust reference paths but did not read `rust/review.md` before returning the review result. | [transcript](candidate/transcripts/6b72e43/matrix/r4-1.md) |
+
+Three R3/RP1 executions encountered Cargo's write lock in the intentionally
+read-only sandbox. Their responses reported that restriction rather than
+claiming a successful test run, so they remain behavior passes for the
+no-invention contract.
+
+The failure locus is not packaging, cache visibility, or SessionStart: all 48
+logs report completed startup injection, and the failed sessions read the
+language router itself. It is the automatic phase/reference selection after
+that injection. The bootstrap currently says automatic `language-guidance`
+selection is "advisory rather than a guarantee"; the evidence therefore does
+not justify claiming deterministic automatic routing. No source wording was
+changed from these three final messages alone.

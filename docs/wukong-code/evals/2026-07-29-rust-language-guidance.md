@@ -291,6 +291,29 @@ This narrow A3 recovery is not a replacement for a fresh complete Rust
 matrix. The full ordinary and pressure/regression cohorts still need rerunning
 from a frozen candidate before changing the Rust pack's `Planned` status.
 
+## Complete SessionStart candidate at `6b72e43`
+
+A fresh complete 48-session cohort was run from candidate
+`6b72e4389c6fc745d508849195ff0a6e3e2122ec` after the SessionStart repair.
+Every fresh, ephemeral, read-only Codex CLI session completed the startup
+hook, and the evaluator-visible local candidate contained the registered Rust
+references. The detailed outputs and run identifiers are preserved in the
+[candidate raw index](raw/2026-07-29-rust-language-guidance/candidate.md).
+
+The result is 45/48: ordinary scenarios passed 28/31 and all 17 pressure and
+regression scenarios passed. The three failures were R1-1 and R1-4, which
+selected `rust/testing.md` for a production implementation task, and R4-1,
+which discovered but did not read `rust/review.md`. The three affected
+sessions had completed SessionStart and had read the language router; this
+isolates the gap to nondeterministic automatic phase/reference selection, not
+to Rust pack availability or Codex hook delivery.
+
+The candidate is therefore not ready for experimental publication. README
+remains `Planned`, and no PR is opened. A narrower design decision is needed
+before changing the generic bootstrap: its current explicit contract says
+automatic language-guidance selection is advisory rather than guaranteed, and
+the complete cohort confirms that limitation.
+
 ## ECC source inventory
 
 ECC candidate material is pinned to
