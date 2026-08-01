@@ -260,6 +260,27 @@ assert_prompt_router_output \
     "$router_home"
 
 assert_prompt_router_output \
+    "Rust test request injects Rust testing guidance" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/rust-basic\",\"prompt\":\"Add a regression test for src/lib.rs.\"}" \
+    "# Rust Testing Guidance" \
+    "rust/implementation.md"$'\037'"go/testing.md" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Rust design request injects Rust profile guidance" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/rust-basic\",\"prompt\":\"Plan a change to src/lib.rs.\"}" \
+    "# Rust Project Profile" \
+    "rust/implementation.md"$'\037'"rust/testing.md" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Rust debugging request injects Rust debugging guidance" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/rust-basic\",\"prompt\":\"Investigate a failure in src/lib.rs.\"}" \
+    "# Rust Debugging Guidance" \
+    "rust/implementation.md"$'\037'"rust/review.md" \
+    "$router_home"
+
+assert_prompt_router_output \
     "Go review request injects Go review guidance" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/go-basic\",\"prompt\":\"Review main.go for correctness and error handling.\"}" \
     "# Go Review Guidance" \

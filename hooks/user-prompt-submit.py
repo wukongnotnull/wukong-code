@@ -87,8 +87,14 @@ def phase_for(prompt: str) -> str | None:
         return "review"
     if re.search(r"\b(verify|verification|exact checks?|claim(?:ing)? (?:this )?complete)\b", prompt):
         return "verification"
-    if re.search(r"\b(skip|skipping).*(?:failing|failed).*\btest\b|\bproduction (?:is )?blocked\b", prompt):
+    if re.search(
+        r"\b(skip|skipping).*(?:failing|failed).*\btest\b|\bproduction (?:is )?blocked\b|"
+        r"\b(?:add|write|create|run|update)\b.*\b(?:test|tests|testing)\b|\bregression\s+test\b",
+        prompt,
+    ):
         return "testing"
+    if re.search(r"\b(plan|design|approach|architecture)\b", prompt):
+        return "profile"
     if re.search(r"\b(change|modify|make|add|implement|fix|refactor|update)\b", prompt):
         return "implementation"
     return None
