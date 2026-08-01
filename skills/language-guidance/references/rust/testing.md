@@ -6,6 +6,9 @@ Keep a valid focused RED required before production implementation. If command
 execution is forbidden, stop at the unverified plan instead of accepting the
 skip or promising the source change.
 
+Before project inspection, do not name a specific dependency, runtime, error crate, edition, or tool as a planned change.
+State only the evidence to inspect and make any later choice conditional on what the project already declares.
+
 ## Discover the Existing Oracle
 
 Inspect Cargo.toml, workspace layout, nearby tests, CI, features, targets, and

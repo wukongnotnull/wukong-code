@@ -227,6 +227,7 @@ assert_contains "$bootstrap" "For an unsupported language or extension, state th
 assert_contains "$skill" "When TDD is the selected primary process, select testing even when the prompt also requests a production-source edit."
 assert_contains "$skill" "A no-command constraint blocks project verification commands, not loading the selected verification reference."
 assert_contains "$skill" "Never install missing verification tools or invent feature and target matrices."
+assert_contains skills/language-guidance/references/rust/testing.md "Before project inspection, do not name a specific dependency, runtime, error crate, edition, or tool as a planned change."
 assert_visible_decision_template "$skill"
 assert_contains "$bootstrap" "documentation-only"
 assert_contains README.md "## Language Guidance"
