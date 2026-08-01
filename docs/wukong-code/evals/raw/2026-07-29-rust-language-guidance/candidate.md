@@ -1,5 +1,33 @@
 # Rust language-guidance candidate raw index — 2026-07-29
 
+## Prompt-router negative-control repair at `fc74087`
+
+The first silent-router repair failed twice: even with an explicit skill
+restriction, Codex continued to treat TypeScript as covered by generic
+language guidance. The final repair changed the deterministic
+`UserPromptSubmit` router to emit explicit negative context for an
+unregistered source extension. Three fresh S7 TypeScript sessions and one S8
+documentation-only session then passed without inventing a language pack,
+reference path, phase, or decision fields.
+
+| Result | Transcript |
+| --- | --- |
+| 3× S7 + 1× S8 negative controls | [captured final responses](candidate/transcripts/fc74087/prompt-router/negative-controls.md) |
+
+This focused control is a prerequisite pass only; the 12-session focused gate
+and the 48-session final cohort remain outstanding.
+
+## Complete prompt-router focused gate at `fc74087`
+
+After the explicit negative-route repair, the low-reasoning focused gate passed
+all five Rust implementations, both Rust reviews, one Go review, one Swift
+verification, and both negative controls. This unblocks the complete matrix;
+it does not establish publication readiness.
+
+| Result | Transcript |
+| --- | --- |
+| 12/12 focused sessions | [captured observations](candidate/transcripts/fc74087/prompt-router/focused-gate.md) |
+
 ## Codex UserPromptSubmit router pilot at `14c7aaf`
 
 The deterministic prompt-router pilot exercised Rust implementation/review,

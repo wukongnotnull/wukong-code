@@ -54,7 +54,7 @@ Rust R1 + rust-basic cwd -> Rust implementation and rust/implementation.md body
 Rust review + rust-basic cwd -> Rust review and rust/review.md body
 Go review + go-basic cwd -> Go review and go/review.md body
 Swift verification + swift-basic cwd -> Swift verification and swift/verification.md body
-TypeScript target, README typo, malformed JSON -> exit 0 with no context
+TypeScript target -> explicit negative context; README typo and malformed JSON -> exit 0 with no context
 ```
 
 - [x] **Step 3: Observe RED**
@@ -142,7 +142,7 @@ Pass conditions:
 R1 context: Rust implementation and rust/implementation.md content
 R4 context: Rust review and rust/review.md content
 Go/Swift: only their selected language reference content
-S7/S8: no prompt-router additionalContext
+S7: explicit negative prompt-router context; S8: no prompt-router additionalContext
 ```
 
 - [ ] **Step 2: Gate the full cohort**
