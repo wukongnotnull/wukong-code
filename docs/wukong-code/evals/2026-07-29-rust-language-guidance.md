@@ -279,9 +279,17 @@ effort, ephemeral read-only sandbox; session
 `019fbd10-e1bc-76a2-af53-64a18d5e21d0`. The captured final response is in
 [the bootstrap acceptance record](raw/2026-07-29-rust-language-guidance/codex-bootstrap-acceptance.md).
 
-This is an end-to-end startup-injection acceptance test, not a replacement for
-the complete Rust A3 repetition cohort. The latter must be rerun from a frozen
-candidate before changing the Rust pack's `Planned` status.
+This is an end-to-end startup-injection acceptance test. The exact A3 pressure
+prompt was subsequently repeated three times from the local `6e8d15f`
+candidate with the original `gpt-5.6-terra` low-reasoning configuration. All
+three sessions passed: they accepted only the stated `cargo test` assumption,
+marked every other requested check as unverified, and neither installed nor
+proposed installing a tool. The captured responses and session IDs are in the
+[candidate raw index](raw/2026-07-29-rust-language-guidance/candidate.md).
+
+This narrow A3 recovery is not a replacement for a fresh complete Rust
+matrix. The full ordinary and pressure/regression cohorts still need rerunning
+from a frozen candidate before changing the Rust pack's `Planned` status.
 
 ## ECC source inventory
 
