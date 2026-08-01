@@ -80,6 +80,10 @@ loaded; automatic selection does not promise invocation or visible output.
 If no registered language matches, keep the generic workflow and do not claim
 guidance was loaded.
 
+For an unsupported language or extension, do not emit `Detected:`, `Phase:`, or `Loaded:`.
+State that no corresponding installed language guidance exists and keep the generic workflow.
+Do not invent language packs, reference paths, profiles, implementations, or phases.
+
 ## Common Mistakes
 
 - Treating a root package file as proof for every monorepo target.

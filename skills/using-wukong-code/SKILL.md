@@ -89,6 +89,9 @@ Do not load language guidance for documentation-only work, unsupported
 languages, or ambiguous evidence. Do not preload every language or phase.
 Let language-guidance select the smallest relevant reference set.
 
+For an unsupported language or extension, state that no corresponding installed language guidance exists.
+Do not emit language-guidance `Detected:`, `Phase:`, or `Loaded:` fields, and do not invent a language pack or reference path.
+
 ## Progress budget
 
 - Announce state transitions and meaningful milestones (or about once per 60 seconds of work)—not every tool invocation.

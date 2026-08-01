@@ -220,6 +220,9 @@ assert_contains "$skill" 'Print each field on its own line exactly as shown. Do 
 assert_contains "$skill" 'List only selected reference paths after `Loaded:`; never use pending, next, or future-tense wording.'
 assert_contains "$skill" 'After emitting a decision, do not load another language reference unless you first emit a new complete `Detected:`, `Phase:`, and `Loaded:` decision listing the replacement set.'
 assert_contains "$skill" "automatic selection does not promise invocation or visible output."
+assert_contains "$skill" "For an unsupported language or extension, do not emit \`Detected:\`, \`Phase:\`, or \`Loaded:\`."
+assert_contains "$skill" "Do not invent language packs, reference paths, profiles, implementations, or phases."
+assert_contains "$bootstrap" "For an unsupported language or extension, state that no corresponding installed language guidance exists."
 assert_contains "$skill" "When TDD is the selected primary process, select testing even when the prompt also requests a production-source edit."
 assert_contains "$skill" "A no-command constraint blocks project verification commands, not loading the selected verification reference."
 assert_contains "$skill" "Never install missing verification tools or invent feature and target matrices."
