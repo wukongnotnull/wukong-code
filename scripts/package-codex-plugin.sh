@@ -242,6 +242,8 @@ git -C "$REPO_ROOT" archive --format=tar "$REF" -- \
   hooks/hooks-codex.json \
   hooks/run-hook.cmd \
   hooks/session-start \
+  hooks/user-prompt-submit \
+  hooks/user-prompt-submit.py \
   skills \
   | tar -xf - -C "$STAGE"
 

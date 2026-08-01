@@ -87,5 +87,23 @@ assert_equal(
     "Codex SessionStart command uses PLUGIN_ROOT",
 )
 
+user_prompt_submit = codex_hooks.get("hooks", {}).get("UserPromptSubmit")
+if not isinstance(user_prompt_submit, list) or len(user_prompt_submit) != 1:
+    raise AssertionError("Codex hooks must define exactly one UserPromptSubmit handler")
+
+prompt_handler = user_prompt_submit[0]
+if "matcher" in prompt_handler:
+    raise AssertionError("Codex UserPromptSubmit handler must not declare a matcher")
+prompt_commands = prompt_handler.get("hooks")
+if not isinstance(prompt_commands, list) or len(prompt_commands) != 1:
+    raise AssertionError("Codex UserPromptSubmit must define exactly one command hook")
+prompt_command = prompt_commands[0]
+assert_equal(prompt_command.get("type"), "command", "Codex UserPromptSubmit hook type")
+assert_equal(
+    prompt_command.get("command"),
+    '"${PLUGIN_ROOT}/hooks/run-hook.cmd" user-prompt-submit',
+    "Codex UserPromptSubmit command uses PLUGIN_ROOT",
+)
+
 print("Codex marketplace manifest looks good")
 PY

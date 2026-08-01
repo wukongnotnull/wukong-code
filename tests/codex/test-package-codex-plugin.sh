@@ -170,6 +170,8 @@ assert_contains "$archive_paths" ".codex-plugin/plugin.json" "archive includes C
 assert_contains "$archive_paths" "hooks/hooks-codex.json" "archive includes Codex hook configuration"
 assert_contains "$archive_paths" "hooks/run-hook.cmd" "archive includes Codex hook dispatcher"
 assert_contains "$archive_paths" "hooks/session-start" "archive includes Codex SessionStart script"
+assert_contains "$archive_paths" "hooks/user-prompt-submit" "archive includes Codex UserPromptSubmit router"
+assert_contains "$archive_paths" "hooks/user-prompt-submit.py" "archive includes Codex language router implementation"
 if printf '%s' "$archive_paths" | grep -Fxq "hooks/hooks.json"; then
   fail "archive excludes cross-harness hook configuration"
 else
