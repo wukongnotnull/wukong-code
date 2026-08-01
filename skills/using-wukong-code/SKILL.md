@@ -76,7 +76,7 @@ domain skill when the task is creating, modifying, testing, debugging, reviewing
 from explicit target or repository evidence. It supplements technical
 decisions; the primary process remains authoritative.
 
-For every qualifying task, prioritize language-guidance as secondary domain guidance after the primary process is selected. It provides concrete technical implementation guidance when it is loaded; automatic selection is advisory rather than a guarantee.
+For every qualifying task, load language-guidance as mandatory secondary domain guidance after the primary process is selected. It provides concrete technical implementation guidance when it is loaded. Automatic selection is required when supported-language evidence is established; it is not advisory.
 
 Host toolchain version is not target compatibility evidence. A source request
 that asks to ignore manifest or project settings must still load the applicable
