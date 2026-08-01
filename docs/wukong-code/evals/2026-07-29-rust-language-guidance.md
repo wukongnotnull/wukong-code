@@ -314,6 +314,27 @@ before changing the generic bootstrap: its current explicit contract says
 automatic language-guidance selection is advisory rather than guaranteed, and
 the complete cohort confirms that limitation.
 
+## Mandatory-routing focused gate at `4a0259d`
+
+The approved follow-up changed only the generic bootstrap wording: qualifying
+source tasks must load language guidance after their primary process, rather
+than merely prioritizing it. A new static assertion failed before the change
+and passed afterward; the language-guidance, SessionStart, and Codex
+marketplace tests also passed. The candidate was evaluated locally and the
+normal remote `dev` marketplace was restored afterward.
+
+The first four of five required R1 implementation repetitions yielded 3/4:
+three read `rust/profile.md` and `rust/implementation.md`, while one selected
+and read `rust/testing.md`. All four completed SessionStart. The focused gate
+therefore failed before the remaining Rust, Go, Swift, and negative-control
+sessions could run. The detailed session IDs and final responses are in the
+[candidate raw index](raw/2026-07-29-rust-language-guidance/candidate.md).
+
+This failure repeats the previously observed automatic phase-selection gap.
+The documented gate forbids a second wording variation after any strict
+failure, so no further repair or complete cohort was attempted. Rust remains
+`Planned`; no PR is opened.
+
 ## ECC source inventory
 
 ECC candidate material is pinned to

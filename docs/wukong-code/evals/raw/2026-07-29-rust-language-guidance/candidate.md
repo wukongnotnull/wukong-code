@@ -239,3 +239,31 @@ that injection. The bootstrap currently says automatic `language-guidance`
 selection is "advisory rather than a guarantee"; the evidence therefore does
 not justify claiming deterministic automatic routing. No source wording was
 changed from these three final messages alone.
+
+## Mandatory-routing focused gate at `4a0259d`
+
+Commit `4a0259d6ad5e3e865490b6b1f3e1f7d333b2cc39` replaced the bootstrap's
+advisory secondary-language wording with a mandatory-routing instruction. Its
+new static assertion was observed failing before the wording change, then
+passed with the language-guidance, SessionStart, and Codex marketplace tests.
+
+The locally installed candidate was then evaluated with the exact R1 prompt in
+four fresh, ephemeral, read-only Codex CLI sessions (`gpt-5.6-terra`, low
+reasoning effort). All four completed SessionStart. The focused gate required
+five R1 implementation passes before any further Rust, Go, Swift, or negative
+control run; it stopped after the fourth session because one was a strict
+failure. The normal remote `dev` marketplace was restored immediately.
+
+| Run | Session ID | Decision and references actually read | Verdict | Final response |
+| --- | --- | --- | --- | --- |
+| R1-1 | `019fbd3b-c6a8-79d2-9d2a-b5ed023cbd66` | implementation; `rust/profile.md`, `rust/implementation.md` | PASS | [final](candidate/transcripts/4a0259d/focused/r1-1.md) |
+| R1-2 | `019fbd3b-c6a8-7293-a08f-b5a319e91b47` | testing; `rust/testing.md` | FAIL — implementation prompt routed to testing | [final](candidate/transcripts/4a0259d/focused/r1-2.md) |
+| R1-3 | `019fbd3b-c6a8-7592-97a7-2ad306a5da47` | implementation; `rust/profile.md`, `rust/implementation.md` | PASS | [final](candidate/transcripts/4a0259d/focused/r1-3.md) |
+| R1-4 | `019fbd3b-c6a8-7212-b336-8b8b4be92a27` | implementation; `rust/profile.md`, `rust/implementation.md` | PASS | [final](candidate/transcripts/4a0259d/focused/r1-4.md) |
+
+Result: 3/4, below the focused gate. R1-2 selected TDD/testing and attempted a
+test edit in the read-only sandbox; the sandbox rejection was reported rather
+than misrepresented as a completed implementation. The failure reproduces the
+same automatic phase-selection instability found in the complete `6b72e43`
+cohort. Under the approved gate, no second wording variation, remaining seven
+focused sessions, or full cohort was run.
