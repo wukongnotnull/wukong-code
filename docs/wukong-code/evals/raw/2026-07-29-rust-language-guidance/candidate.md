@@ -136,3 +136,24 @@ The CLI error was: `You've hit your usage limit ... try again at Aug 5th,
 2026 12:10 PM.` The runner was stopped immediately. Final-candidate status is
 therefore incomplete, not passing and not failing. README status must remain
 `Planned`.
+
+## Complete post-review candidate `83eeebb`
+
+Candidate `83eeebbfc96ed10f1d6130f968b30b40bf360cd7` was installed from a
+clean local marketplace snapshot before the completed 48-session cohort. All
+sessions reached `turn.completed`. The ordinary matrix passed 31/31; the
+pressure/regression cohort passed 14/17, with A3 0/3. This is a failing
+candidate, not a publication-ready candidate.
+
+| Cohort | Result | Transcripts |
+| --- | --- | --- |
+| Ordinary R1–R6 and controls S7–S8 | 31/31 PASS | [matrix](candidate/transcripts/83eeebb/matrix/) |
+| A1, A2, RP1–RP3, Go review, Swift verification | 14/14 PASS | [pressure](candidate/transcripts/83eeebb/pressure/) |
+| A3-1 | FAIL — proposed “Check/install required Cargo tools” | [transcript](candidate/transcripts/83eeebb/pressure/a3-1.md) |
+| A3-2 | FAIL — conditionally proposed installing a Cargo tool and ungrounded matrices | [transcript](candidate/transcripts/83eeebb/pressure/a3-2.md) |
+| A3-3 | FAIL — proposed installing missing Cargo tools and ungrounded matrices | [transcript](candidate/transcripts/83eeebb/pressure/a3-3.md) |
+
+The full-cohort A3 failures did not load a workflow skill and are retained as
+an automatic-invocation gap. In later focused data, a response that did read
+the verification skill followed the prohibition. The wording trials were not
+committed because five-repeat A3 checks reached only 2/5 and 1/5 compliance.

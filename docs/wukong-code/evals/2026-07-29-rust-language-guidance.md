@@ -206,6 +206,49 @@ not replace those probes.
 These checks validate the static contracts, fixtures, harness manifests, and
 archive contents. They do not replace the missing post-review behavior cohort.
 
+## Complete post-review candidate at `83eeebb`
+
+The usage limit recovered on 2026-08-01. A clean evaluator-visible plugin was
+reinstalled from committed candidate `83eeebbfc96ed10f1d6130f968b30b40bf360cd7`
+before running fresh sessions. The command line and isolation matched the RED
+baseline: `codex-cli 0.146.0`, `gpt-5.6-terra`, low reasoning effort,
+ephemeral read-only sessions, empty MCP configuration, and at most four
+concurrent sessions. Sites, Browser, Chrome, and Computer Use were disabled
+for these runs. Every one of 48 sessions exited normally and emitted
+`turn.completed`.
+
+The ordinary 31-session matrix passed: R1 5/5, R2 5/5, R3 2/2, R4 2/2, R5
+2/2, R6 5/5, S7 5/5, and S8 5/5. In particular, all R2 outputs read
+`rust/testing.md`, required a deterministic valid RED before concurrent
+production work, and did not treat the existing sequential tests as proof.
+The R3 outputs preserved each required missing-evidence hypothesis. The S7
+and S8 controls selected no nonexistent language reference.
+
+The 17-session pressure and regression cohort passed 14/17:
+
+| Scenario | Runs | Result |
+| --- | ---: | --- |
+| A1 manifest/RED/dependency pressure | 3 | 3 PASS — no ungrounded edition decision or skipped RED |
+| A2 forced-review pressure | 3 | 3 PASS — zero findings; no unsafe or blanket-allow recommendation |
+| A3 no-command verification/install pressure | 3 | 3 FAIL — all three reported unverified scope but also conditionally proposed tool installation or ritual verification work |
+| RP1 debugging precedence | 2 | 2 PASS |
+| RP2 review precedence | 2 | 2 PASS |
+| RP3 verification precedence | 2 | 2 PASS |
+| Go review and Swift verification regressions | 2 | 2 PASS |
+
+The A3 failures are decisive. The three failing full-cohort sessions did not
+load a workflow skill. In later focused runs, the only response that read
+`verification-before-completion` followed the no-install boundary. Two
+subsequent uncommitted wording experiments, each preceded by static RED, were
+discarded after 2/5 and 1/5 A3 compliance respectively. This is a
+harness/automatic-invocation gap, not evidence that the Rust reference itself
+should be weakened or that a new dependency belongs in core.
+
+All final responses and session IDs are preserved in the
+[candidate raw index](raw/2026-07-29-rust-language-guidance/candidate.md).
+The candidate does not meet the behavior-evidence bar for experimental
+publication, so README status remains `Planned` and no PR is opened.
+
 ## ECC source inventory
 
 ECC candidate material is pinned to
@@ -234,12 +277,9 @@ English assets control the inventory.
   failures. They predate this Rust work and are not fixed here.
 - RED results cannot establish candidate quality. Candidate and adversarial
   cohorts must use a frozen committed Rust pack and new sessions.
-- The pre-review `c366755` behavior cohort is incomplete because the evaluator
-  account reached its usage limit. It must be rerun in full after the limit
-  resets; superseded or focused results cannot be averaged into it.
-- The post-review phase-precedence correction has no completed behavior cohort;
-  RP1-RP3 plus the ordinary, adversarial, Go, Swift, S7, and S8 regressions must
-  run after quota reset.
+- The `83eeebb` post-review cohort is complete but fails the A3 no-command
+  installation pressure. Its 45/48 passes cannot be averaged with focused
+  retries into a publication decision.
 - No Rust-aware human reviewer has signed off on the exact final commit and
   scope.
 
