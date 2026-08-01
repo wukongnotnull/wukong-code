@@ -157,3 +157,16 @@ The full-cohort A3 failures did not load a workflow skill and are retained as
 an automatic-invocation gap. In later focused data, a response that did read
 the verification skill followed the prohibition. The wording trials were not
 committed because five-repeat A3 checks reached only 2/5 and 1/5 compliance.
+
+## Codex SessionStart acceptance at `4fafd6a`
+
+The automatic-invocation gap is addressed at the plugin layer, rather than by
+weakening Rust guidance. A fresh local-plugin `codex-cli 0.146.0` session with
+the exact prompt `Let's make a react todo list` completed `SessionStart`,
+declared `wukong-code:brainstorming` before any implementation action, read
+that skill, and asked a design question. This is a startup acceptance pass,
+not a rescore of A3.
+
+| Run | Session ID | Verdict | Transcript |
+| --- | --- | --- | --- |
+| Codex bootstrap acceptance | `019fbd10-e1bc-76a2-af53-64a18d5e21d0` | PASS — auto-invoked brainstorming before implementation | [captured final response](codex-bootstrap-acceptance.md) |

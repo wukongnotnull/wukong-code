@@ -249,6 +249,40 @@ All final responses and session IDs are preserved in the
 The candidate does not meet the behavior-evidence bar for experimental
 publication, so README status remains `Planned` and no PR is opened.
 
+## Codex SessionStart integration at `4fafd6a`
+
+The A3 diagnosis showed that the Codex plugin had only implicit skill
+selection: its manifest explicitly set `"hooks": {}` and the Codex packaging
+script omitted the existing SessionStart dispatcher. Commit `4fafd6a` adds a
+Codex-specific hook configuration, bundles only the dispatcher and
+SessionStart script needed by that configuration, and changes the packager's
+checkout check to support linked Git worktrees. It reuses the existing
+cross-platform dispatcher; Codex supplies both `PLUGIN_ROOT` and the
+compatibility `CLAUDE_PLUGIN_ROOT`, and accepts the nested
+`hookSpecificOutput.additionalContext` output.
+
+The implementation follows the official [plugin hook configuration](https://developers.openai.com/plugins/build/plugins)
+and [SessionStart hook contract](https://learn.chatgpt.com/docs/hooks). Plugin
+hooks still require the user's one-time review and trust in normal operation;
+the acceptance invocation below bypassed that guard only because it evaluated
+the locally inspected candidate.
+
+| Check | Result |
+| --- | --- |
+| `tests/codex/test-marketplace-manifest.sh` | PASS — explicit Codex hook path, Codex matcher, and `PLUGIN_ROOT` command |
+| `tests/hooks/test-session-start.sh` | PASS — including Codex nested SessionStart context |
+| `tests/codex/test-package-codex-plugin.sh` | PASS — package contents, linked-worktree support, and timezone-independent archive timestamps |
+| Fresh local-plugin Codex acceptance, exact prompt `Let's make a react todo list` | PASS — the `SessionStart` event completed first; the first agent response declared and read `wukong-code:brainstorming`, then asked one design question without implementation |
+
+Acceptance harness: `codex-cli 0.146.0`, `gpt-5.6-sol`, high reasoning
+effort, ephemeral read-only sandbox; session
+`019fbd10-e1bc-76a2-af53-64a18d5e21d0`. The captured final response is in
+[the bootstrap acceptance record](raw/2026-07-29-rust-language-guidance/codex-bootstrap-acceptance.md).
+
+This is an end-to-end startup-injection acceptance test, not a replacement for
+the complete Rust A3 repetition cohort. The latter must be rerun from a frozen
+candidate before changing the Rust pack's `Planned` status.
+
 ## ECC source inventory
 
 ECC candidate material is pinned to
@@ -272,9 +306,9 @@ English assets control the inventory.
   Codex CLI behavior, not every supported harness or model.
 - No Rust 1.63 compiler, non-host target, feature matrix, async runtime, FFI,
   unsafe code, build script, proc macro, or Cargo extension was executed.
-- The existing Codex package test rejects linked worktrees and, in an ordinary
-  Asia/Shanghai clone, retains two timezone-sensitive ZIP/tar timestamp
-  failures. They predate this Rust work and are not fixed here.
+- `4fafd6a` makes the Codex packager support linked worktrees and normalizes
+  archive timestamps independently of the host timezone; those package-test
+  limitations no longer apply.
 - RED results cannot establish candidate quality. Candidate and adversarial
   cohorts must use a frozen committed Rust pack and new sessions.
 - The `83eeebb` post-review cohort is complete but fails the A3 no-command
