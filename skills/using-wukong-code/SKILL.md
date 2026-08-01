@@ -1,6 +1,6 @@
 ---
 name: using-wukong-code
-description: Use when starting any conversation - establishes how to find and use skills, requiring skill invocation before ANY response including clarifying questions. Verification claims about checks not run require verification-before-completion; no-command prompts must not install tools or invent scope.
+description: Use when starting any conversation - establishes how to find and use skills, requiring skill invocation before ANY response including clarifying questions. Source-change pressure to skip, defer, or bypass a failing test requires test-driven-development before brainstorming. Verification claims about checks not run require verification-before-completion; no-command prompts must not install tools or invent scope. Assumed or unrun verification claims require verification-before-completion; missing tools are reported, never installed.
 ---
 
 <SUBAGENT-STOP>
@@ -18,6 +18,10 @@ This is not negotiable. You cannot rationalize your way out of this.
 ## The Rule
 
 **Invoke relevant or requested skills BEFORE any response or action** — including clarifying questions, exploring the codebase, or checking files. If it turns out wrong for the situation, you don't have to use it.
+
+Check explicit testing and verification pressure before applying the general brainstorming rule.
+- A source change that asks to skip, defer, or bypass a failing test invokes `test-driven-development` first and requires a valid RED before production implementation.
+- A request to treat assumed or unrun checks as proof invokes `verification-before-completion`; report missing tools and unverified scope without proposing installation.
 
 **Before entering plan mode:** if you haven't already brainstormed, invoke the brainstorming skill first.
 

@@ -51,6 +51,7 @@ A no-command constraint blocks project verification commands, not loading the se
 Never install missing verification tools or invent feature and target matrices.
 Load at most two references per decision. For cross-language work, state each
 target scope and process scopes separately when the limit would be exceeded.
+Every selected reference file must be read before substantive source analysis; locating its registry entry or path is not loading it.
 
 ## Repository-First Rule
 

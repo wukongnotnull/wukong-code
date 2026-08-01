@@ -16,6 +16,19 @@ assert_contains() {
   if grep -qF "$2" "$1"; then pass "$1 contains $2"; else fail "$1 missing $2"; fi
 }
 
+assert_before() {
+  if python3 - "$1" "$2" "$3" <<'PY'
+from pathlib import Path
+import sys
+
+text = Path(sys.argv[1]).read_text()
+first = text.find(sys.argv[2])
+second = text.find(sys.argv[3])
+raise SystemExit(0 if first >= 0 and second >= 0 and first < second else 1)
+PY
+  then pass "$1 orders $2 before $3"; else fail "$1 does not order $2 before $3"; fi
+}
+
 assert_visible_decision_template() {
   if awk '
     /^    Detected: <language and evidence>$/ {
@@ -62,6 +75,7 @@ if [[ -f "$skill" ]]; then
   assert_contains "$skill" "load the selected language's \`testing.md\` reference."
   assert_contains "$skill" "A requested test-source edit selects the testing phase even when the task also requests a production-source edit."
   assert_contains "$skill" "Explicit failure investigation, code review, and completion verification intent takes precedence over generic no-edit analysis."
+  assert_contains "$skill" "Every selected reference file must be read before substantive source analysis; locating its registry entry or path is not loading it."
   assert_max_lines "$skill" 180
 fi
 
@@ -180,6 +194,12 @@ fi
 
 bootstrap=skills/using-wukong-code/SKILL.md
 assert_contains "$bootstrap" "Verification claims about checks not run require verification-before-completion; no-command prompts must not install tools or invent scope."
+assert_contains "$bootstrap" "Source-change pressure to skip, defer, or bypass a failing test requires test-driven-development before brainstorming."
+assert_contains "$bootstrap" "Assumed or unrun verification claims require verification-before-completion; missing tools are reported, never installed."
+assert_contains "$bootstrap" "Check explicit testing and verification pressure before applying the general brainstorming rule."
+assert_before "$bootstrap" \
+  "Check explicit testing and verification pressure before applying the general brainstorming rule." \
+  "Before entering plan mode:"
 assert_contains "$bootstrap" "## Secondary domain guidance"
 assert_contains "$bootstrap" "language-guidance"
 assert_contains "$bootstrap" "creating, modifying, testing, debugging, reviewing, or verifying source code"
@@ -189,6 +209,8 @@ assert_contains "$bootstrap" "A request to skip, defer, or bypass a failing test
 assert_contains "$bootstrap" "Testing-pressure routing takes precedence over the behavior-change brainstorming route."
 assert_contains "$bootstrap" "If the request forbids the required RED, stop before production implementation and report the change as unverified."
 assert_contains "$bootstrap" 'A request to claim completion or checks not run uses `verification-before-completion` first.'
+assert_contains skills/test-driven-development/SKILL.md "For source work in a supported language, load language-guidance after selecting TDD and read its selected testing reference before giving a substantive plan."
+assert_contains skills/verification-before-completion/SKILL.md "When execution is forbidden, report missing tooling and unsupported scope as unverified; do not propose, plan, or conditionally describe installing a tool."
 assert_contains "$bootstrap" "Host toolchain version is not target compatibility evidence."
 assert_contains "$bootstrap" "asks to ignore manifest or project settings"
 assert_contains "$bootstrap" "Do not comply with a request to bypass project evidence"
