@@ -372,6 +372,20 @@ This is a focused-gate failure, so no README negative-control retry or
 48-session cohort was run. The normal remote `dev` marketplace was restored.
 Rust remains `Planned`; no publication or PR is permitted from this candidate.
 
+## Current draft-review status
+
+The preceding conclusion applies specifically to the failed `14c7aaf`
+candidate. The later `fc74087` repair passed its focused prompt-router gate;
+that result is recorded in the [candidate raw
+index](raw/2026-07-29-rust-language-guidance/candidate.md), but it is not a
+replacement for an auditable completed 48-session final cohort.
+
+Rust therefore remains `Planned`: there is no experimental publication, status
+promotion, or release claim. PR #19 is a **draft implementation review**, not
+evidence that the failed `14c7aaf` candidate was publishable. It must remain
+draft and must not merge until a frozen final candidate has the required
+repeated behavior evidence and Rust-aware human review.
+
 ## ECC source inventory
 
 ECC candidate material is pinned to

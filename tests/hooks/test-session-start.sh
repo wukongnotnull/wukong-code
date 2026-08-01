@@ -148,9 +148,10 @@ assert_prompt_router_output() {
     local contains="$3"
     local not_contains="$4"
     local home="$5"
+    local plugin_root="${6:-$REPO_ROOT}"
 
     local output
-    if ! output="$(printf '%s' "$input" | env -i PATH="${PATH:-}" HOME="$home" PLUGIN_ROOT="$REPO_ROOT" bash "$WRAPPER_UNDER_TEST" user-prompt-submit 2>&1)"; then
+    if ! output="$(printf '%s' "$input" | env -i PATH="${PATH:-}" HOME="$home" PLUGIN_ROOT="$plugin_root" bash "$plugin_root/hooks/run-hook.cmd" user-prompt-submit 2>&1)"; then
         fail "$description"
         echo "    hook exited non-zero"
         echo "$output" | sed 's/^/      /'
@@ -253,6 +254,13 @@ assert_prompt_router_output \
     "$router_home"
 
 assert_prompt_router_output \
+    "Rust manifest change injects Rust implementation guidance" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/rust-basic\",\"prompt\":\"Update Cargo.toml to add the feature configuration.\"}" \
+    "# Rust Implementation Guidance" \
+    "No installed language guidance is registered for .toml." \
+    "$router_home"
+
+assert_prompt_router_output \
     "Rust review request injects Rust review guidance" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/rust-basic\",\"prompt\":\"Review src/lib.rs for correctness and API risks.\"}" \
     "# Rust Review Guidance" \
@@ -300,6 +308,28 @@ assert_prompt_router_output \
     "No installed language guidance is registered for .ts." \
     "# Rust Implementation Guidance"$'\037'"# Go Implementation Guidance"$'\037'"# Swift Implementation Guidance" \
     "$router_home"
+
+registry_router_root="$TEST_ROOT/registry-router"
+mkdir -p "$registry_router_root"
+cp -R "$REPO_ROOT/hooks" "$registry_router_root/hooks"
+cp -R "$REPO_ROOT/skills" "$registry_router_root/skills"
+python3 - "$registry_router_root/skills/language-guidance/references/registry.json" <<'PY'
+import json
+from pathlib import Path
+import sys
+
+path = Path(sys.argv[1])
+data = json.loads(path.read_text())
+data["languages"]["rust"]["extensions"].append(".rustsrc")
+path.write_text(json.dumps(data))
+PY
+assert_prompt_router_output \
+    "Router derives registered extensions from the registry" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/rust-basic\",\"prompt\":\"Change src/lib.rustsrc to add the feature configuration.\"}" \
+    "# Rust Implementation Guidance" \
+    "No installed language guidance is registered for .rustsrc." \
+    "$router_home" \
+    "$registry_router_root"
 
 assert_prompt_router_empty \
     "Documentation typo does not inject language guidance" \

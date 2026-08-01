@@ -10,10 +10,8 @@ from pathlib import Path
 from typing import Any
 
 
-SUPPORTED_EXTENSIONS = {".rs": "rust", ".go": "go", ".swift": "swift"}
 DOCUMENTATION_EXTENSIONS = {".adoc", ".md", ".rst", ".txt"}
 SOURCE_EXTENSION = re.compile(r"(?<![\w.])([\w./-]+\.[A-Za-z0-9]+)\b")
-LANGUAGE_NAME = re.compile(r"\b(rust|go|swift)\b", re.IGNORECASE)
 
 
 def read_input() -> dict[str, Any] | None:
@@ -39,25 +37,52 @@ def owner_for(directory: Path, markers: list[str]) -> Path | None:
     return None
 
 
+def extension_languages(languages: dict[str, Any]) -> dict[str, str]:
+    return {
+        extension.lower(): language
+        for language, data in languages.items()
+        for extension in data["extensions"]
+    }
+
+
+def named_language(prompt: str, languages: dict[str, Any]) -> str | None:
+    matches = [
+        language
+        for language in languages
+        if re.search(rf"\b{re.escape(language)}\b", prompt, re.IGNORECASE)
+    ]
+    return matches[-1] if matches else None
+
+
 def target_language(prompt: str, cwd: Path, languages: dict[str, Any]) -> tuple[str, Path] | None:
     source_matches = SOURCE_EXTENSION.findall(prompt)
     if source_matches:
         target = Path(source_matches[-1])
         extension = target.suffix.lower()
-        language = SUPPORTED_EXTENSIONS.get(extension)
-        if language is None:
-            return None
         try:
             candidate = (cwd / target).resolve(strict=False)
             candidate.relative_to(cwd.resolve(strict=False))
         except ValueError:
             return None
-        owner = owner_for(candidate.parent, languages[language]["markers"])
-        return (language, owner) if owner else None
 
-    named = LANGUAGE_NAME.findall(prompt)
-    if named:
-        language = named[-1].lower()
+        language = extension_languages(languages).get(extension)
+        if language:
+            owner = owner_for(candidate.parent, languages[language]["markers"])
+            return (language, owner) if owner else None
+
+        marker_languages = [
+            language
+            for language, data in languages.items()
+            if target.name in data["markers"]
+        ]
+        if len(marker_languages) == 1:
+            language = marker_languages[0]
+            owner = owner_for(candidate.parent, languages[language]["markers"])
+            return language, owner or candidate.parent
+        return None
+
+    language = named_language(prompt, languages)
+    if language:
         owner = owner_for(cwd, languages[language]["markers"])
         return (language, owner) if owner else None
 
@@ -69,12 +94,12 @@ def target_language(prompt: str, cwd: Path, languages: dict[str, Any]) -> tuple[
     return candidates[0] if len(candidates) == 1 else None
 
 
-def unregistered_source_extension(prompt: str) -> str | None:
+def unregistered_source_extension(prompt: str, languages: dict[str, Any]) -> str | None:
     source_matches = SOURCE_EXTENSION.findall(prompt)
     if not source_matches:
         return None
     extension = Path(source_matches[-1]).suffix.lower()
-    if extension in SUPPORTED_EXTENSIONS or extension in DOCUMENTATION_EXTENSIONS:
+    if extension in extension_languages(languages) or extension in DOCUMENTATION_EXTENSIONS:
         return None
     return extension
 
@@ -128,7 +153,7 @@ def main() -> None:
         cwd = Path(payload["cwd"]).resolve(strict=False)
         selection = target_language(payload["prompt"], cwd, languages)
         phase = phase_for(payload["prompt"])
-        unsupported_extension = unregistered_source_extension(payload["prompt"])
+        unsupported_extension = unregistered_source_extension(payload["prompt"], languages)
         if not selection and unsupported_extension and phase:
             context = (
                 "Deterministic Codex language routing\n\n"
