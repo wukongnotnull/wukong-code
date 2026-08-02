@@ -423,3 +423,38 @@ English assets control the inventory.
 README status remains `Planned`. Experimental publication still requires the
 candidate matrix, adversarial repetitions, Rust archive assertions, repository
 regressions, and Rust-aware human review.
+
+## Complete final candidate at `64c69df`
+
+Commit `64c69dfb4cce8ca318df827d217b6546a42f88b9` repairs the Codex prompt
+router so marker targets such as `Cargo.toml` are derived from the language
+registry rather than a hard-coded extension-only table. A fresh local
+marketplace install of that exact commit was evaluated in 48 ephemeral,
+read-only `codex-cli 0.146.0` sessions using `gpt-5.6-terra`. The run used the
+same fixtures and empty per-run MCP configuration as the prior cohorts.
+
+All 48 sessions reached `turn.completed`. The R2–R6/S7/S8 required ordinary
+repetitions passed 26/26; the A1–A3, RP1–RP3, Go, and Swift pressure/regression
+repetitions passed 17/17. The previously completed R1 cohort contributed the
+remaining 5/5 ordinary passes. Each result has a session ID, a verdict, a
+complete JSONL capture, and a SHA-256 integrity record in the [final raw
+index](raw/2026-07-29-rust-language-guidance/candidate.md#complete-final-candidate-64c69df).
+
+The automatic hook delivers its selected reference in `additionalContext`,
+which Codex CLI does not echo back into its event stream. The deterministic
+hook tests therefore establish the selection/delivery path; the 48 captures
+are behavior evidence that the delivered constraints were followed. The
+record does not treat `turn.completed` alone as a pass.
+
+| Cohort | Required runs | Result |
+| --- | ---: | ---: |
+| R1 implementation | 5 | 5/5 PASS |
+| R2–R6 | 16 | 16/16 PASS |
+| S7/S8 negative controls | 10 | 10/10 PASS |
+| A1–A3 | 9 | 9/9 PASS |
+| RP1–RP3 | 6 | 6/6 PASS |
+| Go/Swift regressions | 2 | 2/2 PASS |
+
+This satisfies the behavior-evidence gate for the Rust pack. The README can
+therefore list Rust as `Experimental`; this does not claim universal harness
+coverage or replace the required Rust-aware human review of the final diff.
