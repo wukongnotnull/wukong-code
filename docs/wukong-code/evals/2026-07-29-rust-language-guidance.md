@@ -1,0 +1,460 @@
+# Rust language-guidance evaluation — 2026-07-29
+
+## Methodology and isolation
+
+This first record is the no-Rust-guidance RED baseline. Rust fixtures and
+scenario definitions existed, but the installed `language-guidance` registry
+contained only Go and Swift and had no Rust references.
+
+- Source branch commit before fixture edits:
+  `b839bfece6c1d1bf679a987f6afa41a6bb089b18`.
+- Sanitized fixture repository commit: `32728eb`.
+- Harness: `codex-cli 0.146.0`, `gpt-5.6-terra`, low reasoning effort,
+  ephemeral fresh sessions, read-only sandbox, empty per-run MCP configuration.
+- Concurrency: at most four independent CLI sessions.
+- Installed Wukong Code plugin: `wukong-code@wukong-code-dev` 6.2.1 from its
+  Git marketplace cache; its evaluator-visible registry had Go and Swift only.
+- Other enabled plugins: Sites, Browser, Chrome, and Computer Use. Documents,
+  PDF, Spreadsheets, Presentations, Template Creator, and Visualize were
+  installed but disabled.
+- Every scored session received only its CWD, exact scenario prompt, and the
+  instruction to return a complete pre-edit response without modifying files.
+- The sanitized repository contained only the Rust basic crate, the mixed
+  Go/Swift/TypeScript/Rust monorepo fixture, and a minimal README. It had a
+  clean Git commit and no Wukong Code design, plan, scenario rubric, or Rust
+  reference file.
+- One earlier R1 calibration run against the implementation worktree is
+  excluded because it read the design and plan, contaminating the control.
+
+Complete final responses, session IDs, and per-run verdicts are preserved in
+the [baseline raw index](raw/2026-07-29-rust-language-guidance/baseline.md).
+CLI JSONL remains in the local evaluation scratch directory and is not treated
+as source-controlled behavior evidence.
+
+## Cargo fixture evidence
+
+Local execution environment:
+
+- `rustc 1.97.1 (8bab26f4f 2026-07-14)`;
+- `cargo 1.97.1 (c980f4866 2026-06-30)`;
+- host `aarch64-apple-darwin`, macOS 26.5.2;
+- fixture Edition 2021, declared `rust-version = "1.63"`, no dependencies.
+
+| Command | Result |
+| --- | --- |
+| `cargo metadata --no-deps --format-version 1` in `rust-basic` | PASS; one library, one integration test target, no dependencies |
+| `cargo fmt --check` in `rust-basic` | PASS after applying rustfmt's one-line signature formatting |
+| focused input-order test | PASS; 1 passed, 1 filtered out |
+| focused lowest-index-error test | PASS; 1 passed, 1 filtered out |
+| `cargo test --all-targets` in `rust-basic` | PASS; 2 integration tests passed |
+| `cargo check` in `rust-basic` | PASS |
+| metadata, formatting, and check in `monorepo/rust-worker` | PASS; no dependencies |
+
+The installed 1.97 compiler does not prove the declared 1.63 MSRV. No older
+toolchain was installed for this evaluation.
+
+## RED behavior results
+
+| Scenario | Runs | Result |
+| --- | ---: | --- |
+| R1 implementation | 5 | 5 TARGET FAIL — technically plausible standard-library plans, but no registered Rust implementation phase loaded |
+| R2 TDD pressure | 5 | 5 TARGET FAIL — no Rust testing phase; 3/5 accepted skipping RED and 2/5 retained a RED cycle |
+| R3 debugging | 2 | 2 TARGET FAIL — correctly observed the concurrent change was absent, but no Rust debugging phase loaded |
+| R4 review | 2 | 2 TARGET FAIL — both correctly returned zero findings, but no Rust review phase loaded |
+| R5 verification | 2 | 2 TARGET FAIL — no Rust verification phase; one assumed `all-features`, the other proposed unavailable `+1.63`/Clippy commands |
+| R6 nearest marker | 5 | 5 TARGET FAIL — all selected the nearest Cargo crate and explicitly reported that Rust guidance was unavailable |
+| S7 unsupported TypeScript | 5 | 5 PASS — TypeScript selected from `web/tsconfig.json`; Go, Swift, and Rust guidance remained unloaded |
+| S8 documentation-only | 5 | 5 PASS — documentation-only scope loaded no language guidance |
+
+The 31 scored sessions produced 10 negative-control passes and 21 expected
+positive target failures. Generic Rust knowledge did not count as a phase
+selection pass. No run hallucinated an existing Rust reference path.
+
+The controls demonstrate three concrete needs for the candidate pack:
+
+1. registered Rust phase selection, not merely Rust syntax detection;
+2. explicit resistance to skipping a valid RED run;
+3. verification derived from manifest/repository evidence rather than ritual
+   `all-features`, unavailable toolchains, or optional components.
+
+## Candidate implementation and refinement
+
+The registered Rust candidate was introduced at `8b7212a`. The evaluated
+cohorts then produced these measured routing/content repairs:
+
+| Commit | Observed failure | Minimal repair |
+| --- | --- | --- |
+| `4c7500e` | Initial final-message-only score misread a passing strict probe | Unjustified broad profile routing; removed after full JSONL review |
+| `3151a7a` | TDD pressure accepted skipped RED; verification scope expanded | Require testing phase/RED and evidence-bounded verification |
+| `026e754` | Missing concurrent revision still produced a leading cause | Forbid ranked causes without the target revision/log |
+| `b1f4386` | Missing-evidence diagnosis collapsed distinct branches; no-command verification skipped its reference | Preserve concurrency hypotheses; strengthen verification trigger |
+| `38726e1` | No-command verification sometimes bypassed bootstrap routing | Put unsupported-claim routing in the bootstrap description |
+| `81dbbaf` | Experimental change outside the approved Task 3 file set | Superseded and reverted; no net process-skill change |
+| `c366755` | Frozen pre-review candidate | Net candidate used for the interrupted final cohort |
+
+The complete superseded `4c7500e` cohort scored 25/31 ordinary and 3/9
+adversarial passes. Its Rust-positive scenarios scored 17/21 and controls
+scored 8/10; two TypeScript controls invented nonexistent reference paths.
+Failures were not discarded: they drove the focused repairs above. The frozen
+`c366755` cohort completed only four sessions, all R1 passes, before
+`codex-cli` returned an account usage-limit error. The runner was stopped;
+remaining sessions are `INCONCLUSIVE` and no superseded pass was carried
+forward.
+
+Review of the complete strict-probe JSONL also corrected an earlier scoring
+error: `strict-1` emitted `Phase: profile` and loaded `rust/profile.md` before
+its final message, so it was a pass. The post-review candidate removes the
+unjustified generic no-edit profile rule and explicitly gives failure
+investigation, code review, and completion verification precedence. That
+behavior-changing correction requires a new complete cohort after quota reset.
+
+Complete agent-message transcripts, session IDs, and per-run verdicts are in
+the [candidate raw index](raw/2026-07-29-rust-language-guidance/candidate.md).
+
+## Candidate source and semantic boundaries
+
+The six references retain only conditional, repository-first guidance from
+the ECC inventory:
+
+- `rust/profile.md`: Cargo ownership, workspace/target evidence, MSRV,
+  edition, toolchain, features, generated inputs, and target uncertainty;
+- `rust/implementation.md`: ownership/API boundaries, typed errors,
+  concurrency completion/order/error contracts, async runtime preservation,
+  and unsafe invariants;
+- `rust/testing.md`: valid runtime and compile-fail RED, focused-to-broad Cargo
+  checks, deterministic concurrency tests, and conditional optional tools;
+- `rust/debugging.md`: exact compiler/Cargo/test/build evidence, distinct hang
+  hypotheses, and invariant-first unsafe diagnosis;
+- `rust/review.md`: reachable correctness mechanisms, tight locations, zero
+  findings, and rejection of style-as-defect review;
+- `rust/verification.md`: repository-defined scope, safe Cargo defaults,
+  explicit missing/unknown checks, and no tool installation.
+
+The main Rust semantic and toolchain boundaries are conditional on repository
+evidence and map to the maintained primary sources below. Project-specific
+external APIs instead require the owning repository or upstream API contract;
+the pack does not infer domain-specific risk from Rust alone.
+
+| Recommendation | Applies when | Authority/source |
+| --- | --- | --- |
+| Manifest, edition, MSRV, targets, profiles, and build inputs | `Cargo.toml`, workspace metadata, or nearby Cargo configuration establishes the crate scope | [manifest](https://doc.rust-lang.org/cargo/reference/manifest.html), [workspaces](https://doc.rust-lang.org/cargo/reference/workspaces.html), [features](https://doc.rust-lang.org/cargo/reference/features.html), [editions](https://doc.rust-lang.org/edition-guide/), [build scripts](https://doc.rust-lang.org/cargo/reference/build-scripts.html) |
+| Ownership, borrowing, visibility, error propagation, and API types | Target signatures, callers, and established error/module boundaries require the choice; borrowing or abstraction is not prescribed ritually | [references and borrowing](https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html), [`Result`](https://doc.rust-lang.org/std/result/index.html), [visibility](https://doc.rust-lang.org/reference/visibility-and-privacy.html), [generics](https://doc.rust-lang.org/reference/items/generics.html), [dyn compatibility](https://doc.rust-lang.org/reference/items/traits.html#dyn-compatibility) |
+| Scoped threads and cross-thread value boundaries | Existing standard-library threaded code or the requested contract requires threads | [`thread::scope`](https://doc.rust-lang.org/std/thread/fn.scope.html), [`Send`](https://doc.rust-lang.org/std/marker/trait.Send.html), [`Sync`](https://doc.rust-lang.org/std/marker/trait.Sync.html) |
+| Async ownership and cancellation contracts | The repository already selects an async runtime or exposes a `Future` boundary | [`Future`](https://doc.rust-lang.org/std/future/trait.Future.html), [async blocks](https://doc.rust-lang.org/reference/expressions/block-expr.html#async-blocks) |
+| Unsafe invariants, pointer validity, provenance, and FFI boundaries | Existing code contains `unsafe`, raw pointers, or external blocks; guidance does not introduce them | [`unsafe`](https://doc.rust-lang.org/reference/unsafe-keyword.html), [undefined behavior](https://doc.rust-lang.org/reference/behavior-considered-undefined.html), [`std::ptr`](https://doc.rust-lang.org/std/ptr/index.html), [external blocks](https://doc.rust-lang.org/reference/items/external-blocks.html) |
+| Runtime and compile-fail tests | The repository has Cargo tests, rustdoc compile-fail tests, or an already-established compiler/UI diagnostic harness; the pack does not introduce `compiletest` | [`cargo test`](https://doc.rust-lang.org/cargo/commands/cargo-test.html), [rustdoc tests](https://doc.rust-lang.org/rustdoc/write-documentation/documentation-tests.html), [rustc UI tests](https://rustc-dev-guide.rust-lang.org/tests/ui.html) |
+| Exact compiler, Cargo, and build diagnosis | A captured error, failing command, build script, feature, or target supplies evidence | [error index](https://doc.rust-lang.org/error_codes/error-index.html), [`cargo check`](https://doc.rust-lang.org/cargo/commands/cargo-check.html), [build scripts](https://doc.rust-lang.org/cargo/reference/build-scripts.html) |
+| Correctness review boundaries | Target code exposes recoverable errors, ownership/drop behavior, unsafe, concurrency, or a public compatibility surface | [`Result`](https://doc.rust-lang.org/std/result/index.html), [destructors and drop scopes](https://doc.rust-lang.org/reference/destructors.html), [undefined behavior](https://doc.rust-lang.org/reference/behavior-considered-undefined.html), [`Send`](https://doc.rust-lang.org/std/marker/trait.Send.html), [`Sync`](https://doc.rust-lang.org/std/marker/trait.Sync.html), [Cargo SemVer guidance](https://doc.rust-lang.org/cargo/reference/semver.html) |
+| Project-specific external API review | The exact external operation and untrusted input path are present in target code | Owning repository rules and upstream API documentation; no Rust-only SQL, command, path, secret, or deserialization finding |
+| Focused-to-broad verification and optional formatting/lint checks | Repository scripts or installed official components establish the command and scope | [`cargo test`](https://doc.rust-lang.org/cargo/commands/cargo-test.html), [`cargo check`](https://doc.rust-lang.org/cargo/commands/cargo-check.html), [`cargo fmt`](https://doc.rust-lang.org/cargo/commands/cargo-fmt.html), [Clippy usage](https://doc.rust-lang.org/clippy/usage.html) |
+
+The fixture's `rust-version = "1.63"` is compatibility intent recorded in the
+manifest; the installed Rust 1.97 host does not prove that MSRV. Optional
+components and unexecuted feature or target combinations remain explicitly
+unverified. The Rustonomicon was useful background during source review but is
+not used as the primary authority for these recommendations.
+
+## Candidate static, Cargo, and package evidence
+
+After the measured repairs:
+
+| Check | Result |
+| --- | --- |
+| `bash tests/skills/test-language-guidance.sh` | PASS |
+| `bash tests/skills/test-skill-slim-gates.sh` | PASS |
+| Rust focused tests and `cargo test --all-targets` | PASS |
+| Rust `cargo check` and `cargo fmt --check` | PASS |
+| six Rust files in Codex ZIP archive | PASS in ordinary temporary clone |
+| six Rust files in Codex tar.gz archive | PASS in ordinary temporary clone |
+| full Codex package suite | retains only the two approved timezone-sensitive ZIP/tar timestamp failures |
+
+The full non-Rust repository regressions and final package rerun are recorded
+again during final local verification below. None substitutes for the missing
+final behavior cohort.
+
+## Pre-review local verification at `c366755`
+
+| Command | Result |
+| --- | --- |
+| `bash tests/skills/test-language-guidance.sh` | PASS |
+| `bash tests/skills/test-skill-slim-gates.sh` | PASS |
+| `bash tests/opencode/run-tests.sh` | PASS — 2 passed, 0 failed |
+| `bash tests/kimi/run-tests.sh` | PASS — manifest valid |
+| `cargo test --all-targets && cargo check && cargo fmt --check` in `rust-basic` | PASS — 2 integration tests |
+| same Cargo sequence in `monorepo/rust-worker` | PASS |
+| `git diff --check` | PASS before evidence write; rerun required after final evidence commit |
+| Codex package test in a new ordinary clone with `TZ=Asia/Shanghai` | Rust ZIP/tar assertions PASS; suite status 1 only because the two approved timestamp checks fail |
+
+Because common bootstrap/router wording changed, the plan requires fresh Go,
+Swift, S7, and S8 behavior probes. They could not start after the account quota
+error and remain `INCONCLUSIVE`; static contracts and harness tests passing do
+not replace those probes.
+
+## Post-review local verification at `53b2284`
+
+| Command | Result |
+| --- | --- |
+| `bash tests/skills/test-language-guidance.sh` | PASS, including phase precedence and the external-API review boundary |
+| `bash tests/skills/test-skill-slim-gates.sh` | PASS |
+| `bash tests/opencode/run-tests.sh` | PASS — 2 passed, 0 failed |
+| `bash tests/kimi/run-tests.sh` | PASS — manifest valid |
+| `cargo test --all-targets && cargo check && cargo fmt --check` in `rust-basic` | PASS — 2 integration tests |
+| same Cargo sequence in `monorepo/rust-worker` | PASS |
+| `git diff --check` | PASS |
+| Codex package test in a new ordinary clone with `TZ=Asia/Shanghai` | all six Rust ZIP/tar assertions PASS; status 1 only for the two pre-existing timezone-sensitive timestamp assertions |
+
+These checks validate the static contracts, fixtures, harness manifests, and
+archive contents. They do not replace the missing post-review behavior cohort.
+
+## Complete post-review candidate at `83eeebb`
+
+The usage limit recovered on 2026-08-01. A clean evaluator-visible plugin was
+reinstalled from committed candidate `83eeebbfc96ed10f1d6130f968b30b40bf360cd7`
+before running fresh sessions. The command line and isolation matched the RED
+baseline: `codex-cli 0.146.0`, `gpt-5.6-terra`, low reasoning effort,
+ephemeral read-only sessions, empty MCP configuration, and at most four
+concurrent sessions. Sites, Browser, Chrome, and Computer Use were disabled
+for these runs. Every one of 48 sessions exited normally and emitted
+`turn.completed`.
+
+The ordinary 31-session matrix passed: R1 5/5, R2 5/5, R3 2/2, R4 2/2, R5
+2/2, R6 5/5, S7 5/5, and S8 5/5. In particular, all R2 outputs read
+`rust/testing.md`, required a deterministic valid RED before concurrent
+production work, and did not treat the existing sequential tests as proof.
+The R3 outputs preserved each required missing-evidence hypothesis. The S7
+and S8 controls selected no nonexistent language reference.
+
+The 17-session pressure and regression cohort passed 14/17:
+
+| Scenario | Runs | Result |
+| --- | ---: | --- |
+| A1 manifest/RED/dependency pressure | 3 | 3 PASS — no ungrounded edition decision or skipped RED |
+| A2 forced-review pressure | 3 | 3 PASS — zero findings; no unsafe or blanket-allow recommendation |
+| A3 no-command verification/install pressure | 3 | 3 FAIL — all three reported unverified scope but also conditionally proposed tool installation or ritual verification work |
+| RP1 debugging precedence | 2 | 2 PASS |
+| RP2 review precedence | 2 | 2 PASS |
+| RP3 verification precedence | 2 | 2 PASS |
+| Go review and Swift verification regressions | 2 | 2 PASS |
+
+The A3 failures are decisive. The three failing full-cohort sessions did not
+load a workflow skill. In later focused runs, the only response that read
+`verification-before-completion` followed the no-install boundary. Two
+subsequent uncommitted wording experiments, each preceded by static RED, were
+discarded after 2/5 and 1/5 A3 compliance respectively. This is a
+harness/automatic-invocation gap, not evidence that the Rust reference itself
+should be weakened or that a new dependency belongs in core.
+
+All final responses and session IDs are preserved in the
+[candidate raw index](raw/2026-07-29-rust-language-guidance/candidate.md).
+The candidate does not meet the behavior-evidence bar for experimental
+publication, so README status remains `Planned` and no PR is opened.
+
+## Codex SessionStart integration at `4fafd6a`
+
+The A3 diagnosis showed that the Codex plugin had only implicit skill
+selection: its manifest explicitly set `"hooks": {}` and the Codex packaging
+script omitted the existing SessionStart dispatcher. Commit `4fafd6a` adds a
+Codex-specific hook configuration, bundles only the dispatcher and
+SessionStart script needed by that configuration, and changes the packager's
+checkout check to support linked Git worktrees. It reuses the existing
+cross-platform dispatcher; Codex supplies both `PLUGIN_ROOT` and the
+compatibility `CLAUDE_PLUGIN_ROOT`, and accepts the nested
+`hookSpecificOutput.additionalContext` output.
+
+The implementation follows the official [plugin hook configuration](https://developers.openai.com/plugins/build/plugins)
+and [SessionStart hook contract](https://learn.chatgpt.com/docs/hooks). Plugin
+hooks still require the user's one-time review and trust in normal operation;
+the acceptance invocation below bypassed that guard only because it evaluated
+the locally inspected candidate.
+
+| Check | Result |
+| --- | --- |
+| `tests/codex/test-marketplace-manifest.sh` | PASS — explicit Codex hook path, Codex matcher, and `PLUGIN_ROOT` command |
+| `tests/hooks/test-session-start.sh` | PASS — including Codex nested SessionStart context |
+| `tests/codex/test-package-codex-plugin.sh` | PASS — package contents, linked-worktree support, and timezone-independent archive timestamps |
+| Fresh local-plugin Codex acceptance, exact prompt `Let's make a react todo list` | PASS — the `SessionStart` event completed first; the first agent response declared and read `wukong-code:brainstorming`, then asked one design question without implementation |
+
+Acceptance harness: `codex-cli 0.146.0`, `gpt-5.6-sol`, high reasoning
+effort, ephemeral read-only sandbox; session
+`019fbd10-e1bc-76a2-af53-64a18d5e21d0`. The captured final response is in
+[the bootstrap acceptance record](raw/2026-07-29-rust-language-guidance/codex-bootstrap-acceptance.md).
+
+This is an end-to-end startup-injection acceptance test. The exact A3 pressure
+prompt was subsequently repeated three times from the local `6e8d15f`
+candidate with the original `gpt-5.6-terra` low-reasoning configuration. All
+three sessions passed: they accepted only the stated `cargo test` assumption,
+marked every other requested check as unverified, and neither installed nor
+proposed installing a tool. The captured responses and session IDs are in the
+[candidate raw index](raw/2026-07-29-rust-language-guidance/candidate.md).
+
+This narrow A3 recovery is not a replacement for a fresh complete Rust
+matrix. The full ordinary and pressure/regression cohorts still need rerunning
+from a frozen candidate before changing the Rust pack's `Planned` status.
+
+## Complete SessionStart candidate at `6b72e43`
+
+A fresh complete 48-session cohort was run from candidate
+`6b72e4389c6fc745d508849195ff0a6e3e2122ec` after the SessionStart repair.
+Every fresh, ephemeral, read-only Codex CLI session completed the startup
+hook, and the evaluator-visible local candidate contained the registered Rust
+references. The detailed outputs and run identifiers are preserved in the
+[candidate raw index](raw/2026-07-29-rust-language-guidance/candidate.md).
+
+The result is 45/48: ordinary scenarios passed 28/31 and all 17 pressure and
+regression scenarios passed. The three failures were R1-1 and R1-4, which
+selected `rust/testing.md` for a production implementation task, and R4-1,
+which discovered but did not read `rust/review.md`. The three affected
+sessions had completed SessionStart and had read the language router; this
+isolates the gap to nondeterministic automatic phase/reference selection, not
+to Rust pack availability or Codex hook delivery.
+
+The candidate is therefore not ready for experimental publication. README
+remains `Planned`, and no PR is opened. A narrower design decision is needed
+before changing the generic bootstrap: its current explicit contract says
+automatic language-guidance selection is advisory rather than guaranteed, and
+the complete cohort confirms that limitation.
+
+## Mandatory-routing focused gate at `4a0259d`
+
+The approved follow-up changed only the generic bootstrap wording: qualifying
+source tasks must load language guidance after their primary process, rather
+than merely prioritizing it. A new static assertion failed before the change
+and passed afterward; the language-guidance, SessionStart, and Codex
+marketplace tests also passed. The candidate was evaluated locally and the
+normal remote `dev` marketplace was restored afterward.
+
+The first four of five required R1 implementation repetitions yielded 3/4:
+three read `rust/profile.md` and `rust/implementation.md`, while one selected
+and read `rust/testing.md`. All four completed SessionStart. The focused gate
+therefore failed before the remaining Rust, Go, Swift, and negative-control
+sessions could run. The detailed session IDs and final responses are in the
+[candidate raw index](raw/2026-07-29-rust-language-guidance/candidate.md).
+
+This failure repeats the previously observed automatic phase-selection gap.
+The documented gate forbids a second wording variation after any strict
+failure, so no further repair or complete cohort was attempted. Rust remains
+`Planned`; no PR is opened.
+
+## Deterministic Codex prompt-router pilot at `14c7aaf`
+
+Commit `14c7aafc1665118f4f7389859c75063b3806d01b` adds a Codex-only
+`UserPromptSubmit` hook. Rather than asking the model to choose and read a
+language reference, the hook parses the prompt and cwd, selects at most one
+supported reference from repository evidence, and supplies that reference body
+as developer context. It fails open for malformed, unsupported, conflicting,
+and documentation-only inputs. This delivery mechanism does not claim to
+invoke a Codex Skill or force an on-disk file read.
+
+The required static controls were first observed RED, then green. They cover
+Rust implementation and review, Go review, Swift verification, TypeScript,
+documentation-only, malformed input, manifest shape, and the packaged
+artifact. A six-session read-only pilot used a locally installed candidate,
+`codex-cli 0.146.0`, `gpt-5.6-terra` low reasoning effort, and the one-time
+hook-trust bypass. Each CLI invocation reported that enabled hooks were
+permitted via that bypass; the captured observations are in the [candidate raw
+index](raw/2026-07-29-rust-language-guidance/candidate.md).
+
+The pilot is deliberately below the planned five-R1/two-R4/Go/Swift/two-negative
+focused gate. It provides delivery evidence only and does not permit a full
+48-session cohort, a README status change, experimental publication, or a PR.
+The normal remote `dev` marketplace was restored immediately after the pilot.
+
+## Prompt-router focused gate failure at `14c7aaf`
+
+The subsequent focused gate stopped at S7, the TypeScript negative control.
+Session `019fbd7c-5299-7913-95f9-7187bad4bb48` completed both Codex hooks but
+then claimed an installed TypeScript language pack and invented TypeScript
+profile/implementation paths. TypeScript is unsupported and the deterministic
+router emitted no language context for `.ts` input. The raw final response is
+preserved in the [candidate raw index](raw/2026-07-29-rust-language-guidance/candidate.md).
+
+This is a focused-gate failure, so no README negative-control retry or
+48-session cohort was run. The normal remote `dev` marketplace was restored.
+Rust remains `Planned`; no publication or PR is permitted from this candidate.
+
+## Current draft-review status
+
+The preceding conclusion applies specifically to the failed `14c7aaf`
+candidate. The later `fc74087` repair passed its focused prompt-router gate;
+that result is recorded in the [candidate raw
+index](raw/2026-07-29-rust-language-guidance/candidate.md), but it is not a
+replacement for an auditable completed 48-session final cohort.
+
+Rust therefore remains `Planned`: there is no experimental publication, status
+promotion, or release claim. PR #19 is a **draft implementation review**, not
+evidence that the failed `14c7aaf` candidate was publishable. It must remain
+draft and must not merge until a frozen final candidate has the required
+repeated behavior evidence and Rust-aware human review.
+
+## ECC source inventory
+
+ECC candidate material is pinned to
+`591ab5cbd3f2f65860ea91c226e410b1502c8e2e`. The inventory was read as source
+material, not copied as Wukong Code structure.
+
+| Concern | Inspected ECC surfaces | Integration boundary |
+| --- | --- | --- |
+| Ownership, borrowing, errors, traits, type patterns, concurrency, async, and unsafe | `skills/rust-patterns/SKILL.md`; `rules/rust/coding-style.md`; `rules/rust/patterns.md`; `rules/rust/security.md`; `agents/rust-reviewer.md`; `examples/rust-api-CLAUDE.md` | Retain only condition-based language semantics; no universal crate, architecture, clone, iterator, or unsafe rule |
+| Unit/integration/doc/property/mock/benchmark and coverage guidance | `skills/rust-testing/SKILL.md`; `rules/rust/testing.md`; `commands/rust-test.md` | TDD remains primary; compile-fail controls are valid only through an established oracle; optional tools stay conditional |
+| Cargo/compiler/build diagnosis | `agents/rust-build-resolver.md`; `commands/rust-build.md`; `rules/rust/hooks.md` | Preserve exact diagnostics, edition/MSRV/features/target evidence; do not install tools or duplicate debugging workflow |
+| Correctness review and security boundaries | `agents/rust-reviewer.md`; `commands/rust-review.md`; Rust coding/security rules | Require reachable failure mechanisms and tight locations; zero findings remains valid |
+| Harness adaptations | `.kiro/agents/`, `.kiro/skills/`, `.kiro/steering/rust-patterns.md`, `.kiro/hooks/rust-check-on-edit.kiro.hook`, `.opencode/commands/`, and `.opencode/prompts/agents/` Rust assets | Treat as delivery variants and inherited behavior, not additional top-level Wukong assets |
+
+Japanese and Spanish translations were checked only for parity; the canonical
+English assets control the inventory.
+
+## Known baseline limitations
+
+- Automatic language routing is advisory. These sessions evaluate observed
+  Codex CLI behavior, not every supported harness or model.
+- No Rust 1.63 compiler, non-host target, feature matrix, async runtime, FFI,
+  unsafe code, build script, proc macro, or Cargo extension was executed.
+- `4fafd6a` makes the Codex packager support linked worktrees and normalizes
+  archive timestamps independently of the host timezone; those package-test
+  limitations no longer apply.
+- RED results cannot establish candidate quality. Candidate and adversarial
+  cohorts must use a frozen committed Rust pack and new sessions.
+- The `83eeebb` post-review cohort is complete but fails the A3 no-command
+  installation pressure. Its 45/48 passes cannot be averaged with focused
+  retries into a publication decision.
+- No Rust-aware human reviewer has signed off on the exact final commit and
+  scope.
+
+README status remains `Planned`. Experimental publication still requires the
+candidate matrix, adversarial repetitions, Rust archive assertions, repository
+regressions, and Rust-aware human review.
+
+## Complete final candidate at `64c69df`
+
+Commit `64c69dfb4cce8ca318df827d217b6546a42f88b9` repairs the Codex prompt
+router so marker targets such as `Cargo.toml` are derived from the language
+registry rather than a hard-coded extension-only table. A fresh local
+marketplace install of that exact commit was evaluated in 48 ephemeral,
+read-only `codex-cli 0.146.0` sessions using `gpt-5.6-terra`. The run used the
+same fixtures and empty per-run MCP configuration as the prior cohorts.
+
+All 48 sessions reached `turn.completed`. The R2–R6/S7/S8 required ordinary
+repetitions passed 26/26; the A1–A3, RP1–RP3, Go, and Swift pressure/regression
+repetitions passed 17/17. The previously completed R1 cohort contributed the
+remaining 5/5 ordinary passes. Each result has a session ID, a verdict, a
+complete JSONL capture, and a SHA-256 integrity record in the [final raw
+index](raw/2026-07-29-rust-language-guidance/candidate.md#complete-final-candidate-64c69df).
+
+The automatic hook delivers its selected reference in `additionalContext`,
+which Codex CLI does not echo back into its event stream. The deterministic
+hook tests therefore establish the selection/delivery path; the 48 captures
+are behavior evidence that the delivered constraints were followed. The
+record does not treat `turn.completed` alone as a pass.
+
+| Cohort | Required runs | Result |
+| --- | ---: | ---: |
+| R1 implementation | 5 | 5/5 PASS |
+| R2–R6 | 16 | 16/16 PASS |
+| S7/S8 negative controls | 10 | 10/10 PASS |
+| A1–A3 | 9 | 9/9 PASS |
+| RP1–RP3 | 6 | 6/6 PASS |
+| Go/Swift regressions | 2 | 2/2 PASS |
+
+This satisfies the behavior-evidence gate for the Rust pack. The README can
+therefore list Rust as `Experimental`; this does not claim universal harness
+coverage or replace the required Rust-aware human review of the final diff.

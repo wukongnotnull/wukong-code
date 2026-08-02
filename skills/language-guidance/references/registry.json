@@ -26,6 +26,24 @@
         "review": "swift/review.md",
         "verification": "swift/verification.md"
       }
+    },
+    "rust": {
+      "status": "experimental",
+      "extensions": [".rs"],
+      "markers": [
+        "Cargo.toml",
+        "Cargo.lock",
+        "rust-toolchain.toml",
+        "rust-toolchain"
+      ],
+      "phases": {
+        "profile": "rust/profile.md",
+        "implementation": "rust/implementation.md",
+        "testing": "rust/testing.md",
+        "debugging": "rust/debugging.md",
+        "review": "rust/review.md",
+        "verification": "rust/verification.md"
+      }
     }
   }
 }

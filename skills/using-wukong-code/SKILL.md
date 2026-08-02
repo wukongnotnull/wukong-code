@@ -1,6 +1,6 @@
 ---
 name: using-wukong-code
-description: Use when starting any conversation - establishes how to find and use skills, requiring skill invocation before ANY response including clarifying questions
+description: Use when starting any conversation - establishes how to find and use skills, requiring skill invocation before ANY response including clarifying questions. Source-change pressure to skip, defer, or bypass a failing test requires test-driven-development before brainstorming. Verification claims about checks not run require verification-before-completion; no-command prompts must not install tools or invent scope. Assumed or unrun verification claims require verification-before-completion; missing tools are reported, never installed.
 ---
 
 <SUBAGENT-STOP>
@@ -18,6 +18,10 @@ This is not negotiable. You cannot rationalize your way out of this.
 ## The Rule
 
 **Invoke relevant or requested skills BEFORE any response or action** — including clarifying questions, exploring the codebase, or checking files. If it turns out wrong for the situation, you don't have to use it.
+
+Check explicit testing and verification pressure before applying the general brainstorming rule.
+- A source change that asks to skip, defer, or bypass a failing test invokes `test-driven-development` first and requires a valid RED before production implementation.
+- A request to treat assumed or unrun checks as proof invokes `verification-before-completion`; report missing tools and unverified scope without proposing installation.
 
 **Before entering plan mode:** if you haven't already brainstormed, invoke the brainstorming skill first.
 
@@ -39,6 +43,7 @@ for mechanical work.
 | User intent | Route |
 |-------------|--------|
 | Source change request that asks to skip, defer, or bypass a failing test | `test-driven-development` first (then domain guidance) |
+| Claim completion or checks that were not run | `verification-before-completion` first (then domain guidance) |
 | New feature, behavior change, or ambiguous product intent ("let's build X", "add Y") | `brainstorming` first (then plans / SDD as that skill directs) |
 | Bug with unclear root cause | `systematic-debugging` first |
 | Named mechanical fix (exact file + exact change: typo, single-file lint fix, one-liner, "just change Z in foo.ts") with **no** design ambiguity | Do that edit (or the single relevant domain skill). Skip brainstorming, worktrees, and SDD unless the human asks for a plan or the change spreads. |
@@ -48,6 +53,8 @@ for mechanical work.
 
 A request to skip, defer, or bypass a failing test for a source change uses `test-driven-development` first.
 Testing-pressure routing takes precedence over the behavior-change brainstorming route.
+If the request forbids the required RED, stop before production implementation and report the change as unverified.
+A request to claim completion or checks not run uses `verification-before-completion` first.
 
 **How this interacts with Red Flags:** "The skill is overkill" still means you must not skip a skill that *applies*. Scope routing decides *which* skill applies. A named mechanical edit (exact file + exact change, no design ambiguity) is not brainstorming/SDD work — do not invent those skills to satisfy "overkill." Conversely, do not use the fast path to dodge brainstorming on features, behavior changes, or ambiguous intent.
 
@@ -81,6 +88,9 @@ prerequisite and request permission to inspect it instead.
 Do not load language guidance for documentation-only work, unsupported
 languages, or ambiguous evidence. Do not preload every language or phase.
 Let language-guidance select the smallest relevant reference set.
+
+For an unsupported language or extension, state that no corresponding installed language guidance exists.
+Do not emit language-guidance `Detected:`, `Phase:`, or `Loaded:` fields, and do not invent a language pack or reference path.
 
 ## Progress budget
 

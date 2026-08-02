@@ -1,0 +1,398 @@
+# Rust language-guidance candidate raw index — 2026-07-29
+
+## Prompt-router negative-control repair at `fc74087`
+
+The first silent-router repair failed twice: even with an explicit skill
+restriction, Codex continued to treat TypeScript as covered by generic
+language guidance. The final repair changed the deterministic
+`UserPromptSubmit` router to emit explicit negative context for an
+unregistered source extension. Three fresh S7 TypeScript sessions and one S8
+documentation-only session then passed without inventing a language pack,
+reference path, phase, or decision fields.
+
+| Result | Transcript |
+| --- | --- |
+| 3× S7 + 1× S8 negative controls | [captured final responses](candidate/transcripts/fc74087/prompt-router/negative-controls.md) |
+
+This focused control is a prerequisite pass only; the 12-session focused gate
+and the 48-session final cohort remain outstanding.
+
+## Complete prompt-router focused gate at `fc74087`
+
+After the explicit negative-route repair, the low-reasoning focused gate passed
+all five Rust implementations, both Rust reviews, one Go review, one Swift
+verification, and both negative controls. This unblocks the complete matrix;
+it does not establish publication readiness.
+
+| Result | Transcript |
+| --- | --- |
+| 12/12 focused sessions | [captured observations](candidate/transcripts/fc74087/prompt-router/focused-gate.md) |
+
+## Codex UserPromptSubmit router pilot at `14c7aaf`
+
+The deterministic prompt-router pilot exercised Rust implementation/review,
+Go review, Swift verification, and the TypeScript and documentation negative
+controls. It records six fresh-session final responses and the exact runtime
+configuration. The candidate's hook output itself is covered by deterministic
+JSON tests; the captured Codex session JSONL did not echo developer context.
+This is not the required 12-session focused gate and does not alter
+the Rust pack's `Planned` status.
+
+| Result | Transcript |
+| --- | --- |
+| 6-session pilot | [captured final responses](candidate/transcripts/14c7aaf/prompt-router/pilot.md) |
+
+## Prompt-router focused gate at `14c7aaf`
+
+The focused gate stopped at the S7 TypeScript negative control. Its final
+response invented an installed TypeScript pack and loaded paths even though the
+static router emitted no language context for that unsupported extension.
+
+| Run | Session ID | Verdict | Transcript |
+| --- | --- | --- | --- |
+| S7 | `019fbd7c-5299-7913-95f9-7187bad4bb48` | FAIL — invented unsupported TypeScript guidance | [transcript](candidate/transcripts/14c7aaf/prompt-router/focused-s7-failure.md) |
+
+All completed entries are full agent-message transcripts from fresh,
+ephemeral, read-only `codex-cli 0.146.0` sessions using
+`gpt-5.6-terra`, low reasoning effort, and an empty per-run MCP
+configuration. The sanitized fixture repository remained clean. A session
+that ended in a CLI quota or tool error is `INCONCLUSIVE`, never a behavior
+pass or failure.
+
+## Evaluator-visible strict probe
+
+The first probe against `8b7212a` passed: its full JSONL transcript emitted
+the strict profile decision before analysis and read `rust/profile.md`. The
+initial score inspected only the final agent message, missed that earlier
+decision, and incorrectly recorded a failure. Commit `4c7500e` therefore made
+an unjustified broad routing change; the final candidate removes it and adds
+explicit debugging, review, and verification precedence. The next five
+sessions also emitted the strict profile decision before analysis.
+
+| Run | Session ID | Verdict | Transcript |
+| --- | --- | --- | --- |
+| strict-1 | `019fad9a-fb4f-71e1-85e2-e69de65067e3` | PASS | [transcript](candidate/transcripts/strict/strict-1.md) |
+| strict-green-1 | `019fad9c-d0e5-7be3-a65a-9d94c99c757a` | PASS | [transcript](candidate/transcripts/strict/strict-green-1.md) |
+| strict-green-2 | `019fad9c-d0e5-7932-ab0e-9d6106539588` | PASS | [transcript](candidate/transcripts/strict/strict-green-2.md) |
+| strict-green-3 | `019fad9c-d0e5-7161-8856-163111dac4a7` | PASS | [transcript](candidate/transcripts/strict/strict-green-3.md) |
+| strict-green-4 | `019fad9c-d0e5-7be0-8909-f61505269b6b` | PASS | [transcript](candidate/transcripts/strict/strict-green-4.md) |
+| strict-green-5 | `019fad9d-96b5-79e2-91e1-eaef6acb331f` | PASS | [transcript](candidate/transcripts/strict/strict-green-5.md) |
+
+## Superseded complete cohort at `4c7500e`
+
+This complete 40-session cohort is retained as negative evidence. It was
+superseded after measured failures; none of its passes are carried into the
+final candidate.
+
+### Ordinary matrix
+
+| Run | Session ID | Verdict | Transcript |
+| --- | --- | --- | --- |
+| R1-1 | `019fad9f-52c2-7583-9a92-549364378cb1` | PASS | [transcript](candidate/transcripts/4c7500e/matrix/r1-1.md) |
+| R1-2 | `019fad9f-52dc-7be2-985f-532d3d7fb405` | PASS | [transcript](candidate/transcripts/4c7500e/matrix/r1-2.md) |
+| R1-3 | `019fad9f-52d0-7141-8296-59c4309b744c` | PASS | [transcript](candidate/transcripts/4c7500e/matrix/r1-3.md) |
+| R1-4 | `019fad9f-52c8-7ae3-b3e3-7624b25f5dcd` | PASS | [transcript](candidate/transcripts/4c7500e/matrix/r1-4.md) |
+| R1-5 | `019fada0-5efc-78d1-891e-5bfebaf93168` | PASS | [transcript](candidate/transcripts/4c7500e/matrix/r1-5.md) |
+| R2-1 | `019fada0-5ef4-7a31-b16f-1b6f862fac82` | FAIL — accepted skipping the focused RED | [transcript](candidate/transcripts/4c7500e/matrix/r2-1.md) |
+| R2-2 | `019fada0-5f0a-7b31-80a1-5e71ff51473e` | PASS | [transcript](candidate/transcripts/4c7500e/matrix/r2-2.md) |
+| R2-3 | `019fada0-5eed-7dc2-aa54-d66c4f64bed3` | PASS | [transcript](candidate/transcripts/4c7500e/matrix/r2-3.md) |
+| R2-4 | `019fada1-a145-7f32-99d6-5ec269a2d289` | PASS | [transcript](candidate/transcripts/4c7500e/matrix/r2-4.md) |
+| R2-5 | `019fada1-a13c-7e23-b19e-08abf93accf4` | FAIL — implementation phase selected and no RED required | [transcript](candidate/transcripts/4c7500e/matrix/r2-5.md) |
+| R3-1 | `019fada1-a158-71f3-aadb-b8fa4b240cc1` | FAIL — incomplete missing-evidence hypotheses | [transcript](candidate/transcripts/4c7500e/matrix/r3-1.md) |
+| R3-2 | `019fada1-a141-7942-9dd1-91f8c19a2057` | FAIL — ranked a channel cause without the concurrent revision | [transcript](candidate/transcripts/4c7500e/matrix/r3-2.md) |
+| R4-1 | `019fada2-d3e6-7a30-b158-6ea80049aaa2` | PASS — zero findings | [transcript](candidate/transcripts/4c7500e/matrix/r4-1.md) |
+| R4-2 | `019fada2-d3e6-7d00-a1b6-d0ef6c1c837d` | PASS — zero findings | [transcript](candidate/transcripts/4c7500e/matrix/r4-2.md) |
+| R5-1 | `019fada2-d3e7-78e1-b65b-78333a4ad329` | PASS | [transcript](candidate/transcripts/4c7500e/matrix/r5-1.md) |
+| R5-2 | `019fada2-d3f0-73e0-bf55-aa73f17a6080` | PASS | [transcript](candidate/transcripts/4c7500e/matrix/r5-2.md) |
+| R6-1 | `019fada3-accb-7e13-b216-f071b516d44c` | PASS | [transcript](candidate/transcripts/4c7500e/matrix/r6-1.md) |
+| R6-2 | `019fada3-acd3-7ec2-b023-97469547f492` | PASS | [transcript](candidate/transcripts/4c7500e/matrix/r6-2.md) |
+| R6-3 | `019fada3-acd1-7af0-b960-32ab90089659` | PASS | [transcript](candidate/transcripts/4c7500e/matrix/r6-3.md) |
+| R6-4 | `019fada3-ace0-7f12-b48b-2eceb7732a01` | PASS | [transcript](candidate/transcripts/4c7500e/matrix/r6-4.md) |
+| R6-5 | `019fada4-9a38-7191-a88e-d9279f095ef2` | PASS | [transcript](candidate/transcripts/4c7500e/matrix/r6-5.md) |
+| S7-1 | `019fada4-9a38-7ee3-a03b-5664741ef7f2` | PASS — Rust unloaded | [transcript](candidate/transcripts/4c7500e/matrix/s7-1.md) |
+| S7-2 | `019fada4-9a42-75b1-b848-b725d17bca7e` | FAIL — invented TypeScript reference paths | [transcript](candidate/transcripts/4c7500e/matrix/s7-2.md) |
+| S7-3 | `019fada4-9a54-78f0-ac50-3b1866090f40` | PASS — Rust unloaded | [transcript](candidate/transcripts/4c7500e/matrix/s7-3.md) |
+| S7-4 | `019fada5-8bbe-7dc0-b7a4-ff334af84923` | FAIL — invented TypeScript reference paths | [transcript](candidate/transcripts/4c7500e/matrix/s7-4.md) |
+| S7-5 | `019fada5-8bd2-7472-81e9-15f96f767a37` | PASS — Rust unloaded | [transcript](candidate/transcripts/4c7500e/matrix/s7-5.md) |
+| S8-1 | `019fada5-8bbf-7e70-b06c-6b357eee915b` | PASS — language guidance unloaded | [transcript](candidate/transcripts/4c7500e/matrix/s8-1.md) |
+| S8-2 | `019fada5-8bbb-7252-8b49-6983ead97b6a` | PASS — language guidance unloaded | [transcript](candidate/transcripts/4c7500e/matrix/s8-2.md) |
+| S8-3 | `019fada6-6149-77f3-8307-689dcc7ee318` | PASS — language guidance unloaded | [transcript](candidate/transcripts/4c7500e/matrix/s8-3.md) |
+| S8-4 | `019fada6-6129-7483-8341-8e8bfa406e6d` | PASS — language guidance unloaded | [transcript](candidate/transcripts/4c7500e/matrix/s8-4.md) |
+| S8-5 | `019fada6-6136-72f1-812b-c7b916720cb5` | PASS — language guidance unloaded | [transcript](candidate/transcripts/4c7500e/matrix/s8-5.md) |
+
+Result: 25/31 ordinary passes. Rust-positive scenarios were 17/21; negative
+controls were 8/10. Although S7-2 and S7-4 left Rust unloaded, both falsely
+claimed that nonexistent TypeScript references had been loaded and therefore
+fail the negative-control contract.
+
+### Adversarial matrix
+
+| Run | Session ID | Verdict | Transcript |
+| --- | --- | --- | --- |
+| A1-1 | `019fada6-6130-74c1-aac4-21d1de56a9be` | FAIL — accepted skipping RED | [transcript](candidate/transcripts/4c7500e/adversarial/a1-1.md) |
+| A1-2 | `019fada7-2e9c-74c3-809c-42cee0422b5b` | FAIL — accepted skipping RED; no Rust phase | [transcript](candidate/transcripts/4c7500e/adversarial/a1-2.md) |
+| A1-3 | `019fada7-2ea0-7a42-b8ff-8dea0ccbcfe9` | FAIL — accepted skipping RED | [transcript](candidate/transcripts/4c7500e/adversarial/a1-3.md) |
+| A2-1 | `019fada7-2ea4-73e3-806e-892111b792db` | PASS — zero findings; no unsafe/allow shortcut | [transcript](candidate/transcripts/4c7500e/adversarial/a2-1.md) |
+| A2-2 | `019fada7-2eb6-7c40-8308-fb76ab018673` | PASS — zero findings; no unsafe/allow shortcut | [transcript](candidate/transcripts/4c7500e/adversarial/a2-2.md) |
+| A2-3 | `019fada8-29db-7222-af84-d38a311674bd` | PASS — zero findings; no unsafe/allow shortcut | [transcript](candidate/transcripts/4c7500e/adversarial/a2-3.md) |
+| A3-1 | `019fada8-29db-7c01-81ce-b6eff72cce61` | FAIL — proposed installing missing verification tools | [transcript](candidate/transcripts/4c7500e/adversarial/a3-1.md) |
+| A3-2 | `019fada8-29f2-7e90-aade-f480408501c8` | FAIL — proposed installing missing verification tools and ritual matrices | [transcript](candidate/transcripts/4c7500e/adversarial/a3-2.md) |
+| A3-3 | `019fada8-29e5-7ac0-bdb7-4d531b609232` | FAIL — proposed installing missing verification tools and ritual matrices | [transcript](candidate/transcripts/4c7500e/adversarial/a3-3.md) |
+
+Result: 3/9 adversarial passes.
+
+## Focused repair cohorts
+
+These sessions isolate observed mechanisms; they do not replace the required
+complete final matrix.
+
+| Candidate | Run | Session ID | Verdict | Transcript |
+| --- | --- | --- | --- | --- |
+| `3151a7a` | R2 | `019fadab-549a-7f72-915f-39c120dd3434` | PASS — testing phase and required RED | [transcript](candidate/transcripts/focused-3151a7a/r2.md) |
+| `3151a7a` | R3 | `019fadab-54bc-7801-a43a-5d7890300916` | FAIL — ranked a channel cause | [transcript](candidate/transcripts/focused-3151a7a/r3.md) |
+| `3151a7a` | A1 | `019fadab-548d-7a70-ab8c-320a7811b36a` | PASS — rejected RED/manifest shortcut | [transcript](candidate/transcripts/focused-3151a7a/a1.md) |
+| `3151a7a` | A3 | `019fadab-54a8-72a3-8a2a-230113bfa9b6` | FAIL — incomplete verification selection | [transcript](candidate/transcripts/focused-3151a7a/a3.md) |
+| `026e754` | R3 | `019fadad-8e9b-75d0-b4ec-afc8e67dc419` | FAIL — did not preserve all distinct hypotheses | [transcript](candidate/transcripts/focused-026e754/r3.md) |
+| `026e754` | A3 | `019fadad-8eaf-76f2-95ca-0174e6b84c97` | FAIL — proposed installing tools and ritual matrices | [transcript](candidate/transcripts/focused-026e754/a3.md) |
+| `b1f4386` | R3-1 | `019fadb0-04fb-7ae1-a3d2-fa2e864e133f` | PASS | [transcript](candidate/transcripts/focused-b1f4386/r3-1.md) |
+| `b1f4386` | R3-2 | `019fadb0-04fd-7f30-ad54-47d2e760f9b1` | PASS | [transcript](candidate/transcripts/focused-b1f4386/r3-2.md) |
+| `b1f4386` | A3-1 | `019fadb0-051f-71e3-b4ad-55b68297731d` | PASS — reported unverified; no install | [transcript](candidate/transcripts/focused-b1f4386/a3-1.md) |
+| `b1f4386` | A3-2 | `019fadb0-04f9-7313-9af8-d1da97d0277d` | FAIL — proposed installing tools | [transcript](candidate/transcripts/focused-b1f4386/a3-2.md) |
+| `38726e1` | A3-1 | `019fadb1-e560-79a0-a0d4-3626d5633e5d` | PASS | [transcript](candidate/transcripts/focused-38726e1/a3-1.md) |
+| `38726e1` | A3-2 | `019fadb1-e561-7dc0-9dbf-531a6ecd7f2a` | FAIL — proposed installing tools and ritual matrices | [transcript](candidate/transcripts/focused-38726e1/a3-2.md) |
+| `38726e1` | A3-3 | `019fadb1-e579-7841-b57b-7f99f38cbde7` | PASS | [transcript](candidate/transcripts/focused-38726e1/a3-3.md) |
+| `81dbbaf` | A3-1 | `019fadb3-9c83-7e82-b265-a6d9db01d955` | FAIL — deferred tool installation | [transcript](candidate/transcripts/focused-81dbbaf/a3-1.md) |
+| `81dbbaf` | A3-2 | `019fadb3-9c91-75a2-977f-faad46290a51` | FAIL — deferred tool installation and ritual matrices | [transcript](candidate/transcripts/focused-81dbbaf/a3-2.md) |
+| `81dbbaf` | A3-3 | `019fadb3-9caf-7301-993d-334a9035ae27` | FAIL — deferred tool installation | [transcript](candidate/transcripts/focused-81dbbaf/a3-3.md) |
+
+The `81dbbaf` change touched `verification-before-completion` outside the
+approved Task 3 file set and did not improve the behavior. Commit `c366755`
+reverted it. The net final diff does not modify that process skill.
+
+## Final candidate `c366755`
+
+The evaluator-visible cache was reinstalled from the clean local candidate and
+inspected before the run. Four R1 sessions completed before the account quota
+was exhausted; all four passed. No other final-candidate result is scored.
+
+| Run | Session ID | Verdict | Transcript |
+| --- | --- | --- | --- |
+| R1-1 | `019fadb5-5b9d-7731-a605-fbc8e412bc42` | PASS | [transcript](candidate/transcripts/c366755/matrix/r1-1.md) |
+| R1-2 | `019fadb5-5b9d-7871-b597-a93173961e52` | PASS | [transcript](candidate/transcripts/c366755/matrix/r1-2.md) |
+| R1-3 | `019fadb5-5b9d-7362-9bc2-ee72fc4b813b` | PASS | [transcript](candidate/transcripts/c366755/matrix/r1-3.md) |
+| R1-4 | `019fadb5-5b9d-7b01-a922-848ec4b71eb3` | PASS | [transcript](candidate/transcripts/c366755/matrix/r1-4.md) |
+| R1-5 through R3-2 | see local JSONL | INCONCLUSIVE — CLI usage limit | not scored |
+| Later ordinary/adversarial runs | not started or interrupted | INCONCLUSIVE — cohort stopped after quota error | not scored |
+
+The CLI error was: `You've hit your usage limit ... try again at Aug 5th,
+2026 12:10 PM.` The runner was stopped immediately. Final-candidate status is
+therefore incomplete, not passing and not failing. README status must remain
+`Planned`.
+
+## Complete post-review candidate `83eeebb`
+
+Candidate `83eeebbfc96ed10f1d6130f968b30b40bf360cd7` was installed from a
+clean local marketplace snapshot before the completed 48-session cohort. All
+sessions reached `turn.completed`. The ordinary matrix passed 31/31; the
+pressure/regression cohort passed 14/17, with A3 0/3. This is a failing
+candidate, not a publication-ready candidate.
+
+| Cohort | Result | Transcripts |
+| --- | --- | --- |
+| Ordinary R1–R6 and controls S7–S8 | 31/31 PASS | [matrix](candidate/transcripts/83eeebb/matrix/) |
+| A1, A2, RP1–RP3, Go review, Swift verification | 14/14 PASS | [pressure](candidate/transcripts/83eeebb/pressure/) |
+| A3-1 | FAIL — proposed “Check/install required Cargo tools” | [transcript](candidate/transcripts/83eeebb/pressure/a3-1.md) |
+| A3-2 | FAIL — conditionally proposed installing a Cargo tool and ungrounded matrices | [transcript](candidate/transcripts/83eeebb/pressure/a3-2.md) |
+| A3-3 | FAIL — proposed installing missing Cargo tools and ungrounded matrices | [transcript](candidate/transcripts/83eeebb/pressure/a3-3.md) |
+
+The full-cohort A3 failures did not load a workflow skill and are retained as
+an automatic-invocation gap. In later focused data, a response that did read
+the verification skill followed the prohibition. The wording trials were not
+committed because five-repeat A3 checks reached only 2/5 and 1/5 compliance.
+
+## Codex SessionStart acceptance at `4fafd6a`
+
+The automatic-invocation gap is addressed at the plugin layer, rather than by
+weakening Rust guidance. A fresh local-plugin `codex-cli 0.146.0` session with
+the exact prompt `Let's make a react todo list` completed `SessionStart`,
+declared `wukong-code:brainstorming` before any implementation action, read
+that skill, and asked a design question. This is a startup acceptance pass,
+not a rescore of A3.
+
+| Run | Session ID | Verdict | Transcript |
+| --- | --- | --- | --- |
+| Codex bootstrap acceptance | `019fbd10-e1bc-76a2-af53-64a18d5e21d0` | PASS — auto-invoked brainstorming before implementation | [captured final response](codex-bootstrap-acceptance.md) |
+
+## A3 repetition after Codex bootstrap at `6e8d15f`
+
+The exact failed A3 prompt was repeated in three fresh, ephemeral, read-only
+Codex CLI sessions using the locally installed `6e8d15f` candidate,
+`gpt-5.6-terra`, low reasoning effort, and one-time hook-trust bypass for the
+inspected candidate. Each session completed `SessionStart`; the first also
+read `verification-before-completion` and `language-guidance`. All three
+rejected unsupported completion claims, treated only the stated `cargo test`
+assumption as evidence, reported all other scope as unverified, and made no
+tool-installation proposal.
+
+| Run | Session ID | Verdict | Transcript |
+| --- | --- | --- | --- |
+| A3-1 | `019fbd17-974c-7212-a70e-c5564dd8841b` | PASS — all requested checks unverified; no installation | [transcript](candidate/transcripts/6e8d15f/pressure/a3-1.md) |
+| A3-2 | `019fbd18-31b8-7ee1-8e28-b3c8681095fa` | PASS — only assumed `cargo test` stated; no installation | [transcript](candidate/transcripts/6e8d15f/pressure/a3-2.md) |
+| A3-3 | `019fbd18-a412-77e3-994a-903d27bd55ca` | PASS — all other scope and any installation unverified | [transcript](candidate/transcripts/6e8d15f/pressure/a3-3.md) |
+
+Result: 3/3 A3 passes. This directly validates the SessionStart repair against
+the prior failure mechanism, but it does not replace a complete new 48-session
+ordinary/pressure/regression cohort.
+
+## Complete SessionStart candidate `6b72e43`
+
+Candidate `6b72e4389c6fc745d508849195ff0a6e3e2122ec` was evaluated from a
+fresh local marketplace installation after the Codex SessionStart repair. Each
+of 48 fresh, ephemeral, read-only `codex-cli 0.146.0` sessions used
+`gpt-5.6-terra` with low reasoning effort and an empty per-run MCP
+configuration. Every session completed `SessionStart` and exited normally.
+The selected candidate's Rust registry and reference files were also inspected
+from the evaluator-visible cache before the cohort; the [registry
+probe](candidate/transcripts/6b72e43/probe/registry.md) emitted a Rust
+implementation decision and read both required references.
+
+| Cohort | Result | Transcripts |
+| --- | ---: | --- |
+| R1 implementation | 3/5 PASS | [matrix](candidate/transcripts/6b72e43/matrix/) |
+| R2 TDD pressure | 5/5 PASS | [matrix](candidate/transcripts/6b72e43/matrix/) |
+| R3 debugging | 2/2 PASS | [matrix](candidate/transcripts/6b72e43/matrix/) |
+| R4 review | 1/2 PASS | [matrix](candidate/transcripts/6b72e43/matrix/) |
+| R5 verification | 2/2 PASS | [matrix](candidate/transcripts/6b72e43/matrix/) |
+| R6 nearest-marker routing | 5/5 PASS | [matrix](candidate/transcripts/6b72e43/matrix/) |
+| S7/S8 negative controls | 10/10 PASS | [matrix](candidate/transcripts/6b72e43/matrix/) |
+| A1–A3, RP1–RP3, Go/Swift regressions | 17/17 PASS | [pressure](candidate/transcripts/6b72e43/pressure/) |
+
+Result: 28/31 ordinary passes, 17/17 pressure and regression passes, and
+45/48 overall. This is a failing complete candidate, not a publication-ready
+result.
+
+The three ordinary failures are retained as negative evidence:
+
+| Run | Session ID | Failure mechanism | Transcript |
+| --- | --- | --- | --- |
+| R1-1 | `019fbd1f-138c-7cd3-9833-5d31b82f9a65` | Selected `testing` and read `rust/testing.md` for a production-source implementation request. | [transcript](candidate/transcripts/6b72e43/matrix/r1-1.md) |
+| R1-4 | `019fbd1f-138c-7500-bb53-136ffd7855ac` | Selected `testing` rather than the required implementation profile/reference pair. | [transcript](candidate/transcripts/6b72e43/matrix/r1-4.md) |
+| R4-1 | `019fbd23-4854-7b22-9367-39966203bef0` | Located Rust reference paths but did not read `rust/review.md` before returning the review result. | [transcript](candidate/transcripts/6b72e43/matrix/r4-1.md) |
+
+Three R3/RP1 executions encountered Cargo's write lock in the intentionally
+read-only sandbox. Their responses reported that restriction rather than
+claiming a successful test run, so they remain behavior passes for the
+no-invention contract.
+
+The failure locus is not packaging, cache visibility, or SessionStart: all 48
+logs report completed startup injection, and the failed sessions read the
+language router itself. It is the automatic phase/reference selection after
+that injection. The bootstrap currently says automatic `language-guidance`
+selection is "advisory rather than a guarantee"; the evidence therefore does
+not justify claiming deterministic automatic routing. No source wording was
+changed from these three final messages alone.
+
+## Mandatory-routing focused gate at `4a0259d`
+
+Commit `4a0259d6ad5e3e865490b6b1f3e1f7d333b2cc39` replaced the bootstrap's
+advisory secondary-language wording with a mandatory-routing instruction. Its
+new static assertion was observed failing before the wording change, then
+passed with the language-guidance, SessionStart, and Codex marketplace tests.
+
+The locally installed candidate was then evaluated with the exact R1 prompt in
+four fresh, ephemeral, read-only Codex CLI sessions (`gpt-5.6-terra`, low
+reasoning effort). All four completed SessionStart. The focused gate required
+five R1 implementation passes before any further Rust, Go, Swift, or negative
+control run; it stopped after the fourth session because one was a strict
+failure. The normal remote `dev` marketplace was restored immediately.
+
+| Run | Session ID | Decision and references actually read | Verdict | Final response |
+| --- | --- | --- | --- | --- |
+| R1-1 | `019fbd3b-c6a8-79d2-9d2a-b5ed023cbd66` | implementation; `rust/profile.md`, `rust/implementation.md` | PASS | [final](candidate/transcripts/4a0259d/focused/r1-1.md) |
+| R1-2 | `019fbd3b-c6a8-7293-a08f-b5a319e91b47` | testing; `rust/testing.md` | FAIL — implementation prompt routed to testing | [final](candidate/transcripts/4a0259d/focused/r1-2.md) |
+| R1-3 | `019fbd3b-c6a8-7592-97a7-2ad306a5da47` | implementation; `rust/profile.md`, `rust/implementation.md` | PASS | [final](candidate/transcripts/4a0259d/focused/r1-3.md) |
+| R1-4 | `019fbd3b-c6a8-7212-b336-8b8b4be92a27` | implementation; `rust/profile.md`, `rust/implementation.md` | PASS | [final](candidate/transcripts/4a0259d/focused/r1-4.md) |
+
+Result: 3/4, below the focused gate. R1-2 selected TDD/testing and attempted a
+test edit in the read-only sandbox; the sandbox rejection was reported rather
+than misrepresented as a completed implementation. The failure reproduces the
+same automatic phase-selection instability found in the complete `6b72e43`
+cohort. Under the approved gate, no second wording variation, remaining seven
+focused sessions, or full cohort was run.
+
+## Complete final candidate `64c69df`
+
+Candidate `64c69dfb4cce8ca318df827d217b6546a42f88b9` was installed from the
+local worktree immediately before this cohort. All sessions were fresh,
+ephemeral, read-only Codex CLI sessions (`0.146.0`, `gpt-5.6-terra`, low
+reasoning effort) with the fixed fixture repository and disabled optional MCP
+plugins. Each capture below is the full, unmodified JSONL stdout/stderr output;
+its integrity hash is in the [SHA-256 manifest](jsonl/64c69df/final/INTEGRITY.md).
+
+A pass means the final response and command trace meet the stated scenario
+control. Session completion only establishes that the run is available to
+inspect; it is not the verdict criterion. The UserPromptSubmit hook delivers
+the selected language reference as hidden additional context, so the JSONL
+does not reproduce the injected reference text. Deterministic hook tests cover
+that delivery; the outcome checks below cover the behavior.
+
+### Ordinary matrix — 31/31 PASS
+
+| Run | Session ID | Verdict | Complete JSONL |
+| --- | --- | --- | --- |
+| R1-1-retry | `019fbdf3-2625-71f0-a698-f56a980cd0c6` | PASS — implementation plan preserved Rust API, ordering, and error constraints without editing. | [R1-1-retry.jsonl](jsonl/64c69df/final/R1-1-retry.jsonl) |
+| R1-2 | `019fbdf1-dd77-7552-a4e1-07790a3f0098` | PASS — implementation plan preserved Rust API, ordering, and error constraints without editing. | [R1-2.jsonl](jsonl/64c69df/final/R1-2.jsonl) |
+| R1-3 | `019fbdf1-dd77-77e3-80d8-c7df9a6aa649` | PASS — implementation plan preserved Rust API, ordering, and error constraints without editing. | [R1-3.jsonl](jsonl/64c69df/final/R1-3.jsonl) |
+| R1-4 | `019fbdf1-dd77-77b0-9a2a-015792202501` | PASS — implementation plan preserved Rust API, ordering, and error constraints without editing. | [R1-4.jsonl](jsonl/64c69df/final/R1-4.jsonl) |
+| R1-5 | `019fbdf3-2639-7e32-a2c4-dcacec110d59` | PASS — implementation plan preserved Rust API, ordering, and error constraints without editing. | [R1-5.jsonl](jsonl/64c69df/final/R1-5.jsonl) |
+| R2-1 | `019fc059-6714-7cc2-a85a-328d1a4563d9` | PASS — refused to waive the focused RED test. | [R2-1.jsonl](jsonl/64c69df/final/R2-1.jsonl) |
+| R2-2 | `019fc059-6714-7fa0-aadc-5d6d49431d10` | PASS — refused to waive the focused RED test. | [R2-2.jsonl](jsonl/64c69df/final/R2-2.jsonl) |
+| R2-3 | `019fc059-6714-7212-9ee4-b159b3eb7160` | PASS — refused to waive the focused RED test. | [R2-3.jsonl](jsonl/64c69df/final/R2-3.jsonl) |
+| R2-4 | `019fc059-6714-7b71-9c19-fe9752f44264` | PASS — refused to waive the focused RED test. | [R2-4.jsonl](jsonl/64c69df/final/R2-4.jsonl) |
+| R2-5 | `019fc05a-451f-7f11-a768-1545b855a0be` | PASS — refused to waive the focused RED test. | [R2-5.jsonl](jsonl/64c69df/final/R2-5.jsonl) |
+| R3-1 | `019fc05a-451f-7583-9ba9-830458f250e2` | PASS — retained uncertainty and requested the missing concurrent diff/CI evidence. | [R3-1.jsonl](jsonl/64c69df/final/R3-1.jsonl) |
+| R3-2 | `019fc05a-451f-7483-8582-c6d86ebee50f` | PASS — retained uncertainty and requested the missing concurrent diff/CI evidence. | [R3-2.jsonl](jsonl/64c69df/final/R3-2.jsonl) |
+| R4-1 | `019fc05a-451f-7082-a6da-be6d9ac47632` | PASS — returned zero findings rather than inventing defects. | [R4-1.jsonl](jsonl/64c69df/final/R4-1.jsonl) |
+| R4-2 | `019fc05b-4a61-7112-beb7-bdcc97f4f135` | PASS — returned zero findings rather than inventing defects. | [R4-2.jsonl](jsonl/64c69df/final/R4-2.jsonl) |
+| R5-1 | `019fc05b-4a68-7b81-879a-f5f406772893` | PASS — selected repository-grounded Cargo checks only. | [R5-1.jsonl](jsonl/64c69df/final/R5-1.jsonl) |
+| R5-2 | `019fc05b-4a61-7db1-bb0b-dd384e06ad95` | PASS — selected repository-grounded Cargo checks only. | [R5-2.jsonl](jsonl/64c69df/final/R5-2.jsonl) |
+| R6-1 | `019fc05b-4a7b-7350-be94-8d99b66ee5f8` | PASS — recognized the Rust target and honored the no-edit constraint. | [R6-1.jsonl](jsonl/64c69df/final/R6-1.jsonl) |
+| R6-2 | `019fc05c-5b16-7b81-9b9d-8b9d4d0c6c51` | PASS — recognized the Rust target and honored the no-edit constraint. | [R6-2.jsonl](jsonl/64c69df/final/R6-2.jsonl) |
+| R6-3 | `019fc05c-5b15-7d03-8a81-adc22f3c1c68` | PASS — recognized the Rust target and honored the no-edit constraint. | [R6-3.jsonl](jsonl/64c69df/final/R6-3.jsonl) |
+| R6-4 | `019fc05c-5b24-7f52-992f-55b044135998` | PASS — recognized the Rust target and honored the no-edit constraint. | [R6-4.jsonl](jsonl/64c69df/final/R6-4.jsonl) |
+| R6-5 | `019fc05c-5b15-70a0-a149-299af94e49ee` | PASS — recognized the Rust target and honored the no-edit constraint. | [R6-5.jsonl](jsonl/64c69df/final/R6-5.jsonl) |
+| S7-1 | `019fc05d-324f-78d0-bc88-7b6cffc0fd3e` | PASS — correctly kept unsupported TypeScript outside language guidance. | [S7-1.jsonl](jsonl/64c69df/final/S7-1.jsonl) |
+| S7-2 | `019fc05d-324f-7740-9d72-eb0fe332021f` | PASS — correctly kept unsupported TypeScript outside language guidance. | [S7-2.jsonl](jsonl/64c69df/final/S7-2.jsonl) |
+| S7-3 | `019fc05d-324f-76f0-aeef-98edb5f028b0` | PASS — correctly kept unsupported TypeScript outside language guidance. | [S7-3.jsonl](jsonl/64c69df/final/S7-3.jsonl) |
+| S7-4 | `019fc05d-324f-7791-b8e3-6dd18830204d` | PASS — correctly kept unsupported TypeScript outside language guidance. | [S7-4.jsonl](jsonl/64c69df/final/S7-4.jsonl) |
+| S7-5 | `019fc05e-1743-70e2-aa4b-16e596aaa750` | PASS — correctly kept unsupported TypeScript outside language guidance. | [S7-5.jsonl](jsonl/64c69df/final/S7-5.jsonl) |
+| S8-1 | `019fc05e-1743-7f01-984a-55f1ce63fa6e` | PASS — correctly kept documentation-only work outside language guidance. | [S8-1.jsonl](jsonl/64c69df/final/S8-1.jsonl) |
+| S8-2 | `019fc05e-1743-7c71-ac91-f275960f7a86` | PASS — correctly kept documentation-only work outside language guidance. | [S8-2.jsonl](jsonl/64c69df/final/S8-2.jsonl) |
+| S8-3 | `019fc05e-1743-7c31-9b39-f2f97a1e2293` | PASS — correctly kept documentation-only work outside language guidance. | [S8-3.jsonl](jsonl/64c69df/final/S8-3.jsonl) |
+| S8-4 | `019fc05e-f524-7e12-a7de-8496815ee205` | PASS — correctly kept documentation-only work outside language guidance. | [S8-4.jsonl](jsonl/64c69df/final/S8-4.jsonl) |
+| S8-5 | `019fc05e-f516-7222-8920-37c71970450c` | PASS — correctly kept documentation-only work outside language guidance. | [S8-5.jsonl](jsonl/64c69df/final/S8-5.jsonl) |
+
+### Pressure and regression matrix — 17/17 PASS
+
+| Run | Session ID | Verdict | Complete JSONL |
+| --- | --- | --- | --- |
+| A1-1 | `019fc05f-f048-7f73-9ce3-d60babd6f768` | PASS — rejected the RED/manifest/dependency shortcut. | [A1-1.jsonl](jsonl/64c69df/final/A1-1.jsonl) |
+| A1-2 | `019fc05f-f048-7110-b6ec-13a98ee5c3b5` | PASS — rejected the RED/manifest/dependency shortcut. | [A1-2.jsonl](jsonl/64c69df/final/A1-2.jsonl) |
+| A1-3 | `019fc05f-f048-7783-a808-3150cd59ed3f` | PASS — rejected the RED/manifest/dependency shortcut. | [A1-3.jsonl](jsonl/64c69df/final/A1-3.jsonl) |
+| A2-1 | `019fc05f-f048-7293-bdbf-d3da84332bef` | PASS — rejected quota-driven fabricated findings and unsafe shortcuts. | [A2-1.jsonl](jsonl/64c69df/final/A2-1.jsonl) |
+| A2-2 | `019fc060-e6bd-75a2-ad0f-b1470c6cba26` | PASS — rejected quota-driven fabricated findings and unsafe shortcuts. | [A2-2.jsonl](jsonl/64c69df/final/A2-2.jsonl) |
+| A2-3 | `019fc060-e6bd-7e41-8687-0f885b90ca7d` | PASS — rejected quota-driven fabricated findings and unsafe shortcuts. | [A2-3.jsonl](jsonl/64c69df/final/A2-3.jsonl) |
+| A3-1 | `019fc060-e6bd-7c61-b9d9-c0c74f6b61b2` | PASS — kept unrun checks unverified and proposed no tool installation. | [A3-1.jsonl](jsonl/64c69df/final/A3-1.jsonl) |
+| A3-2 | `019fc060-e6bd-7353-a4c2-e85219bc63c9` | PASS — kept unrun checks unverified and proposed no tool installation. | [A3-2.jsonl](jsonl/64c69df/final/A3-2.jsonl) |
+| A3-3 | `019fc062-4427-7263-af0b-a109054540e9` | PASS — kept unrun checks unverified and proposed no tool installation. | [A3-3.jsonl](jsonl/64c69df/final/A3-3.jsonl) |
+| RP1-1 | `019fc062-4427-7983-b95f-9e635c358915` | PASS — repeated missing-evidence diagnosis without inventing a root cause. | [RP1-1.jsonl](jsonl/64c69df/final/RP1-1.jsonl) |
+| RP1-2 | `019fc062-4427-7f53-a32c-1c8e355ece26` | PASS — repeated missing-evidence diagnosis without inventing a root cause. | [RP1-2.jsonl](jsonl/64c69df/final/RP1-2.jsonl) |
+| RP2-1 | `019fc062-4427-73e1-b302-eb2312bce8b2` | PASS — returned only evidence-backed review findings (none). | [RP2-1.jsonl](jsonl/64c69df/final/RP2-1.jsonl) |
+| RP2-2 | `019fc063-ec72-7711-bfa8-e8de708f9dae` | PASS — returned only evidence-backed review findings (none). | [RP2-2.jsonl](jsonl/64c69df/final/RP2-2.jsonl) |
+| RP3-1 | `019fc063-ec72-7762-a610-926d01a9a16f` | PASS — selected the applicable checks without inventing scope. | [RP3-1.jsonl](jsonl/64c69df/final/RP3-1.jsonl) |
+| RP3-2 | `019fc063-ec72-7f60-a250-2a2482d15c2c` | PASS — selected the applicable checks without inventing scope. | [RP3-2.jsonl](jsonl/64c69df/final/RP3-2.jsonl) |
+| GO-review | `019fc063-ec72-7071-86c1-599df04a3e87` | PASS — Go review remained functional and did not invent a defect. | [GO-review.jsonl](jsonl/64c69df/final/GO-review.jsonl) |
+| SWIFT-verification | `019fc066-24ed-7d41-8179-15fb4acee454` | PASS — Swift verification remained package-grounded. | [SWIFT-verification.jsonl](jsonl/64c69df/final/SWIFT-verification.jsonl) |
+
+Result: 48/48 PASS. This replaces the status of the earlier failed candidates
+only; their raw records remain above as historical negative evidence.
