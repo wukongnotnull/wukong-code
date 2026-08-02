@@ -1,6 +1,6 @@
 ---
 name: language-guidance
-description: Use when creating, changing, testing, debugging, reviewing, or verifying source code whose language can be identified from explicit task or repository evidence. When explicitly invoked, test-source edits select testing; requested production-source edits emit before responding a strict Detected: <language and evidence>, Phase: implementation, and Loaded: <language>/profile.md, <language>/implementation.md decision.
+description: Use when creating, changing, testing, debugging, reviewing, or verifying source code whose language is established in the installed registry from explicit task or repository evidence. When explicitly invoked, test-source edits select testing; requested production-source edits emit before responding a strict Detected: <language and evidence>, Phase: implementation, and Loaded: <language>/profile.md, <language>/implementation.md decision. Verification claims, including no-command prompts, select verification, load <language>/verification.md, never install missing tools, and never invent feature or target scope.
 ---
 
 # Language Guidance
@@ -40,13 +40,18 @@ evidence conflicts.
 | Review code | review |
 | Prove completion | verification |
 
+Explicit failure investigation, code review, and completion verification intent takes precedence over generic no-edit analysis.
 A requested test-source edit selects the testing phase even when the task also requests a production-source edit. When the already-selected primary process is TDD or testing, select the testing phase and load the selected language's `testing.md` reference. Language guidance does not determine or enforce the primary process.
+When TDD is the selected primary process, select testing even when the prompt also requests a production-source edit.
 For a requested production-source edit, select the implementation phase and
 load both profile and implementation before discussing the approach. This
 remains true when brainstorming or an instruction to explain first actions
 delays the edit.
+A no-command constraint blocks project verification commands, not loading the selected verification reference.
+Never install missing verification tools or invent feature and target matrices.
 Load at most two references per decision. For cross-language work, state each
 target scope and process scopes separately when the limit would be exceeded.
+Every selected reference file must be read before substantive source analysis; locating its registry entry or path is not loading it.
 
 ## Repository-First Rule
 
@@ -74,6 +79,10 @@ loaded; automatic selection does not promise invocation or visible output.
 
 If no registered language matches, keep the generic workflow and do not claim
 guidance was loaded.
+
+For an unsupported language or extension, do not emit `Detected:`, `Phase:`, or `Loaded:`.
+State that no corresponding installed language guidance exists and keep the generic workflow.
+Do not invent language packs, reference paths, profiles, implementations, or phases.
 
 ## Common Mistakes
 

@@ -21,7 +21,7 @@
     "workflow"
   ],
   "skills": "./skills/",
-  "hooks": {},
+  "hooks": "./hooks/hooks-codex.json",
   "interface": {
     "displayName": "Wukong Code",
     "shortDescription": "Planning, TDD, debugging, and delivery workflows for coding agents",

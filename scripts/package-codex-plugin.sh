@@ -39,9 +39,10 @@ Options:
   --keep-stage             Print and keep the temporary staging directory.
   -h, --help               Show this help.
 
-The archive is rootless: .codex-plugin/, assets/, skills/, README.md, LICENSE,
-and CODE_OF_CONDUCT.md sit at the archive root. Source-only repo files, hooks, tests,
-docs, and other harness manifests are intentionally not shipped.
+The archive is rootless: .codex-plugin/, assets/, skills/, the Codex SessionStart
+hook files, README.md, LICENSE, and CODE_OF_CONDUCT.md sit at the archive root.
+Source-only repo files, cross-harness hook configuration, tests, docs, and other
+harness manifests are intentionally not shipped.
 EOF
 }
 
@@ -132,6 +133,7 @@ fi
 
 command -v git >/dev/null || die "git not found in PATH"
 command -v jq >/dev/null || die "jq not found in PATH"
+command -v python3 >/dev/null || die "python3 not found in PATH"
 command -v tar >/dev/null || die "tar not found in PATH"
 command -v gzip >/dev/null || die "gzip not found in PATH"
 command -v shasum >/dev/null || die "shasum not found in PATH"
@@ -140,7 +142,8 @@ if [[ "$FORMAT" == "zip" ]]; then
   command -v unzip >/dev/null || die "unzip not found in PATH"
 fi
 
-[[ -d "$REPO_ROOT/.git" ]] || die "repo root is not a git checkout: $REPO_ROOT"
+git -C "$REPO_ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1 ||
+  die "repo root is not a git checkout: $REPO_ROOT"
 git -C "$REPO_ROOT" rev-parse --verify "$REF^{commit}" >/dev/null ||
   die "git ref does not resolve to a commit: $REF"
 
@@ -236,6 +239,11 @@ git -C "$REPO_ROOT" archive --format=tar "$REF" -- \
   LICENSE \
   README.md \
   assets \
+  hooks/hooks-codex.json \
+  hooks/run-hook.cmd \
+  hooks/session-start \
+  hooks/user-prompt-submit \
+  hooks/user-prompt-submit.py \
   skills \
   | tar -xf - -C "$STAGE"
 
@@ -293,16 +301,34 @@ metadata_count="$(find "$STAGE/skills" -path '*/agents/openai.yaml' -type f | wc
 case "$FORMAT" in
   zip)
     # ZIP cannot represent dates earlier than 1980.
-    TZ=UTC find "$STAGE" -exec touch -t 198001010000 {} +
+    python3 - "$STAGE" 315532800 <<'PY'
+import os
+import sys
+from pathlib import Path
+
+root = Path(sys.argv[1])
+timestamp = int(sys.argv[2])
+for path in [root, *root.rglob("*")]:
+    os.utime(path, (timestamp, timestamp), follow_symlinks=False)
+PY
     (
       cd "$STAGE"
       rm -f "$OUTPUT"
-      COPYFILE_DISABLE=1 zip -X -q - -@ <"$ARCHIVE_LIST" >"$OUTPUT"
+      TZ=UTC COPYFILE_DISABLE=1 zip -X -q - -@ <"$ARCHIVE_LIST" >"$OUTPUT"
     )
     ;;
   tar.gz)
     # Match the prior official archive's deterministic tar entry metadata.
-    TZ=UTC find "$STAGE" -exec touch -t 197001010000 {} +
+    python3 - "$STAGE" 0 <<'PY'
+import os
+import sys
+from pathlib import Path
+
+root = Path(sys.argv[1])
+timestamp = int(sys.argv[2])
+for path in [root, *root.rglob("*")]:
+    os.utime(path, (timestamp, timestamp), follow_symlinks=False)
+PY
     (
       cd "$STAGE"
       rm -f "$OUTPUT"
@@ -327,7 +353,7 @@ esac
 
 unexpected_paths="$(
   printf '%s\n' "$archive_paths" |
-    grep -E '(^wukong-code/|^\.agents/|^hooks/|package\.json$|^\.git|^\.pytest_cache|^\.ruff_cache|^scripts/|^tests/|^docs/|^evals/|^lib/|^\.claude|^\.cursor|^\.kimi|^\.opencode|^\.pi|^AGENTS\.md$|^CLAUDE\.md$|^GEMINI\.md$|^RELEASE-NOTES\.md$|^CHANGELOG\.md$)' || true
+    grep -E '(^wukong-code/|^\.agents/|^hooks/(hooks\.json|hooks-cursor\.json)$|package\.json$|^\.git|^\.pytest_cache|^\.ruff_cache|^scripts/|^tests/|^docs/|^evals/|^lib/|^\.claude|^\.cursor|^\.kimi|^\.opencode|^\.pi|^AGENTS\.md$|^CLAUDE\.md$|^GEMINI\.md$|^RELEASE-NOTES\.md$|^CHANGELOG\.md$)' || true
 )"
 if [[ -n "$unexpected_paths" ]]; then
   printf '%s\n' "$unexpected_paths" | sed 's/^/  /' >&2

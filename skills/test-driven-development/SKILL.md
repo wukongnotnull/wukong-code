@@ -44,6 +44,8 @@ Write code before the test? Delete it. Start over.
 
 Implement fresh from tests. Period.
 
+For source work in a supported language, load language-guidance after selecting TDD and read its selected testing reference before giving a substantive plan.
+
 ## Red-Green-Refactor
 
 ### RED - Write Failing Test

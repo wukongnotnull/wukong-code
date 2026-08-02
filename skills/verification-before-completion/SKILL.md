@@ -39,6 +39,8 @@ BEFORE claiming any status or expressing satisfaction:
 Skip any step = lying, not verifying
 ```
 
+When execution is forbidden, report missing tooling and unsupported scope as unverified; do not propose, plan, or conditionally describe installing a tool.
+
 ## Evidence reuse (same task)
 
 Reuse a prior verification run in this task instead of re-running solely because a later workflow stage repeats the same requirement, when **all** are true:
