@@ -55,7 +55,7 @@ assert_file "$skill"
 assert_file "$registry"
 assert_file skills/language-guidance/references/shared/language-pack-contract.md
 
-for language in go swift rust; do
+for language in go swift rust java; do
   for phase in profile implementation testing debugging review verification; do
     assert_file "skills/language-guidance/references/$language/$phase.md"
   done
@@ -89,7 +89,7 @@ import sys
 root = pathlib.Path("skills/language-guidance/references")
 data = json.loads(pathlib.Path(sys.argv[1]).read_text())
 assert data["version"] == 1
-assert set(data["languages"]) == {"go", "swift", "rust"}
+assert set(data["languages"]) == {"go", "swift", "rust", "java"}
 
 expected = {
     "go": {
@@ -110,6 +110,17 @@ expected = {
             "Cargo.lock",
             "rust-toolchain.toml",
             "rust-toolchain",
+        ],
+    },
+    "java": {
+        "status": "experimental",
+        "extensions": [".java"],
+        "markers": [
+            "pom.xml",
+            "build.gradle",
+            "build.gradle.kts",
+            "settings.gradle",
+            "settings.gradle.kts",
         ],
     },
 }
@@ -138,10 +149,53 @@ for language in go swift rust; do
   done
 done
 
+for phase in profile implementation testing debugging review verification; do
+  file="skills/language-guidance/references/java/$phase.md"
+  [[ -f "$file" ]] && assert_max_lines "$file" 200
+done
+
 assert_contains skills/language-guidance/references/swift/profile.md "SwiftPM success does not prove an"
 assert_contains skills/language-guidance/references/swift/implementation.md "Cancellation is cooperative"
 assert_contains skills/language-guidance/references/swift/testing.md "Valid RED reaches the new test"
 assert_contains skills/language-guidance/references/swift/verification.md "SwiftPM success is not Xcode"
+
+assert_file tests/skills/fixtures/language-guidance/java-basic/pom.xml
+assert_file tests/skills/fixtures/language-guidance/java-basic/src/main/java/example/langguidance/BatchProcessor.java
+assert_file tests/skills/fixtures/language-guidance/java-basic/src/test/java/example/langguidance/BatchProcessorTest.java
+assert_file tests/skills/fixtures/language-guidance/java-gradle-basic/settings.gradle
+assert_file tests/skills/fixtures/language-guidance/java-gradle-basic/build.gradle
+assert_file tests/skills/fixtures/language-guidance/java-gradle-basic/src/main/java/example/langguidance/BatchProcessor.java
+assert_file tests/skills/fixtures/language-guidance/java-gradle-basic/src/test/java/example/langguidance/BatchProcessorHarness.java
+assert_file tests/skills/fixtures/language-guidance/monorepo/java-worker/pom.xml
+assert_file tests/skills/fixtures/language-guidance/monorepo/java-worker/src/main/java/example/worker/Worker.java
+assert_contains tests/skills/fixtures/language-guidance/java-basic/src/main/java/example/langguidance/BatchProcessor.java "input.startsWith(\"fail:\")"
+assert_contains tests/skills/fixtures/language-guidance/java-basic/src/main/java/example/langguidance/BatchProcessor.java "interface ItemProcessor"
+assert_contains tests/skills/fixtures/language-guidance/java-basic/src/main/java/example/langguidance/BatchProcessor.java "MAX_WORKERS = 2"
+assert_contains tests/skills/fixtures/language-guidance/java-basic/src/test/java/example/langguidance/BatchProcessorTest.java "fail:lowest-index"
+assert_contains tests/skills/fixtures/language-guidance/java-basic/src/test/java/example/langguidance/BatchProcessorTest.java "CountDownLatch"
+assert_contains tests/skills/fixtures/language-guidance/java-basic/src/test/java/example/langguidance/BatchProcessorTest.java "assertInterruptedCallerWaitsForStartedWork"
+
+for pom in \
+  tests/skills/fixtures/language-guidance/java-basic/pom.xml \
+  tests/skills/fixtures/language-guidance/monorepo/java-worker/pom.xml; do
+  if grep -q '<dependencies>' "$pom"; then
+    fail "$pom declares dependencies"
+  else
+    pass "$pom declares no dependency block"
+  fi
+done
+
+gradle_build=tests/skills/fixtures/language-guidance/java-gradle-basic/build.gradle
+assert_contains "$gradle_build" "JavaLanguageVersion.of(17)"
+assert_contains "$gradle_build" "verifyHarness"
+assert_contains "$gradle_build" "enabled = false"
+if [[ ! -f "$gradle_build" ]]; then
+  fail "$gradle_build missing dependency policy target"
+elif grep -qE '^dependencies[[:space:]]*\{' "$gradle_build"; then
+  fail "$gradle_build declares dependencies"
+else
+  pass "$gradle_build declares no dependency block"
+fi
 
 assert_file tests/skills/fixtures/language-guidance/rust-basic/Cargo.toml
 assert_file tests/skills/fixtures/language-guidance/rust-basic/src/lib.rs
@@ -186,6 +240,25 @@ assert_contains skills/language-guidance/references/rust/verification.md \
   "Missing Cargo extensions are reported"
 assert_contains skills/language-guidance/references/rust/verification.md \
   "An assumed cargo test pass proves only that stated scope"
+
+assert_contains skills/language-guidance/references/java/profile.md \
+  "The declared release or toolchain owns language compatibility"
+assert_contains skills/language-guidance/references/java/profile.md \
+  "source/target does not establish the runtime API baseline"
+assert_contains skills/language-guidance/references/java/implementation.md \
+  "Thread completion order is not the error contract"
+assert_contains skills/language-guidance/references/java/testing.md \
+  "Valid RED reaches the new test"
+assert_contains skills/language-guidance/references/java/testing.md \
+  "latches,"
+assert_contains skills/language-guidance/references/java/testing.md \
+  "barriers, or future completion"
+assert_contains skills/language-guidance/references/java/debugging.md \
+  "do not name a leading, likely, or most likely cause"
+assert_contains skills/language-guidance/references/java/review.md \
+  "Zero findings is valid"
+assert_contains skills/language-guidance/references/java/verification.md \
+  "Maven success does not prove Gradle"
 
 if grep -R -nE '((curl|wget).*[|][[:space:]]*(sh|bash)|(^|[[:space:]])(go[[:space:]]+install|npm[[:space:]]+install|pnpm[[:space:]]+(install|add)|yarn[[:space:]]+(install|add)|pip3?[[:space:]]+install|brew[[:space:]]+install|apt(-get)?[[:space:]]+install|apk[[:space:]]+add|dnf[[:space:]]+install|yum[[:space:]]+install|cargo[[:space:]]+install|gem[[:space:]]+install|composer[[:space:]]+require|bundle[[:space:]]+add))' skills/language-guidance; then
   fail "installer command found"
@@ -232,6 +305,7 @@ assert_visible_decision_template "$skill"
 assert_contains "$bootstrap" "documentation-only"
 assert_contains README.md "## Language Guidance"
 assert_contains README.md "| Go | Experimental |"
+assert_contains README.md "| Java | Planned | — | — | — | — | — | — |"
 assert_contains README.md "| Swift | Planned | — | — | — | — | — | — |"
 assert_contains README.md "| Rust | Experimental | — | — | — | — | — | — |"
 assert_contains CLAUDE.md "### Language-level skills"

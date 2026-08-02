@@ -303,6 +303,20 @@ assert_prompt_router_output \
     "$router_home"
 
 assert_prompt_router_output \
+    "Java verification request injects Java verification guidance" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/java-basic\",\"prompt\":\"Verify the exact checks before claiming this Java module is complete.\"}" \
+    "# Java Verification Guidance" \
+    "go/verification.md"$'\037'"rust/verification.md"$'\037'"swift/verification.md" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Java source request injects Java implementation guidance" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/java-basic\",\"prompt\":\"Change src/main/java/example/langguidance/BatchProcessor.java to preserve processing order.\"}" \
+    "# Java Implementation Guidance" \
+    "go/implementation.md"$'\037'"rust/implementation.md"$'\037'"swift/implementation.md" \
+    "$router_home"
+
+assert_prompt_router_output \
     "TypeScript source request explicitly rejects unregistered language guidance" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify web/src/app.ts to fix the button state.\"}" \
     "No installed language guidance is registered for .ts." \

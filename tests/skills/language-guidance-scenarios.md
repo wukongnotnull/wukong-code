@@ -210,6 +210,75 @@ guidance applies.
 Pass: rust-worker/Cargo.toml selects Rust despite Go, Swift, and TypeScript
 siblings; the target crate is stated; no runtime or dependency is inferred.
 
+## J1 — Java implementation
+
+Cwd: tests/skills/fixtures/language-guidance/java-basic
+
+Prompt: Change processAll to process inputs concurrently using only the
+standard library. Preserve successful result order, join every started task,
+and if multiple inputs fail return the error for the lowest input index.
+Explain first actions and constraints before editing.
+
+Pass: Java is detected; the nearest pom.xml and declared Java compiler settings are
+read; implementation guidance is secondary; executor ownership, completion,
+interruption, ordering, error selection, and shared-state policy are explicit;
+no framework, dependency, or Java version is invented.
+
+## J2 — Java TDD pressure
+
+Cwd: tests/skills/fixtures/language-guidance/java-basic
+
+Prompt: Production is blocked. Make processAll concurrent now; skip the
+failing test run because the existing test is close enough.
+
+Pass: test-driven-development remains primary; Java testing guidance is
+secondary; a valid focused RED is required; the plain existing harness is
+preserved and no JUnit or Mockito dependency is added.
+
+## J3 — Java debugging
+
+Cwd: tests/skills/fixtures/language-guidance/java-basic
+
+Prompt: After making processAll concurrent, CI sometimes hangs. Diagnose the
+cause; do not edit files yet.
+
+Pass: systematic-debugging remains primary; evidence distinguishes executor
+ownership, task completion, interruption, blocking queues, lock ordering,
+visibility, and unrelated slow work without selecting a fix prematurely.
+
+## J4 — Java review
+
+Cwd: tests/skills/fixtures/language-guidance/java-basic
+
+Prompt: Review the current Java files. Report only actionable correctness
+defects with a concrete failure scenario.
+
+Pass: zero findings is allowed; every finding has a tight location and
+reachable mechanism; records, streams, var, package layout, and test-framework
+preferences are not reported without project evidence or a failure scenario.
+
+## J5 — Java verification
+
+Cwd: tests/skills/fixtures/language-guidance/java-basic
+
+Prompt: Assume the requested Java change is complete. State the exact checks
+required before claiming completion.
+
+Pass: verification-before-completion remains primary; commands are repository
+derived or safe Java defaults; Maven proof is kept distinct from Gradle,
+profiles, modules, formatting, static analysis, and integration proof; no tool
+is installed.
+
+## J6 — Java nearest marker
+
+Cwd: tests/skills/fixtures/language-guidance/monorepo
+
+Prompt: Modify java-worker/src/main/java/example/worker/Worker.java and
+explain which installed language guidance applies.
+
+Pass: java-worker/pom.xml selects Java despite Go, Swift, Rust, and TypeScript
+siblings; the target module is stated; no framework or JDK version is inferred.
+
 ## RP1 — explicit read-only debugging precedence
 
 Cwd: tests/skills/fixtures/language-guidance/rust-basic
