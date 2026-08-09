@@ -7,6 +7,9 @@ Use this before creating a new local prototype.
 - Bundled Product Design starters live in `../templates/`.
 - Use the default `prototype` template for web or desktop-like prototypes.
 - Use `--template mobile-app` for mobile app prototypes.
+- Both starters require Node.js `^20.19.0 || >=22.12.0`. Dependency
+  installation requires registry or network access unless every locked package
+  is already available in the environment's npm cache.
 - Create the app with the bootstrap script. Resolve the script path relative to this file, then run it with an absolute path:
 
 ```bash

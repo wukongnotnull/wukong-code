@@ -126,6 +126,24 @@ grep -Fq ".local/state/wukong-code/product-design" \
   "$REPO_ROOT/skills/product-design-user-context/SKILL.md" ||
   fail "user-context does not document the portable state fallback"
 
+python3 - "$REPO_ROOT" <<'PY'
+from pathlib import Path
+import json
+import sys
+
+root = Path(sys.argv[1])
+expected = "^20.19.0 || >=22.12.0"
+for template in ("prototype", "mobile-app"):
+    package = json.loads((root / "templates" / template / "package.json").read_text(encoding="utf-8"))
+    actual = package.get("engines", {}).get("node")
+    if actual != expected:
+        raise SystemExit(f"templates/{template}/package.json Node engine is {actual!r}; expected {expected!r}")
+PY
+
+grep -Fq "requires registry or network access" \
+  "$REPO_ROOT/references/local-prototype-preflight.md" ||
+  fail "prototype preflight does not disclose package installation connectivity"
+
 if grep -Fq "Chat isn't supported by the Product Design plugin" \
   "$REPO_ROOT/skills/product-design/SKILL.md"; then
   fail "Product Design router still refuses non-Work-Mode hosts categorically"

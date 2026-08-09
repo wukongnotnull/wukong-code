@@ -12,7 +12,8 @@
 
 - Work directly on `main` as explicitly requested; do not pull, rebase, push, or open a PR.
 - Preserve the pre-existing untracked Java plan.
-- Do not change Product Design templates or add dependencies.
+- Do not change Product Design template behavior or add dependencies; declaring
+  the Node engine required by the existing locked toolchain is allowed.
 - Keep all ten source capabilities and their local support files.
 - Wukong primary process skills remain authoritative over Product Design domain guidance.
 - Use `6.3.0-product-design.1` on every declared local-fork version surface.
