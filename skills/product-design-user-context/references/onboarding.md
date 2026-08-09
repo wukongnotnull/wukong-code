@@ -2,7 +2,7 @@
 
 Use this reference when saved user context is missing, when the user asks what Product Design can remember, when the user asks to set up Product Design, or when the user provides product/design references to save.
 
-Before beginning setup, run the persistence availability check in [$user-context](../SKILL.md). If persistent context is unavailable, do not render the onboarding prompt below. Explain that references can be used in the current conversation but cannot be saved for future conversations.
+Before beginning setup, run the persistence availability check in [$product-design-user-context](../SKILL.md). If persistent context is unavailable, do not render the onboarding prompt below. Explain that references can be used in the current conversation but cannot be saved for future conversations.
 
 Setup is short. It is not a questionnaire and not a formal onboarding state machine.
 
@@ -28,16 +28,17 @@ Send any of those now, or say `skip` and I'll work from each task's source.
 
 ## Step 2: Save Context
 
-When the user provides references, save them to:
+When the user provides references, resolve the state directory through the
+preflight script and save them to:
 
 ```text
-$CODEX_HOME/state/plugins/product-design/user-context.md
+<resolved-state-dir>/user-context.md
 ```
 
 Create the file first if needed:
 
 ```bash
-python3 scripts/init_user_context.py
+python3 /absolute/path/to/wukong-code/skills/product-design-user-context/scripts/init_user_context.py
 ```
 
 Use the category structure from `../SKILL.md`.
@@ -45,7 +46,7 @@ Use the category structure from `../SKILL.md`.
 If the user provides screenshots or reference images, copy them into:
 
 ```text
-$CODEX_HOME/state/plugins/product-design/assets/
+<resolved-state-dir>/assets/
 ```
 
 Give saved images clear names that say what they show, such as `assets/payment-sheet-mobile-error-state.png` or `assets/account-menu-open-state.png`.

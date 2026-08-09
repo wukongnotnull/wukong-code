@@ -1,8 +1,8 @@
 {
   "name": "wukong-code",
   "displayName": "Wukong Code",
-  "description": "Core skills library: TDD, debugging, collaboration patterns, and proven techniques",
-  "version": "6.2.1",
+  "description": "Wukong development workflows plus Product Design research, prototyping, audits, and QA",
+  "version": "6.3.0-product-design.1",
   "author": {
     "name": "Jesse Vincent",
     "email": "jesse@fsck.com"
@@ -16,7 +16,8 @@
     "debugging",
     "collaboration",
     "best-practices",
-    "workflows"
+    "workflows",
+    "product-design"
   ],
   "skills": "./skills/",
   "hooks": "./hooks/hooks-cursor.json"

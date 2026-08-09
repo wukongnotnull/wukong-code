@@ -1,5 +1,5 @@
 ---
-name: url-to-code
+name: product-design-url-to-code
 description: "Clone a live URL as a runnable frontend-only local app."
 ---
 
@@ -9,18 +9,18 @@ If the user explicitly invokes this skill, continue.
 
 Only continue when the user asks to clone or recreate the current site.
 
-If the user says `like`, `better`, `redesign`, or `improve`, return to [$index](../index/SKILL.md).
+If the user says `like`, `better`, `redesign`, or `improve`, return to [$product-design](../product-design/SKILL.md).
 
 Clone `<target-url>` as a real interactive, frontend-only local app or website. The clone should look and interact like the source.
 
 ## Critical Overrides
 
-- Refer to the Plugin router [$index](../index/SKILL.md) before proceeding.
+- Refer to the Plugin router [$product-design](../product-design/SKILL.md) before proceeding.
 - Follow [$critical-overrides](../../references/critical-overrides.md).
 
 ## User Context
 
-Before starting, load [$user-context](../user-context/SKILL.md) and run its preflight script when local shell access is available.
+Before starting, load [$product-design-user-context](../product-design-user-context/SKILL.md) and run its preflight script when local shell access is available.
 
 Use saved product URLs, Figma files, screenshots, reference images, codebase paths, Storybook, tokens, design systems, brand assets, component refs, browser preferences, and share targets as grounding material when relevant.
 
@@ -30,7 +30,7 @@ Do not inspect every saved reference. Inspect only what the current task needs.
 
 1. CRITICAL STEP: Warn the user that they must follow the target website's terms before proceeding. This workflow is only for apps and websites the user owns, or has permission to recreate.
 
-2. Open the source URL using the Browser Choice rule in [$index](../index/SKILL.md#browser-choice).
+2. Open the source URL using the Browser Choice rule in [$product-design](../product-design/SKILL.md#browser-choice).
 
 3. Check that the page is correct.
 
@@ -117,7 +117,7 @@ For local prototype verification in ChatGPT Work Mode:
 - Check every interaction you captured.
 - Fix any obvious mismatch before running final QA.
 
-12. Run [design-qa](../design-qa/SKILL.md) as the blocking build gate.
+12. Run [design-qa](../product-design-design-qa/SKILL.md) as the blocking build gate.
 
 - Save the QA report as `design-qa.md` in the project root.
 - Fix P0/P1/P2 issues, capture the app again, and repeat until the QA report says `final result: passed`.
@@ -127,7 +127,7 @@ For local prototype verification in ChatGPT Work Mode:
 
 13. Handoff the app or website
 
-- Only hand off after [design-qa](../design-qa/SKILL.md) passes.
+- Only hand off after [design-qa](../product-design-design-qa/SKILL.md) passes.
 - Keep the prototype running locally.
 - Keep the local preview open for the user. In ChatGPT Work Mode, tell the user to inspect the prototype in the cloud browser; do not provide a clickable local URL. In Codex Desktop, provide the clickable local URL. Do not deploy to Sites unless the user explicitly asks to share, publish, or deploy.
 - After the preview handoff, use the shared build handoff from `critical-overrides.md`. Do not add a different completion message.

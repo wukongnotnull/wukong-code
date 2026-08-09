@@ -4,13 +4,13 @@
 from __future__ import annotations
 
 import argparse
-import os
 import sys
 from pathlib import Path
 
+from state_paths import resolve_state_dir
+
 SKILL_ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE_PATH = SKILL_ROOT / "plugin-author-config/user-context-template.md"
-PLUGIN_STATE_DIR = Path("state/plugins/product-design")
 
 CONTEXT_NOTE = """<!--
 Product Design context. This file is user-editable.
@@ -24,15 +24,14 @@ Saved references should include Date Added, Useful Context, and Future Use when 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Create $CODEX_HOME/state/plugins/product-design/user-context.md "
-            "from the bundled Product Design template."
+            "Create Product Design user-context.md in the resolved host state directory."
         )
     )
     parser.add_argument(
         "--codex-home",
         type=Path,
         default=None,
-        help="Codex home directory. Defaults to $CODEX_HOME or ~/.codex.",
+        help="Optional Codex home directory for the legacy Codex state layout.",
     )
     parser.add_argument(
         "--state-dir",
@@ -48,16 +47,9 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def resolve_state_dir(codex_home: Path | None, state_dir: Path | None) -> Path:
-    if state_dir is not None:
-        return state_dir.expanduser().resolve()
-    home = codex_home or Path(os.environ.get("CODEX_HOME", "~/.codex"))
-    return (home.expanduser() / PLUGIN_STATE_DIR).resolve()
-
-
 def main() -> int:
     args = parse_args()
-    state_dir = resolve_state_dir(args.codex_home, args.state_dir)
+    state_dir = resolve_state_dir(state_dir=args.state_dir, codex_home=args.codex_home)
     context_path = state_dir / "user-context.md"
 
     if not TEMPLATE_PATH.exists():

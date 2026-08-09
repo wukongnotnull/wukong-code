@@ -1,5 +1,5 @@
 ---
-name: ideate
+name: product-design-ideate
 description: "Generate image-based alternatives, remixes, or new design directions from a Product Design brief. Use when the user asks for design variants, visual exploration, remixes, or image-generated approaches from provided context."
 ---
 
@@ -7,16 +7,16 @@ description: "Generate image-based alternatives, remixes, or new design directio
 
 You're tasked with generating design concepts for a user's idea.
 
-Follow the shared Product Design routing guidance in [$index](../index/SKILL.md).
+Follow the shared Product Design routing guidance in [$product-design](../product-design/SKILL.md).
 
 ## Critical Overrides
 
-- Refer to the Plugin router [$index](../index/SKILL.md) before proceeding.
+- Refer to the Plugin router [$product-design](../product-design/SKILL.md) before proceeding.
 - Follow [$critical-overrides](../../references/critical-overrides.md).
 
 ## User Context
 
-Before starting, load [$user-context](../user-context/SKILL.md) and run its preflight script when local shell access is available.
+Before starting, load [$product-design-user-context](../product-design-user-context/SKILL.md) and run its preflight script when local shell access is available.
 
 Attach provided product URLs, Figma files, screenshots, reference images, codebase paths, Storybook, tokens, design systems, brand assets, component refs, browser preferences, and share targets to the Image Gen generations to align them to the design brief.
 
@@ -24,7 +24,7 @@ Do not inspect every saved reference. Inspect only what the current task needs.
 
 ## Workflow
 
-Do not generate images until `$get-context` has satisfied the minimum required design brief.
+Do not generate images until `$product-design-context` has satisfied the minimum required design brief.
 
 Before generating images:
 
@@ -96,7 +96,7 @@ Rules you must follow:
 - Preserve hard constraints from the brief in every image.
 - After generating options, stop for the user's selection before any build work begins.
 - When the user later selects option `N`, resolve it against the Nth displayed generated-image result from the most recent ideation set, not the original planned concept order. If the exact displayed result cannot be resolved, do not build from a guess; ask the user to name the concept or reattach/select the image.
-- The selected option is the visual target for `$image-to-code`.
+- The selected option is the visual target for `$product-design-image-to-code`.
 
 ## Feedback Loop
 
@@ -186,6 +186,6 @@ Do not name or describe the options. For the default three images, send only:
 
 Adjust the numbers only if the user requested a different count.
 
-If the user chooses a number, acknowledge the chosen option before routing to `$image-to-code`, for example: `Building option 2!` Do not ask for confirmation when the mapping is clear.
+If the user chooses a number, acknowledge the chosen option before routing to `$product-design-image-to-code`, for example: `Building option 2!` Do not ask for confirmation when the mapping is clear.
 
 Done means the requested number of independent images have been generated and the user has been asked to select one.

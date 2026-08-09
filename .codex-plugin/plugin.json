@@ -1,6 +1,6 @@
 {
   "name": "wukong-code",
-  "version": "6.2.1",
+  "version": "6.3.0-product-design.1",
   "description": "An agentic skills framework & software development methodology that works: planning, TDD, debugging, and collaboration workflows.",
   "author": {
     "name": "Jesse Vincent",
@@ -39,7 +39,9 @@
     ],
     "defaultPrompt": [
       "I've got an idea for something I'd like to build.",
-      "Let's add a feature to this project."
+      "Let's add a feature to this project.",
+      "Use Product Design to audit this product flow from screenshots.",
+      "Use Product Design to turn this selected mockup into a verified prototype."
     ],
     "websiteURL": "https://github.com/wukongnotnull/wukong-code",
     "privacyPolicyURL": "https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement",

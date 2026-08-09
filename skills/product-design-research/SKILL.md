@@ -1,5 +1,5 @@
 ---
-name: research
+name: product-design-research
 description: "Run fast, source-grounded UX research on the highest-signal problems users are experiencing with a user-specified digital product. Use when the user asks to research user pain, UX friction, onboarding issues, docs/help problems, developer experience friction, support pain, product workflow issues, or current user complaints for a named product."
 ---
 
@@ -11,12 +11,12 @@ Focus on current, evidence-backed user problems. Prioritize logged-in product ex
 
 ## Critical Overrides
 
-- Refer to the Plugin router [$index](../index/SKILL.md) before proceeding.
+- Refer to the Plugin router [$product-design](../product-design/SKILL.md) before proceeding.
 - Follow [$critical-overrides](../../references/critical-overrides.md).
 
 ## User Context
 
-Before starting, load [$user-context](../user-context/SKILL.md) and run its preflight script when local shell access is available.
+Before starting, load [$product-design-user-context](../product-design-user-context/SKILL.md) and run its preflight script when local shell access is available.
 
 Use saved product URLs, Figma files, screenshots, reference images, codebase paths, Storybook, tokens, design systems, brand assets, component refs, browser preferences, and share targets as grounding material when relevant.
 

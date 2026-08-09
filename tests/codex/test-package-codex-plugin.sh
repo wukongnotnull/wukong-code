@@ -178,6 +178,12 @@ else
   pass "archive excludes cross-harness hook configuration"
 fi
 assert_contains "$archive_paths" "skills/brainstorming/SKILL.md" "archive includes skills"
+assert_contains "$archive_paths" "skills/product-design/SKILL.md" "archive includes namespaced Product Design router"
+if printf '%s' "$archive_paths" | grep -Fxq "skills/index/SKILL.md"; then
+  fail "archive excludes legacy generic Product Design router"
+else
+  pass "archive excludes legacy generic Product Design router"
+fi
 for swift_phase in profile implementation testing debugging review verification; do
   assert_contains "$archive_paths" \
     "skills/language-guidance/references/swift/$swift_phase.md" \

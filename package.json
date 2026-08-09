@@ -1,7 +1,7 @@
 {
   "name": "wukong-code",
-  "version": "6.2.1",
-  "description": "Wukong Code skills and runtime bootstrap for coding agents",
+  "version": "6.3.0-product-design.1",
+  "description": "Wukong Code development and Product Design skills with runtime bootstrap for coding agents",
   "type": "module",
   "main": ".opencode/plugins/wukong-code.js",
   "keywords": [
@@ -10,7 +10,8 @@
     "tdd",
     "debugging",
     "collaboration",
-    "workflow"
+    "workflow",
+    "product-design"
   ],
   "pi": {
     "extensions": [

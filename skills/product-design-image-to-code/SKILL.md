@@ -1,5 +1,5 @@
 ---
-name: image-to-code
+name: product-design-image-to-code
 description: "Implement a selected image, screenshot, mockup, or Image Gen reference as a faithful, responsive frontend."
 ---
 
@@ -9,12 +9,12 @@ You're tasked with translating the visual target image into a high-quality, inte
 
 ## Critical Overrides
 
-- Refer to the Plugin router [$index](../index/SKILL.md) before proceeding.
+- Refer to the Plugin router [$product-design](../product-design/SKILL.md) before proceeding.
 - Follow [$critical-overrides](../../references/critical-overrides.md).
 
 ## User Context
 
-Before starting, load [$user-context](../user-context/SKILL.md) and run its preflight script when local shell access is available.
+Before starting, load [$product-design-user-context](../product-design-user-context/SKILL.md) and run its preflight script when local shell access is available.
 
 Use saved product URLs, Figma files, screenshots, reference images, codebase paths, Storybook, tokens, design systems, brand assets, component refs, browser preferences, and share targets as grounding material when relevant.
 
@@ -44,8 +44,8 @@ CRITICAL: THIS IS NOT GUIDANCE. THIS IS A CHECKLIST TO COMPLETE.
 
 2. Resolve the exact selected visual target before building.
 
-    - If the user selected a numbered `$ideate` option, use the Nth displayed generated-image result from the most recent ideation set. Do not use the original concept planning order or Image Gen prompt submission order.
-    - Use the concept-name list from `$ideate` only when it was explicitly written in the same displayed-image order.
+    - If the user selected a numbered `$product-design-ideate` option, use the Nth displayed generated-image result from the most recent ideation set. Do not use the original concept planning order or Image Gen prompt submission order.
+    - Use the concept-name list from `$product-design-ideate` only when it was explicitly written in the same displayed-image order.
     - A generated-image result ID, selected image attachment, screenshot, mockup, or Figma frame is stronger than a bare ordinal. Prefer that exact reference when available.
     - If the selected result cannot be resolved unambiguously, stop before implementation and ask the user to name the concept or reattach/select the image. Never guess and build a nearby option.
 
@@ -113,9 +113,9 @@ Prioritize critical above-the-fold assets first, then reuse agents for supportin
 
 10. Run the local app.
 
-11. Capture the local app using the Browser Choice rule in [$index](../index/SKILL.md#browser-choice).
+11. Capture the local app using the Browser Choice rule in [$product-design](../product-design/SKILL.md#browser-choice).
 
-12. Run [design-qa](../design-qa/SKILL.md) as the blocking build gate.
+12. Run [design-qa](../product-design-design-qa/SKILL.md) as the blocking build gate.
 
     Steps:
 
@@ -129,7 +129,7 @@ Prioritize critical above-the-fold assets first, then reuse agents for supportin
 
 13. Handoff the app or website.
 
-    - Only hand off after [design-qa](../design-qa/SKILL.md) passes.
+    - Only hand off after [design-qa](../product-design-design-qa/SKILL.md) passes.
     - Keep the prototype running locally.
     - Keep the local preview open for the user. In ChatGPT Work Mode, tell the user to inspect the prototype in the cloud browser; do not provide a clickable local URL. In Codex Desktop, provide the clickable local URL. Do not deploy to Sites unless the user explicitly asks to share, publish, or deploy.
     - After the preview handoff, use the shared build handoff from `critical-overrides.md`. Do not add a different completion message.

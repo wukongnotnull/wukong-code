@@ -1,5 +1,5 @@
 ---
-name: audit
+name: product-design-audit
 description: "Audit or critique a product flow, journey, workflow, funnel, onboarding path, checkout path, settings path, screen, or multi-step product experience by capturing screenshots first, then reporting UX, design, and accessibility findings inline from that evidence. Use Figma only when the user explicitly asks for a board. Use when the user asks to audit, review, critique, inspect, assess, analyze, evaluate, or give feedback on a product experience."
 ---
 
@@ -18,12 +18,12 @@ The output is not a loose opinion. The output is:
 
 ## Critical Overrides
 
-- Refer to the Plugin router [$index](../index/SKILL.md) before proceeding.
+- Refer to the Plugin router [$product-design](../product-design/SKILL.md) before proceeding.
 - Follow [$critical-overrides](../../references/critical-overrides.md).
 
 ## User Context
 
-Before starting, load [$user-context](../user-context/SKILL.md) and run its preflight script when local shell access is available.
+Before starting, load [$product-design-user-context](../product-design-user-context/SKILL.md) and run its preflight script when local shell access is available.
 
 Use saved product URLs, Figma files, screenshots, reference images, codebase paths, Storybook, tokens, design systems, brand assets, component refs, browser preferences, and share targets as grounding material when relevant.
 
@@ -49,7 +49,7 @@ Output rules:
 
 Capture rules:
 
-- Follow the Browser Choice rule in [$index](../index/SKILL.md#browser-choice).
+- Follow the Browser Choice rule in [$product-design](../product-design/SKILL.md#browser-choice).
 - If none of those can capture valid screenshots or control the flow, stop and report the blocker.
 
 Browser capture order:

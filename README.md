@@ -227,7 +227,8 @@ status until those fields contain real evidence.
 
 ### Product Design (local fork integration)
 
-This local fork also bundles Product Design workflows for product brief intake,
+Local fork version `6.3.0-product-design.1` also bundles Product Design
+workflows for product brief intake,
 UX research, flow audits, visual ideation, image and URL-to-code prototypes,
 prototype QA, saved design context, and prototype sharing. These ten skills are
 imported from product-design version 0.1.52; their shared references, bootstrap

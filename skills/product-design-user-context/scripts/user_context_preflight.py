@@ -6,14 +6,15 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import os
 import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-PLUGIN_STATE_DIR = Path("state/plugins/product-design")
+from state_paths import resolve_state_dir
+
+
 DEFAULT_MAX_CONTEXT_BYTES = 2_000_000
 
 
@@ -25,7 +26,7 @@ def parse_args() -> argparse.Namespace:
         "--codex-home",
         type=Path,
         default=None,
-        help="Codex home directory. Defaults to $CODEX_HOME or ~/.codex.",
+        help="Optional Codex home directory for the legacy Codex state layout.",
     )
     parser.add_argument(
         "--state-dir",
@@ -40,13 +41,6 @@ def parse_args() -> argparse.Namespace:
         help="Maximum user-context.md size to read.",
     )
     return parser.parse_args()
-
-
-def resolve_state_dir(codex_home: Path | None, state_dir: Path | None) -> Path:
-    if state_dir is not None:
-        return state_dir.expanduser().resolve()
-    home = codex_home or Path(os.environ.get("CODEX_HOME", "~/.codex"))
-    return (home.expanduser() / PLUGIN_STATE_DIR).resolve()
 
 
 def file_mtime(path: Path) -> str | None:
@@ -149,7 +143,7 @@ def missing_payload(state_dir: Path, context_path: Path) -> dict[str, Any]:
 
 def main() -> int:
     args = parse_args()
-    state_dir = resolve_state_dir(args.codex_home, args.state_dir)
+    state_dir = resolve_state_dir(state_dir=args.state_dir, codex_home=args.codex_home)
     context_path = state_dir / "user-context.md"
 
     if not context_path.exists():

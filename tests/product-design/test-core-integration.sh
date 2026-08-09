@@ -4,6 +4,18 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 EXPECTED_SKILLS=(
+  product-design
+  product-design-audit
+  product-design-context
+  product-design-design-qa
+  product-design-ideate
+  product-design-image-to-code
+  product-design-research
+  product-design-share
+  product-design-url-to-code
+  product-design-user-context
+)
+LEGACY_PRODUCT_DESIGN_SKILLS=(
   audit design-qa get-context ideate image-to-code
   index research share url-to-code user-context
 )
@@ -12,14 +24,17 @@ EXPECTED_SHARED_FILES=(
   references/critical-overrides.md
   references/existing-codebase-edits.md
   references/local-prototype-preflight.md
+  references/product-design-host-capabilities.md
   references/wukong-product-design-composition.md
   scripts/bootstrap-prototype.mjs
   scripts/check-sites-starter-contract.mjs
   templates/prototype/package.json
   templates/mobile-app/package.json
+  skills/product-design-user-context/scripts/state_paths.py
   product-design.lock.json
   THIRD_PARTY_NOTICES.md
 )
+ROUTING_SCENARIOS="$REPO_ROOT/tests/product-design/routing-scenarios.md"
 MARKDOWN_ROOTS=("$REPO_ROOT/references")
 for skill in "${EXPECTED_SKILLS[@]}"; do
   MARKDOWN_ROOTS+=("$REPO_ROOT/skills/$skill")
@@ -55,6 +70,23 @@ for expected in sys.argv[2:]:
         )
 PY
 
+for legacy_skill in "${LEGACY_PRODUCT_DESIGN_SKILLS[@]}"; do
+  [[ ! -e "$REPO_ROOT/skills/$legacy_skill" ]] ||
+    fail "legacy Product Design skill directory still exists: skills/$legacy_skill"
+done
+
+[[ -f "$ROUTING_SCENARIOS" ]] || fail "missing Product Design routing scenarios"
+for skill in "${EXPECTED_SKILLS[@]}"; do
+  grep -Fq "$skill" "$ROUTING_SCENARIOS" ||
+    fail "routing scenarios do not cover $skill"
+done
+for scenario in PD1 PD2 PD3 PD4 PD5 PD6 PD7 PD8; do
+  grep -Fq "## $scenario:" "$ROUTING_SCENARIOS" ||
+    fail "routing scenarios are missing $scenario"
+done
+grep -Fq "Ordinary UI implementation remains Wukong-led" "$ROUTING_SCENARIOS" ||
+  fail "routing scenarios are missing the ordinary-coding negative case"
+
 for relative_path in "${EXPECTED_SHARED_FILES[@]}"; do
   [[ -f "$REPO_ROOT/$relative_path" ]] || fail "missing shared Product Design resource: $relative_path"
 done
@@ -75,17 +107,36 @@ done
 grep -Fq "Wukong process selection remains primary" \
   "$REPO_ROOT/references/wukong-product-design-composition.md" ||
   fail "composition contract does not preserve Wukong process authority"
-grep -Fq "wukong-product-design-composition.md" "$REPO_ROOT/skills/index/SKILL.md" ||
+grep -Fq "wukong-product-design-composition.md" "$REPO_ROOT/skills/product-design/SKILL.md" ||
   fail "Product Design router does not link the Wukong composition contract"
+grep -Fq "product-design-host-capabilities.md" "$REPO_ROOT/skills/product-design/SKILL.md" ||
+  fail "Product Design router does not link the host capability contract"
 grep -Fq "wukong-product-design-composition.md" "$REPO_ROOT/references/critical-overrides.md" ||
   fail "Product Design critical overrides do not link the Wukong composition contract"
 
 if grep -Fq "/plugins/product-design/" "$REPO_ROOT/references/local-prototype-preflight.md"; then
   fail "local prototype preflight still assumes a standalone product-design plugin path"
 fi
-if grep -Fq "python3 scripts/" "$REPO_ROOT/skills/user-context/SKILL.md"; then
+if grep -Fq "python3 scripts/" "$REPO_ROOT/skills/product-design-user-context/SKILL.md"; then
   fail "user-context still resolves helper scripts from the user's current directory"
 fi
+grep -Fq "PRODUCT_DESIGN_STATE_DIR" "$REPO_ROOT/skills/product-design-user-context/SKILL.md" ||
+  fail "user-context does not document the portable state override"
+grep -Fq ".local/state/wukong-code/product-design" \
+  "$REPO_ROOT/skills/product-design-user-context/SKILL.md" ||
+  fail "user-context does not document the portable state fallback"
+
+if grep -Fq "Chat isn't supported by the Product Design plugin" \
+  "$REPO_ROOT/skills/product-design/SKILL.md"; then
+  fail "Product Design router still refuses non-Work-Mode hosts categorically"
+fi
+
+for host in "Codex Desktop" "ChatGPT Work Mode" "Claude Code" Cursor Kimi OpenCode Pi Gemini; do
+  grep -Fq "$host" "$REPO_ROOT/references/product-design-host-capabilities.md" ||
+    fail "host capability contract is missing $host"
+done
+grep -Fq "sequential fallback" "$REPO_ROOT/references/product-design-host-capabilities.md" ||
+  fail "host capability contract does not define a sequential fallback"
 
 python3 - "$REPO_ROOT/product-design.lock.json" <<'PY'
 import json
@@ -97,6 +148,7 @@ with open(sys.argv[1], encoding="utf-8") as lock_file:
 expected = {
     "name": "product-design",
     "version": "0.1.52",
+    "wukong_code_version": "6.3.0-product-design.1",
     "license": "MIT",
     "distribution": "local-only",
 }
@@ -104,6 +156,55 @@ for key, value in expected.items():
     if lock.get(key) != value:
         raise SystemExit(f"product-design.lock.json {key!r} must equal {value!r}")
 PY
+
+python3 - "$REPO_ROOT" <<'PY'
+from pathlib import Path
+import json
+import sys
+
+root = Path(sys.argv[1])
+expected = "6.3.0-product-design.1"
+config = json.loads((root / ".version-bump.json").read_text(encoding="utf-8"))
+
+for entry in config["files"]:
+    data = json.loads((root / entry["path"]).read_text(encoding="utf-8"))
+    value = data
+    for segment in entry["field"].split("."):
+        value = value[int(segment)] if segment.isdigit() else value[segment]
+    if value != expected:
+        raise SystemExit(f"{entry['path']} version is {value!r}; expected {expected!r}")
+PY
+
+python3 - "$REPO_ROOT" <<'PY'
+from pathlib import Path
+import json
+import sys
+
+root = Path(sys.argv[1])
+for relative in (
+    ".codex-plugin/plugin.json",
+    ".claude-plugin/plugin.json",
+    ".cursor-plugin/plugin.json",
+    ".kimi-plugin/plugin.json",
+    "gemini-extension.json",
+    "package.json",
+):
+    manifest = json.loads((root / relative).read_text(encoding="utf-8"))
+    interface = manifest.get("interface", {})
+    searchable = " ".join(
+        [
+            str(manifest.get("description", "")),
+            " ".join(str(value) for value in manifest.get("keywords", [])),
+            str(interface.get("shortDescription", "")),
+            str(interface.get("longDescription", "")),
+        ]
+    ).casefold()
+    if "product design" not in searchable and "product-design" not in searchable:
+        raise SystemExit(f"{relative} does not advertise Product Design")
+PY
+
+grep -Fq "6.3.0-product-design.1" "$REPO_ROOT/README.md" ||
+  fail "README does not identify the local Product Design fork version"
 
 grep -Fq "Copyright (c) 2026 OpenAI" "$REPO_ROOT/THIRD_PARTY_NOTICES.md" ||
   fail "third-party notice is missing the upstream OpenAI copyright"
@@ -132,6 +233,14 @@ with open(sys.argv[1], encoding="utf-8") as manifest_file:
 
 if "product-design" not in manifest.get("keywords", []):
     raise SystemExit("root plugin manifest is missing the product-design keyword")
+
+product_prompts = [
+    prompt
+    for prompt in manifest.get("interface", {}).get("defaultPrompt", [])
+    if "product" in prompt.casefold() and "design" in prompt.casefold()
+]
+if len(product_prompts) < 2:
+    raise SystemExit("root plugin manifest needs at least two Product Design starter prompts")
 PY
 
 grep -Fq "Product Design (local fork integration)" "$REPO_ROOT/README.md" ||

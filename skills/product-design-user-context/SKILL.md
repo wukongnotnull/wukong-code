@@ -1,5 +1,5 @@
 ---
-name: user-context
+name: product-design-user-context
 description: Load or manage Product Design's saved user context. Use when the user asks to set up Product Design, get started, onboard, save product or design sources, see what Product Design remembers, update saved context, or remember Product Design preferences. Examples include product URLs, Figma files, screenshots, reference images, codebase paths, Storybook, tokens, design systems, brand assets, and general product/design notes.
 ---
 
@@ -20,9 +20,9 @@ Use this skill when the user asks to:
 
 ## Critical Overrides
 
-- Refer to the Plugin router [$index](../index/SKILL.md) before proceeding.
+- Refer to the Product Design router [$product-design](../product-design/SKILL.md) before proceeding.
 - Follow [$critical-overrides](../../references/critical-overrides.md).
-- Before offering onboarding or saving context for future conversations, confirm that local shell access is available, `$CODEX_HOME` can be resolved, and `$CODEX_HOME/state/plugins/product-design/` exists and is writable or can be created in a writable parent directory. If `user-context.md` already exists, confirm that it is writable too.
+- Before offering onboarding or saving context for future conversations, confirm that local shell access is available and run the preflight script to resolve a host-appropriate state directory. Confirm that directory is writable or can be created in a writable parent directory. If `user-context.md` already exists, confirm that it is writable too.
 - If any check cannot be completed or fails, persistent context is unavailable. Do not offer saved-context onboarding or claim that new context was saved for future conversations. If the user asks to save something, explain that it can be used in the current conversation but not saved for future conversations.
 
 ## Saved User Context
@@ -37,16 +37,22 @@ When a workflow needs visual grounding, attach or include relevant saved screens
 
 ## State File
 
-Saved context lives here:
+State resolution uses this priority:
 
 ```text
-$CODEX_HOME/state/plugins/product-design/user-context.md
+--state-dir
+PRODUCT_DESIGN_STATE_DIR
+--codex-home or CODEX_HOME -> $CODEX_HOME/state/plugins/product-design
+existing ~/.codex/state/plugins/product-design
+XDG_STATE_HOME -> $XDG_STATE_HOME/wukong-code/product-design
+portable fallback -> ~/.local/state/wukong-code/product-design
 ```
 
-Saved screenshots and reference images live next to it:
+Saved context is `user-context.md` in the resolved directory. Saved screenshots
+and reference images live next to it:
 
 ```text
-$CODEX_HOME/state/plugins/product-design/assets/
+<resolved-state-dir>/assets/
 ```
 
 If the file does not exist, continue normally unless the user asks to set up Product Design, save context, or the current task is blocked by missing product/design context.
@@ -60,7 +66,7 @@ that absolute path. Do not resolve `scripts/` from the user's current working
 directory. For example:
 
 ```bash
-python3 /absolute/path/to/wukong-code/skills/user-context/scripts/user_context_preflight.py
+python3 /absolute/path/to/wukong-code/skills/product-design-user-context/scripts/user_context_preflight.py
 ```
 
 Use the returned saved entries as the starting context for the task.
@@ -85,7 +91,7 @@ Resolve the script from the directory containing this `SKILL.md` and invoke
 its absolute path:
 
 ```bash
-python3 /absolute/path/to/wukong-code/skills/user-context/scripts/init_user_context.py
+python3 /absolute/path/to/wukong-code/skills/product-design-user-context/scripts/init_user_context.py
 ```
 
 Then add the references to the created `user-context.md`.

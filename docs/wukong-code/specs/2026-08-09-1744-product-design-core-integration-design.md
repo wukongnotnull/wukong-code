@@ -43,16 +43,16 @@ local-fork customization.
 ```text
 wukong-code/
 ├── skills/
-│   ├── audit/
-│   ├── design-qa/
-│   ├── get-context/
-│   ├── ideate/
-│   ├── image-to-code/
-│   ├── index/
-│   ├── research/
-│   ├── share/
-│   ├── url-to-code/
-│   └── user-context/
+│   ├── product-design/
+│   ├── product-design-audit/
+│   ├── product-design-context/
+│   ├── product-design-design-qa/
+│   ├── product-design-ideate/
+│   ├── product-design-image-to-code/
+│   ├── product-design-research/
+│   ├── product-design-share/
+│   ├── product-design-url-to-code/
+│   └── product-design-user-context/
 ├── references/                  # shared Product Design references
 ├── scripts/                     # Product Design bootstrap and checks
 ├── templates/
@@ -67,9 +67,11 @@ introduced. Existing Wukong Code skills remain unchanged.
 
 ## Integration Boundaries
 
-- Copy the ten complete skill directories without renaming them. Their
-  per-skill references, scripts, and `agents/openai.yaml` files stay beside the
-  corresponding `SKILL.md` files.
+- Preserve all ten source capabilities under collision-free
+  `product-design-*` directory and frontmatter names. Their per-skill
+  references, scripts, and `agents/openai.yaml` files stay beside the
+  corresponding `SKILL.md` files; `product-design.lock.json` records the source
+  identity and local adaptation.
 - Copy source-root shared resources to the root locations expected by relative
   links: `references/`, `scripts/`, and `templates/`. Do not copy the source
   package's presentation-only `assets/`; the root plugin keeps its existing
@@ -83,6 +85,11 @@ introduced. Existing Wukong Code skills remain unchanged.
 - Treat the Product Design workflows as domain guidance. When they build or
   change source code, the existing Wukong Code process skills remain the
   governing lifecycle rules.
+- Route tool-specific behavior through the shared host-capability contract.
+  Codex state remains compatible; non-Codex hosts use an explicit or portable
+  state root rather than silently writing a new `~/.codex` tree.
+- Identify this local fork as `6.3.0-product-design.1` across every declared
+  harness manifest.
 
 ## Verification Design
 
@@ -95,7 +102,9 @@ production import is made. It must cover:
    imported skills;
 4. required shared resources at their expected repository-root paths;
 5. absence of ignored source artifacts such as `.DS_Store`; and
-6. the provided `check-sites-starter-contract.mjs` validation against imported
+6. portable state-root priority and legacy compatibility;
+7. routing-scenario coverage and host-capability fallbacks; and
+8. the provided `check-sites-starter-contract.mjs` validation against imported
    templates.
 
 After import, run the focused integration check, the source template-contract
@@ -104,14 +113,17 @@ environment-dependent checks that cannot be exercised.
 
 ## Acceptance Criteria
 
-- All ten named Product Design skills are present under root `skills/` and
-  loadable through the existing root-plugin skill path.
+- All ten namespaced Product Design skills are present under root `skills/`,
+  loadable through the existing root-plugin skill path, and no legacy generic
+  Product Design directories remain.
 - Every local reference needed by an imported skill resolves inside this
   repository.
 - Supporting references, scripts, templates, and required assets are present
   without generated clutter.
 - No existing Wukong Code skill changes behavior as part of this migration.
 - Source provenance/version and the local-fork-only boundary are documented.
+- All declared harness manifests use `6.3.0-product-design.1`.
+- Codex and portable state resolution pass isolated-home tests.
 - Focused integration checks, source template-contract validation, and
   relevant root-plugin packaging tests pass.
 

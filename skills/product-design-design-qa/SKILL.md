@@ -1,5 +1,5 @@
 ---
-name: design-qa
+name: product-design-design-qa
 description: "Internal prototype QA helper. Use only after a Product Design prototype, URL-to-code build, or image-to-code build has a source visual target and a rendered implementation to compare before handoff. Do not use for broad UX critique, design critique, product audits, or flow reviews; route those user-facing requests to audit."
 ---
 
@@ -7,7 +7,7 @@ description: "Internal prototype QA helper. Use only after a Product Design prot
 
 Use this internal helper to compare a prototype's source design against the rendered implementation before handoff.
 
-Do not use this skill for broad UX critique, design critique, product audits, or flow reviews. Use [audit](../audit/SKILL.md) for those user-facing requests.
+Do not use this skill for broad UX critique, design critique, product audits, or flow reviews. Use [audit](../product-design-audit/SKILL.md) for those user-facing requests.
 
 Use this skill before every Product Design build handoff.
 
@@ -51,7 +51,7 @@ A later pass must identify the earlier findings, the fixes made, and the post-fi
    - For Figma, use design context and screenshot tools when available.
    - For Product Design `mobile-app` template implementations, capture the app viewport itself, not the whole browser page, desktop canvas, or surrounding phone stage. Use `data-testid="device-screen"` / `[data-phone-screen]` for content-only comparisons; use `data-testid="phone-frame"` only when the source visual includes the device bezel.
    - Before capturing a `mobile-app` template, run `npm run check:runtime`. Treat a failure as blocking. Do not bypass the check or accept a rasterized or duplicated status bar, device bezel, or home indicator as app content.
-   - For web/app implementations, follow the Browser Choice rule in [index](../index/SKILL.md#browser-choice). In ChatGPT Work Mode, follow the active build skill's "Previewing prototypes in ChatGPT Work Mode" section before opening a local implementation. Then capture screenshots at the intended viewport.
+   - For web/app implementations, follow the Browser Choice rule in [index](../product-design/SKILL.md#browser-choice). In ChatGPT Work Mode, follow the active build skill's "Previewing prototypes in ChatGPT Work Mode" section before opening a local implementation. Then capture screenshots at the intended viewport.
    - Capture additional states when relevant: mobile/desktop, hover/focus/active, empty/loading/error, dark/light, and key responsive breakpoints.
    - Save paths or URLs for screenshots when available so findings can cite evidence.
    - Capturing screenshots is not enough. Put the source image and the implementation screenshot together in the same comparison input before judging.

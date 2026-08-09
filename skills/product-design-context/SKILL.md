@@ -1,5 +1,5 @@
 ---
-name: get-context
+name: product-design-context
 description: "Mandatory design-brief gate for clarifying the product and outcome. Use before ideation, image-to-code builds, redesigns, or product UI work to clarify missing product information and play back the brief before proceeding."
 ---
 
@@ -20,12 +20,12 @@ Hard boundary: do not implement UI, scaffold a prototype, start a server, or cre
 
 ## Critical Overrides
 
-- Refer to the Plugin router [$index](../index/SKILL.md) before proceeding.
+- Refer to the Plugin router [$product-design](../product-design/SKILL.md) before proceeding.
 - Follow [$critical-overrides](../../references/critical-overrides.md).
 
 ## User Context
 
-Before starting, load [$user-context](../user-context/SKILL.md) and run its preflight script when local shell access is available.
+Before starting, load [$product-design-user-context](../product-design-user-context/SKILL.md) and run its preflight script when local shell access is available.
 
 Use saved product URLs, Figma files, screenshots, reference images, codebase paths, Storybook, tokens, design systems, brand assets, component refs, browser preferences, and share targets as grounding material when relevant.
 
@@ -35,7 +35,7 @@ Do not inspect every saved reference. Inspect only what the current task needs.
 
 1. When the next workflow is already clear, read that skill before sending the brief playback. Do not only name a skill you have not read.
 
-2. Before executing `$ideate`, `$url-to-code`, or `$image-to-code`, play back the minimum brief and any defaults in one pithy user-visible note.
+2. Before executing `$product-design-ideate`, `$product-design-url-to-code`, or `$product-design-image-to-code`, play back the minimum brief and any defaults in one pithy user-visible note.
 
 3. If the target and intended user outcome are clear, continue to the next workflow in the same turn. Do not wait for explicit confirmation. If the user provides feedback, incorporate it and course-correct.
 
