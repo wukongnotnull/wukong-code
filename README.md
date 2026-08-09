@@ -184,7 +184,7 @@ workflow. Automatic selection is advisory rather than guaranteed.
 | Language | Status | Implementation | Testing | Debugging | Review | Verification | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Go | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-07-22-go-language-guidance.md) |
-| Java | Planned | — | — | — | — | — | — |
+| Java | Experimental | — | — | — | — | — | — |
 | TypeScript | Planned | — | — | — | — | — | — |
 | Swift | Planned | — | — | — | — | — | — |
 | Rust | Experimental | — | — | — | — | — | — |

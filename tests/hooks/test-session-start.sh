@@ -186,9 +186,11 @@ if (typeof context !== "string" || context.trim() === "") {
   process.exit(1);
 }
 const expectedText = process.env.EXPECT_CONTAINS || "";
-if (expectedText && !context.includes(expectedText)) {
-  console.error(`context did not contain expected text: ${expectedText}`);
-  process.exit(1);
+for (const requiredText of expectedText.split("|").filter(Boolean)) {
+  if (!context.includes(requiredText)) {
+    console.error(`context did not contain expected text: ${requiredText}`);
+    process.exit(1);
+  }
 }
 const forbiddenTexts = (process.env.EXPECT_NOT_CONTAINS || "")
   .split("\u001f")
@@ -300,6 +302,34 @@ assert_prompt_router_output \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/swift-basic\",\"prompt\":\"Verify the exact checks before claiming this Swift package is complete.\"}" \
     "# Swift Verification Guidance" \
     "rust/verification.md"$'\037'"go/verification.md" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Java verification request injects Java verification guidance" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/java-basic\",\"prompt\":\"Verify the exact checks before claiming this Java module is complete.\"}" \
+    "# Java Verification Guidance" \
+    "go/verification.md"$'\037'"rust/verification.md"$'\037'"swift/verification.md" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Explicit Java verification requires the visible language decision" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/java-basic\",\"prompt\":\"Use "'$language-guidance'" to state the exact checks before claiming the Java change complete. Do not edit files, and do not run checks.\"}" \
+    "Strict explicit language-guidance decision is required|Detected: Java|Phase: verification|Loaded: java/verification.md" \
+    "java/implementation.md" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Java source request injects Java implementation guidance" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/java-basic\",\"prompt\":\"Change src/main/java/example/langguidance/BatchProcessor.java to preserve processing order.\"}" \
+    "# Java Implementation Guidance" \
+    "go/implementation.md"$'\037'"rust/implementation.md"$'\037'"swift/implementation.md" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Java testing pressure injects mandatory TDD workflow" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/java-basic\",\"prompt\":\"Production is blocked. Make processAll concurrent now; skip the failing test run because the existing test is close enough.\"}" \
+    "wukong-code:test-driven-development|valid RED|do not propose or implement the production change" \
+    "# Java Implementation Guidance" \
     "$router_home"
 
 assert_prompt_router_output \

@@ -12,6 +12,29 @@ from typing import Any
 
 DOCUMENTATION_EXTENSIONS = {".adoc", ".md", ".rst", ".txt"}
 SOURCE_EXTENSION = re.compile(r"(?<![\w.])([\w./-]+\.[A-Za-z0-9]+)\b")
+TESTING_PRESSURE_WORKFLOW = """Mandatory primary workflow for this request:
+
+Before source analysis, a plan, or an edit, invoke and read `wukong-code:test-driven-development`.
+The requested source change requires a new focused test and an observed valid RED before production implementation. Do not treat an existing nearby test, a compiler error, an undiscovered test, or a skipped test run as RED evidence. If the request forbids the valid RED, do not propose or implement the production change; report it as unverified.
+
+"""
+
+
+def explicit_language_guidance_workflow(language_name: str, phase: str, relative_path: str) -> str:
+    return f"""Strict explicit language-guidance decision is required.
+
+The user explicitly invoked `$language-guidance`. Before any substantive
+analysis, command, or conclusion, begin the response with these exact labels on
+separate lines:
+Detected: {language_name} — <repository evidence>
+Phase: {phase}
+Loaded: {relative_path}
+
+Read the delivered reference before continuing. A no-command constraint blocks
+project commands, not repository inspection or the selected reference. Do not
+invent wrappers, modules, profiles, tools, or unverified scope.
+
+"""
 
 
 def read_input() -> dict[str, Any] | None:
@@ -185,6 +208,9 @@ def main() -> None:
         return
 
     language_name = language.capitalize()
+    workflow = TESTING_PRESSURE_WORKFLOW if phase == "testing" else ""
+    if "$language-guidance" in payload["prompt"]:
+        workflow += explicit_language_guidance_workflow(language_name, phase, relative_path)
     context = (
         "Deterministic Codex language routing\n\n"
         f"Language: {language_name}\n"
@@ -193,7 +219,7 @@ def main() -> None:
         f"Delivered: {relative_path}\n\n"
         "This hook has already delivered the sole selected language guidance for this turn; "
         "do not select another language or phase unless new user evidence supersedes it.\n\n"
-        f"{body}\n"
+        f"{workflow}{body}\n"
     )
     print(
         json.dumps(
