@@ -80,12 +80,13 @@ EXCLUDES=(
   "/tmp/"
 )
 
-# The flattened Product Design integration needs two root helpers at runtime.
+# The flattened Product Design integration needs three root helpers at runtime.
 # These ordered include rules must be evaluated before the /scripts/***
 # exclusion so no other repository-maintenance script enters the Codex plugin.
 ROOT_SCRIPT_INCLUDES=(
   "/scripts/"
   "/scripts/bootstrap-prototype.mjs"
+  "/scripts/check-product-design-import.mjs"
   "/scripts/check-sites-starter-contract.mjs"
 )
 

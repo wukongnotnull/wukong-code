@@ -236,7 +236,10 @@ scripts, and web/mobile starter templates are packaged with the root plugin.
 This domain-specific addition is local only and must not be submitted as a
 Wukong Code upstream core contribution. The imported Product Design material
 is MIT-licensed by OpenAI; its provenance and required copyright/license text
-are preserved in `product-design.lock.json` and `THIRD_PARTY_NOTICES.md`.
+are preserved in `product-design.lock.json` and `THIRD_PARTY_NOTICES.md`. Run
+`node scripts/check-product-design-import.mjs` to verify the exact integrated
+content against the lock, or add `--print` after a reviewed upstream refresh to
+calculate the replacement digest.
 
 ## Philosophy
 

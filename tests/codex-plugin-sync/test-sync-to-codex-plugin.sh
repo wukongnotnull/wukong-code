@@ -189,6 +189,7 @@ write_upstream_fixture() {
 
     cp "$SYNC_SCRIPT_SOURCE" "$repo/scripts/sync-to-codex-plugin.sh"
     printf 'bootstrap fixture\n' > "$repo/scripts/bootstrap-prototype.mjs"
+    printf 'integrity fixture\n' > "$repo/scripts/check-product-design-import.mjs"
     printf 'contract fixture\n' > "$repo/scripts/check-sites-starter-contract.mjs"
     printf 'source-only fixture\n' > "$repo/scripts/release-local.sh"
 
@@ -308,6 +309,7 @@ EOF
         hooks/session-start-codex \
         package.json \
         scripts/bootstrap-prototype.mjs \
+        scripts/check-product-design-import.mjs \
         scripts/check-sites-starter-contract.mjs \
         scripts/release-local.sh \
         scripts/sync-to-codex-plugin.sh \
@@ -419,6 +421,7 @@ EOF
     chmod +x "$repo/plugins/wukong-code/hooks/session-start" "$repo/plugins/wukong-code/hooks/session-start-codex" "$repo/plugins/wukong-code/hooks/run-hook.cmd"
 
     printf 'bootstrap fixture\n' > "$repo/plugins/wukong-code/scripts/bootstrap-prototype.mjs"
+    printf 'integrity fixture\n' > "$repo/plugins/wukong-code/scripts/check-product-design-import.mjs"
     printf 'contract fixture\n' > "$repo/plugins/wukong-code/scripts/check-sites-starter-contract.mjs"
 
     cat > "$repo/plugins/wukong-code/skills/example/SKILL.md" <<'EOF'
@@ -444,6 +447,7 @@ EOF
         plugins/wukong-code/hooks/session-start \
         plugins/wukong-code/hooks/session-start-codex \
         plugins/wukong-code/scripts/bootstrap-prototype.mjs \
+        plugins/wukong-code/scripts/check-product-design-import.mjs \
         plugins/wukong-code/scripts/check-sites-starter-contract.mjs \
         plugins/wukong-code/skills/example/agents/openai.yaml \
         plugins/wukong-code/skills/example/SKILL.md \
@@ -671,6 +675,7 @@ main() {
     assert_contains "$preview_section" "hooks/session-start-codex" "Preview includes Codex session-start hook"
     assert_contains "$preview_section" "hooks/run-hook.cmd" "Preview includes hook command wrapper"
     assert_contains "$preview_section" "scripts/bootstrap-prototype.mjs" "Preview includes Product Design bootstrap helper"
+    assert_contains "$preview_section" "scripts/check-product-design-import.mjs" "Preview includes Product Design integrity helper"
     assert_contains "$preview_section" "scripts/check-sites-starter-contract.mjs" "Preview includes Product Design contract helper"
     assert_not_contains "$preview_section" "scripts/release-local.sh" "Preview excludes unrelated root scripts"
     assert_not_contains "$preview_section" "scripts/sync-to-codex-plugin.sh" "Preview excludes the sync script itself"

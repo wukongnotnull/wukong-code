@@ -27,6 +27,7 @@ EXPECTED_SHARED_FILES=(
   references/product-design-host-capabilities.md
   references/wukong-product-design-composition.md
   scripts/bootstrap-prototype.mjs
+  scripts/check-product-design-import.mjs
   scripts/check-sites-starter-contract.mjs
   templates/prototype/package.json
   templates/mobile-app/package.json
@@ -173,6 +174,30 @@ expected = {
 for key, value in expected.items():
     if lock.get(key) != value:
         raise SystemExit(f"product-design.lock.json {key!r} must equal {value!r}")
+
+expected_imported_roots = [
+    "skills/product-design",
+    "skills/product-design-audit",
+    "skills/product-design-context",
+    "skills/product-design-design-qa",
+    "skills/product-design-ideate",
+    "skills/product-design-image-to-code",
+    "skills/product-design-research",
+    "skills/product-design-share",
+    "skills/product-design-url-to-code",
+    "skills/product-design-user-context",
+    "references/communication-protocol.md",
+    "references/critical-overrides.md",
+    "references/existing-codebase-edits.md",
+    "references/local-prototype-preflight.md",
+    "references/product-design-host-capabilities.md",
+    "references/wukong-product-design-composition.md",
+    "scripts/bootstrap-prototype.mjs",
+    "scripts/check-sites-starter-contract.mjs",
+    "templates",
+]
+if lock.get("imported_roots") != expected_imported_roots:
+    raise SystemExit("product-design.lock.json must use the exact imported source boundary")
 PY
 
 python3 - "$REPO_ROOT" <<'PY'
@@ -235,6 +260,8 @@ if grep -Fq "includes no repository license file" \
   "$REPO_ROOT/docs/wukong-code/specs/2026-08-09-1744-product-design-core-integration-design.md"; then
   fail "integration design still claims the Product Design source has no license"
 fi
+
+node "$REPO_ROOT/scripts/check-product-design-import.mjs" --root "$REPO_ROOT"
 
 for import_root in skills references scripts templates; do
   if find "$REPO_ROOT/$import_root" -name .DS_Store -print -quit | grep -q .; then

@@ -40,7 +40,7 @@ Options:
   -h, --help               Show this help.
 
 The archive is rootless: .codex-plugin/, assets/, skills/, references/,
-templates/, the two Product Design runtime scripts, the Codex SessionStart hook
+templates/, the three Product Design support scripts, the Codex SessionStart hook
 files, README.md, LICENSE, THIRD_PARTY_NOTICES.md, product-design.lock.json, and
 CODE_OF_CONDUCT.md sit at the archive root. Source-only repo files,
 cross-harness hook configuration, tests, docs, and other harness manifests are
@@ -250,6 +250,7 @@ git -C "$REPO_ROOT" archive --format=tar "$REF" -- \
   product-design.lock.json \
   references \
   scripts/bootstrap-prototype.mjs \
+  scripts/check-product-design-import.mjs \
   scripts/check-sites-starter-contract.mjs \
   skills \
   templates \
@@ -365,7 +366,7 @@ unexpected_paths="$(
 )"
 unexpected_scripts="$(
   printf '%s\n' "$archive_paths" |
-    awk '$0 ~ /^scripts\// && $0 != "scripts/" && $0 != "scripts/bootstrap-prototype.mjs" && $0 != "scripts/check-sites-starter-contract.mjs"'
+    awk '$0 ~ /^scripts\// && $0 != "scripts/" && $0 != "scripts/bootstrap-prototype.mjs" && $0 != "scripts/check-product-design-import.mjs" && $0 != "scripts/check-sites-starter-contract.mjs"'
 )"
 if [[ -n "$unexpected_paths" || -n "$unexpected_scripts" ]]; then
   printf '%s\n' "$unexpected_paths" "$unexpected_scripts" | sed '/^$/d; s/^/  /' >&2

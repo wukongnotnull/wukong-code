@@ -207,15 +207,23 @@ assert_contains "$archive_paths" "assets/app-icon.png" "archive includes app ico
 assert_contains "$archive_paths" "assets/wukong-code-small.svg" "archive includes composer icon"
 assert_contains "$archive_paths" "references/critical-overrides.md" "archive includes Product Design shared references"
 assert_contains "$archive_paths" "scripts/bootstrap-prototype.mjs" "archive includes Product Design bootstrap script"
+assert_contains "$archive_paths" "scripts/check-product-design-import.mjs" "archive includes Product Design integrity check"
 assert_contains "$archive_paths" "scripts/check-sites-starter-contract.mjs" "archive includes Product Design template contract check"
 assert_contains "$archive_paths" "templates/prototype/package.json" "archive includes Product Design web starter"
 assert_contains "$archive_paths" "templates/mobile-app/package.json" "archive includes Product Design mobile starter"
 assert_contains "$archive_paths" "product-design.lock.json" "archive includes Product Design provenance lock"
 assert_contains "$archive_paths" "THIRD_PARTY_NOTICES.md" "archive includes third-party license boundary"
 
+if integrity_output="$(node "$extracted/scripts/check-product-design-import.mjs" --root "$extracted" 2>&1)"; then
+  pass "packaged Product Design content matches its integrity lock"
+else
+  fail "packaged Product Design content matches its integrity lock"
+  printf '%s\n' "$integrity_output" | sed 's/^/    /'
+fi
+
 unexpected_product_design_scripts="$(
   printf '%s\n' "$archive_paths" |
-    awk '$0 ~ /^scripts\// && $0 != "scripts/bootstrap-prototype.mjs" && $0 != "scripts/check-sites-starter-contract.mjs"'
+    awk '$0 ~ /^scripts\// && $0 != "scripts/bootstrap-prototype.mjs" && $0 != "scripts/check-product-design-import.mjs" && $0 != "scripts/check-sites-starter-contract.mjs"'
 )"
 assert_equals "$unexpected_product_design_scripts" "" "archive excludes unrelated root scripts"
 
