@@ -225,6 +225,16 @@ status until those fields contain real evidence.
 - **writing-skills** - Create new skills following best practices (includes testing methodology)
 - **using-wukong-code** - Introduction to the skills system
 
+### Product Design (local fork integration)
+
+This local fork also bundles Product Design workflows for product brief intake,
+UX research, flow audits, visual ideation, image and URL-to-code prototypes,
+prototype QA, saved design context, and prototype sharing. These ten skills are
+imported from product-design version 0.1.52; their shared references, bootstrap
+scripts, and web/mobile starter templates are packaged with the root plugin.
+This domain-specific addition is local only and must not be submitted as a
+Wukong Code upstream core contribution.
+
 ## Philosophy
 
 - **Test-Driven Development** - Write tests first, always

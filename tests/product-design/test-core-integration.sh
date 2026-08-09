@@ -53,4 +53,20 @@ for import_root in skills references scripts templates; do
   fi
 done
 
+python3 - "$REPO_ROOT/.codex-plugin/plugin.json" <<'PY'
+import json
+import sys
+
+with open(sys.argv[1], encoding="utf-8") as manifest_file:
+    manifest = json.load(manifest_file)
+
+if "product-design" not in manifest.get("keywords", []):
+    raise SystemExit("root plugin manifest is missing the product-design keyword")
+PY
+
+grep -Fq "Product Design (local fork integration)" "$REPO_ROOT/README.md" ||
+  fail "README is missing the Product Design local-fork section"
+grep -Fq "product-design version 0.1.52" "$REPO_ROOT/README.md" ||
+  fail "README is missing the imported Product Design source version"
+
 echo "Product Design skill graph is complete."
