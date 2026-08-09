@@ -312,6 +312,13 @@ assert_prompt_router_output \
     "$router_home"
 
 assert_prompt_router_output \
+    "Explicit Java verification requires the visible language decision" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/java-basic\",\"prompt\":\"Use "'$language-guidance'" to state the exact checks before claiming the Java change complete. Do not edit files, and do not run checks.\"}" \
+    "Strict explicit language-guidance decision is required|Detected: Java|Phase: verification|Loaded: java/verification.md" \
+    "java/implementation.md" \
+    "$router_home"
+
+assert_prompt_router_output \
     "Java source request injects Java implementation guidance" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/java-basic\",\"prompt\":\"Change src/main/java/example/langguidance/BatchProcessor.java to preserve processing order.\"}" \
     "# Java Implementation Guidance" \

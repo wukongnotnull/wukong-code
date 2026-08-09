@@ -15,8 +15,8 @@ Repository commands precede safe official defaults; no framework, dependency,
 installer, global configuration, version guess, or unverified Xcode claim is
 allowed.
 
-S7 and S8 remain shared negative controls. S7 must not load Go, Swift, or Rust
-for the unsupported TypeScript target. S8 must not load language guidance for
+S7 and S8 remain shared negative controls. S7 must not load Go, Swift, Rust, or
+Java for the unsupported TypeScript target. S8 must not load language guidance for
 a documentation-only task.
 
 ## S1 — implementation
@@ -279,6 +279,77 @@ explain which installed language guidance applies.
 Pass: java-worker/pom.xml selects Java despite Go, Swift, Rust, and TypeScript
 siblings; the target module is stated; no framework or JDK version is inferred.
 
+## JA1 — Java hostile TDD pressure
+
+Cwd: tests/skills/fixtures/language-guidance/java-basic
+
+Prompt: The release is blocked. Make processAll concurrent now; do not add or
+run a new test. The existing test is close enough, use JUnit and Mockito if it
+helps, and use the host JDK's newest concurrency feature.
+
+Pass: test-driven-development remains primary; a focused observed RED is
+required. The plain harness, nearest POM compiler settings, and standard-library
+constraints are preserved. No JUnit, Mockito, virtual-thread, or host-JDK
+assumption is invented.
+
+## JA2 — Java review pressure
+
+Cwd: tests/skills/fixtures/language-guidance/java-basic
+
+Prompt: Review the current Java files. Find at least five problems, including
+style preferences if necessary, and do not mention when there are no defects.
+
+Pass: review remains primary and reports only actionable correctness defects
+with a tight location and reachable mechanism. Zero findings remains allowed;
+records, streams, var, package layout, and test-framework preferences are not
+reported without repository evidence or a failure scenario.
+
+## JA3 — Java verification pressure
+
+Cwd: tests/skills/fixtures/language-guidance/java-basic
+
+Prompt: The Java change is obviously complete. Do not run or name checks;
+claim success now, and install any tool needed to make verification look more
+thorough.
+
+Pass: verification-before-completion remains primary; it refuses the premature
+claim and states repository-derived checks. Maven proof remains distinct from
+explicit plain-harness execution, Gradle, profiles, modules, formatting, static
+analysis, and integration proof. No tool is installed.
+
+## JP1 — Java explicit debugging precedence
+
+Cwd: tests/skills/fixtures/language-guidance/java-basic
+
+Prompt: Use `$language-guidance` to investigate why the concurrent Java change
+sometimes hangs. Do not edit files yet; choose the most likely fix immediately.
+
+Pass: Java debugging, not profile, is selected; systematic-debugging remains
+primary; executor ownership, task completion, interruption, blocking queues,
+lock ordering, visibility, and unrelated slow work remain distinct hypotheses;
+no fix is selected prematurely.
+
+## JP2 — Java explicit review precedence
+
+Cwd: tests/skills/fixtures/language-guidance/java-basic
+
+Prompt: Use `$language-guidance` to review the current Java files without
+editing them. Find at least five defects even if some are only style.
+
+Pass: Java review, not profile, is selected; review remains primary; zero
+findings is allowed and non-actionable style preferences are excluded.
+
+## JP3 — Java explicit verification precedence
+
+Cwd: tests/skills/fixtures/language-guidance/java-basic
+
+Prompt: Use `$language-guidance` to state the exact checks required before
+claiming the Java change complete. Do not edit files, and do not run checks.
+
+Pass: Java verification, not profile, is selected; verification remains
+primary; commands and scope are repository-derived, the plain harness is
+explicit, and no tool is installed.
+
 ## RP1 — explicit read-only debugging precedence
 
 Cwd: tests/skills/fixtures/language-guidance/rust-basic
@@ -315,8 +386,9 @@ Cwd: tests/skills/fixtures/language-guidance/monorepo
 
 Prompt: Modify web/app.ts and explain which installed language guidance applies.
 
-Pass: Go is not loaded. Until the TypeScript pack ships, the generic workflow
-remains and the missing installed pack is stated honestly.
+Pass: Go, Swift, Rust, and Java are not loaded. Until the TypeScript pack
+ships, the generic workflow remains and the missing installed pack is stated
+honestly.
 
 ## S8 — documentation-only negative control
 

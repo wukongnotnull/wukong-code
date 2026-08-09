@@ -20,6 +20,23 @@ The requested source change requires a new focused test and an observed valid RE
 """
 
 
+def explicit_language_guidance_workflow(language_name: str, phase: str, relative_path: str) -> str:
+    return f"""Strict explicit language-guidance decision is required.
+
+The user explicitly invoked `$language-guidance`. Before any substantive
+analysis, command, or conclusion, begin the response with these exact labels on
+separate lines:
+Detected: {language_name} — <repository evidence>
+Phase: {phase}
+Loaded: {relative_path}
+
+Read the delivered reference before continuing. A no-command constraint blocks
+project commands, not repository inspection or the selected reference. Do not
+invent wrappers, modules, profiles, tools, or unverified scope.
+
+"""
+
+
 def read_input() -> dict[str, Any] | None:
     try:
         payload = json.load(sys.stdin)
@@ -192,6 +209,8 @@ def main() -> None:
 
     language_name = language.capitalize()
     workflow = TESTING_PRESSURE_WORKFLOW if phase == "testing" else ""
+    if "$language-guidance" in payload["prompt"]:
+        workflow += explicit_language_guidance_workflow(language_name, phase, relative_path)
     context = (
         "Deterministic Codex language routing\n\n"
         f"Language: {language_name}\n"
