@@ -148,40 +148,62 @@ The GREEN implementation fixes capacity at two workers for this fixture and
 records interruption until its termination loop has finished cleanup, then
 restores it. This is still fixture evidence, not a release behavior cohort.
 
-## Frozen-candidate behavior gate: stopped on TDD failure
+## Frozen-candidate behavior gate: repaired and completed
 
-Candidate `ce48d33` was installed as the evaluator-visible local marketplace
-artifact. To avoid evaluating a completed implementation against a request to
-make it concurrent, the evaluation workspace was an independent, clean Git
-repository populated from the pre-concurrency fixture revision `f1993b4`.
-Each run was ephemeral and read-only with `codex-cli 0.146.0`,
-`gpt-5.6-terra`, low reasoning effort, and the hook-trust bypass used only for
-the inspected local artifact.
+The first frozen probe correctly exposed a blocker: it accepted a skip-RED
+instruction and proposed a common-pool implementation. That matrix was
+stopped rather than counted as a partial pass. The approved router repair
+(`a83e3da`) injects the TDD requirement before testing guidance. A later,
+properly escaped explicit `$language-guidance` regression exposed a second
+issue: the hook delivered the reference but did not make the strict visible
+decision authoritative, and wrapper examples could be mistaken for configured
+commands.
 
-The first implementation probe planned a bounded standard-library executor,
-input-indexed futures, deterministic error selection, a `finally` shutdown,
-and latch-based tests. It is a focused retrieval observation, not a cohort
-result. The required TDD-pressure scenario then failed decisively: session
-`019fc0ee-3ee4-7f32-b0ff-3e472dc5bb62` accepted the instruction to skip RED,
-did not select or announce TDD, and proposed `CompletableFuture.supplyAsync`
-on the common pool. It therefore omitted a valid failing test and introduced
-an unbounded, repository-unowned executor policy. This is a target failure;
-the ordinary/pressure matrix was stopped rather than treating partial runs as
-publication evidence.
+Final candidate `87e05ea` adds a static RED/GREEN control and requires the
+explicit `Detected`, `Phase`, and `Loaded` decision before substantive work.
+Java verification now requires repository inspection before naming commands
+and requires an explicit `main` harness invocation when Maven discovers no
+tests.
 
-The failure is in automatic process-skill adherence, not a missing Java
-reference: the deterministic prompt router delivered Java testing guidance for
-the prompt shape. Correcting it would require a cross-language workflow or
-router change, which is outside this Java-pack-only candidate and needs a
-separate scoped decision and fresh regression evaluation.
+The final artifact was installed from the local worktree marketplace. Each
+session used an independently initialized `f1993b4` fixture baseline,
+ephemeral read-only `codex exec`, `gpt-5.6-sol` at low reasoning effort, and
+hook-trust bypass only for the local artifact. Four calls that had no final
+response were inconclusive and replaced; none was scored.
+
+| Cohort | Runs | Result |
+| --- | ---: | --- |
+| J1 implementation; J2 skip-RED pressure | 10 | PASS |
+| J3 debugging; J4 review; J5 verification | 6 | PASS |
+| J6 nearest marker; S7 TypeScript; S8 documentation | 15 | PASS |
+| JA1 TDD/dependency/JDK; JA2 review; JA3 verification pressure | 9 | PASS |
+| JP1 debugging; JP2 review; JP3 verification precedence | 6 | PASS |
+| Go and Swift TDD router regressions | 2 | PASS |
+
+Final behavior total: **48/48 PASS**. The raw cohort summaries, including the
+invalidated shell-corrupted explicit prompt and replaced inconclusive calls,
+are in `docs/wukong-code/evals/raw/2026-08-09-explicit-verification-routing-fix.md`.
+
+## Final regression and packaging checks
+
+On the final candidate, the Maven fixture passed `clean test`, explicit
+`BatchProcessorTest.main`, and `clean` under both Corretto 17.0.6 and OpenJDK
+22.0.1. Surefire's reported zero tests was retained as build evidence only;
+the explicit harness exit code was the behavior proof. The Gradle 8.9 fixture
+passed offline `clean check` and `clean` with JDK 17. The same Gradle command
+cannot load macOS native-platform libraries under the restricted sandbox, but
+passed unchanged outside that boundary, identifying sandbox native-library
+loading rather than a project build failure.
+
+The final candidate also passed `tests/skills/test-language-guidance.sh`,
+`tests/hooks/test-session-start.sh`, `tests/skills/test-skill-slim-gates.sh`,
+`tests/codex/test-package-codex-plugin.sh`, and `git diff --check`.
 
 ## Limitations and release status
 
-This record covers static controls, targeted fresh-context probes, runtime
-fixtures, and a stopped behavior gate—not the repeated 48-session
-ordinary/adversarial/regression matrix required for a published language pack.
-No Java-aware human has reviewed the reference content. The local marketplace
-must also be restored to remote `dev` before handoff. Accordingly, the registry
-is only `experimental` and README continues to list Java as `Planned`.
+Static controls, fixture/runtime checks, and the 48-session behavior gate now
+pass. No Java-aware human has reviewed the reference content. Java therefore
+remains experimental and README remains `Planned` until that review occurs.
+The local marketplace must be restored to remote `dev` before handoff.
 
 Frameworks or third-party preferences introduced: none.
