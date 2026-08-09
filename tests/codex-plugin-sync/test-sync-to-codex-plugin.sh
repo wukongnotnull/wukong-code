@@ -188,6 +188,9 @@ write_upstream_fixture() {
     fi
 
     cp "$SYNC_SCRIPT_SOURCE" "$repo/scripts/sync-to-codex-plugin.sh"
+    printf 'bootstrap fixture\n' > "$repo/scripts/bootstrap-prototype.mjs"
+    printf 'contract fixture\n' > "$repo/scripts/check-sites-starter-contract.mjs"
+    printf 'source-only fixture\n' > "$repo/scripts/release-local.sh"
 
     cat > "$repo/package.json" <<EOF
 {
@@ -304,6 +307,9 @@ EOF
         hooks/session-start \
         hooks/session-start-codex \
         package.json \
+        scripts/bootstrap-prototype.mjs \
+        scripts/check-sites-starter-contract.mjs \
+        scripts/release-local.sh \
         scripts/sync-to-codex-plugin.sh \
         skills/example/SKILL.md
     git -C "$repo" add -f .private-journal/keep.txt
@@ -361,6 +367,7 @@ write_synced_destination_fixture() {
         "$repo/plugins/wukong-code/.private-journal" \
         "$repo/plugins/wukong-code/assets" \
         "$repo/plugins/wukong-code/hooks" \
+        "$repo/plugins/wukong-code/scripts" \
         "$repo/plugins/wukong-code/skills/example/agents" \
         "$repo/plugins/wukong-code/skills/example"
 
@@ -411,6 +418,9 @@ echo run-hook fixture
 EOF
     chmod +x "$repo/plugins/wukong-code/hooks/session-start" "$repo/plugins/wukong-code/hooks/session-start-codex" "$repo/plugins/wukong-code/hooks/run-hook.cmd"
 
+    printf 'bootstrap fixture\n' > "$repo/plugins/wukong-code/scripts/bootstrap-prototype.mjs"
+    printf 'contract fixture\n' > "$repo/plugins/wukong-code/scripts/check-sites-starter-contract.mjs"
+
     cat > "$repo/plugins/wukong-code/skills/example/SKILL.md" <<'EOF'
 # Example Skill
 
@@ -433,6 +443,8 @@ EOF
         plugins/wukong-code/hooks/run-hook.cmd \
         plugins/wukong-code/hooks/session-start \
         plugins/wukong-code/hooks/session-start-codex \
+        plugins/wukong-code/scripts/bootstrap-prototype.mjs \
+        plugins/wukong-code/scripts/check-sites-starter-contract.mjs \
         plugins/wukong-code/skills/example/agents/openai.yaml \
         plugins/wukong-code/skills/example/SKILL.md \
         plugins/wukong-code/.private-journal/keep.txt
@@ -658,6 +670,10 @@ main() {
     assert_contains "$preview_section" "hooks/session-start" "Preview includes session-start hook"
     assert_contains "$preview_section" "hooks/session-start-codex" "Preview includes Codex session-start hook"
     assert_contains "$preview_section" "hooks/run-hook.cmd" "Preview includes hook command wrapper"
+    assert_contains "$preview_section" "scripts/bootstrap-prototype.mjs" "Preview includes Product Design bootstrap helper"
+    assert_contains "$preview_section" "scripts/check-sites-starter-contract.mjs" "Preview includes Product Design contract helper"
+    assert_not_contains "$preview_section" "scripts/release-local.sh" "Preview excludes unrelated root scripts"
+    assert_not_contains "$preview_section" "scripts/sync-to-codex-plugin.sh" "Preview excludes the sync script itself"
     assert_contains "$preview_section" ".private-journal/keep.txt" "Preview includes tracked ignored file"
     assert_not_contains "$preview_section" ".private-journal/leak.txt" "Preview excludes ignored untracked file"
     assert_not_contains "$preview_section" "ignored-cache/" "Preview excludes pure ignored directories"

@@ -204,6 +204,8 @@ assert_contains "$archive_paths" "scripts/bootstrap-prototype.mjs" "archive incl
 assert_contains "$archive_paths" "scripts/check-sites-starter-contract.mjs" "archive includes Product Design template contract check"
 assert_contains "$archive_paths" "templates/prototype/package.json" "archive includes Product Design web starter"
 assert_contains "$archive_paths" "templates/mobile-app/package.json" "archive includes Product Design mobile starter"
+assert_contains "$archive_paths" "product-design.lock.json" "archive includes Product Design provenance lock"
+assert_contains "$archive_paths" "THIRD_PARTY_NOTICES.md" "archive includes third-party license boundary"
 
 unexpected_product_design_scripts="$(
   printf '%s\n' "$archive_paths" |

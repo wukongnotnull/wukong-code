@@ -39,10 +39,12 @@ Options:
   --keep-stage             Print and keep the temporary staging directory.
   -h, --help               Show this help.
 
-The archive is rootless: .codex-plugin/, assets/, skills/, the Codex SessionStart
-hook files, README.md, LICENSE, and CODE_OF_CONDUCT.md sit at the archive root.
-Source-only repo files, cross-harness hook configuration, tests, docs, and other
-harness manifests are intentionally not shipped.
+The archive is rootless: .codex-plugin/, assets/, skills/, references/,
+templates/, the two Product Design runtime scripts, the Codex SessionStart hook
+files, README.md, LICENSE, THIRD_PARTY_NOTICES.md, product-design.lock.json, and
+CODE_OF_CONDUCT.md sit at the archive root. Source-only repo files,
+cross-harness hook configuration, tests, docs, and other harness manifests are
+intentionally not shipped.
 EOF
 }
 
@@ -238,12 +240,14 @@ git -C "$REPO_ROOT" archive --format=tar "$REF" -- \
   CODE_OF_CONDUCT.md \
   LICENSE \
   README.md \
+  THIRD_PARTY_NOTICES.md \
   assets \
   hooks/hooks-codex.json \
   hooks/run-hook.cmd \
   hooks/session-start \
   hooks/user-prompt-submit \
   hooks/user-prompt-submit.py \
+  product-design.lock.json \
   references \
   scripts/bootstrap-prototype.mjs \
   scripts/check-sites-starter-contract.mjs \

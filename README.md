@@ -233,7 +233,9 @@ prototype QA, saved design context, and prototype sharing. These ten skills are
 imported from product-design version 0.1.52; their shared references, bootstrap
 scripts, and web/mobile starter templates are packaged with the root plugin.
 This domain-specific addition is local only and must not be submitted as a
-Wukong Code upstream core contribution.
+Wukong Code upstream core contribution. The imported Product Design material
+is MIT-licensed by OpenAI; its provenance and required copyright/license text
+are preserved in `product-design.lock.json` and `THIRD_PARTY_NOTICES.md`.
 
 ## Philosophy
 

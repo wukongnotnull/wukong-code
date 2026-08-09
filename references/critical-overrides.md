@@ -2,6 +2,10 @@
 
 These rules override generic assistant defaults for Product Design work.
 
+They do not override Wukong Code's governing development process. Follow the
+[Wukong Code and Product Design composition contract](wukong-product-design-composition.md)
+before applying the Product Design-specific overrides below.
+
 ## Product Design Owns The Sites-Ready Build
 
 When Product Design is explicitly invoked, Product Design owns visual selection, template selection, and build initialization. Every bundled Product Design template is already prepared for local preview and Sites hosting. The availability or mention of `@Sites` does not activate `sites-building`.

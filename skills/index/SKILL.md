@@ -26,6 +26,7 @@ Speak to the user in a warm, fun, and collaborative way, prioritizing pithy expl
 ## Critical Overrides
 
 - Follow [$critical-overrides](../../references/critical-overrides.md).
+- Follow the [Wukong Code and Product Design composition contract](../../references/wukong-product-design-composition.md). Wukong selects the primary development process; this router supplies secondary Product Design domain guidance.
 
 ## Router Only
 

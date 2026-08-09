@@ -10,11 +10,11 @@ Use this before creating a new local prototype.
 - Create the app with the bootstrap script. Resolve the script path relative to this file, then run it with an absolute path:
 
 ```bash
-node /absolute/path/to/plugins/product-design/scripts/bootstrap-prototype.mjs --dest /absolute/path/to/new-prototype
+node /absolute/path/to/wukong-code/scripts/bootstrap-prototype.mjs --dest /absolute/path/to/new-prototype
 ```
 
 ```bash
-node /absolute/path/to/plugins/product-design/scripts/bootstrap-prototype.mjs --template mobile-app --dest /absolute/path/to/new-mobile-prototype
+node /absolute/path/to/wukong-code/scripts/bootstrap-prototype.mjs --template mobile-app --dest /absolute/path/to/new-mobile-prototype
 ```
 
 - For `mobile-app`, run `npm ci --prefer-offline --no-audit --no-fund` from the generated project root. For the web `prototype` template, run `npm install --prefer-offline --no-audit --no-fund`. Use the environment's configured npm cache.

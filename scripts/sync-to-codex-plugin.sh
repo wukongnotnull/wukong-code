@@ -75,9 +75,18 @@ EXCLUDES=(
   "/docs/"
   "/evals/"
   "/lib/"
-  "/scripts/"
+  "/scripts/***"
   "/tests/"
   "/tmp/"
+)
+
+# The flattened Product Design integration needs two root helpers at runtime.
+# These ordered include rules must be evaluated before the /scripts/***
+# exclusion so no other repository-maintenance script enters the Codex plugin.
+ROOT_SCRIPT_INCLUDES=(
+  "/scripts/"
+  "/scripts/bootstrap-prototype.mjs"
+  "/scripts/check-sites-starter-contract.mjs"
 )
 
 # =============================================================================
@@ -318,6 +327,7 @@ fi
 # =============================================================================
 
 RSYNC_ARGS=(-av --delete --delete-excluded)
+for pat in "${ROOT_SCRIPT_INCLUDES[@]}"; do RSYNC_ARGS+=(--include="$pat"); done
 for pat in "${EXCLUDES[@]}"; do RSYNC_ARGS+=(--exclude="$pat"); done
 append_git_ignored_directory_excludes
 append_git_ignored_file_excludes

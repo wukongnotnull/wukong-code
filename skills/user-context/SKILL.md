@@ -55,8 +55,12 @@ If the file does not exist, continue normally unless the user asks to set up Pro
 
 When any Product Design workflow needs saved context, run:
 
+Resolve the script from the directory containing this `SKILL.md`, then invoke
+that absolute path. Do not resolve `scripts/` from the user's current working
+directory. For example:
+
 ```bash
-python3 scripts/user_context_preflight.py
+python3 /absolute/path/to/wukong-code/skills/user-context/scripts/user_context_preflight.py
 ```
 
 Use the returned saved entries as the starting context for the task.
@@ -77,8 +81,11 @@ Do not inspect the workspace, install dependencies, scaffold a prototype, genera
 
 After the user provides references to save, run:
 
+Resolve the script from the directory containing this `SKILL.md` and invoke
+its absolute path:
+
 ```bash
-python3 scripts/init_user_context.py
+python3 /absolute/path/to/wukong-code/skills/user-context/scripts/init_user_context.py
 ```
 
 Then add the references to the created `user-context.md`.

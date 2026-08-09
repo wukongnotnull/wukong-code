@@ -1,0 +1,32 @@
+{
+  "name": "product-design",
+  "version": "0.1.52",
+  "source_repository": "https://github.com/openai/role-specific-plugins",
+  "source_path": "plugins/product-design",
+  "source_license": "https://github.com/openai/role-specific-plugins/blob/main/LICENSE",
+  "license": "MIT",
+  "copyright": "Copyright (c) 2026 OpenAI",
+  "import_date": "2026-08-09",
+  "distribution": "local-only",
+  "imported_roots": [
+    "skills/audit",
+    "skills/design-qa",
+    "skills/get-context",
+    "skills/ideate",
+    "skills/image-to-code",
+    "skills/index",
+    "skills/research",
+    "skills/share",
+    "skills/url-to-code",
+    "skills/user-context",
+    "references",
+    "scripts/bootstrap-prototype.mjs",
+    "scripts/check-sites-starter-contract.mjs",
+    "templates"
+  ],
+  "local_adaptations": [
+    "Wukong process-composition contract",
+    "installed-path resolution guidance",
+    "Codex packaging and sync integration"
+  ]
+}

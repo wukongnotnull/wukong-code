@@ -30,10 +30,13 @@ contains ten skills:
 10. `user-context`
 
 The source's relative links also require its shared `references/`, `scripts/`,
-`templates/`, and selected `assets/` directories. The source package declares
-itself private and includes no repository license file. The integration will
-preserve its provenance and version in documentation, make no licensing claim,
-and will not be published or proposed upstream.
+`templates/`, and selected `assets/` directories. The downloaded package
+declares itself private and omits its repository-level license file, while the
+canonical `openai/role-specific-plugins` repository publishes Product Design
+under the MIT License. The integration will preserve the upstream copyright,
+MIT-licensed terms, provenance, and version in the packaged artifact. It will
+not be proposed upstream to Wukong Code because this remains a domain-specific
+local-fork customization.
 
 ## Target Layout
 
