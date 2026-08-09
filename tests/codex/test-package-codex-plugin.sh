@@ -164,7 +164,7 @@ assert_contains "$output" "SHA-256:" "reports archive checksum"
 extract_archive "$archive" "$extracted"
 
 archive_paths="$(list_archive "$archive" | normalize_archive_paths)"
-unexpected_pattern='(^wukong-code/|^\.agents/|package\.json$|^\.git|^\.pytest_cache|^\.ruff_cache|^scripts/|^tests/|^docs/|^evals/|^lib/|^\.claude|^\.cursor|^\.kimi|^\.opencode|^\.pi|^AGENTS\.md$|^CLAUDE\.md$|^GEMINI\.md$|^RELEASE-NOTES\.md$|^CHANGELOG\.md$)'
+unexpected_pattern='(^wukong-code/|^\.agents/|^package\.json$|^\.git|^\.pytest_cache|^\.ruff_cache|^tests/|^docs/|^evals/|^lib/|^\.claude|^\.cursor|^\.kimi|^\.opencode|^\.pi|^AGENTS\.md$|^CLAUDE\.md$|^GEMINI\.md$|^RELEASE-NOTES\.md$|^CHANGELOG\.md$)'
 assert_not_matches "$archive_paths" "$unexpected_pattern" "archive excludes source-only paths"
 assert_contains "$archive_paths" ".codex-plugin/plugin.json" "archive includes Codex manifest"
 assert_contains "$archive_paths" "hooks/hooks-codex.json" "archive includes Codex hook configuration"
@@ -199,6 +199,17 @@ language_metadata="$(read_archive_file "$archive" skills/language-guidance/agent
 assert_contains "$language_metadata" "display_name: \"Language Guidance\"" "uses source metadata"
 assert_contains "$archive_paths" "assets/app-icon.png" "archive includes app icon"
 assert_contains "$archive_paths" "assets/wukong-code-small.svg" "archive includes composer icon"
+assert_contains "$archive_paths" "references/critical-overrides.md" "archive includes Product Design shared references"
+assert_contains "$archive_paths" "scripts/bootstrap-prototype.mjs" "archive includes Product Design bootstrap script"
+assert_contains "$archive_paths" "scripts/check-sites-starter-contract.mjs" "archive includes Product Design template contract check"
+assert_contains "$archive_paths" "templates/prototype/package.json" "archive includes Product Design web starter"
+assert_contains "$archive_paths" "templates/mobile-app/package.json" "archive includes Product Design mobile starter"
+
+unexpected_product_design_scripts="$(
+  printf '%s\n' "$archive_paths" |
+    awk '$0 ~ /^scripts\// && $0 != "scripts/bootstrap-prototype.mjs" && $0 != "scripts/check-sites-starter-contract.mjs"'
+)"
+assert_equals "$unexpected_product_design_scripts" "" "archive excludes unrelated root scripts"
 
 manifest_summary="$(read_archive_file "$archive" .codex-plugin/plugin.json | python3 -c 'import json,sys; data=json.load(sys.stdin); print("\t".join([data["name"], data["version"], data["skills"], str(data.get("hooks"))]))')"
 expected_version="$(python3 -c 'import json; print(json.load(open("'"$REPO_ROOT"'/.codex-plugin/plugin.json"))["version"])')"

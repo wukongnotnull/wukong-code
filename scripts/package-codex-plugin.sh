@@ -244,7 +244,11 @@ git -C "$REPO_ROOT" archive --format=tar "$REF" -- \
   hooks/session-start \
   hooks/user-prompt-submit \
   hooks/user-prompt-submit.py \
+  references \
+  scripts/bootstrap-prototype.mjs \
+  scripts/check-sites-starter-contract.mjs \
   skills \
+  templates \
   | tar -xf - -C "$STAGE"
 
 VERSION="$(jq -r '.version // empty' "$STAGE/.codex-plugin/plugin.json")"
@@ -353,10 +357,14 @@ esac
 
 unexpected_paths="$(
   printf '%s\n' "$archive_paths" |
-    grep -E '(^wukong-code/|^\.agents/|^hooks/(hooks\.json|hooks-cursor\.json)$|package\.json$|^\.git|^\.pytest_cache|^\.ruff_cache|^scripts/|^tests/|^docs/|^evals/|^lib/|^\.claude|^\.cursor|^\.kimi|^\.opencode|^\.pi|^AGENTS\.md$|^CLAUDE\.md$|^GEMINI\.md$|^RELEASE-NOTES\.md$|^CHANGELOG\.md$)' || true
+    grep -E '(^wukong-code/|^\.agents/|^hooks/(hooks\.json|hooks-cursor\.json)$|^package\.json$|^\.git|^\.pytest_cache|^\.ruff_cache|^tests/|^docs/|^evals/|^lib/|^\.claude|^\.cursor|^\.kimi|^\.opencode|^\.pi|^AGENTS\.md$|^CLAUDE\.md$|^GEMINI\.md$|^RELEASE-NOTES\.md$|^CHANGELOG\.md$)' || true
 )"
-if [[ -n "$unexpected_paths" ]]; then
-  printf '%s\n' "$unexpected_paths" | sed 's/^/  /' >&2
+unexpected_scripts="$(
+  printf '%s\n' "$archive_paths" |
+    awk '$0 ~ /^scripts\// && $0 != "scripts/" && $0 != "scripts/bootstrap-prototype.mjs" && $0 != "scripts/check-sites-starter-contract.mjs"'
+)"
+if [[ -n "$unexpected_paths" || -n "$unexpected_scripts" ]]; then
+  printf '%s\n' "$unexpected_paths" "$unexpected_scripts" | sed '/^$/d; s/^/  /' >&2
   die "archive contains source-only paths"
 fi
 
