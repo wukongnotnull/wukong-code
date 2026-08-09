@@ -23,7 +23,9 @@ The output is not a loose opinion. The output is:
 
 ## User Context
 
-Before starting, load [$product-design-user-context](../product-design-user-context/SKILL.md) and run its preflight script when local shell access is available.
+Load [$product-design-user-context](../product-design-user-context/SKILL.md) and run its preflight script only when the user asks to use saved references or when the current request lacks the target, flow, or capture details needed to start.
+
+When an auditable screenshot or URL is supplied, do not load saved context before capture. Use the supplied evidence as the audit's source of truth.
 
 Use saved product URLs, Figma files, screenshots, reference images, codebase paths, Storybook, tokens, design systems, brand assets, component refs, browser preferences, and share targets as grounding material when relevant.
 

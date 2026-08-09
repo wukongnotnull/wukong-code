@@ -33,6 +33,17 @@ Speak to the user in a warm, fun, and collaborative way, prioritizing pithy expl
 
 This router chooses the next Product Design skill. It does not do that skill's work.
 
+## Process Selection
+
+Process selection is mandatory before focused Product Design routing.
+
+- Direct audits, research, and critique that do not change source use their
+  focused Product Design skill directly.
+- New visual directions and URL clones: load `$brainstorming` first.
+- An approved visual target or other implementation target in an identified
+  project: load `$test-driven-development` first, then the focused Product
+  Design build and QA guidance.
+
 If the user names a focused skill, read that exact skill first. Do not replace it with a related skill.
 
 When a request matches `$product-design-user-context`, `$product-design-context`, `$product-design-research`, `$product-design-ideate`, `$product-design-image-to-code`, `$product-design-url-to-code`, `$product-design-audit`, `$product-design-design-qa`, or `$product-design-share`, load the focused skill and follow it.
@@ -98,13 +109,17 @@ Use [$product-design-user-context](../product-design-user-context/SKILL.md) when
 - Remember a Product Design preference
 - Setup my plugin
 
+A request to save Product Design context always loads `$product-design-user-context` before a build.
+
 Adjust the context-gathering request to match the user's request. First-time setup differs from updating existing context.
 
 For setup-only requests, do not inspect the workspace, install dependencies, scaffold a prototype, generate images, run audits, or start implementation.
 
 When answering "what can you do?", "how do I get started?", or similar broad Product Design questions, load `$product-design-user-context` and follow its persistence availability check before offering saved-context onboarding.
 
-Before routing to Product Design workflows, load [$product-design-user-context](../product-design-user-context/SKILL.md) and run its preflight script when local shell access is available.
+Before routing to Product Design workflows, load [$product-design-user-context](../product-design-user-context/SKILL.md) and run its preflight script when saved references, preferences, or a missing brief could affect the work.
+
+When an auditable screenshot or URL is supplied, do not load saved context before `$product-design-audit` unless the user asks to use saved references. The current evidence is the audit's source of truth.
 
 ## Browser Annotation Updates
 

@@ -20,8 +20,13 @@ When Product Design is explicitly invoked, Product Design owns visual selection,
 
 ## Saved User Context
 
-- If `user-context.md` exists, use it by default.
-- Use saved product URLs, Figma files, screenshots, reference images, codebase paths, Storybook, tokens, design systems, brand assets, component refs, browser preferences, and share targets to ground Product Design work.
+- Do not read saved context merely because it exists. Load and inspect it only
+  when the focused workflow or the user explicitly needs saved references,
+  preferences, or persistence.
+- When saved context is needed, use the relevant product URLs, Figma files,
+  screenshots, reference images, codebase paths, Storybook, tokens, design
+  systems, brand assets, component refs, browser preferences, and share targets
+  to ground Product Design work.
 - Ideation, prototypes, audits, clones, and critiques should match the saved product context unless the user asks for something different.
 - When a workflow needs visual grounding, attach or include relevant saved screenshots, reference images, tokens, design language, and component references in ImageGen, ideation, prototype, audit, and critique work.
 

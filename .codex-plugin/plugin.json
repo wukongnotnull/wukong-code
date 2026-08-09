@@ -39,7 +39,6 @@
     ],
     "defaultPrompt": [
       "I've got an idea for something I'd like to build.",
-      "Let's add a feature to this project.",
       "Use Product Design to audit this product flow from screenshots.",
       "Use Product Design to turn this selected mockup into a verified prototype."
     ],

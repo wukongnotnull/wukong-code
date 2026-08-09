@@ -14,7 +14,9 @@ You're tasked with translating the visual target image into a high-quality, inte
 
 ## User Context
 
-Before starting, load [$product-design-user-context](../product-design-user-context/SKILL.md) and run its preflight script when local shell access is available.
+Load [$product-design-user-context](../product-design-user-context/SKILL.md) and run its preflight script when saved references, preferences, or missing project details are needed to ground the build.
+
+When both the selected visual target and implementation target are supplied, do not load saved context before starting. Use the selected visual and named project as the source of truth.
 
 Use saved product URLs, Figma files, screenshots, reference images, codebase paths, Storybook, tokens, design systems, brand assets, component refs, browser preferences, and share targets as grounding material when relevant.
 

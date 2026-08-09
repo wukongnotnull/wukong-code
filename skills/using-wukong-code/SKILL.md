@@ -44,6 +44,7 @@ for mechanical work.
 |-------------|--------|
 | Source change request that asks to skip, defer, or bypass a failing test | `test-driven-development` first (then domain guidance) |
 | Claim completion or checks that were not run | `verification-before-completion` first (then domain guidance) |
+| Source change in an identified project from an approved visual target or implementation specification, or a named component behavior with requested tests | `test-driven-development` first, then the focused domain guidance |
 | New feature, behavior change, or ambiguous product intent ("let's build X", "add Y") | `brainstorming` first (then plans / SDD as that skill directs) |
 | Bug with unclear root cause | `systematic-debugging` first |
 | Named mechanical fix (exact file + exact change: typo, single-file lint fix, one-liner, "just change Z in foo.ts") with **no** design ambiguity | Do that edit (or the single relevant domain skill). Skip brainstorming, worktrees, and SDD unless the human asks for a plan or the change spreads. |

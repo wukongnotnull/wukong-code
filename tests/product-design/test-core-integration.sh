@@ -279,14 +279,57 @@ with open(sys.argv[1], encoding="utf-8") as manifest_file:
 if "product-design" not in manifest.get("keywords", []):
     raise SystemExit("root plugin manifest is missing the product-design keyword")
 
+default_prompts = manifest.get("interface", {}).get("defaultPrompt", [])
+if len(default_prompts) != 3:
+    raise SystemExit(
+        "root plugin manifest must declare exactly three default prompts; "
+        "Codex ignores prompts beyond its supported limit"
+    )
+
 product_prompts = [
     prompt
-    for prompt in manifest.get("interface", {}).get("defaultPrompt", [])
+    for prompt in default_prompts
     if "product" in prompt.casefold() and "design" in prompt.casefold()
 ]
 if len(product_prompts) < 2:
     raise SystemExit("root plugin manifest needs at least two Product Design starter prompts")
 PY
+
+grep -Fq "When an auditable screenshot or URL is supplied, do not load" \
+  "$REPO_ROOT/skills/product-design/SKILL.md" ||
+  fail "Product Design router does not keep direct audits independent of saved context"
+grep -Fq "When an auditable screenshot or URL is supplied, do not load" \
+  "$REPO_ROOT/skills/product-design-audit/SKILL.md" ||
+  fail "audit skill does not avoid unrelated saved-context preflight"
+grep -Fq "When both the selected visual target and implementation target are supplied, do not load" \
+  "$REPO_ROOT/skills/product-design-image-to-code/SKILL.md" ||
+  fail "image-to-code does not avoid unrelated saved-context preflight"
+for template in "$REPO_ROOT/templates/prototype/AGENTS.md" "$REPO_ROOT/templates/mobile-app/AGENTS.md"; do
+  grep -Fq '`$product-design-context`' "$template" ||
+    fail "${template#$REPO_ROOT/} does not name the namespaced Product Design context skill"
+  if grep -Fq "Product Design plugin's \`get-context\` skill" "$template"; then
+    fail "${template#$REPO_ROOT/} still points to the standalone generic get-context skill"
+  fi
+done
+
+grep -Fq "Process selection is mandatory before focused Product Design routing." \
+  "$REPO_ROOT/skills/product-design/SKILL.md" ||
+  fail "Product Design router does not require Wukong process selection first"
+grep -Fq 'New visual directions and URL clones: load `$brainstorming` first.' \
+  "$REPO_ROOT/skills/product-design/SKILL.md" ||
+  fail "Product Design router does not route new directions and clones through brainstorming"
+grep -Fq 'A request to save Product Design context always loads `$product-design-user-context` before a build.' \
+  "$REPO_ROOT/skills/product-design/SKILL.md" ||
+  fail "Product Design router does not prioritize explicit context saves"
+grep -Fq "Do not read saved context merely because it exists." \
+  "$REPO_ROOT/references/critical-overrides.md" ||
+  fail "critical overrides force unrelated saved-context reads"
+grep -Fq "approved visual target or implementation specification" \
+  "$REPO_ROOT/skills/using-wukong-code/SKILL.md" ||
+  fail "Wukong scope routing does not recognize approved implementation targets"
+grep -Fq '`test-driven-development` first, then the focused domain guidance' \
+  "$REPO_ROOT/skills/using-wukong-code/SKILL.md" ||
+  fail "Wukong scope routing does not send approved implementation targets to TDD"
 
 grep -Fq "Product Design (local fork integration)" "$REPO_ROOT/README.md" ||
   fail "README is missing the Product Design local-fork section"
