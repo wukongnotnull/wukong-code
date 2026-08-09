@@ -44,6 +44,25 @@
         "review": "rust/review.md",
         "verification": "rust/verification.md"
       }
+    },
+    "java": {
+      "status": "experimental",
+      "extensions": [".java"],
+      "markers": [
+        "pom.xml",
+        "build.gradle",
+        "build.gradle.kts",
+        "settings.gradle",
+        "settings.gradle.kts"
+      ],
+      "phases": {
+        "profile": "java/profile.md",
+        "implementation": "java/implementation.md",
+        "testing": "java/testing.md",
+        "debugging": "java/debugging.md",
+        "review": "java/review.md",
+        "verification": "java/verification.md"
+      }
     }
   }
 }

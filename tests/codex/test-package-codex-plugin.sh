@@ -188,6 +188,11 @@ for rust_phase in profile implementation testing debugging review verification; 
     "skills/language-guidance/references/rust/$rust_phase.md" \
     "archive includes Rust $rust_phase reference"
 done
+for java_phase in profile implementation testing debugging review verification; do
+  assert_contains "$archive_paths" \
+    "skills/language-guidance/references/java/$java_phase.md" \
+    "archive includes Java $java_phase reference"
+done
 assert_contains "$archive_paths" "skills/brainstorming/agents/openai.yaml" "archive includes OpenAI skill metadata"
 assert_contains "$archive_paths" "skills/language-guidance/agents/openai.yaml" "archive keeps source metadata"
 language_metadata="$(read_archive_file "$archive" skills/language-guidance/agents/openai.yaml)"
