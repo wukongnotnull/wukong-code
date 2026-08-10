@@ -210,6 +210,10 @@ status until those fields contain real evidence.
 **Language implementation**
 - **language-guidance** - Experimental, evidence-based guidance for supported languages and phases
 
+**Frontend design**
+- **frontend-design** — Anthropic's Apache-2.0 guidance for distinctive,
+  intentional frontend visual design. [Source](https://github.com/anthropics/skills/tree/main/skills/frontend-design)
+
 **Collaboration** 
 - **brainstorming** - Socratic design refinement
 - **writing-plans** - Detailed implementation plans
