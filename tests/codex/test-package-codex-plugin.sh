@@ -184,6 +184,8 @@ if printf '%s' "$archive_paths" | grep -Fxq "skills/index/SKILL.md"; then
 else
   pass "archive excludes legacy generic Product Design router"
 fi
+assert_contains "$archive_paths" "skills/frontend-design/SKILL.md" "archive includes Anthropic frontend-design skill"
+assert_contains "$archive_paths" "skills/frontend-design/LICENSE.txt" "archive includes frontend-design Apache license"
 for swift_phase in profile implementation testing debugging review verification; do
   assert_contains "$archive_paths" \
     "skills/language-guidance/references/swift/$swift_phase.md" \

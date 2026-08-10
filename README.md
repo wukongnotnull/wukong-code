@@ -210,6 +210,10 @@ status until those fields contain real evidence.
 **Language implementation**
 - **language-guidance** - Experimental, evidence-based guidance for supported languages and phases
 
+**Frontend design**
+- **frontend-design** — Anthropic's Apache-2.0 guidance for distinctive,
+  intentional frontend visual design. [Source](https://github.com/anthropics/skills/tree/main/skills/frontend-design)
+
 **Collaboration** 
 - **brainstorming** - Socratic design refinement
 - **writing-plans** - Detailed implementation plans
@@ -250,7 +254,14 @@ calculate the replacement digest.
 
 ## Contributing
 
-The general contribution process for Wukong Code is below. Keep in mind that we don't generally accept contributions of new skills and that any updates to skills must work across all of the coding agents we support.
+The general contribution process for Wukong Code is below. Wukong Code accepts
+new skills after maintainer review when they solve a concrete problem, have a
+clear intended audience, and can be maintained safely across supported
+harnesses. Domain-specific and externally sourced skills are eligible for core
+review; contributors must disclose the source, license, dependency impact,
+tests or evaluations, and maintenance or update strategy. Core skills remain
+zero-dependency unless a separately documented harness-support exception
+applies.
 
 1. Fork the repository
 2. Switch to the 'dev' branch

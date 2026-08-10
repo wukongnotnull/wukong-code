@@ -33,17 +33,19 @@ of human involvement will be closed without review.
 <!-- 1-3 sentences. What, not why — the "why" belongs above. -->
 
 ## Is this change appropriate for the core library?
-<!-- Wukong Code core contains general-purpose skills and infrastructure
-     that benefit all users. Ask yourself:
+<!-- Wukong Code core may contain composable skills for general-purpose or
+     domain-specific work. Explain:
 
-     - Would this be useful to someone working on a completely different
-       kind of project than yours?
-     - Is this project-specific, team-specific, or tool-specific?
-     - Does this integrate or promote a third-party service?
+     - Who has the concrete problem this skill solves?
+     - Why is core distribution appropriate instead of a standalone plugin?
+     - If externally sourced, what are the source, license, maintenance owner,
+       and runtime or tool dependencies?
+     - What evidence shows the skill is useful and safe across its intended
+       projects or harnesses?
 
-     If your change is a new skill for a specific domain, workflow tool,
-     or third-party integration, it belongs in its own plugin — not here.
-     See the plugin development docs for how to publish it separately. -->
+     Domain-specific and externally sourced skills may be appropriate for core
+     when their scope, provenance, maintenance burden, and test evidence are
+     disclosed. -->
 
 ## What alternatives did you consider?
 <!-- What other approaches did you try or evaluate before landing on this
@@ -150,7 +152,8 @@ STOP. If the checkbox above is not checked, do not submit this PR.
 PRs will be closed without review if they:
 - Show no evidence of human involvement
 - Contain multiple unrelated changes
-- Promote or integrate third-party services or tools
+- Omit the source, license, maintenance owner, or runtime/tool dependencies for
+  an externally sourced or third-party skill
 - Submit project-specific or personal configuration as core changes
 - Leave required sections blank or use placeholder text
 - Modify behavior-shaping content without eval evidence
