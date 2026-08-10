@@ -178,6 +178,8 @@ else
   pass "archive excludes cross-harness hook configuration"
 fi
 assert_contains "$archive_paths" "skills/brainstorming/SKILL.md" "archive includes skills"
+assert_contains "$archive_paths" "skills/frontend-design/SKILL.md" "archive includes Anthropic frontend-design skill"
+assert_contains "$archive_paths" "skills/frontend-design/LICENSE.txt" "archive includes frontend-design Apache license"
 for swift_phase in profile implementation testing debugging review verification; do
   assert_contains "$archive_paths" \
     "skills/language-guidance/references/swift/$swift_phase.md" \
