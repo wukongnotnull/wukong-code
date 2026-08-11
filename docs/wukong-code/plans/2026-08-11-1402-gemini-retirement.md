@@ -334,11 +334,11 @@ Expected: every command exits 0. The skill wording change remains behavior-unver
 - [ ] **Step 2: Check the remaining-reference boundary and repository state**
 
 ```bash
-rg -n -i 'gemini' --glob '!RELEASE-NOTES.md' --glob '!docs/wukong-code/specs/**' \
-  --glob '!docs/wukong-code/plans/**' --glob '!docs/wukong-code/evals/**' \
-  --glob '!docs/wukong-code/evals/raw/**' .
+rg -n -i 'gemini' .version-bump.json docs/testing.md \
+  docs/porting-to-a-new-harness.md scripts/sync-to-codex-plugin.sh \
+  skills/product-design/SKILL.md references/product-design-host-capabilities.md
 git diff --check
 git status --short
 ```
 
-Expected: the search emits no output, `git diff --check` exits 0, and the working tree is clean. Commit any in-repository skill-evaluation report separately; otherwise report its external location without claiming it passed.
+Expected: the active-surface search emits no output, `git diff --check` exits 0, and the working tree is clean. Historical records, regression tests, and the Product Design integrity-lock adaptation may legitimately mention Gemini. Commit any in-repository skill-evaluation report separately; otherwise report its external location without claiming it passed.
