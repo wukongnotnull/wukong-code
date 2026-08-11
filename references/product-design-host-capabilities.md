@@ -15,7 +15,6 @@ path below.
 | Kimi | Available browser/terminal integrations | Skip unavailable image generation or hosting branches without disabling unrelated Product Design work. |
 | OpenCode | Available browser/terminal integrations | Use the portable state directory and sequential fallback. |
 | Pi | Available browser/terminal integrations | Use the portable state directory and sequential fallback. |
-| Gemini | Available browser/terminal integrations | Use the portable state directory and sequential fallback. |
 
 The table describes preferred adapters, not guaranteed tools. Current tool
 availability is authoritative.

@@ -32,13 +32,14 @@
   ],
   "integrity": {
     "algorithm": "sha256-path-content-v1",
-    "value": "be397469a59535ab89ab4e92a68ec6d11200c1588077cc35e757807bdb402de6"
+    "value": "c80282edf86cbab16b55896bfb5a596e6cc373bb614e0861c6385550bd8cce0f"
   },
   "local_adaptations": [
     "Collision-free product-design skill namespace",
     "Wukong process-composition contract",
     "installed-path resolution guidance",
     "Codex packaging and sync integration",
-    "Deterministic integrated-content integrity lock"
+    "Deterministic integrated-content integrity lock",
+    "Gemini integration retirement"
   ]
 }
