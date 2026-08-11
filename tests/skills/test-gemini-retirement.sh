@@ -32,10 +32,11 @@ require_absent 'Gemini|gemini' "$REPO_ROOT/docs/testing.md" "testing guide does 
 require_absent 'Gemini|gemini' "$REPO_ROOT/docs/porting-to-a-new-harness.md" "porting guide does not advertise Gemini"
 require_absent 'GEMINI\.md|gemini-extension\.json' "$REPO_ROOT/scripts/sync-to-codex-plugin.sh" "Codex sync has no stale Gemini exclusions"
 
-if rg -Fq '## v6.3.0' "$REPO_ROOT/RELEASE-NOTES.md"; then
-  pass "release notes include v6.3.0"
+current_version="$(jq -r '.version' "$REPO_ROOT/package.json")"
+if rg -Fq "## v$current_version" "$REPO_ROOT/RELEASE-NOTES.md"; then
+  pass "release notes include v$current_version"
 else
-  fail "release notes omit v6.3.0"
+  fail "release notes omit v$current_version"
 fi
 
 if [[ "$failures" -gt 0 ]]; then

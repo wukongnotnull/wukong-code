@@ -38,7 +38,7 @@ into the harness's native tools. Three components:
    truth, shared verbatim by every harness. Skills are written to describe
    *actions* — "invoke a skill", "read a file", "dispatch a subagent", "create a
    todo" — and never name a specific tool. This is what lets one skill body run
-   on Claude Code, Codex, Gemini, pi, and the rest without edits.
+   across installed harnesses without edits.
 
 2. **Tool mapping (per-harness).** Each harness needs the action vocabulary
    translated into its real tool names. That translation lives in
@@ -66,15 +66,13 @@ code; rewording it for "compliance" is rejected on sight.)
 user's files.** The bootstrap, the skills, and the tool mapping all get delivered
 *as part of what the harness installs* — a plugin, an extension, a marketplace
 entry, an extension-bundled context file. A port **must not** reach into a user's
-global or personal config (`~/.gemini/config/AGENTS.md`, `settings.json`,
-`trustedFolders.json`, a hand-edited `~/.bashrc`, etc.) to inject anything. The
+global or personal config (`AGENTS.md`, `settings.json`, `trustedFolders.json`,
+a hand-edited `~/.bashrc`, etc.) to inject anything. The
 harness owns what it loads; your install artifact is the only thing you get to
 write. If the install mechanism genuinely can't carry the bootstrap, that is a
 limitation to surface (Part 6) — never a license to hand-edit the user's config.
-(Shape C is *not* an exception: Gemini's context file is fine because it ships
-*inside the installed extension* and is declared by the manifest's
-`contextFileName` — the harness loads the extension's own file, not a file you
-edited in the user's home.)
+(Shape C is *not* an exception: an extension-owned context file is fine only
+when it ships inside the installed extension and its manifest declares it.)
 
 ---
 
@@ -94,9 +92,8 @@ one non-negotiable capability. It can take any form:
 - an **in-process plugin/extension** with a session-start or message lifecycle
   callback that can mutate the message array (OpenCode, pi), or
 - an **instructions-file** convention where the harness loads a context file that
-  *your installed extension ships and declares* (e.g. Gemini's `contextFileName`
-  pointing at the extension's own `GEMINI.md`) — not a file you edit in the user's
-  home.
+  *your installed extension ships and declares* — not a file you edit in the
+  user's home.
 
 If the only way to get Wukong Code in front of the model is for your human
 partner to opt in each session (paste a prompt, run a command, enable a mode),
@@ -200,9 +197,9 @@ had to do every one of these):
   token actually reached the model.
 
 **A fork does not inherit its parent's behavior.** A harness derived from another
-(e.g. a Gemini-derived CLI) may expose the parent's manifest fields and
-`@`-include syntax and *still not honor them the same way*. Verify with a marker;
-never assume the parent's recipe transfers.
+may expose its parent's manifest fields or include syntax and *still not honor
+them the same way*. Verify with a marker; never assume the parent's recipe
+transfers.
 
 Then route to a shape:
 
@@ -263,27 +260,15 @@ mutating the message array in code.
 ### Shape C — Instructions-file
 
 The harness has neither a shell hook nor a code plugin — its session-start
-surface is a context file that *your installed extension ships and the manifest
-declares* (e.g. Gemini's `contextFileName` → the extension's own `GEMINI.md`).
-You can't run code or mutate messages; the extension's context file points at the
-bootstrap. There is no injector to assemble a string or strip frontmatter — the
-harness loads the referenced content as-is. **This works only because the file is
-part of the installed extension** — never substitute "edit the user's global
-`GEMINI.md`/`AGENTS.md`" for shipping your own (rule 2).
+surface is a context file that the installed extension ships and its manifest
+declares. You can't run code or mutate messages; the extension-owned context file
+points at the bootstrap. Never substitute an edit to the user's global
+instructions file for shipping your own.
 
-- Reference: `gemini-extension.json` (manifest, with `contextFileName`),
-  `GEMINI.md` (two `@`-includes — the bootstrap skill and the tool-mapping
-  reference), `skills/using-wukong-code/references/gemini-tools.md`.
-- Note: `@`-include is a Gemini feature. If your harness loads an instructions
-  file but has no include syntax, you must inline the bootstrap content into the
-  file instead.
-- **Don't trust that an `@`-include is actually expanded — prove it.** A
-  Gemini-*derived* harness can accept `@./path` syntax yet treat it as a *hint
-  the model may choose to read* (it emits a file-read tool call) rather than a
-  guaranteed inline expansion. That's the difference between the bootstrap being
-  reliably present every session and the model maybe-reading it. Run a
-  unique-marker test: if the marker isn't in context *without* a tool call,
-  **inline the content** rather than `@`-include it.
+Keep the manifest, context file, and tool-mapping reference together. If the
+harness supports includes, prove they expand into session context; otherwise
+inline the bootstrap in the extension-owned context file. A convention that only
+hints the model might read a file does not satisfy the session-start requirement.
 
 ### Routing table
 
@@ -291,7 +276,7 @@ part of the installed extension** — never substitute "edit the user's global
 |---|---|---|
 | runs a shell command at session start and reads its stdout | A (shell-hook) | Cursor (`hooks/session-start` + `hooks/hooks-cursor.json` + `.cursor-plugin/`) |
 | is a JS/TS plugin host with session/message lifecycle callbacks | B (in-process) | OpenCode (`.opencode/`) — or pi (`.pi/`) if it has no native skill tool |
-| ships an extension-declared context file it always loads | C (instructions-file) | Gemini (`gemini-extension.json` + `GEMINI.md` + `references/gemini-tools.md`) |
+| ships an extension-declared context file it always loads | C (instructions-file) | a verified extension-owned context file |
 | has a plugin install command and a manifest `contextFileName` (or equivalent) the installer keeps | C via the plugin installer | Antigravity (`.antigravity-plugin/` — `agy plugin install` ships a generated context file; verify the installer preserves it — Part 6) |
 
 Most real harnesses fit one row cleanly; the last is the hybrid case (rule 2 still
@@ -337,15 +322,12 @@ ones in spirit:
     harnesses, not dev/type packages. If you hit this, confirm the approach with
     the maintainer rather than quietly adding a dependency. Keep any build output
     out of git and document the command.
-- **Shape C (instructions-file):** a small manifest (see `gemini-extension.json`:
-  `name`, `description`, `version`, `contextFileName`) plus the context file
-  itself (`GEMINI.md` is just two `@`-includes: the bootstrap skill and the
-  tool-mapping reference). The Gemini manifest has no `skills` field — Gemini
-  auto-discovers the `skills/` directory bundled in the installed extension. If
-  your harness has a native skill tool but no manifest field to register the
-  directory, you must find its discovery convention (read its extension docs),
-  then verify empirically: after wiring, ask the model to list its available
-  skills — if the bundled skills don't appear, discovery isn't working yet.
+- **Shape C (instructions-file):** a small manifest with the fields the target
+  harness requires plus the context file itself. The context file must load the
+  bootstrap and tool mapping through the target harness's documented mechanism.
+  If the harness has a native skill tool but no manifest field to register the
+  directory, find and verify its discovery convention empirically: ask the model
+  to list its available skills after wiring.
 
 ### Step 3 — Wire the bootstrap injection
 
@@ -450,17 +432,12 @@ messages break some models (#894). Three things you must replicate:
 **Shape C — point your extension's context file at the bootstrap; assemble
 nothing.** There is no injector, so you do *not* strip frontmatter or build a
 wrapped string. The context file your extension ships (declared by the manifest —
-*not* the user's own global file) pulls in two things: the `using-wukong-code`
-skill and the harness's tool-mapping reference. `GEMINI.md`
-does this with two `@`-includes (`@./skills/using-wukong-code/SKILL.md` and
-`@./skills/using-wukong-code/references/<harness>-tools.md`); the harness loads
-them raw, frontmatter and all, and `SKILL.md` already carries its own
-`<EXTREMELY-IMPORTANT>` block internally. If your harness has no include syntax,
-inline the content into the instructions file instead. Gemini ships **no**
-"already loaded, don't re-invoke" preamble — for an `@`-include harness the
-content is the active instruction set, not a skill the model would re-load. If
-you find your harness does try to re-invoke, add that note as a literal line in
-the instructions file (you have no code to add it any other way).
+*not* the user's own global file) pulls in the `using-wukong-code` skill and the
+harness's tool-mapping reference. If the harness has no include syntax, inline
+the content into the instructions file instead. For an include-based harness the
+content is the active instruction set, not a skill the model should re-load. If
+the harness tries to re-invoke it, add that note as a literal line in the
+instructions file.
 
 ### Step 4 — Write the tool mapping
 
@@ -504,8 +481,8 @@ Where the mapping lives depends on shape:
   *both* places — `piToolMapping()` inline **and** `references/pi-tools.md`. If
   you maintain it in two places, update both, or the port is half-done.
 - **Shape C:** put it in `references/<harness>-tools.md` and pull it into the
-  always-loaded instructions file (e.g. `GEMINI.md` `@`-includes
-  `gemini-tools.md`).
+  always-loaded instructions file through the target harness's documented
+  include or embedding mechanism.
 
 You may also add a one-line pointer to your harness in `SKILL.md`'s "Platform
 Adaptation" section so an agent reading the bootstrap knows where its mapping
@@ -524,8 +501,8 @@ platform's mechanism" depends on the harness — and for a harness with no skill
 tool, the documented mechanism *is* reading `SKILL.md`. So reading it there
 honors the rule rather than breaking it. Distinguish three cases:
 
-1. **Native `Skill`-style tool** (Claude Code, Copilot CLI, Gemini's
-   `activate_skill`): point the mapping at that tool.
+1. **Native `Skill`-style tool** (Claude Code, Copilot CLI): point the mapping
+   at that tool.
 2. **Native skill *discovery* but no `Skill` tool** (pi, Antigravity): the harness
    can find and list skills, but the model can't call a tool to load one. Get the
    skills installed where the harness scans (pi registers via `resources_discover`
@@ -685,7 +662,7 @@ it. Distribution differs per harness ecosystem — find yours:
 |---|---|---|
 | Native plugin marketplace | Claude Code | Register in `.claude-plugin/marketplace.json`; users `/plugin install`. The external `wukong-code-marketplace` repo is the source of truth users install from — see the release steps in `CLAUDE.md`. |
 | External marketplace fork, synced by script | Codex | `scripts/sync-to-codex-plugin.sh` rsyncs the tracked plugin files into a separate fork repo and opens a PR. Read its include/exclude list so you ship the right tree (it deliberately drops repo-internal dirs and other harnesses' dotdirs). |
-| Git-URL extension install | Gemini, Kimi Code, OpenCode | Users install from a git URL (`gemini extensions install …`; Kimi Code `/plugins install …`; an `opencode.json` `plugin` array entry). Document the exact command. |
+| Git-URL extension install | Kimi Code, OpenCode | Users install from a git URL (Kimi Code `/plugins install …`; an `opencode.json` `plugin` array entry). Document the exact command. |
 | Package-manifest fields | pi | Declared through fields in the repo-root `package.json`; users install via the harness's package command. |
 | Local installer (plugin install) | Antigravity (`agy`) | A small `install.sh` that runs the harness's own `agy plugin install` against a staging dir holding the manifest, the skills, and a generated `contextFileName` context file (the bootstrap). Everything arrives through the install mechanism — *not* by editing the user's config (see below). |
 
@@ -724,8 +701,8 @@ Then:
   `.<harness>/INSTALL.md` (see `docs/README.opencode.md` and
   `.opencode/INSTALL.md`), plus an install section in the top-level `README.md`.
   The only supported install action is **running the harness's own install
-  command** (`agy plugin install`, `gemini extensions install`, `/plugin
-  install`, etc.). Hand-copying skill files and editing the user's global/personal
+  command** (`agy plugin install`, `/plugin install`, etc.). Hand-copying skill
+  files and editing the user's global/personal
   config are *both* off-limits (rule 2 / the PR rules). If the harness has no
   install command at all — its only surface is a user-owned config file — then it
   fails the "deliver via install mechanism" rule, and you should raise that rather
@@ -797,7 +774,6 @@ Use this as the live index; when in doubt, read the files, not this table.
 | Codex | `.codex-plugin/plugin.json` (declares empty `hooks`) | native skill discovery (no session-start hook) | `references/codex-tools.md` | `tests/codex/`, `tests/codex-plugin-sync/` | fork sync (`scripts/sync-to-codex-plugin.sh`) |
 | Cursor | `.cursor-plugin/plugin.json` + `hooks/hooks-cursor.json` | shell hook → `hooks/session-start` (`additional_context`) | `references/claude-code-tools.md` | `tests/hooks/` | hand-authored |
 | Copilot CLI | (shares Claude Code hook path; `COPILOT_CLI` env) | shell hook → `hooks/session-start` (`additionalContext`) | `references/copilot-tools.md` | `tests/hooks/` | — |
-| Gemini CLI | `gemini-extension.json` + `GEMINI.md` | instructions file `@`-includes bootstrap + mapping | `references/gemini-tools.md` | — | `gemini extensions install` |
 | Kimi Code | `.kimi-plugin/plugin.json` | manifest `sessionStart.skill` loads `using-wukong-code` | inline `skillInstructions` in manifest | `tests/kimi/` | marketplace or `/plugins install` GitHub URL |
 | OpenCode | `.opencode/plugins/wukong-code.js` (declared via root `package.json` `main`) | in-process: `config` hook registers skills dir; `experimental.chat.messages.transform` injects user message | inline in `wukong-code.js` | `tests/opencode/` | `opencode.json` plugin git URL |
 | pi | `.pi/extensions/wukong-code.ts` | in-process: `resources_discover` registers skills; `context` event injects user message; lifecycle-flag + compaction-aware | `piToolMapping()` inline **and** `references/pi-tools.md` | `tests/pi/` | repo-root `package.json` fields |

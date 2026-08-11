@@ -1,5 +1,11 @@
 # Wukong Code Release Notes
 
+## v6.3.0 (2026-08-11)
+
+### Harness Support
+
+- **Gemini integration retired.** Removed residual extension configuration that referenced a removed tool mapping. Current documentation, version metadata, and Codex sync configuration no longer advertise Gemini CLI as a supported harness.
+
 ## v6.2.1 (2026-07-19)
 
 ### Lower Resident Skill Cost
