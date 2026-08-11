@@ -167,7 +167,7 @@ with open(sys.argv[1], encoding="utf-8") as lock_file:
 expected = {
     "name": "product-design",
     "version": "0.1.52",
-    "wukong_code_version": "6.3.0-product-design.1",
+    "wukong_code_version": "6.3.0",
     "license": "MIT",
     "distribution": "local-only",
 }
@@ -206,7 +206,7 @@ import json
 import sys
 
 root = Path(sys.argv[1])
-expected = "6.3.0-product-design.1"
+expected = "6.3.0"
 config = json.loads((root / ".version-bump.json").read_text(encoding="utf-8"))
 
 for entry in config["files"]:
@@ -246,7 +246,7 @@ for relative in (
         raise SystemExit(f"{relative} does not advertise Product Design")
 PY
 
-grep -Fq "6.3.0-product-design.1" "$REPO_ROOT/README.md" ||
+grep -Fq "6.3.0" "$REPO_ROOT/README.md" ||
   fail "README does not identify the local Product Design fork version"
 
 grep -Fq "Copyright (c) 2026 OpenAI" "$REPO_ROOT/THIRD_PARTY_NOTICES.md" ||

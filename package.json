@@ -1,6 +1,6 @@
 {
   "name": "wukong-code",
-  "version": "6.3.0-product-design.1",
+  "version": "6.3.0",
   "description": "Wukong Code development and Product Design skills with runtime bootstrap for coding agents",
   "type": "module",
   "main": ".opencode/plugins/wukong-code.js",

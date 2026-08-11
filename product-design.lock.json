@@ -1,7 +1,7 @@
 {
   "name": "product-design",
   "version": "0.1.52",
-  "wukong_code_version": "6.3.0-product-design.1",
+  "wukong_code_version": "6.3.0",
   "source_repository": "https://github.com/openai/role-specific-plugins",
   "source_path": "plugins/product-design",
   "source_license": "https://github.com/openai/role-specific-plugins/blob/main/LICENSE",
