@@ -346,4 +346,3 @@ Expected: no whitespace errors and no uncommitted files.
 Report that `npm run test:extended` is not a passing completion gate until the
 existing Antigravity mapping contract is fixed. Report that host CLI and Drill
 tests remain manual by design.
-
