@@ -4,6 +4,10 @@
   "description": "Wukong Code development and Product Design skills with runtime bootstrap for coding agents",
   "type": "module",
   "main": ".opencode/plugins/wukong-code.js",
+  "scripts": {
+    "test": "bash scripts/test.sh --suite core",
+    "test:extended": "bash scripts/test.sh --suite extended"
+  },
   "keywords": [
     "pi-package",
     "skills",
