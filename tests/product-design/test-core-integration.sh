@@ -150,10 +150,16 @@ if grep -Fq "Chat isn't supported by the Product Design plugin" \
   fail "Product Design router still refuses non-Work-Mode hosts categorically"
 fi
 
-for host in "Codex Desktop" "ChatGPT Work Mode" "Claude Code" Cursor Kimi OpenCode Pi Gemini; do
+for host in "Codex Desktop" "ChatGPT Work Mode" "Claude Code" Cursor Kimi OpenCode Pi; do
   grep -Fq "$host" "$REPO_ROOT/references/product-design-host-capabilities.md" ||
     fail "host capability contract is missing $host"
 done
+if rg -qi 'gemini' "$REPO_ROOT/references/product-design-host-capabilities.md"; then
+  fail "host capability contract still lists Gemini"
+fi
+if rg -qi 'gemini' "$REPO_ROOT/skills/product-design/SKILL.md"; then
+  fail "Product Design router still lists Gemini"
+fi
 grep -Fq "sequential fallback" "$REPO_ROOT/references/product-design-host-capabilities.md" ||
   fail "host capability contract does not define a sequential fallback"
 
@@ -229,7 +235,6 @@ for relative in (
     ".claude-plugin/plugin.json",
     ".cursor-plugin/plugin.json",
     ".kimi-plugin/plugin.json",
-    "gemini-extension.json",
     "package.json",
 ):
     manifest = json.loads((root / relative).read_text(encoding="utf-8"))

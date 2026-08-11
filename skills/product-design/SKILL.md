@@ -72,7 +72,7 @@ In Codex Desktop, use `@Browser` and explicitly select the in-app surface with `
 
 In Codex Desktop, use Chrome only when the user asks for it, the task needs an existing Chrome tab/login/profile/extension, or the in-app Browser is unavailable or blocked.
 
-In Claude Code, Cursor, Kimi, OpenCode, Pi, Gemini, or another host, use the
+In Claude Code, Cursor, Kimi, OpenCode, Pi, or another supported host, use the
 browser capability exposed to that session. If none is exposed, apply the
 source-capture fallback from the host capability contract.
 
