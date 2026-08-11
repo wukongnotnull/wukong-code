@@ -39,6 +39,15 @@ assert_equals() {
   fi
 }
 
+assert_file_contains() {
+  local file="$1"
+  local expected="$2"
+  local description="$3"
+
+  [[ -f "$file" ]] || fail "$description: missing $file"
+  grep -Fq -- "$expected" "$file" || fail "$description: expected $expected"
+}
+
 make_shell_stub() {
   local relative_path="$1"
   local target="$FIXTURE/$relative_path"
@@ -151,5 +160,21 @@ else
   status=$?
   [[ "$status" -eq 42 ]] || fail "child failure exits with $status instead of 42"
 fi
+
+assert_file_contains "$REPO_ROOT/package.json" \
+  '"test": "bash scripts/test.sh --suite core"' \
+  "package metadata exposes the core suite"
+assert_file_contains "$REPO_ROOT/package.json" \
+  '"test:extended": "bash scripts/test.sh --suite extended"' \
+  "package metadata exposes the extended suite"
+assert_file_contains "$REPO_ROOT/.github/workflows/test.yml" \
+  'run: npm test' \
+  "workflow runs the core suite"
+assert_file_contains "$REPO_ROOT/.github/workflows/test.yml" \
+  'workflow_dispatch:' \
+  "workflow exposes manual dispatch"
+assert_file_contains "$REPO_ROOT/docs/testing.md" \
+  'npm run test:extended' \
+  "testing guide documents the extended suite"
 
 echo "PASS: layered test runner contract"
