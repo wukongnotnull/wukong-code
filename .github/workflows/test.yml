@@ -1,0 +1,37 @@
+name: Test
+
+on:
+  pull_request:
+  push:
+    branches: [main, dev]
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: Suite to run
+        required: true
+        default: extended
+        type: choice
+        options: [core, extended]
+
+jobs:
+  core:
+    if: github.event_name != 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm test
+
+  manual:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: tests/brainstorm-server/package-lock.json
+      - run: bash scripts/test.sh --suite ${{ inputs.suite }}
