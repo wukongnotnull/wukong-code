@@ -184,10 +184,10 @@ workflow. Automatic selection is advisory rather than guaranteed.
 | Language | Status | Implementation | Testing | Debugging | Review | Verification | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Go | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-07-22-go-language-guidance.md) |
-| Java | Experimental | — | — | — | — | — | — |
+| Java | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-08-02-java-language-guidance.md) |
 | TypeScript | Planned | — | — | — | — | — | — |
-| Swift | Planned | — | — | — | — | — | — |
-| Rust | Experimental | — | — | — | — | — | — |
+| Swift | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-07-29-swift-language-guidance.md) |
+| Rust | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-07-29-rust-language-guidance.md) |
 
 Experimental means initial behavior evals exist but real-project evidence is
 still accumulating. Packs never install tools or override repository commands.
