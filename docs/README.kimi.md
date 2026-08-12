@@ -20,10 +20,10 @@ You can also install from this repository:
 /plugins install https://github.com/wukongnotnull/wukong-code
 ```
 
-For unreleased validation against `dev`, pin the branch explicitly:
+For unreleased validation against `main`, pin the branch explicitly:
 
 ```text
-/plugins install https://github.com/wukongnotnull/wukong-code/tree/dev
+/plugins install https://github.com/wukongnotnull/wukong-code/tree/main
 ```
 
 Kimi Code applies plugin changes to new sessions. After installing, updating, enabling, disabling, or reloading a plugin, start a fresh session with `/new`.
@@ -78,7 +78,7 @@ Select Wukong Code and update it from there. Start a fresh session with `/new` a
 Kimi Code installs the latest GitHub release for a bare repository URL when one exists. To test unreleased changes before the next Wukong Code release, install the branch explicitly:
 
 ```text
-/plugins install https://github.com/wukongnotnull/wukong-code/tree/dev
+/plugins install https://github.com/wukongnotnull/wukong-code/tree/main
 ```
 
 ### Skills not triggering
