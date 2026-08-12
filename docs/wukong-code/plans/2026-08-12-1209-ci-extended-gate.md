@@ -180,4 +180,3 @@ Expected: each command exits 0; the last command reports `All extended tests pas
 Run: `git status --short --branch && git log --oneline main..HEAD`
 
 Expected: clean feature branch with only the CI-gate commits described above.
-
