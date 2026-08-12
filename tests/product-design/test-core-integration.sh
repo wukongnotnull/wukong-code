@@ -123,7 +123,7 @@ grep -Fq 'Faithful workflows exclude `$frontend-design`' \
 grep -Fq '[$frontend-design](../frontend-design/SKILL.md)' \
   "$REPO_ROOT/skills/product-design-ideate/SKILL.md" ||
   fail "Product Design ideation does not load frontend-design"
-grep -Fq 'frontend-design does not load' "$ROUTING_SCENARIOS" ||
+grep -Fq '`frontend-design` does not load' "$ROUTING_SCENARIOS" ||
   fail "routing scenarios do not contain a frontend-design negative control"
 
 if grep -Fq "/plugins/product-design/" "$REPO_ROOT/references/local-prototype-preflight.md"; then

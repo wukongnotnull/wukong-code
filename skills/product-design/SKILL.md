@@ -44,6 +44,24 @@ Process selection is mandatory before focused Product Design routing.
   project: load `$test-driven-development` first, then the focused Product
   Design build and QA guidance.
 
+## Frontend Design Composition
+
+Original visual directions and substantial redesigns load `$frontend-design`
+after the governing Wukong process permits secondary domain guidance and
+before `$product-design-ideate`. This includes new products, pages, screens,
+or features with no selected visual target, plus redesigns that may
+intentionally depart from their source.
+
+Audits, research-only requests, faithful URL clones, selected-visual
+implementations, design QA, sharing, and ordinary UI implementation do not
+load `$frontend-design`. For URL requests, `clone`, `recreate`, or `match
+faithfully` selects the fidelity branch; `redesign`, `new direction`, or
+`inspired by` selects the original-direction branch. `make ... better` and
+`match ... but modernize` are materially ambiguous: ask whether the user wants
+a mostly faithful refresh or a substantial redesign before choosing a branch.
+Ask the same targeted fidelity question whenever comparable wording leaves the
+choice materially ambiguous.
+
 If the user names a focused skill, read that exact skill first. Do not replace it with a related skill.
 
 When a request matches `$product-design-user-context`, `$product-design-context`, `$product-design-research`, `$product-design-ideate`, `$product-design-image-to-code`, `$product-design-url-to-code`, `$product-design-audit`, `$product-design-design-qa`, or `$product-design-share`, load the focused skill and follow it.
@@ -152,6 +170,8 @@ Capture and review a product flow, journey, screen, or multi-step product experi
 ### $product-design-ideate
 
 Generate image-based visual alternatives, remixes, or concept directions for a component, screen, feature, workflow, or product idea. Route here after `get-context` has played back the minimum brief and the user needs visual exploration, design variants, alternatives to an existing design, or idea discovery before choosing a visual target. Prefer this over prose-only ideation unless the user asks for prose.
+For an original visual direction or substantial redesign, apply the
+`Frontend Design Composition` section before routing here.
 
 ### $product-design-url-to-code
 
