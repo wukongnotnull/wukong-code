@@ -179,5 +179,8 @@ assert_file_contains "$REPO_ROOT/.github/workflows/test.yml" \
 assert_file_contains "$REPO_ROOT/docs/testing.md" \
   'npm run test:extended' \
   "testing guide documents the extended suite"
+assert_file_contains "$REPO_ROOT/docs/testing.md" \
+  'GitHub Actions runs the extended suite for pull requests and pushes to `main` and `dev`.' \
+  "testing guide documents the mandatory extended CI gate"
 
 echo "PASS: layered test runner contract"

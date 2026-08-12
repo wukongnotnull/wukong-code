@@ -20,10 +20,11 @@ with:
 npm run test:extended
 ```
 
-GitHub Actions runs the core suite for pull requests and pushes to `main` and
-`dev`. The extended suite is available through manual workflow dispatch. Tests
-that need a host CLI, credentials, or real LLM sessions remain manual: use the
-relevant runner under `tests/` or the Drill workflow under `evals/`.
+GitHub Actions runs the extended suite for pull requests and pushes to `main` and `dev`.
+Use `npm run test:extended` locally to reproduce that gate; `npm test` remains the
+quicker core suite. Manual workflow dispatch can run either suite. Tests that need
+a host CLI, credentials, or real LLM sessions remain manual: use the relevant
+runner under `tests/` or the Drill workflow under `evals/`.
 
 ## Plugin tests
 
