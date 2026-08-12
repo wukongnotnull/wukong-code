@@ -1,18 +1,13 @@
-<div align="center">
-
-<img src="assets/wukong-code-small.svg" alt="Wukong Code ロゴ" width="160" />
-
 # Wukong Code
 
-**コーディングエージェントのための完全なソフトウェア開発方法論**<br>
+**コーディングエージェントのための完全なソフトウェア開発方法論**
+
 設計を先に · テスト駆動開発 · 主張より検証
 
-[![ライセンス：MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![バージョン](https://img.shields.io/github/v/tag/wukongnotnull/wukong-code?label=version)](https://github.com/wukongnotnull/wukong-code/tags)
-[![プラグイン](https://img.shields.io/badge/type-coding%20agent%20plugin-F59E0B.svg)](https://github.com/wukongnotnull/wukong-code)
-[![Stars](https://img.shields.io/github/stars/wukongnotnull/wukong-code?style=social)](https://github.com/wukongnotnull/wukong-code/stargazers)
-
-</div>
+[ライセンス：MIT](LICENSE)
+[バージョン](https://github.com/wukongnotnull/wukong-code/tags)
+[プラグイン](https://github.com/wukongnotnull/wukong-code)
+[Stars](https://github.com/wukongnotnull/wukong-code/stargazers)
 
 **言語：** [English](README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md)
 
@@ -20,7 +15,8 @@
 
 ---
 
-**クイックナビ**<br>
+**クイックナビ**
+
 [Wukong Code を選ぶ理由](#wukong-code-を選ぶ理由) · [仕組み](#仕組み) · [インストール](#対応エージェントとインストール) · [基本ワークフロー](#基本ワークフロー) · [スキル](#収録内容) · [言語ガイダンス](#言語ガイダンス) · [テスト](#テスト) · [FAQ](#faq) · [コントリビューション](#コントリビューション) · [ライセンス](#ライセンス)
 
 ---
@@ -86,8 +82,6 @@ Product Design は、プロダクトのアイデアと動くソフトウェア�
 
 インストール方法はエージェントごとに異なります。複数を使う場合は、それぞれに Wukong Code をインストールしてください。
 
-現在のリリース：**[v6.3.0](https://github.com/wukongnotnull/wukong-code/releases/tag/v6.3.0)**。このリリースで Gemini CLI のサポートは終了し、現在の対応一覧には含まれません。
-
 **対応：** [Antigravity](#antigravity) · [Claude Code](#claude-code) · [Codex App](#codex-app) · [Codex CLI](#codex-cli) · [Cursor](#cursor) · [Factory Droid](#factory-droid) · [GitHub Copilot CLI](#github-copilot-cli) · [Kimi Code](#kimi-code) · [OpenCode](#opencode) · [Pi](#pi)
 
 ### Antigravity
@@ -111,21 +105,20 @@ Antigravity はセッション開始フックを実行するため、最初の�
 
 ### Codex App
 
-Wukong Code は [Codex 公式プラグインマーケットプレイス](https://github.com/openai/plugins)から利用できます。
+Wukong Code は Codex 公式プラグインマーケットプレイスには掲載されていません。このリポジトリの URL から直接インストールしてください。
 
 1. Codex サイドバーの **Plugins** をクリックします。
-2. Coding セクションで **Wukong Code** を探します。
-3. `+` をクリックし、案内に従います。
+2. リポジトリ URL からプラグインをインストールするオプションを選択します。
+3. `https://github.com/wukongnotnull/wukong-code` を入力し、案内に従います。
 
 ### Codex CLI
 
-プラグイン画面を開きます。
+このリポジトリをマーケットプレイスソースとして追加し、Wukong Code をインストールします。
 
-```text
-/plugins
+```bash
+/plugin marketplace add wukongnotnull/wukong-code
+/plugin install wukong-code@wukong-code
 ```
-
-`wukong-code` を検索し、**Install Plugin** を選択します。
 
 ### Cursor
 
@@ -219,7 +212,7 @@ Pi パッケージはスキルを読み込み、起動時とコンテキスト�
 
 ## 収録内容
 
-バージョン `6.3.0` には **26 個のトップレベルスキル**（汎用開発スキル 16 個、Product Design スキル 10 個）が収録されています。
+**26 個のトップレベルスキル**：汎用開発スキル 16 個、Product Design スキル 10 個。
 
 | 分野 | スキルとガイダンス |
 | --- | --- |
@@ -234,7 +227,7 @@ Pi パッケージはスキルを読み込み、起動時とコンテキスト�
 
 ### Product Design
 
-バージョン `6.3.0` には、次の 10 個の Product Design スキルが含まれます。
+次の 10 個の Product Design スキルが含まれます。
 
 | スキル | 役割 |
 | --- | --- |
@@ -243,19 +236,11 @@ Pi パッケージはスキルを読み込み、起動時とコンテキスト�
 | `product-design-context` | デザイン対象、対象ユーザー、期待する成果を明確にします |
 | `product-design-research` | 最新の情報源からユーザーの課題とプロダクト機会を調査します |
 | `product-design-audit` | 現在取得した証拠を基に、プロダクトフローの UX、ビジュアル、アクセシビリティを監査します |
-| `product-design-ideate` | 具体的な題材に根ざし、意図的な視覚選択とアンチテンプレート批評を備えた 3 つの独自方向を、[Anthropic Frontend Design](https://github.com/anthropics/skills/tree/main/skills/frontend-design) を翻案した指針で生成します |
+| `product-design-ideate` | 具体的な題材に根ざし、意図的な視覚選択とアンチテンプレート批評を備えた 3 つの独自方向を生成します |
 | `product-design-url-to-code` | 公開 URL を忠実に再現した、実行可能なローカルフロントエンドプロトタイプを作成します |
 | `product-design-image-to-code` | 選択したビジュアルソースをレスポンシブで操作可能なフロントエンドとして実装します |
 | `product-design-design-qa` | ビジュアルソースとレンダリング結果を比較し、引き渡しの合否を判定します |
 | `product-design-share` | 要求されたときに実行可能なプロトタイプを公開し、共有リンクを返します |
-
-これらは Product Design `0.1.52` から取り込まれています。MIT ライセンスの出所は [`product-design.lock.json`](product-design.lock.json) と [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) に記録されています。
-
-取り込み内容の検証：
-
-```bash
-node scripts/check-product-design-import.mjs
-```
 
 ---
 
@@ -275,24 +260,6 @@ Wukong Code の方法論は言語に依存しません。リポジトリの根�
 
 ---
 
-## テスト
-
-決定論的なコアチェックを実行します。
-
-```bash
-npm test
-```
-
-コアに加えて brainstorm-server と Antigravity のチェックを実行します。
-
-```bash
-npm run test:extended
-```
-
-ホスト CLI、認証情報、実際の LLM セッションを必要とするテストは手動実行です。プラグインテストの入口と、独立した [wukong-code-evals](https://github.com/wukongnotnull/wukong-code-evals) の振る舞い評価手順は [`docs/testing.md`](docs/testing.md) を参照してください。
-
----
-
 ## 方針
 
 | 原則 | 意味 |
@@ -306,44 +273,50 @@ npm run test:extended
 
 ## FAQ
 
-**スキルを手動で呼び出す必要がありますか？**<br>
+**スキルを手動で呼び出す必要がありますか？**
+
 ありません。正しく統合されたエージェントはセッション開始時にブートストラップを読み込み、タスクの文脈から関連スキルを選びます。
 
-**複数のコーディングエージェントにインストールできますか？**<br>
+**複数のコーディングエージェントにインストールできますか？**
+
 はい。プラグインシステムは互いに独立しているため、それぞれにインストールしてください。
 
-**更新方法は？**<br>
+**更新方法は？**
+
 各エージェントが提供する更新手順を使用してください。リポジトリからインストールした場合は、通常、同じインストールコマンドを再実行して更新できます。
 
-**Wukong Code はプロジェクトの依存関係をインストールしますか？**<br>
+**Wukong Code はプロジェクトの依存関係をインストールしますか？**
+
 いいえ。コアはゼロ依存で、言語パックもツールをインストールしたり、リポジトリが定義したコマンドを置き換えたりしません。
 
-**振る舞い評価はどこにありますか？**<br>
+**振る舞い評価はどこにありますか？**
+
 スキルの振る舞い評価は [wukong-code-evals](https://github.com/wukongnotnull/wukong-code-evals) にあり、ローカルでは `evals/` にクローンします。プラグイン基盤のテストは `tests/` にあります。
 
 ---
 
-## コントリビューション
+## 作者について
 
-コントリビューションは、実際に経験した具体的な問題を解決する必要があります。開始前に [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md) とリポジトリのコントリビューター向け指示を読んでください。
+**悟空非空也 (Wukong)** — Way to AI の創設者、インディー開発者、コンテンツクリエイター。
 
-ドメイン固有または外部由来のスキルも、対象者が明確で、対応エージェント全体で安全に保守できる場合はコアレビューの対象になります。コントリビューターは、出所、ライセンス、依存関係への影響、テストまたは評価、保守・更新方針を開示する必要があります。エージェント対応の例外が別途明記されていない限り、コアはゼロ依存を維持します。
-
-1. 関連するオープン・クローズ済み PR を検索します。
-2. リポジトリをフォークして `dev` ブランチに切り替えます。
-3. 1 つの明確な問題につき 1 つのブランチを作ります。
-4. スキル変更では `writing-skills` と振る舞い評価を使用します。
-5. 少なくとも 1 つのエージェントでテストし、エージェント環境を完全に開示します。
-6. PR を作成する前に、人間のレビュアーへ完全な diff を提示します。
-
-プロジェクト固有、ツール固有、または個人向けの狭い統合は通常、独立したプラグインとして公開します。完全な手順は [`skills/writing-skills/SKILL.md`](skills/writing-skills/SKILL.md) と [`docs/testing.md`](docs/testing.md) を参照してください。
+| プラットフォーム | リンク |
+| --- | --- |
+| 🌐 ウェブサイト | [waytoai.cn](https://waytoai.cn) |
+| 𝕏 Twitter | [悟空非空也](https://x.com/wukongnotnull) |
+| 📺 Bilibili | [悟空非空也](https://space.bilibili.com/456634391) |
+| ▶️ YouTube | [悟空非空也](https://www.youtube.com/@wukongnotnull) |
+| 📕 Xiaohongshu | [悟空非空也](https://www.xiaohongshu.com/user/profile/5ca89c2f000000001100952b) |
+| 💬 WeChat | 「悟空非空也」で検索 |
 
 ---
 
-## コミュニティ
+## 謝辞
 
-- [GitHub Issues](https://github.com/wukongnotnull/wukong-code/issues)
-- [ソースリポジトリ](https://github.com/wukongnotnull/wukong-code)
+インスピレーションと基盤となる成果を提供してくださった、以下のオープンソースプロジェクトとスキルコレクションに感謝します。
+
+- [Superpowers](https://github.com/obra/superpowers)
+- [Frontend Design](https://github.com/anthropics/skills/tree/main/skills/frontend-design)
+- [Product Design](https://github.com/openai/role-specific-plugins/tree/main/plugins/product-design)
 
 ---
 
@@ -351,8 +324,4 @@ npm run test:extended
 
 Wukong Code は [MIT License](LICENSE) のもとで公開されています。第三者に関する告知は [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) に記録されています。
 
-<div align="center">
-
-MIT License · [Wukong Code](https://github.com/wukongnotnull/wukong-code)
-
-</div>
+MIT License © [悟空非空也](https://github.com/wukongnotnull)

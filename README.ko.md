@@ -1,18 +1,13 @@
-<div align="center">
-
-<img src="assets/wukong-code-small.svg" alt="Wukong Code 로고" width="160" />
-
 # Wukong Code
 
-**코딩 에이전트를 위한 완전한 소프트웨어 개발 방법론**<br>
+**코딩 에이전트를 위한 완전한 소프트웨어 개발 방법론**
+
 설계 우선 · 테스트 주도 개발 · 주장보다 검증
 
-[![라이선스: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![버전](https://img.shields.io/github/v/tag/wukongnotnull/wukong-code?label=version)](https://github.com/wukongnotnull/wukong-code/tags)
-[![플러그인](https://img.shields.io/badge/type-coding%20agent%20plugin-F59E0B.svg)](https://github.com/wukongnotnull/wukong-code)
-[![Stars](https://img.shields.io/github/stars/wukongnotnull/wukong-code?style=social)](https://github.com/wukongnotnull/wukong-code/stargazers)
-
-</div>
+[라이선스: MIT](LICENSE)
+[버전](https://github.com/wukongnotnull/wukong-code/tags)
+[플러그인](https://github.com/wukongnotnull/wukong-code)
+[Stars](https://github.com/wukongnotnull/wukong-code/stargazers)
 
 **언어:** [English](README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md)
 
@@ -20,7 +15,8 @@
 
 ---
 
-**빠른 탐색**<br>
+**빠른 탐색**
+
 [Wukong Code를 선택하는 이유](#wukong-code를-선택하는-이유) · [작동 방식](#작동-방식) · [설치](#지원-에이전트와-설치) · [기본 워크플로](#기본-워크플로) · [스킬](#포함된-내용) · [언어 가이드](#언어-가이드) · [테스트](#테스트) · [FAQ](#faq) · [기여](#기여) · [라이선스](#라이선스)
 
 ---
@@ -86,8 +82,6 @@ Product Design은 제품 아이디어와 작동하는 소프트웨어 사이의 
 
 설치 방법은 에이전트마다 다릅니다. 여러 에이전트를 사용한다면 각각 Wukong Code를 설치해야 합니다.
 
-현재 릴리스: **[v6.3.0](https://github.com/wukongnotnull/wukong-code/releases/tag/v6.3.0)**. 이 릴리스에서 Gemini CLI 지원이 종료되어 현재 지원 목록에는 포함되지 않습니다.
-
 **지원:** [Antigravity](#antigravity) · [Claude Code](#claude-code) · [Codex App](#codex-app) · [Codex CLI](#codex-cli) · [Cursor](#cursor) · [Factory Droid](#factory-droid) · [GitHub Copilot CLI](#github-copilot-cli) · [Kimi Code](#kimi-code) · [OpenCode](#opencode) · [Pi](#pi)
 
 ### Antigravity
@@ -111,21 +105,20 @@ Antigravity는 세션 시작 훅을 실행하므로 첫 메시지부터 Wukong C
 
 ### Codex App
 
-Wukong Code는 [Codex 공식 플러그인 마켓플레이스](https://github.com/openai/plugins)에서 제공됩니다.
+Wukong Code는 Codex 공식 플러그인 마켓플레이스에 등록되어 있지 않습니다. 이 저장소 URL에서 직접 설치하세요.
 
 1. Codex 사이드바에서 **Plugins**를 클릭합니다.
-2. Coding 섹션에서 **Wukong Code**를 찾습니다.
-3. `+`를 클릭하고 안내를 따릅니다.
+2. 저장소 URL에서 플러그인을 설치하는 옵션을 선택합니다.
+3. `https://github.com/wukongnotnull/wukong-code`를 입력하고 안내를 따릅니다.
 
 ### Codex CLI
 
-플러그인 화면을 엽니다.
+이 저장소를 마켓플레이스 소스로 추가한 다음 Wukong Code를 설치합니다.
 
-```text
-/plugins
+```bash
+/plugin marketplace add wukongnotnull/wukong-code
+/plugin install wukong-code@wukong-code
 ```
-
-`wukong-code`를 검색한 뒤 **Install Plugin**을 선택합니다.
 
 ### Cursor
 
@@ -219,7 +212,7 @@ Pi 패키지는 스킬을 불러오고 시작 시점과 컨텍스트 압축 후�
 
 ## 포함된 내용
 
-버전 `6.3.0`에는 **26개의 최상위 스킬**이 포함됩니다. 범용 개발 스킬 16개와 Product Design 스킬 10개입니다.
+**26개의 최상위 스킬**: 범용 개발 스킬 16개와 Product Design 스킬 10개.
 
 | 영역 | 스킬과 가이드 |
 | --- | --- |
@@ -234,7 +227,7 @@ Pi 패키지는 스킬을 불러오고 시작 시점과 컨텍스트 압축 후�
 
 ### Product Design
 
-버전 `6.3.0`에는 다음 10개의 Product Design 스킬이 포함됩니다.
+다음 10개의 Product Design 스킬이 포함됩니다.
 
 | 스킬 | 역할 |
 | --- | --- |
@@ -243,19 +236,11 @@ Pi 패키지는 스킬을 불러오고 시작 시점과 컨텍스트 압축 후�
 | `product-design-context` | 디자인 대상, 목표 사용자, 기대 결과를 명확히 합니다 |
 | `product-design-research` | 최신 출처를 바탕으로 사용자 문제와 제품 기회를 조사합니다 |
 | `product-design-audit` | 현재 수집한 근거로 제품 흐름의 UX, 시각 디자인, 접근성 문제를 감사합니다 |
-| `product-design-ideate` | 구체적인 주제에 기반하고 의도적인 시각 선택과 안티 템플릿 비평을 포함한 세 가지 독창적 방향을, [Anthropic Frontend Design](https://github.com/anthropics/skills/tree/main/skills/frontend-design)을 각색한 지침으로 생성합니다 |
+| `product-design-ideate` | 구체적인 주제에 기반하고 의도적인 시각 선택과 안티 템플릿 비평을 포함한 세 가지 독창적 방향을 생성합니다 |
 | `product-design-url-to-code` | 라이브 URL을 실행 가능한 로컬 프런트엔드 프로토타입으로 충실히 재현합니다 |
 | `product-design-image-to-code` | 선택한 시각 자료를 반응형 인터랙티브 프런트엔드로 구현합니다 |
 | `product-design-design-qa` | 시각 원본과 렌더링 결과를 비교하고 전달 가능 여부를 판정합니다 |
 | `product-design-share` | 요청 시 실행 가능한 프로토타입을 게시하고 공유 링크를 반환합니다 |
-
-이 스킬은 Product Design `0.1.52`에서 가져왔습니다. MIT 출처 정보는 [`product-design.lock.json`](product-design.lock.json)과 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)에 기록되어 있습니다.
-
-가져온 콘텐츠를 검증하려면 다음을 실행합니다.
-
-```bash
-node scripts/check-product-design-import.mjs
-```
 
 ---
 
@@ -275,24 +260,6 @@ Wukong Code의 방법론은 특정 언어에 종속되지 않습니다. 저장�
 
 ---
 
-## 테스트
-
-결정론적 코어 검사를 실행합니다.
-
-```bash
-npm test
-```
-
-코어 검사와 brainstorm-server 및 Antigravity 검사를 함께 실행합니다.
-
-```bash
-npm run test:extended
-```
-
-호스트 CLI, 자격 증명 또는 실제 LLM 세션이 필요한 테스트는 수동으로 실행해야 합니다. 플러그인 테스트 실행 방법과 별도의 [wukong-code-evals](https://github.com/wukongnotnull/wukong-code-evals) 행동 평가 과정은 [`docs/testing.md`](docs/testing.md)를 참고하세요.
-
----
-
 ## 철학
 
 | 원칙 | 의미 |
@@ -306,44 +273,50 @@ npm run test:extended
 
 ## FAQ
 
-**스킬을 직접 호출해야 하나요?**<br>
+**스킬을 직접 호출해야 하나요?**
+
 아니요. 올바르게 통합된 에이전트는 세션 시작 시 부트스트랩을 불러오고 작업 맥락에서 관련 스킬을 선택합니다.
 
-**여러 코딩 에이전트에 설치할 수 있나요?**<br>
+**여러 코딩 에이전트에 설치할 수 있나요?**
+
 예. 플러그인 시스템은 서로 독립적이므로 각 에이전트에 따로 설치해야 합니다.
 
-**어떻게 업데이트하나요?**<br>
+**어떻게 업데이트하나요?**
+
 각 에이전트가 제공하는 업데이트 절차를 사용하세요. 저장소 기반 설치는 일반적으로 설치 명령을 다시 실행해 갱신할 수 있습니다.
 
-**Wukong Code가 프로젝트 의존성을 설치하나요?**<br>
+**Wukong Code가 프로젝트 의존성을 설치하나요?**
+
 아니요. 코어는 외부 의존성이 없으며 언어 팩도 도구를 설치하거나 저장소가 정의한 명령을 바꾸지 않습니다.
 
-**행동 평가는 어디에 있나요?**<br>
+**행동 평가는 어디에 있나요?**
+
 스킬 행동 평가는 [wukong-code-evals](https://github.com/wukongnotnull/wukong-code-evals)에 있으며 로컬에서는 `evals/`에 클론합니다. 플러그인 인프라 테스트는 `tests/`에 있습니다.
 
 ---
 
-## 기여
+## 저자 소개
 
-기여는 실제로 경험한 구체적인 문제를 해결해야 합니다. 시작하기 전에 [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md)와 저장소 기여 지침을 읽으세요.
+**悟空非空也 (Wukong)** — Way to AI 창립자, 인디 개발자, 콘텐츠 크리에이터.
 
-도메인별 스킬과 외부에서 가져온 스킬도 대상 사용자가 명확하고 지원 에이전트 전반에서 안전하게 유지할 수 있다면 코어 리뷰 대상이 됩니다. 기여자는 출처, 라이선스, 의존성 영향, 테스트 또는 평가, 유지보수나 업데이트 전략을 공개해야 합니다. 에이전트 지원을 위한 예외가 별도로 문서화되지 않는 한 코어는 외부 의존성을 두지 않습니다.
-
-1. 관련된 열린 PR과 닫힌 PR을 검색합니다.
-2. 저장소를 포크하고 `dev` 브랜치로 전환합니다.
-3. 하나의 분명한 문제를 위한 하나의 브랜치를 만듭니다.
-4. 스킬 변경에는 `writing-skills`와 행동 평가를 사용합니다.
-5. 최소 한 개의 에이전트에서 테스트하고 전체 에이전트 환경을 공개합니다.
-6. PR을 만들기 전에 전체 diff를 사람 리뷰어에게 보여 줍니다.
-
-프로젝트별, 도구별, 좁은 개인 용도의 통합은 일반적으로 독립 플러그인으로 배포해야 합니다. 전체 절차는 [`skills/writing-skills/SKILL.md`](skills/writing-skills/SKILL.md)와 [`docs/testing.md`](docs/testing.md)를 참고하세요.
+| 플랫폼 | 링크 |
+| --- | --- |
+| 🌐 웹사이트 | [waytoai.cn](https://waytoai.cn) |
+| 𝕏 Twitter | [悟空非空也](https://x.com/wukongnotnull) |
+| 📺 Bilibili | [悟空非空也](https://space.bilibili.com/456634391) |
+| ▶️ YouTube | [悟空非空也](https://www.youtube.com/@wukongnotnull) |
+| 📕 Xiaohongshu | [悟空非空也](https://www.xiaohongshu.com/user/profile/5ca89c2f000000001100952b) |
+| 💬 WeChat | 「悟空非空也」 검색 |
 
 ---
 
-## 커뮤니티
+## 감사의 말
 
-- [GitHub Issues](https://github.com/wukongnotnull/wukong-code/issues)
-- [소스 저장소](https://github.com/wukongnotnull/wukong-code)
+영감과 기반을 제공한 다음 오픈 소스 프로젝트 및 스킬 모음에 감사드립니다.
+
+- [Superpowers](https://github.com/obra/superpowers)
+- [Frontend Design](https://github.com/anthropics/skills/tree/main/skills/frontend-design)
+- [Product Design](https://github.com/openai/role-specific-plugins/tree/main/plugins/product-design)
 
 ---
 
@@ -351,8 +324,4 @@ npm run test:extended
 
 Wukong Code는 [MIT License](LICENSE)로 배포됩니다. 서드파티 고지는 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md)에 기록되어 있습니다.
 
-<div align="center">
-
-MIT License · [Wukong Code](https://github.com/wukongnotnull/wukong-code)
-
-</div>
+MIT License © [悟空非空也](https://github.com/wukongnotnull)

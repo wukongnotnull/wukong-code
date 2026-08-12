@@ -1,18 +1,13 @@
-<div align="center">
-
-<img src="assets/wukong-code-small.svg" alt="Wukong Code 標誌" width="160" />
-
 # Wukong Code
 
-**面向程式設計智慧體的完整軟體開發方法論**<br>
+**面向程式設計智慧體的完整軟體開發方法論**
+
 先設計 · 測試驅動開發 · 先驗證再下結論
 
-[![授權條款：MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![版本](https://img.shields.io/github/v/tag/wukongnotnull/wukong-code?label=version)](https://github.com/wukongnotnull/wukong-code/tags)
-[![外掛](https://img.shields.io/badge/type-coding%20agent%20plugin-F59E0B.svg)](https://github.com/wukongnotnull/wukong-code)
-[![Stars](https://img.shields.io/github/stars/wukongnotnull/wukong-code?style=social)](https://github.com/wukongnotnull/wukong-code/stargazers)
-
-</div>
+[授權條款：MIT](LICENSE)
+[版本](https://github.com/wukongnotnull/wukong-code/tags)
+[外掛](https://github.com/wukongnotnull/wukong-code)
+[Stars](https://github.com/wukongnotnull/wukong-code/stargazers)
 
 **多語言：** [English](README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md)
 
@@ -20,7 +15,8 @@
 
 ---
 
-**快速導覽**<br>
+**快速導覽**
+
 [為什麼選擇 Wukong Code](#為什麼選擇-wukong-code) · [運作方式](#運作方式) · [安裝](#支援的智慧體與安裝方式) · [基本工作流程](#基本工作流程) · [技能庫](#包含內容) · [語言指導](#語言指導) · [測試](#測試) · [常見問題](#常見問題) · [參與貢獻](#參與貢獻) · [授權條款](#授權條款)
 
 ---
@@ -86,8 +82,6 @@ Product Design 連接產品想法與可執行的軟體。存在已儲存的產�
 
 不同智慧體的安裝方式不同。如果同時使用多個智慧體，需要分別安裝 Wukong Code。
 
-目前版本：**[v6.3.0](https://github.com/wukongnotnull/wukong-code/releases/tag/v6.3.0)**。此版本已停止支援 Gemini CLI，目前支援清單不再包含它。
-
 **支援：** [Antigravity](#antigravity) · [Claude Code](#claude-code) · [Codex App](#codex-app) · [Codex CLI](#codex-cli) · [Cursor](#cursor) · [Factory Droid](#factory-droid) · [GitHub Copilot CLI](#github-copilot-cli) · [Kimi Code](#kimi-code) · [OpenCode](#opencode) · [Pi](#pi)
 
 ### Antigravity
@@ -111,21 +105,20 @@ Antigravity 會執行工作階段啟動鉤子，因此 Wukong Code 從第一則�
 
 ### Codex App
 
-Wukong Code 已上架 [Codex 官方外掛市集](https://github.com/openai/plugins)。
+Wukong Code 尚未上架 Codex 官方外掛市集，請直接透過本儲存庫連結安裝：
 
 1. 點選 Codex 側邊欄中的 **Plugins**。
-2. 在 Coding 分類找到 **Wukong Code**。
-3. 點選 `+`，依提示完成安裝。
+2. 選擇透過儲存庫 URL 安裝外掛的選項。
+3. 輸入 `https://github.com/wukongnotnull/wukong-code`，依提示完成安裝。
 
 ### Codex CLI
 
-開啟外掛介面：
+將本儲存庫新增為外掛市集來源，然後安裝 Wukong Code：
 
-```text
-/plugins
+```bash
+/plugin marketplace add wukongnotnull/wukong-code
+/plugin install wukong-code@wukong-code
 ```
-
-搜尋 `wukong-code`，然後選擇 **Install Plugin**。
 
 ### Cursor
 
@@ -219,7 +212,7 @@ Pi 套件會載入技能，並在工作階段啟動和內容壓縮後注入 `usi
 
 ## 包含內容
 
-`6.3.0` 版本包含 **26 個頂層技能**：16 個通用開發技能與 10 個 Product Design 技能。
+**26 個頂層技能**：16 個通用開發技能與 10 個 Product Design 技能。
 
 | 領域 | 技能與指導 |
 | --- | --- |
@@ -234,7 +227,7 @@ Pi 套件會載入技能，並在工作階段啟動和內容壓縮後注入 `usi
 
 ### Product Design
 
-`6.3.0` 版本包含以下 10 個 Product Design 技能：
+包含以下 10 個 Product Design 技能：
 
 | 技能 | 作用 |
 | --- | --- |
@@ -243,19 +236,11 @@ Pi 套件會載入技能，並在工作階段啟動和內容壓縮後注入 `usi
 | `product-design-context` | 明確設計目標、目標使用者和預期結果 |
 | `product-design-research` | 根據最新來源研究使用者痛點與產品機會 |
 | `product-design-audit` | 根據目前擷取的證據稽核產品流程中的 UX、視覺與無障礙問題 |
-| `product-design-ideate` | 產生三個立足具體主題、視覺選擇明確且經過反範本批評的原創方向，並套用改編自 [Anthropic Frontend Design](https://github.com/anthropics/skills/tree/main/skills/frontend-design) 的指導 |
+| `product-design-ideate` | 產生三個立足具體主題、視覺選擇明確且經過反範本批評的原創方向 |
 | `product-design-url-to-code` | 將線上 URL 忠實複製為可執行的本機前端原型 |
 | `product-design-image-to-code` | 將選定視覺稿實作為響應式互動前端 |
 | `product-design-design-qa` | 比較視覺來源與渲染結果，並作為原型交付門檻 |
 | `product-design-share` | 使用者要求時發布可執行原型並回傳分享連結 |
-
-這些內容匯入自 Product Design `0.1.52`，MIT 來源記錄在 [`product-design.lock.json`](product-design.lock.json) 和 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) 中。
-
-驗證匯入內容：
-
-```bash
-node scripts/check-product-design-import.mjs
-```
 
 ---
 
@@ -275,24 +260,6 @@ Wukong Code 的方法論保持語言無關。當儲存庫證據能確定受支�
 
 ---
 
-## 測試
-
-執行確定性的核心檢查：
-
-```bash
-npm test
-```
-
-執行核心檢查以及 brainstorm-server 和 Antigravity 檢查：
-
-```bash
-npm run test:extended
-```
-
-需要宿主 CLI、憑證或真實 LLM 工作階段的測試仍需手動執行。外掛測試入口與獨立的 [wukong-code-evals](https://github.com/wukongnotnull/wukong-code-evals) 行為評估流程請參閱 [`docs/testing.md`](docs/testing.md)。
-
----
-
 ## 理念
 
 | 原則 | 含義 |
@@ -306,44 +273,50 @@ npm run test:extended
 
 ## 常見問題
 
-**需要手動呼叫技能嗎？**<br>
+**需要手動呼叫技能嗎？**
+
 不需要。正確整合的智慧體會在工作階段啟動時載入引導指令，再依任務情境選擇相關技能。
 
-**可以在多個程式設計智慧體中安裝嗎？**<br>
+**可以在多個程式設計智慧體中安裝嗎？**
+
 可以。不同智慧體的外掛系統彼此獨立，需要分別安裝。
 
-**如何更新？**<br>
+**如何更新？**
+
 使用對應智慧體提供的更新流程。透過儲存庫安裝時，通常可以重複安裝指令來更新版本。
 
-**Wukong Code 會安裝專案相依套件嗎？**<br>
+**Wukong Code 會安裝專案相依套件嗎？**
+
 不會。核心維持零相依，語言指導套件也不會安裝工具或取代儲存庫定義的指令。
 
-**行為評估在哪裡？**<br>
+**行為評估在哪裡？**
+
 技能行為評估位於 [wukong-code-evals](https://github.com/wukongnotnull/wukong-code-evals)，本機複製到 `evals/`；外掛基礎設施測試仍位於 `tests/`。
 
 ---
 
-## 參與貢獻
+## 關於作者
 
-貢獻必須解決真實經歷過的具體問題。開始前請閱讀 [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md) 和儲存庫貢獻指南。
+**悟空非空也（Wukong）**——Way to AI 創辦人、獨立開發者、內容創作者。
 
-領域專用技能與外部來源技能只要受眾明確，並能在支援的智慧體中安全維護，就可以進入核心審查。貢獻者必須揭露來源、授權條款、相依影響、測試或評估，以及維護或更新策略。除非針對智慧體支援另有明確記錄的例外，核心仍維持零相依。
-
-1. 搜尋開放和已關閉的 PR，確認是否已有相關工作。
-2. Fork 儲存庫並切換到 `dev` 分支。
-3. 一個分支只解決一個明確問題。
-4. 修改技能時必須使用 `writing-skills` 並執行行為評估。
-5. 至少在一個智慧體中測試，並完整揭露智慧體環境。
-6. 建立 PR 前，先讓人工審查者查看完整 diff。
-
-專案專用、工具專用和範圍狹窄的個人整合通常應作為獨立外掛發布。完整流程請參閱 [`skills/writing-skills/SKILL.md`](skills/writing-skills/SKILL.md) 和 [`docs/testing.md`](docs/testing.md)。
+| 平台 | 連結 |
+| --- | --- |
+| 🌐 網站 | [waytoai.cn](https://waytoai.cn) |
+| 𝕏 Twitter | [悟空非空也](https://x.com/wukongnotnull) |
+| 📺 Bilibili | [悟空非空也](https://space.bilibili.com/456634391) |
+| ▶️ YouTube | [悟空非空也](https://www.youtube.com/@wukongnotnull) |
+| 📕 小紅書 | [悟空非空也](https://www.xiaohongshu.com/user/profile/5ca89c2f000000001100952b) |
+| 💬 微信 | 搜尋「悟空非空也」 |
 
 ---
 
-## 社群
+## 致謝
 
-- [GitHub Issues](https://github.com/wukongnotnull/wukong-code/issues)
-- [原始碼儲存庫](https://github.com/wukongnotnull/wukong-code)
+感謝以下開源專案和技能集合帶來的啟發與基礎成果：
+
+- [Superpowers](https://github.com/obra/superpowers)
+- [Frontend Design](https://github.com/anthropics/skills/tree/main/skills/frontend-design)
+- [Product Design](https://github.com/openai/role-specific-plugins/tree/main/plugins/product-design)
 
 ---
 
@@ -351,8 +324,4 @@ npm run test:extended
 
 Wukong Code 採用 [MIT 授權條款](LICENSE)。第三方聲明記錄在 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) 中。
 
-<div align="center">
-
-MIT License · [Wukong Code](https://github.com/wukongnotnull/wukong-code)
-
-</div>
+MIT License © [悟空非空也](https://github.com/wukongnotnull)

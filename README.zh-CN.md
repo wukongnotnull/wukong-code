@@ -1,18 +1,13 @@
-<div align="center">
-
-<img src="assets/wukong-code-small.svg" alt="Wukong Code 标志" width="160" />
-
 # Wukong Code
 
-**面向编程智能体的完整软件开发方法论**<br>
+**面向编程智能体的完整软件开发方法论**
+
 先设计 · 测试驱动开发 · 先验证再下结论
 
-[![许可证：MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![版本](https://img.shields.io/github/v/tag/wukongnotnull/wukong-code?label=version)](https://github.com/wukongnotnull/wukong-code/tags)
-[![插件](https://img.shields.io/badge/type-coding%20agent%20plugin-F59E0B.svg)](https://github.com/wukongnotnull/wukong-code)
-[![Stars](https://img.shields.io/github/stars/wukongnotnull/wukong-code?style=social)](https://github.com/wukongnotnull/wukong-code/stargazers)
-
-</div>
+[许可证：MIT](LICENSE)
+[版本](https://github.com/wukongnotnull/wukong-code/tags)
+[插件](https://github.com/wukongnotnull/wukong-code)
+[Stars](https://github.com/wukongnotnull/wukong-code/stargazers)
 
 **多语言：** [English](README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-TW.md) · [日本語](README.ja.md) · [한국어](README.ko.md)
 
@@ -20,22 +15,25 @@
 
 ---
 
-**快捷导航**<br>
+**快捷导航**
+
 [为什么选择 Wukong Code](#为什么选择-wukong-code) · [工作原理](#工作原理) · [安装](#支持的智能体与安装方法) · [基础工作流](#基础工作流) · [技能库](#包含内容) · [语言指导](#语言指导) · [测试](#测试) · [常见问题](#常见问题) · [参与贡献](#参与贡献) · [许可证](#许可证)
 
 ---
 
 ## 为什么选择 Wukong Code
 
-| 能力 | 你能得到什么 |
-| --- | --- |
-| **先设计再写代码** | 智能体先澄清目标、比较方案并获得确认，然后才开始实现 |
-| **可执行的计划** | 将已确认的设计拆成带有具体文件和验证步骤的小任务 |
+
+| 能力          | 你能得到什么                               |
+| ----------- | ------------------------------------ |
+| **先设计再写代码** | 智能体先澄清目标、比较方案并获得确认，然后才开始实现           |
+| **可执行的计划**  | 将已确认的设计拆成带有具体文件和验证步骤的小任务             |
 | **真正的 TDD** | 强制执行 RED–GREEN–REFACTOR，而不是写完代码后再补测试 |
-| **系统化调试** | 提出修复方案前先调查根因 |
-| **全程评审** | 实施过程中持续检查需求符合度和代码质量 |
-| **先验证再下结论** | 必须取得最新验证结果，不能凭假设宣布完成 |
-| **自动触发** | 技能根据任务上下文自动启用，无需每次输入特殊提示词 |
+| **系统化调试**   | 提出修复方案前先调查根因                         |
+| **全程评审**    | 实施过程中持续检查需求符合度和代码质量                  |
+| **先验证再下结论** | 必须取得最新验证结果，不能凭假设宣布完成                 |
+| **自动触发**    | 技能根据任务上下文自动启用，无需每次输入特殊提示词            |
+
 
 适合希望编程智能体遵循可重复工程流程，而不只是快速生成代码的开发者。
 
@@ -86,8 +84,6 @@ Product Design 连接产品想法与可运行的软件。存在已保存的产�
 
 不同智能体的安装方式不同。如果你同时使用多个智能体，需要分别安装 Wukong Code。
 
-当前版本：**[v6.3.0](https://github.com/wukongnotnull/wukong-code/releases/tag/v6.3.0)**。此版本已停止支持 Gemini CLI，当前支持列表不再包含它。
-
 **支持：** [Antigravity](#antigravity) · [Claude Code](#claude-code) · [Codex App](#codex-app) · [Codex CLI](#codex-cli) · [Cursor](#cursor) · [Factory Droid](#factory-droid) · [GitHub Copilot CLI](#github-copilot-cli) · [Kimi Code](#kimi-code) · [OpenCode](#opencode) · [Pi](#pi)
 
 ### Antigravity
@@ -111,21 +107,20 @@ Antigravity 会运行会话启动钩子，因此 Wukong Code 从第一条消息�
 
 ### Codex App
 
-Wukong Code 已上架 [Codex 官方插件市场](https://github.com/openai/plugins)。
+Wukong Code 尚未上架 Codex 官方插件市场，请直接通过本仓库链接安装：
 
 1. 点击 Codex 侧边栏中的 **Plugins**。
-2. 在 Coding 分类找到 **Wukong Code**。
-3. 点击 `+`，按提示完成安装。
+2. 选择通过仓库 URL 安装插件的选项。
+3. 输入 `https://github.com/wukongnotnull/wukong-code`，按提示完成安装。
 
 ### Codex CLI
 
-打开插件界面：
+添加本仓库作为插件市场来源，然后安装 Wukong Code：
 
-```text
-/plugins
+```bash
+/plugin marketplace add wukongnotnull/wukong-code
+/plugin install wukong-code@wukong-code
 ```
-
-搜索 `wukong-code`，然后选择 **Install Plugin**。
 
 ### Cursor
 
@@ -219,43 +214,38 @@ Pi 软件包会加载技能，并在会话启动和上下文压缩后注入 `usi
 
 ## 包含内容
 
-`6.3.0` 版本包含 **26 个顶层技能**：16 个通用开发技能和 10 个 Product Design 技能。
+**26 个顶层技能**：16 个通用开发技能和 10 个 Product Design 技能。
 
-| 领域 | 技能与指导 |
-| --- | --- |
-| **测试** | `test-driven-development`、测试反模式 |
-| **调试** | `systematic-debugging`、根因追踪、纵深防御、基于条件的等待 |
-| **验证** | `verification-before-completion` |
-| **规划** | `brainstorming`、`grilling`、`writing-plans`、`executing-plans` |
-| **协作** | `dispatching-parallel-agents`、`subagent-driven-development`、`requesting-code-review`、`receiving-code-review` |
-| **工作区** | `using-git-worktrees`、`finishing-a-development-branch` |
-| **语言实现** | 基于证据的实验性 `language-guidance` 指导包 |
-| **元技能** | `writing-skills`、`using-wukong-code` |
+
+| 领域       | 技能与指导                                                                                                        |
+| -------- | ------------------------------------------------------------------------------------------------------------ |
+| **测试**   | `test-driven-development`、测试反模式                                                                              |
+| **调试**   | `systematic-debugging`、根因追踪、纵深防御、基于条件的等待                                                                     |
+| **验证**   | `verification-before-completion`                                                                             |
+| **规划**   | `brainstorming`、`grilling`、`writing-plans`、`executing-plans`                                                 |
+| **协作**   | `dispatching-parallel-agents`、`subagent-driven-development`、`requesting-code-review`、`receiving-code-review` |
+| **工作区**  | `using-git-worktrees`、`finishing-a-development-branch`                                                       |
+| **语言实现** | 基于证据的实验性 `language-guidance` 指导包                                                                             |
+| **元技能**  | `writing-skills`、`using-wukong-code`                                                                         |
+
 
 ### Product Design
 
-`6.3.0` 版本包含以下 10 个 Product Design 技能：
+包含以下 10 个 Product Design 技能：
 
-| 技能 | 作用 |
-| --- | --- |
-| `product-design` | Product Design 总入口，根据目标路由到对应的专用工作流 |
-| `product-design-user-context` | 保存或加载品牌素材、设计系统、截图、参考资料和偏好 |
-| `product-design-context` | 明确设计目标、目标用户和预期结果 |
-| `product-design-research` | 基于最新来源研究用户痛点与产品机会 |
-| `product-design-audit` | 根据当前采集的证据审计产品流程中的 UX、视觉与无障碍问题 |
-| `product-design-ideate` | 生成三个立足具体主题、视觉选择明确且经过反模板批评的原创方向，并应用改编自 [Anthropic Frontend Design](https://github.com/anthropics/skills/tree/main/skills/frontend-design) 的指导 |
-| `product-design-url-to-code` | 将线上 URL 忠实复刻为可运行的本地前端原型 |
-| `product-design-image-to-code` | 将选定视觉稿实现为响应式交互前端 |
-| `product-design-design-qa` | 对比视觉来源与渲染结果，并作为原型交付门槛 |
-| `product-design-share` | 用户要求时发布可运行原型并返回分享链接 |
 
-这些内容导入自 Product Design `0.1.52`，MIT 来源记录在 [`product-design.lock.json`](product-design.lock.json) 和 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) 中。
-
-验证导入内容：
-
-```bash
-node scripts/check-product-design-import.mjs
-```
+| 技能                             | 作用                                                                                                                                           |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `product-design`               | Product Design 总入口，根据目标路由到对应的专用工作流                                                                                                           |
+| `product-design-user-context`  | 保存或加载品牌素材、设计系统、截图、参考资料和偏好                                                                                                                    |
+| `product-design-context`       | 明确设计目标、目标用户和预期结果                                                                                                                             |
+| `product-design-research`      | 基于最新来源研究用户痛点与产品机会                                                                                                                            |
+| `product-design-audit`         | 根据当前采集的证据审计产品流程中的 UX、视觉与无障碍问题                                                                                                                |
+| `product-design-ideate`        | 生成三个立足具体主题、视觉选择明确且经过反模板批评的原创方向 |
+| `product-design-url-to-code`   | 将线上 URL 忠实复刻为可运行的本地前端原型                                                                                                                      |
+| `product-design-image-to-code` | 将选定视觉稿实现为响应式交互前端                                                                                                                             |
+| `product-design-design-qa`     | 对比视觉来源与渲染结果，并作为原型交付门槛                                                                                                                        |
+| `product-design-share`         | 用户要求时发布可运行原型并返回分享链接                                                                                                                          |
 
 ---
 
@@ -263,96 +253,86 @@ node scripts/check-product-design-import.mjs
 
 Wukong Code 的方法论保持语言无关。当仓库证据能够确定受支持的语言和工作阶段时，智能体只加载当前所需的实现指导。指导包不会安装工具，也不会覆盖仓库定义的命令。
 
-| 语言 | 状态 | 实现 | 测试 | 调试 | 评审 | 验证 | 证据 |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Go | 实验性 | ✓ | ✓ | ✓ | ✓ | ✓ | [评估报告](docs/wukong-code/evals/2026-07-22-go-language-guidance.md) |
-| Java | 实验性 | ✓ | ✓ | ✓ | ✓ | ✓ | [评估报告](docs/wukong-code/evals/2026-08-02-java-language-guidance.md) |
-| TypeScript | 计划中 | — | — | — | — | — | — |
-| Swift | 实验性 | ✓ | ✓ | ✓ | ✓ | ✓ | [评估报告](docs/wukong-code/evals/2026-07-29-swift-language-guidance.md) |
-| Rust | 实验性 | ✓ | ✓ | ✓ | ✓ | ✓ | [评估报告](docs/wukong-code/evals/2026-07-29-rust-language-guidance.md) |
+
+| 语言         | 状态  | 实现  | 测试  | 调试  | 评审  | 验证  | 证据                                                                   |
+| ---------- | --- | --- | --- | --- | --- | --- | -------------------------------------------------------------------- |
+| Go         | 实验性 | ✓   | ✓   | ✓   | ✓   | ✓   | [评估报告](docs/wukong-code/evals/2026-07-22-go-language-guidance.md)    |
+| Java       | 实验性 | ✓   | ✓   | ✓   | ✓   | ✓   | [评估报告](docs/wukong-code/evals/2026-08-02-java-language-guidance.md)  |
+| TypeScript | 计划中 | —   | —   | —   | —   | —   | —                                                                    |
+| Swift      | 实验性 | ✓   | ✓   | ✓   | ✓   | ✓   | [评估报告](docs/wukong-code/evals/2026-07-29-swift-language-guidance.md) |
+| Rust       | 实验性 | ✓   | ✓   | ✓   | ✓   | ✓   | [评估报告](docs/wukong-code/evals/2026-07-29-rust-language-guidance.md)  |
+
 
 **实验性**表示已完成初步行为评估，但仍在积累真实项目证据。框架、云服务、数据库和团队专用指导不属于核心范围。
 
 ---
 
-## 测试
-
-运行确定性的核心检查：
-
-```bash
-npm test
-```
-
-运行核心检查以及 brainstorm-server 和 Antigravity 检查：
-
-```bash
-npm run test:extended
-```
-
-需要宿主 CLI、凭据或真实 LLM 会话的测试仍需手动运行。插件测试入口和独立的 [wukong-code-evals](https://github.com/wukongnotnull/wukong-code-evals) 行为评估流程详见 [`docs/testing.md`](docs/testing.md)。
-
----
-
 ## 理念
 
-| 原则 | 含义 |
-| --- | --- |
-| **测试驱动开发** | 永远先写失败测试 |
-| **系统化优于临时发挥** | 遵循可重复流程，而不是猜测 |
-| **降低复杂度** | 优先选择最小且清晰的解决方案 |
-| **证据优于声明** | 宣布成功前先验证 |
+
+| 原则            | 含义             |
+| ------------- | -------------- |
+| **测试驱动开发**    | 永远先写失败测试       |
+| **系统化优于临时发挥** | 遵循可重复流程，而不是猜测  |
+| **降低复杂度**     | 优先选择最小且清晰的解决方案 |
+| **证据优于声明**    | 宣布成功前先验证       |
+
 
 ---
 
 ## 常见问题
 
-**需要手动调用技能吗？**<br>
+**需要手动调用技能吗？**
+
 不需要。正确集成的智能体会在会话启动时加载引导指令，再根据任务上下文选择相关技能。
 
-**可以在多个编程智能体中安装吗？**<br>
+**可以在多个编程智能体中安装吗？**
+
 可以。不同智能体的插件系统彼此独立，需要分别安装。
 
-**如何更新？**<br>
+**如何更新？**
+
 使用对应智能体提供的更新流程。通过仓库安装时，通常可以重复安装命令来刷新版本。
 
-**Wukong Code 会安装项目依赖吗？**<br>
+**Wukong Code 会安装项目依赖吗？**
+
 不会。核心保持零依赖，语言指导包也不会安装工具或替换仓库定义的命令。
 
-**行为评估在哪里？**<br>
+**行为评估在哪里？**
+
 技能行为评估位于 [wukong-code-evals](https://github.com/wukongnotnull/wukong-code-evals)，本地克隆到 `evals/`；插件基础设施测试仍位于 `tests/`。
 
 ---
 
-## 参与贡献
+## 关于作者
 
-贡献必须解决真实经历过的具体问题。开始前请阅读 [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md) 和仓库贡献指南。
+**悟空非空也（Wukong）**——Way to AI 创始人、独立开发者、内容创作者。
 
-领域专用技能和外部来源技能只要受众明确，并能在受支持的智能体中安全维护，就可以进入核心评审。贡献者必须披露来源、许可证、依赖影响、测试或评估，以及维护或更新策略。除非针对智能体支持另有明确记录的例外，核心仍保持零依赖。
 
-1. 搜索开放和已关闭的 PR，确认是否已有相关工作。
-2. Fork 仓库并切换到 `dev` 分支。
-3. 一个分支只解决一个明确问题。
-4. 修改技能时必须使用 `writing-skills` 并运行行为评估。
-5. 至少在一个智能体中测试，并完整披露智能体环境。
-6. 创建 PR 前，先让人工评审者查看完整 diff。
+| 平台          | 链接                                                                         |
+| ----------- | -------------------------------------------------------------------------- |
+| 🌐 网站       | [waytoai.cn](https://waytoai.cn)                                           |
+| 𝕏 Twitter  | [悟空非空也](https://x.com/wukongnotnull)                                       |
+| 📺 Bilibili | [悟空非空也](https://space.bilibili.com/456634391)                              |
+| ▶️ YouTube  | [悟空非空也](https://www.youtube.com/@wukongnotnull)                            |
+| 📕 小红书      | [悟空非空也](https://www.xiaohongshu.com/user/profile/5ca89c2f000000001100952b) |
+| 💬 微信       | 搜索「悟空非空也」                                                                  |
 
-项目专用、工具专用和范围狭窄的个人集成通常应作为独立插件发布。完整流程见 [`skills/writing-skills/SKILL.md`](skills/writing-skills/SKILL.md) 和 [`docs/testing.md`](docs/testing.md)。
 
 ---
 
-## 社区
+## 致谢
 
-- [GitHub Issues](https://github.com/wukongnotnull/wukong-code/issues)
-- [源代码仓库](https://github.com/wukongnotnull/wukong-code)
+感谢以下开源项目和技能集合提供的启发与基础工作：
+
+- [Superpowers](https://github.com/obra/superpowers)
+- [Frontend Design](https://github.com/anthropics/skills/tree/main/skills/frontend-design)
+- [Product Design](https://github.com/openai/role-specific-plugins/tree/main/plugins/product-design)
 
 ---
 
 ## 许可证
 
-Wukong Code 基于 [MIT 许可证](LICENSE)发布。第三方声明记录在 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) 中。
+Wukong Code 基于 [MIT 许可证](LICENSE)发布。第三方声明记录在 `[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)` 中。
 
-<div align="center">
-
-MIT License · [Wukong Code](https://github.com/wukongnotnull/wukong-code)
-
-</div>
+MIT License © [悟空非空也](https://github.com/wukongnotnull)
