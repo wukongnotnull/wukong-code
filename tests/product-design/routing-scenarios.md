@@ -31,6 +31,7 @@ Expected:
 - Skills: `product-design`, then `product-design-audit`.
 - It does not insert `product-design-context` before the audit and does not
   invoke a source-change workflow.
+- `frontend-design` does not load for an evidence-based audit.
 
 ## PD3: Research and explore a new direction
 
@@ -41,8 +42,10 @@ Expected:
 - Primary process: `brainstorming` because the request creates a new design
   direction.
 - Skills in domain order: `product-design`, `product-design-user-context`,
-  `product-design-research`, `product-design-context`, and
+  `product-design-research`, `frontend-design`, `product-design-context`, and
   `product-design-ideate`.
+- `frontend-design` loads after the brainstorming gate and before
+  `product-design-ideate` because the request asks for new visual directions.
 - It waits for a visual selection before implementation.
 
 ## PD4: Faithful URL clone
@@ -56,6 +59,7 @@ Expected:
 - Skills: `product-design`, `product-design-user-context`,
   `product-design-context`, `product-design-url-to-code`, then
   `product-design-design-qa`.
+- `frontend-design` does not load; the captured URL is authoritative.
 - It captures the live source before coding and does not silently redesign it.
 
 ## PD5: Implement a selected image
@@ -68,6 +72,7 @@ Expected:
   the already-selected design satisfies the design gate.
 - Skills: `product-design`, `product-design-image-to-code`, then
   `product-design-design-qa`.
+- `frontend-design` does not load again; the selected image is authoritative.
 - Wukong verification remains required after visual comparison.
 
 ## PD6: Ordinary UI implementation remains Wukong-led
@@ -110,6 +115,46 @@ Expected:
   `~/.codex` directory.
 - The agent uses the sequential fallback for capture/build/compare/fix rather
   than treating missing subagents as a blocker.
+
+## PD9: Original Product Design direction
+
+Prompt: `Use Product Design to create three original visual directions for a new independent-bookstore landing page. There is no existing visual target.`
+
+Expected:
+
+- Primary process: `brainstorming`; its design gate remains authoritative.
+- Skills after the governing process permits domain guidance:
+  `product-design`, `frontend-design`, `product-design-user-context`,
+  `product-design-context`, and `product-design-ideate`.
+- `frontend-design` grounds the subject, audience, page job, visual system,
+  signature element, and anti-template critique before ImageGen prompts.
+- The agent waits for the user to select one of exactly three visual options.
+
+## PD10: Substantial redesign from a URL
+
+Prompt: `Use Product Design to redesign https://example.com/account into a new premium direction. Treat the current page as context, not a visual target to clone.`
+
+Expected:
+
+- Primary process: `brainstorming`; its design gate remains authoritative.
+- Skills after the governing process permits domain guidance:
+  `product-design`, `frontend-design`, `product-design-user-context`,
+  `product-design-context`, and `product-design-ideate`.
+- The current URL is captured as evidence, while `frontend-design` may shape
+  only the visual axes the redesign brief leaves open.
+- It does not route to `product-design-url-to-code` as a faithful clone.
+
+## PD11: Research-only Product Design request
+
+Prompt: `Use Product Design to research current onboarding pain for this product. Report findings only; do not redesign or implement anything.`
+
+Expected:
+
+- Primary process: direct read-only research path.
+- Skills: `product-design`, `product-design-user-context`, and
+  `product-design-research`.
+- `frontend-design` does not load because no visual direction is being
+  invented.
 
 ## Pass criteria
 

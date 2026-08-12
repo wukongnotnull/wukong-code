@@ -81,7 +81,7 @@ for skill in "${EXPECTED_SKILLS[@]}"; do
   grep -Fq "$skill" "$ROUTING_SCENARIOS" ||
     fail "routing scenarios do not cover $skill"
 done
-for scenario in PD1 PD2 PD3 PD4 PD5 PD6 PD7 PD8; do
+for scenario in PD1 PD2 PD3 PD4 PD5 PD6 PD7 PD8 PD9 PD10 PD11; do
   grep -Fq "## $scenario:" "$ROUTING_SCENARIOS" ||
     fail "routing scenarios are missing $scenario"
 done
@@ -114,6 +114,17 @@ grep -Fq "product-design-host-capabilities.md" "$REPO_ROOT/skills/product-design
   fail "Product Design router does not link the host capability contract"
 grep -Fq "wukong-product-design-composition.md" "$REPO_ROOT/references/critical-overrides.md" ||
   fail "Product Design critical overrides do not link the Wukong composition contract"
+grep -Fq 'Original visual directions and substantial redesigns load `$frontend-design`' \
+  "$REPO_ROOT/skills/product-design/SKILL.md" ||
+  fail "Product Design router does not include frontend-design for original directions"
+grep -Fq 'Faithful workflows exclude `$frontend-design`' \
+  "$REPO_ROOT/references/wukong-product-design-composition.md" ||
+  fail "composition contract does not protect fidelity workflows"
+grep -Fq '[$frontend-design](../frontend-design/SKILL.md)' \
+  "$REPO_ROOT/skills/product-design-ideate/SKILL.md" ||
+  fail "Product Design ideation does not load frontend-design"
+grep -Fq 'frontend-design does not load' "$ROUTING_SCENARIOS" ||
+  fail "routing scenarios do not contain a frontend-design negative control"
 
 if grep -Fq "/plugins/product-design/" "$REPO_ROOT/references/local-prototype-preflight.md"; then
   fail "local prototype preflight still assumes a standalone product-design plugin path"
