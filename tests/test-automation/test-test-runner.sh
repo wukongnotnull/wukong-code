@@ -168,8 +168,11 @@ assert_file_contains "$REPO_ROOT/package.json" \
   '"test:extended": "bash scripts/test.sh --suite extended"' \
   "package metadata exposes the extended suite"
 assert_file_contains "$REPO_ROOT/.github/workflows/test.yml" \
-  'run: npm test' \
-  "workflow runs the core suite"
+  'run: npm run test:extended' \
+  "workflow runs the extended suite for pull requests and pushes"
+assert_file_contains "$REPO_ROOT/.github/workflows/test.yml" \
+  'cache-dependency-path: tests/brainstorm-server/package-lock.json' \
+  "workflow caches the nested extended-suite lockfile"
 assert_file_contains "$REPO_ROOT/.github/workflows/test.yml" \
   'workflow_dispatch:' \
   "workflow exposes manual dispatch"
