@@ -29,7 +29,7 @@ Then announce "Using [skill] to [purpose]" and follow the skill exactly. If it h
 
 ## Skill Priority
 
-When multiple skills apply, process skills come first — they set the approach, then implementation skills (frontend-design, etc.) carry it out. Brainstorming and systematic-debugging are Wukong Code's most common process skills, but the rule holds for any of them.
+When multiple skills apply, process skills come first — they set the approach, then domain or implementation skills carry it out. Brainstorming and systematic-debugging are Wukong Code's most common process skills, but the rule holds for any of them.
 
 - "Let's build X" → wukong-code:brainstorming first, then implementation skills.
 - "Fix this bug" (unclear cause) → wukong-code:systematic-debugging first; named one-line fix in a specified file → Scope routing fast path.

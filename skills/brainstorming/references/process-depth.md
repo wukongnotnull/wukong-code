@@ -31,7 +31,7 @@ digraph brainstorming {
 }
 ```
 
-**Full-depth terminal state is invoking writing-plans.** Do NOT invoke frontend-design, mcp-builder, or any other implementation skill before that. (Condensed single-module exit may implement after approval—see resident `SKILL.md`.)
+**Full-depth terminal state is invoking writing-plans.** Do NOT invoke domain or implementation skills before that. (Condensed single-module exit may implement after approval—see resident `SKILL.md`.)
 
 ## The Process
 
