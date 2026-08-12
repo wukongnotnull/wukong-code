@@ -133,6 +133,22 @@ EOF
 
 echo "Codex package archive tests"
 
+# Package the candidate working tree without mutating the real index or HEAD.
+# The packaging script intentionally archives a Git ref, even with
+# `--allow-dirty`, so using HEAD here would test stale committed content.
+candidate_index="$TEST_ROOT/candidate-index"
+GIT_INDEX_FILE="$candidate_index" git -C "$REPO_ROOT" read-tree HEAD
+GIT_INDEX_FILE="$candidate_index" git -C "$REPO_ROOT" add --all
+candidate_tree="$(GIT_INDEX_FILE="$candidate_index" git -C "$REPO_ROOT" write-tree)"
+candidate_ref="$(
+  GIT_AUTHOR_NAME="Wukong Code Tests" \
+  GIT_AUTHOR_EMAIL="tests@wukong-code.local" \
+  GIT_COMMITTER_NAME="Wukong Code Tests" \
+  GIT_COMMITTER_EMAIL="tests@wukong-code.local" \
+    git -C "$REPO_ROOT" commit-tree "$candidate_tree" -p HEAD \
+      -m "Temporary Codex packaging candidate"
+)"
+
 metadata_source="$TEST_ROOT/metadata-source"
 archive="$TEST_ROOT/wukong-code"
 tar_archive="$TEST_ROOT/wukong-code.tar.gz"
@@ -144,7 +160,7 @@ rm -rf "$metadata_source/skills/language-guidance"
 source_hooks="$(python3 -c 'import json; print(json.load(open("'"$REPO_ROOT"'/.codex-plugin/plugin.json")).get("hooks"))')"
 assert_equals "$source_hooks" "./hooks/hooks-codex.json" "source Codex manifest declares its SessionStart hook"
 
-if output="$("$SCRIPT_UNDER_TEST" --allow-dirty --metadata-source "$metadata_source" --output "$archive" 2>&1)"; then
+if output="$("$SCRIPT_UNDER_TEST" --allow-dirty --ref "$candidate_ref" --metadata-source "$metadata_source" --output "$archive" 2>&1)"; then
   pass "package script exits successfully"
 else
   fail "package script exits successfully"
@@ -184,8 +200,17 @@ if printf '%s' "$archive_paths" | grep -Fxq "skills/index/SKILL.md"; then
 else
   pass "archive excludes legacy generic Product Design router"
 fi
-assert_contains "$archive_paths" "skills/frontend-design/SKILL.md" "archive includes Anthropic frontend-design skill"
-assert_contains "$archive_paths" "skills/frontend-design/LICENSE.txt" "archive includes frontend-design Apache license"
+if printf '%s' "$archive_paths" | grep -Fxq "skills/frontend-design/SKILL.md"; then
+  fail "archive excludes removed standalone frontend-design skill"
+else
+  pass "archive excludes removed standalone frontend-design skill"
+fi
+assert_contains "$archive_paths" \
+  "skills/product-design-ideate/references/original-visual-direction.md" \
+  "archive includes folded original visual-direction guidance"
+assert_contains "$archive_paths" \
+  "references/licenses/frontend-design-APACHE-2.0.txt" \
+  "archive includes frontend-design Apache license"
 for swift_phase in profile implementation testing debugging review verification; do
   assert_contains "$archive_paths" \
     "skills/language-guidance/references/swift/$swift_phase.md" \
@@ -253,7 +278,7 @@ PY
 )"
 assert_equals "$zip_times" "(1980, 1, 1, 0, 0, 0)" "zip archive normalizes entry timestamps"
 
-if tar_output="$("$SCRIPT_UNDER_TEST" --allow-dirty --metadata-source "$metadata_source" --format tar.gz --output "$tar_archive" 2>&1)"; then
+if tar_output="$("$SCRIPT_UNDER_TEST" --allow-dirty --ref "$candidate_ref" --metadata-source "$metadata_source" --format tar.gz --output "$tar_archive" 2>&1)"; then
   pass "package script writes explicit tar.gz archive"
 else
   fail "package script writes explicit tar.gz archive"
@@ -288,7 +313,7 @@ archive_from_zip_source="$TEST_ROOT/wukong-code-from-zip-source.zip"
   zip -X -q -r "$metadata_zip" .
 )
 
-if output="$("$SCRIPT_UNDER_TEST" --allow-dirty --metadata-source "$metadata_archive" --output "$archive_from_tar_source" 2>&1)"; then
+if output="$("$SCRIPT_UNDER_TEST" --allow-dirty --ref "$candidate_ref" --metadata-source "$metadata_archive" --output "$archive_from_tar_source" 2>&1)"; then
   pass "package script accepts tarball metadata source"
 else
   fail "package script accepts tarball metadata source"
@@ -301,7 +326,7 @@ else
   fail "tarball metadata source produces identical archive"
 fi
 
-if output="$("$SCRIPT_UNDER_TEST" --allow-dirty --metadata-source "$metadata_zip" --output "$archive_from_zip_source" 2>&1)"; then
+if output="$("$SCRIPT_UNDER_TEST" --allow-dirty --ref "$candidate_ref" --metadata-source "$metadata_zip" --output "$archive_from_zip_source" 2>&1)"; then
   pass "package script accepts zip metadata source"
 else
   fail "package script accepts zip metadata source"
@@ -320,7 +345,7 @@ cp "$metadata_source/skills/brainstorming/agents/openai.yaml" \
   "$incomplete_metadata/skills/brainstorming/agents/openai.yaml"
 
 set +e
-missing_output="$("$SCRIPT_UNDER_TEST" --allow-dirty --metadata-source "$incomplete_metadata" --output "$TEST_ROOT/missing.tar.gz" 2>&1)"
+missing_output="$("$SCRIPT_UNDER_TEST" --allow-dirty --ref "$candidate_ref" --metadata-source "$incomplete_metadata" --output "$TEST_ROOT/missing.tar.gz" 2>&1)"
 missing_status=$?
 set -e
 if [[ "$missing_status" -ne 0 ]]; then

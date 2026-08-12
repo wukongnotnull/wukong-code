@@ -29,3 +29,16 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## Anthropic Frontend Design guidance
+
+The original visual-direction reference at
+`skills/product-design-ideate/references/original-visual-direction.md` is
+adapted from Anthropic's
+[`frontend-design`](https://github.com/anthropics/skills/tree/main/skills/frontend-design)
+skill under the Apache License 2.0. It has been modified and narrowed for
+Product Design's original-direction ideation workflow; it is no longer exposed
+as a standalone skill.
+
+The complete license is available at
+[`references/licenses/frontend-design-APACHE-2.0.txt`](references/licenses/frontend-design-APACHE-2.0.txt).

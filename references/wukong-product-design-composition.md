@@ -51,21 +51,21 @@ preserve the Wukong lifecycle gate and apply the Product Design instruction
 within it. If that cannot be done without materially changing the requested
 outcome, stop and ask the human partner which outcome to prioritize.
 
-## Frontend visual guidance
+## Original visual-direction guidance
 
-Original visual directions and substantial redesigns may load
-`frontend-design` as secondary visual-domain guidance after the selected
-Wukong lifecycle gate permits it. Resolve conflicts in this order:
+Original visual directions and substantial redesigns may load Product Design's
+internal original visual-direction guidance after the selected Wukong
+lifecycle gate permits it. Resolve conflicts in this order:
 
 1. Explicit human-partner requirements and hard constraints.
 2. Supplied or saved source evidence, existing design systems, brand assets,
    tokens, and approved visual targets.
 3. The selected Wukong process and its lifecycle gates.
 4. Product Design workflow contracts.
-5. `frontend-design` choices on visual axes the brief leaves open.
+5. Original visual-direction choices on visual axes the brief leaves open.
 
-Faithful workflows exclude `$frontend-design`: audits, research-only work, URL
-clones, selected-visual implementation, design QA, and sharing preserve their
-source of truth. `frontend-design` cannot waive the three-option selection
-gate, replace image options with prose or ASCII wireframes, or authorize
-implementation.
+Fidelity-preserving workflows exclude the original visual-direction guidance:
+audits, research-only work, URL clones, selected-visual implementation, design
+QA, and sharing preserve their source of truth. The internal guidance cannot
+waive the three-option selection gate, replace image options with prose or
+ASCII wireframes, or authorize implementation.

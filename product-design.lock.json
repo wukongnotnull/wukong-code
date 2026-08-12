@@ -24,6 +24,7 @@
     "references/critical-overrides.md",
     "references/existing-codebase-edits.md",
     "references/local-prototype-preflight.md",
+    "references/licenses/frontend-design-APACHE-2.0.txt",
     "references/product-design-host-capabilities.md",
     "references/wukong-product-design-composition.md",
     "scripts/bootstrap-prototype.mjs",
@@ -32,7 +33,7 @@
   ],
   "integrity": {
     "algorithm": "sha256-path-content-v1",
-    "value": "2d5a48c90bdd2623c18524fbb77d0197790fe3473628264ad93e487c974b749e"
+    "value": "f2afa2c8bc749e2dea2415779e5a3e021d24b419f47aba06bff9b2e01e65fe74"
   },
   "local_adaptations": [
     "Collision-free product-design skill namespace",
@@ -40,6 +41,7 @@
     "installed-path resolution guidance",
     "Codex packaging and sync integration",
     "Deterministic integrated-content integrity lock",
+    "Anthropic visual-direction guidance folded into Product Design ideation",
     "Gemini integration retirement"
   ]
 }

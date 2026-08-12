@@ -219,7 +219,7 @@ The Pi package loads the skills and injects the `using-wukong-code` bootstrap at
 
 ## What's inside
 
-Version `6.3.0` ships **27 top-level skills**: 17 general development skills and 10 Product Design skills.
+Version `6.3.0` ships **26 top-level skills**: 16 general development skills and 10 Product Design skills.
 
 | Area | Skills and guidance |
 | --- | --- |
@@ -230,7 +230,6 @@ Version `6.3.0` ships **27 top-level skills**: 17 general development skills and
 | **Collaboration** | `dispatching-parallel-agents`, `subagent-driven-development`, `requesting-code-review`, `receiving-code-review` |
 | **Workspace** | `using-git-worktrees`, `finishing-a-development-branch` |
 | **Language implementation** | Experimental evidence-based `language-guidance` packs |
-| **Frontend design** | Distinctive, intentional frontend visual-design guidance from [Anthropic Skills](https://github.com/anthropics/skills/tree/main/skills/frontend-design) |
 | **Meta** | `writing-skills`, `using-wukong-code` |
 
 ### Product Design
@@ -244,7 +243,7 @@ Version `6.3.0` bundles these ten Product Design skills:
 | `product-design-context` | Clarifies the design target, intended user, and desired outcome |
 | `product-design-research` | Researches current user pain points and product opportunities from fresh sources |
 | `product-design-audit` | Audits product flows for UX, visual-design, and accessibility issues using captured evidence |
-| `product-design-ideate` | Generates three visual directions for the user to compare and select |
+| `product-design-ideate` | Generates three subject-grounded, intentional visual directions with an anti-template critique, using adapted [Anthropic Frontend Design](https://github.com/anthropics/skills/tree/main/skills/frontend-design) guidance |
 | `product-design-url-to-code` | Faithfully recreates a live URL as a runnable local frontend prototype |
 | `product-design-image-to-code` | Implements a selected visual source as a responsive, interactive frontend |
 | `product-design-design-qa` | Compares the rendered implementation with its visual source and gates handoff |

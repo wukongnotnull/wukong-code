@@ -219,7 +219,7 @@ Pi 套件會載入技能，並在工作階段啟動和內容壓縮後注入 `usi
 
 ## 包含內容
 
-`6.3.0` 版本包含 **27 個頂層技能**：17 個通用開發技能與 10 個 Product Design 技能。
+`6.3.0` 版本包含 **26 個頂層技能**：16 個通用開發技能與 10 個 Product Design 技能。
 
 | 領域 | 技能與指導 |
 | --- | --- |
@@ -230,7 +230,6 @@ Pi 套件會載入技能，並在工作階段啟動和內容壓縮後注入 `usi
 | **協作** | `dispatching-parallel-agents`、`subagent-driven-development`、`requesting-code-review`、`receiving-code-review` |
 | **工作區** | `using-git-worktrees`、`finishing-a-development-branch` |
 | **語言實作** | 以證據為基礎的實驗性 `language-guidance` 指導套件 |
-| **前端設計** | 來自 [Anthropic Skills](https://github.com/anthropics/skills/tree/main/skills/frontend-design) 的鮮明、嚴謹前端視覺設計指導 |
 | **元技能** | `writing-skills`、`using-wukong-code` |
 
 ### Product Design
@@ -244,7 +243,7 @@ Pi 套件會載入技能，並在工作階段啟動和內容壓縮後注入 `usi
 | `product-design-context` | 明確設計目標、目標使用者和預期結果 |
 | `product-design-research` | 根據最新來源研究使用者痛點與產品機會 |
 | `product-design-audit` | 根據目前擷取的證據稽核產品流程中的 UX、視覺與無障礙問題 |
-| `product-design-ideate` | 產生三個可供比較和選擇的視覺方向 |
+| `product-design-ideate` | 產生三個立足具體主題、視覺選擇明確且經過反範本批評的原創方向，並套用改編自 [Anthropic Frontend Design](https://github.com/anthropics/skills/tree/main/skills/frontend-design) 的指導 |
 | `product-design-url-to-code` | 將線上 URL 忠實複製為可執行的本機前端原型 |
 | `product-design-image-to-code` | 將選定視覺稿實作為響應式互動前端 |
 | `product-design-design-qa` | 比較視覺來源與渲染結果，並作為原型交付門檻 |

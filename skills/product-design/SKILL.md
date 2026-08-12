@@ -44,17 +44,17 @@ Process selection is mandatory before focused Product Design routing.
   project: load `$test-driven-development` first, then the focused Product
   Design build and QA guidance.
 
-## Frontend Design Composition
+## Original Visual-Direction Composition
 
-Original visual directions and substantial redesigns load `$frontend-design`
-after the governing Wukong process permits secondary domain guidance and
-before `$product-design-ideate`. This includes new products, pages, screens,
-or features with no selected visual target, plus redesigns that may
-intentionally depart from their source.
+Original visual directions and substantial redesigns load the internal original visual-direction guidance
+through `$product-design-ideate` after the governing Wukong process permits
+secondary domain guidance. This includes new products, pages, screens, or
+features with no selected visual target, plus redesigns that may intentionally
+depart from their source.
 
 Audits, research-only requests, faithful URL clones, selected-visual
 implementations, design QA, sharing, and ordinary UI implementation do not
-load `$frontend-design`. For URL requests, `clone`, `recreate`, or `match
+apply the guidance. For URL requests, `clone`, `recreate`, or `match
 faithfully` selects the fidelity branch; `redesign`, `new direction`, or
 `inspired by` selects the original-direction branch. `make ... better` and
 `match ... but modernize` are materially ambiguous: ask whether the user wants
@@ -171,7 +171,7 @@ Capture and review a product flow, journey, screen, or multi-step product experi
 
 Generate image-based visual alternatives, remixes, or concept directions for a component, screen, feature, workflow, or product idea. Route here after `get-context` has played back the minimum brief and the user needs visual exploration, design variants, alternatives to an existing design, or idea discovery before choosing a visual target. Prefer this over prose-only ideation unless the user asks for prose.
 For an original visual direction or substantial redesign, apply the
-`Frontend Design Composition` section before routing here.
+`Original Visual-Direction Composition` section before routing here.
 
 ### $product-design-url-to-code
 

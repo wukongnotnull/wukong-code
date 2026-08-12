@@ -219,7 +219,7 @@ Pi パッケージはスキルを読み込み、起動時とコンテキスト�
 
 ## 収録内容
 
-バージョン `6.3.0` には **27 個のトップレベルスキル**（汎用開発スキル 17 個、Product Design スキル 10 個）が収録されています。
+バージョン `6.3.0` には **26 個のトップレベルスキル**（汎用開発スキル 16 個、Product Design スキル 10 個）が収録されています。
 
 | 分野 | スキルとガイダンス |
 | --- | --- |
@@ -230,7 +230,6 @@ Pi パッケージはスキルを読み込み、起動時とコンテキスト�
 | **協業** | `dispatching-parallel-agents`、`subagent-driven-development`、`requesting-code-review`、`receiving-code-review` |
 | **ワークスペース** | `using-git-worktrees`、`finishing-a-development-branch` |
 | **言語別実装** | 実験的でエビデンスベースの `language-guidance` パック |
-| **フロントエンド設計** | [Anthropic Skills](https://github.com/anthropics/skills/tree/main/skills/frontend-design) による、明確な意図を持つ独自性のあるビジュアルデザイン指針 |
 | **メタ** | `writing-skills`、`using-wukong-code` |
 
 ### Product Design
@@ -244,7 +243,7 @@ Pi パッケージはスキルを読み込み、起動時とコンテキスト�
 | `product-design-context` | デザイン対象、対象ユーザー、期待する成果を明確にします |
 | `product-design-research` | 最新の情報源からユーザーの課題とプロダクト機会を調査します |
 | `product-design-audit` | 現在取得した証拠を基に、プロダクトフローの UX、ビジュアル、アクセシビリティを監査します |
-| `product-design-ideate` | 比較・選択できる 3 つのビジュアル方向を生成します |
+| `product-design-ideate` | 具体的な題材に根ざし、意図的な視覚選択とアンチテンプレート批評を備えた 3 つの独自方向を、[Anthropic Frontend Design](https://github.com/anthropics/skills/tree/main/skills/frontend-design) を翻案した指針で生成します |
 | `product-design-url-to-code` | 公開 URL を忠実に再現した、実行可能なローカルフロントエンドプロトタイプを作成します |
 | `product-design-image-to-code` | 選択したビジュアルソースをレスポンシブで操作可能なフロントエンドとして実装します |
 | `product-design-design-qa` | ビジュアルソースとレンダリング結果を比較し、引き渡しの合否を判定します |

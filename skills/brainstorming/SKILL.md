@@ -92,7 +92,7 @@ Wait for the user's response. If they request changes, make them and re-run the 
 - Invoke the writing-plans skill to create a detailed implementation plan
 - Do NOT invoke any other skill. writing-plans is the next step.
 
-**Full-depth terminal state is invoking writing-plans.** Do NOT invoke frontend-design, mcp-builder, or any other implementation skill before that. (Condensed single-module exit may implement after approval—see Condensed exits.)
+**Full-depth terminal state is invoking writing-plans.** Do NOT invoke domain or implementation skills before that. (Condensed single-module exit may implement after approval—see Condensed exits.)
 
 ## Process depth (on demand)
 

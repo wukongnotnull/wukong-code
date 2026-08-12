@@ -24,6 +24,7 @@ EXPECTED_SHARED_FILES=(
   references/critical-overrides.md
   references/existing-codebase-edits.md
   references/local-prototype-preflight.md
+  references/licenses/frontend-design-APACHE-2.0.txt
   references/product-design-host-capabilities.md
   references/wukong-product-design-composition.md
   scripts/bootstrap-prototype.mjs
@@ -76,6 +77,11 @@ for legacy_skill in "${LEGACY_PRODUCT_DESIGN_SKILLS[@]}"; do
     fail "legacy Product Design skill directory still exists: skills/$legacy_skill"
 done
 
+[[ ! -e "$REPO_ROOT/skills/frontend-design" ]] ||
+  fail "standalone frontend-design skill directory still exists"
+[[ -f "$REPO_ROOT/skills/product-design-ideate/references/original-visual-direction.md" ]] ||
+  fail "missing internal Product Design original visual-direction guidance"
+
 [[ -f "$ROUTING_SCENARIOS" ]] || fail "missing Product Design routing scenarios"
 for skill in "${EXPECTED_SKILLS[@]}"; do
   grep -Fq "$skill" "$ROUTING_SCENARIOS" ||
@@ -114,17 +120,27 @@ grep -Fq "product-design-host-capabilities.md" "$REPO_ROOT/skills/product-design
   fail "Product Design router does not link the host capability contract"
 grep -Fq "wukong-product-design-composition.md" "$REPO_ROOT/references/critical-overrides.md" ||
   fail "Product Design critical overrides do not link the Wukong composition contract"
-grep -Fq 'Original visual directions and substantial redesigns load `$frontend-design`' \
+grep -Fq 'Original visual directions and substantial redesigns load the internal original visual-direction guidance' \
   "$REPO_ROOT/skills/product-design/SKILL.md" ||
-  fail "Product Design router does not include frontend-design for original directions"
-grep -Fq 'Faithful workflows exclude `$frontend-design`' \
+  fail "Product Design router does not include internal guidance for original directions"
+grep -Fq 'Fidelity-preserving workflows exclude the original visual-direction guidance' \
   "$REPO_ROOT/references/wukong-product-design-composition.md" ||
   fail "composition contract does not protect fidelity workflows"
-grep -Fq '[$frontend-design](../frontend-design/SKILL.md)' \
+grep -Fq '[original visual-direction guidance](references/original-visual-direction.md)' \
   "$REPO_ROOT/skills/product-design-ideate/SKILL.md" ||
-  fail "Product Design ideation does not load frontend-design"
-grep -Fq '`frontend-design` does not load' "$ROUTING_SCENARIOS" ||
-  fail "routing scenarios do not contain a frontend-design negative control"
+  fail "Product Design ideation does not load its internal visual-direction guidance"
+grep -Fq '`original-visual-direction` guidance does not apply' "$ROUTING_SCENARIOS" ||
+  fail "routing scenarios do not contain an internal-guidance negative control"
+
+VISUAL_DIRECTION_REFERENCE="$REPO_ROOT/skills/product-design-ideate/references/original-visual-direction.md"
+for required_field in "Signature element" "Justified aesthetic risk" "Anti-template critique"; do
+  grep -Fq "$required_field" "$VISUAL_DIRECTION_REFERENCE" ||
+    fail "original visual-direction guidance is missing required field: $required_field"
+done
+grep -Fq "Anthropic" "$VISUAL_DIRECTION_REFERENCE" ||
+  fail "original visual-direction guidance does not attribute Anthropic"
+grep -Fqi "modified" "$VISUAL_DIRECTION_REFERENCE" ||
+  fail "original visual-direction guidance does not state that it was modified"
 
 if grep -Fq "/plugins/product-design/" "$REPO_ROOT/references/local-prototype-preflight.md"; then
   fail "local prototype preflight still assumes a standalone product-design plugin path"
@@ -207,6 +223,7 @@ expected_imported_roots = [
     "references/critical-overrides.md",
     "references/existing-codebase-edits.md",
     "references/local-prototype-preflight.md",
+    "references/licenses/frontend-design-APACHE-2.0.txt",
     "references/product-design-host-capabilities.md",
     "references/wukong-product-design-composition.md",
     "scripts/bootstrap-prototype.mjs",
@@ -347,9 +364,9 @@ grep -Fq '`test-driven-development` first, then the focused domain guidance' \
   "$REPO_ROOT/skills/using-wukong-code/SKILL.md" ||
   fail "Wukong scope routing does not send approved implementation targets to TDD"
 
-grep -Fq "Product Design (local fork integration)" "$REPO_ROOT/README.md" ||
-  fail "README is missing the Product Design local-fork section"
-grep -Fq "product-design version 0.1.52" "$REPO_ROOT/README.md" ||
+grep -Fq "### Product Design" "$REPO_ROOT/README.md" ||
+  fail "README is missing the Product Design section"
+grep -Fq 'Product Design `0.1.52`' "$REPO_ROOT/README.md" ||
   fail "README is missing the imported Product Design source version"
 
 echo "Product Design skill graph is complete."

@@ -219,7 +219,7 @@ Pi 패키지는 스킬을 불러오고 시작 시점과 컨텍스트 압축 후�
 
 ## 포함된 내용
 
-버전 `6.3.0`에는 **27개의 최상위 스킬**이 포함됩니다. 범용 개발 스킬 17개와 Product Design 스킬 10개입니다.
+버전 `6.3.0`에는 **26개의 최상위 스킬**이 포함됩니다. 범용 개발 스킬 16개와 Product Design 스킬 10개입니다.
 
 | 영역 | 스킬과 가이드 |
 | --- | --- |
@@ -230,7 +230,6 @@ Pi 패키지는 스킬을 불러오고 시작 시점과 컨텍스트 압축 후�
 | **협업** | `dispatching-parallel-agents`, `subagent-driven-development`, `requesting-code-review`, `receiving-code-review` |
 | **작업 공간** | `using-git-worktrees`, `finishing-a-development-branch` |
 | **언어 구현** | 실험적이며 근거 기반인 `language-guidance` 팩 |
-| **프런트엔드 디자인** | [Anthropic Skills](https://github.com/anthropics/skills/tree/main/skills/frontend-design)의 명확한 의도와 개성을 갖춘 시각 디자인 가이드 |
 | **메타** | `writing-skills`, `using-wukong-code` |
 
 ### Product Design
@@ -244,7 +243,7 @@ Pi 패키지는 스킬을 불러오고 시작 시점과 컨텍스트 압축 후�
 | `product-design-context` | 디자인 대상, 목표 사용자, 기대 결과를 명확히 합니다 |
 | `product-design-research` | 최신 출처를 바탕으로 사용자 문제와 제품 기회를 조사합니다 |
 | `product-design-audit` | 현재 수집한 근거로 제품 흐름의 UX, 시각 디자인, 접근성 문제를 감사합니다 |
-| `product-design-ideate` | 비교하고 선택할 수 있는 세 가지 시각 방향을 생성합니다 |
+| `product-design-ideate` | 구체적인 주제에 기반하고 의도적인 시각 선택과 안티 템플릿 비평을 포함한 세 가지 독창적 방향을, [Anthropic Frontend Design](https://github.com/anthropics/skills/tree/main/skills/frontend-design)을 각색한 지침으로 생성합니다 |
 | `product-design-url-to-code` | 라이브 URL을 실행 가능한 로컬 프런트엔드 프로토타입으로 충실히 재현합니다 |
 | `product-design-image-to-code` | 선택한 시각 자료를 반응형 인터랙티브 프런트엔드로 구현합니다 |
 | `product-design-design-qa` | 시각 원본과 렌더링 결과를 비교하고 전달 가능 여부를 판정합니다 |
