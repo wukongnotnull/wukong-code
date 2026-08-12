@@ -14,6 +14,27 @@ Follow the shared Product Design routing guidance in [$product-design](../produc
 - Refer to the Plugin router [$product-design](../product-design/SKILL.md) before proceeding.
 - Follow [$critical-overrides](../../references/critical-overrides.md).
 
+## Frontend Design Composition
+
+For an original visual direction or substantial redesign, load
+[$frontend-design](../frontend-design/SKILL.md) after the governing Wukong
+process permits secondary domain guidance and before preparing Image Gen
+prompts. Do not load it for a faithful clone or an already-selected visual
+target.
+
+Use the loaded guidance to define, for each direction:
+
+- one concrete subject, intended audience, and primary surface job;
+- a deliberate palette, typography system, and layout concept;
+- one signature element and one justified aesthetic risk;
+- realistic subject-specific content; and
+- a pre-generation critique that replaces generic AI defaults not required by
+  the brief.
+
+Product Design evidence and constraints remain authoritative. Feed this design
+plan into the three independent Image Gen prompts; do not show a prose or ASCII
+mock as a substitute for the required images.
+
 ## User Context
 
 Before starting, load [$product-design-user-context](../product-design-user-context/SKILL.md) and run its preflight script when local shell access is available.
