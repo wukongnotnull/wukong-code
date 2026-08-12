@@ -9,7 +9,7 @@ usage() {
 Usage: bash scripts/test.sh [--suite core|extended]
 
 Suites:
-  core      Deterministic repository checks used by pull-request CI (default).
+  core      Deterministic repository checks (default).
   extended  Runs core, then brainstorm-server and Antigravity checks.
 
 Host CLI integrations and Drill LLM evaluations remain manual; see docs/testing.md.

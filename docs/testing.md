@@ -5,26 +5,22 @@ Wukong Code has two distinct kinds of tests, each in its own directory:
 - **`tests/`** — does the plugin's non-LLM code work? Bash + node + python integration tests for brainstorm-server JS, OpenCode plugin loading, codex-plugin sync, and analysis utilities.
 - **`evals/`** — do agents behave correctly on real LLM sessions? Python harness driving real tmux sessions of Claude Code and Codex, with an LLM actor and verifier judging skill compliance.
 
-## Unified local and CI checks
+## Local deterministic checks
 
-Run the deterministic pull-request gate locally with:
+Run the default deterministic checks locally with:
 
 ```bash
 npm test
 ```
 
-Run the opt-in extended checks, including brainstorm-server and Antigravity,
-with:
+Run the extended checks, including brainstorm-server and Antigravity, with:
 
 ```bash
 npm run test:extended
 ```
 
-GitHub Actions runs the extended suite for pull requests and pushes to `main` and `dev`.
-Use `npm run test:extended` locally to reproduce that gate; `npm test` remains the
-quicker core suite. Manual workflow dispatch can run either suite. Tests that need
-a host CLI, credentials, or real LLM sessions remain manual: use the relevant
-runner under `tests/` or the Drill workflow under `evals/`.
+Tests that need a host CLI, credentials, or real LLM sessions remain manual: use the
+relevant runner under `tests/` or the Drill workflow under `evals/`.
 
 ## Plugin tests
 
