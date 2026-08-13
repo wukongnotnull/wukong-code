@@ -371,7 +371,7 @@ assert_prompt_router_output \
 
 assert_prompt_router_empty \
     "Cross-language actionable targets do not claim a sole language selection" \
-    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify web/app.ts and update rust-worker/src/lib.rs.\"}" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify web/app.ts and rust-worker/src/lib.rs.\"}" \
     "$router_home"
 
 assert_prompt_router_output \
