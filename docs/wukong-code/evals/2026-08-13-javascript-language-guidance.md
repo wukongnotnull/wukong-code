@@ -1,8 +1,10 @@
 # JavaScript language-guidance evaluation draft — 2026-08-13
 
 > **Draft, not publication evidence.** Static contracts and local fixtures have
-> been exercised. No fresh-session behavior cohort and no JavaScript-aware human
-> review have been completed. JS1-JS6 below are scenario definitions, not
+> been exercised. No fresh-session behavior cohort has been completed. The human
+> partner reviewed and approved the complete JavaScript diff on 2026-08-13 and
+> confirmed familiarity with the JavaScript runtime, package, module, and host
+> boundaries reviewed by this pack. JS1-JS6 below are scenario definitions, not
 > measured outcomes. The development sequence below was observed interactively,
 > but its raw command output and intermediate repository states were not checked
 > in. The public README status must remain unchanged.
@@ -116,7 +118,10 @@ and fixture tests do not substitute for that evidence.
   must retain both full registry entries and both scenario/assertion families.
 - A frozen installed candidate must run fresh no-guidance RED and candidate
   GREEN cohorts, with every flagged output manually reviewed.
-- JavaScript-aware human review is pending.
+- Human partner `wukongnotnull` reviewed and approved the complete proposed diff
+  on 2026-08-13 and confirmed familiarity with the JavaScript runtime, package,
+  module, and host boundaries reviewed by this pack. The human language-review
+  gate is complete; the behavior-evaluation gate remains open.
 - Both READMEs remain unchanged. The registry uses the plan-required
   `experimental` candidate value, but the pack is not eligible for public
   Experimental publication until behavior and human-review gates pass.
