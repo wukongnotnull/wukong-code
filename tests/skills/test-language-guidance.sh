@@ -124,6 +124,7 @@ expected = {
         ],
     },
     "typescript": {
+        "display_name": "TypeScript",
         "status": "experimental",
         "extensions": [".ts", ".tsx"],
         "markers": ["tsconfig.json"],
@@ -143,6 +144,8 @@ required_phases = {
 }
 for language, contract in expected.items():
     entry = data["languages"][language]
+    if "display_name" in contract:
+        assert entry["display_name"] == contract["display_name"]
     assert entry["status"] == contract["status"]
     assert entry["extensions"] == contract["extensions"]
     assert entry["markers"] == contract["markers"]
@@ -330,6 +333,8 @@ else
   fail "$typescript_manifest dependency or script contract"
 fi
 
+assert_contains tests/skills/language-guidance-scenarios.md "## TS1 — TypeScript implementation"
+assert_contains tests/skills/language-guidance-scenarios.md "## TS6 — TypeScript nearest marker"
 if grep -R -nE '((curl|wget).*[|][[:space:]]*(sh|bash)|(^|[[:space:]])(go[[:space:]]+install|npm[[:space:]]+install|pnpm[[:space:]]+(install|add)|yarn[[:space:]]+(install|add)|pip3?[[:space:]]+install|brew[[:space:]]+install|apt(-get)?[[:space:]]+install|apk[[:space:]]+add|dnf[[:space:]]+install|yum[[:space:]]+install|cargo[[:space:]]+install|gem[[:space:]]+install|composer[[:space:]]+require|bundle[[:space:]]+add))' skills/language-guidance; then
   fail "installer command found"
 else

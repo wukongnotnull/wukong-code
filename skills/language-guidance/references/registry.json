@@ -65,6 +65,7 @@
       }
     },
     "typescript": {
+      "display_name": "TypeScript",
       "status": "experimental",
       "extensions": [".ts", ".tsx"],
       "markers": ["tsconfig.json"],

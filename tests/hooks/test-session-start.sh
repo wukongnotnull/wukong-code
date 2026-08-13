@@ -248,6 +248,22 @@ assert_command_output \
     bash "$HOOK_UNDER_TEST"
 
 router_home="$(make_home user-prompt-submit)"
+
+tied_owner="$TEST_ROOT/tied-owner"
+mkdir -p "$tied_owner"
+touch "$tied_owner/go.mod" "$tied_owner/Cargo.toml"
+tied_owner="$(cd "$tied_owner" && pwd -P)"
+assert_prompt_router_empty \
+    "Same-distance marker owners remain ambiguous without explicit language evidence" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$tied_owner\",\"prompt\":\"Change the worker behavior.\"}" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "TypeScript marker routes a marker-only production prompt" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/typescript-basic\",\"prompt\":\"Change processAll to preserve order.\"}" \
+    "# TypeScript Project Profile|# TypeScript Implementation Guidance|Delivered: typescript/profile.md, typescript/implementation.md" \
+    "# Rust Project Profile"$'\037'"# Go Project Profile" \
+    "$router_home"
 assert_prompt_router_output \
     "Rust source change injects Rust implementation guidance only" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/rust-basic\",\"prompt\":\"Change process_all so it returns the processed items.\"}" \
@@ -334,9 +350,23 @@ assert_prompt_router_output \
 
 assert_prompt_router_output \
     "TypeScript source request injects TypeScript implementation guidance" \
-    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify web/src/app.ts to fix the button state.\"}" \
-    "# TypeScript Implementation Guidance" \
-    "# Rust Implementation Guidance"$'\037'"# Go Implementation Guidance"$'\037'"# Swift Implementation Guidance" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify web/app.ts to fix the button state.\"}" \
+    "# TypeScript Project Profile|# TypeScript Implementation Guidance|Delivered: typescript/profile.md, typescript/implementation.md" \
+    "# Rust Implementation Guidance"$'\037'"# Go Implementation Guidance"$'\037'"# Swift Implementation Guidance"$'\037'"# JavaScript Implementation Guidance" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Explicit TypeScript request uses canonical display name and both implementation references" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/typescript-basic\",\"prompt\":\"Use "'$language-guidance'" to change src/process-all.ts while preserving order.\"}" \
+    "Detected: TypeScript|Phase: implementation|Loaded: typescript/profile.md, typescript/implementation.md" \
+    "Detected: Typescript" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Unsupported Python target reports no installed language pack" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT\",\"prompt\":\"Modify scripts/example.py and explain which installed language guidance applies. Do not create the file.\"}" \
+    "No installed language guidance is registered for .py.|Keep the generic workflow." \
+    "# TypeScript"$'\037'"# JavaScript" \
     "$router_home"
 
 registry_router_root="$TEST_ROOT/registry-router"
