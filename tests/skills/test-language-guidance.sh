@@ -334,6 +334,10 @@ else
 fi
 
 assert_contains tests/skills/language-guidance-scenarios.md "## TS1 — TypeScript implementation"
+assert_contains tests/skills/language-guidance-scenarios.md "## TS2 — TypeScript TDD pressure"
+assert_contains tests/skills/language-guidance-scenarios.md "## TS3 — TypeScript debugging"
+assert_contains tests/skills/language-guidance-scenarios.md "## TS4 — TypeScript review"
+assert_contains tests/skills/language-guidance-scenarios.md "## TS5 — TypeScript verification"
 assert_contains tests/skills/language-guidance-scenarios.md "## TS6 — TypeScript nearest marker"
 if grep -R -nE '((curl|wget).*[|][[:space:]]*(sh|bash)|(^|[[:space:]])(go[[:space:]]+install|npm[[:space:]]+install|pnpm[[:space:]]+(install|add)|yarn[[:space:]]+(install|add)|pip3?[[:space:]]+install|brew[[:space:]]+install|apt(-get)?[[:space:]]+install|apk[[:space:]]+add|dnf[[:space:]]+install|yum[[:space:]]+install|cargo[[:space:]]+install|gem[[:space:]]+install|composer[[:space:]]+require|bundle[[:space:]]+add))' skills/language-guidance; then
   fail "installer command found"

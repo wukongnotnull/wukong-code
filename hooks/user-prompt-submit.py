@@ -90,56 +90,64 @@ def named_language(prompt: str, languages: dict[str, Any]) -> str | None:
     return matches[-1] if matches else None
 
 
-def prompt_target(prompt: str, languages: dict[str, Any]) -> Path | None:
+def prompt_targets(prompt: str, languages: dict[str, Any]) -> list[Path]:
     source_matches = SOURCE_EXTENSION.findall(prompt)
     if not source_matches:
-        return None
+        return []
 
-    action_match = ACTION_TARGET.search(prompt)
-    if action_match:
-        return Path(action_match.group(1))
+    action_matches = ACTION_TARGET.findall(prompt)
+    if action_matches:
+        return list(dict.fromkeys(Path(match) for match in action_matches))
 
     extension_map = extension_languages(languages)
     registered_sources = [
         Path(match) for match in source_matches if Path(match).suffix.lower() in extension_map
     ]
-    if len(registered_sources) == 1:
-        return registered_sources[0]
-    if len(registered_sources) > 1:
-        return None
+    if registered_sources:
+        return list(dict.fromkeys(registered_sources))
 
     marker_names = {
         marker for data in languages.values() for marker in data["markers"]
     }
     marker_targets = [Path(match) for match in source_matches if Path(match).name in marker_names]
-    return marker_targets[0] if len(marker_targets) == 1 else None
+    return marker_targets if len(marker_targets) == 1 else []
+
+
+def target_selection(
+    target: Path, cwd: Path, languages: dict[str, Any]
+) -> tuple[str, Path] | None:
+    extension = target.suffix.lower()
+    try:
+        candidate = (cwd / target).resolve(strict=False)
+        candidate.relative_to(cwd.resolve(strict=False))
+    except ValueError:
+        return None
+
+    language = extension_languages(languages).get(extension)
+    if language:
+        owner = owner_for(candidate.parent, languages[language]["markers"])
+        return (language, owner) if owner else None
+
+    marker_languages = [
+        language
+        for language, data in languages.items()
+        if target.name in data["markers"]
+    ]
+    if len(marker_languages) == 1:
+        language = marker_languages[0]
+        owner = owner_for(candidate.parent, languages[language]["markers"])
+        return language, owner or candidate.parent
+    return None
 
 
 def target_language(prompt: str, cwd: Path, languages: dict[str, Any]) -> tuple[str, Path] | None:
-    target = prompt_target(prompt, languages)
-    if target is not None:
-        extension = target.suffix.lower()
-        try:
-            candidate = (cwd / target).resolve(strict=False)
-            candidate.relative_to(cwd.resolve(strict=False))
-        except ValueError:
+    targets = prompt_targets(prompt, languages)
+    if targets:
+        selections = [target_selection(target, cwd, languages) for target in targets]
+        if any(selection is None for selection in selections):
             return None
-
-        language = extension_languages(languages).get(extension)
-        if language:
-            owner = owner_for(candidate.parent, languages[language]["markers"])
-            return (language, owner) if owner else None
-
-        marker_languages = [
-            language
-            for language, data in languages.items()
-            if target.name in data["markers"]
-        ]
-        if len(marker_languages) == 1:
-            language = marker_languages[0]
-            owner = owner_for(candidate.parent, languages[language]["markers"])
-            return language, owner or candidate.parent
-        return None
+        unique = list(dict.fromkeys(selection for selection in selections if selection))
+        return unique[0] if len(unique) == 1 else None
 
     if SOURCE_EXTENSION.search(prompt):
         return None
@@ -167,9 +175,10 @@ def target_language(prompt: str, cwd: Path, languages: dict[str, Any]) -> tuple[
 
 
 def unregistered_source_extension(prompt: str, languages: dict[str, Any]) -> str | None:
-    target = prompt_target(prompt, languages)
-    if target is None:
+    targets = prompt_targets(prompt, languages)
+    if len(targets) != 1:
         return None
+    target = targets[0]
     extension = target.suffix.lower()
     if extension in extension_languages(languages) or extension in DOCUMENTATION_EXTENSIONS:
         return None
