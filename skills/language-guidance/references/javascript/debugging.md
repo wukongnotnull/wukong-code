@@ -29,9 +29,10 @@ cancellation, stale transformed output, and unrelated slow work distinct until
 a focused reproducer eliminates branches.
 
 If the existing test, log, or user-supplied symptom does not observe the claimed behavior, the symptom is undefined.
+A self-authored fail-fast, hang, or cleanup probe does not define that user symptom.
+If the existing suite passes and does not observe completion order, do not name Promise.all fail-fast as the cause of that test.
 Do not name a root cause from an unobserved completion-order, fail-fast, hang,
-or cleanup hypothesis. Keep those branches open until a focused reproducer or
-failing assertion observes them.
+or cleanup hypothesis. Keep those branches open until an existing test, log, or user-supplied failing assertion observes them.
 
 Read the affected entry point and callers, test one causal hypothesis, then
 change the smallest intent-preserving boundary. Do not change package `type`,
