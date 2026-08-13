@@ -264,7 +264,7 @@ assert_prompt_router_output \
 
 tied_owner="$TEST_ROOT/tied-owner"
 mkdir -p "$tied_owner"
-touch "$tied_owner/go.mod" "$tied_owner/Cargo.toml"
+touch "$tied_owner/go.mod" "$tied_owner/package.json"
 tied_owner="$(cd "$tied_owner" && pwd -P)"
 assert_prompt_router_empty \
     "Same-distance marker owners remain ambiguous without explicit language evidence" \
@@ -272,8 +272,8 @@ assert_prompt_router_empty \
     "$router_home"
 
 assert_prompt_router_output \
-    "Specific TypeScript marker wins over generic package ownership at the same distance" \
-    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/typescript-basic\",\"prompt\":\"Change processAll to preserve order.\"}" \
+    "Nearest TypeScript marker routes a marker-only production prompt" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo/web\",\"prompt\":\"Change processAll to preserve order.\"}" \
     "# TypeScript Project Profile|# TypeScript Implementation Guidance|Delivered: typescript/profile.md, typescript/implementation.md" \
     "# JavaScript Project Profile"$'\037'"# JavaScript Implementation Guidance" \
     "$router_home"
