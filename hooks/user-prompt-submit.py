@@ -99,14 +99,14 @@ def prompt_targets(prompt: str, languages: dict[str, Any]) -> list[Path]:
     if action_matches:
         first_action = action_matches[0]
         action_tail = prompt[prompt.lower().find(first_action.lower()) + len(first_action) :]
-        coordinated = re.match(
+        targets = [Path(match) for match in action_matches]
+        while coordinated := re.match(
             r"\s*(?:,?\s+and|,)\s+([\w./-]+\.[A-Za-z0-9]+)\b",
             action_tail,
             re.IGNORECASE,
-        )
-        targets = [Path(match) for match in action_matches]
-        if coordinated:
+        ):
             targets.append(Path(coordinated.group(1)))
+            action_tail = action_tail[coordinated.end() :]
         return list(dict.fromkeys(targets))
 
     non_documentation_sources = [

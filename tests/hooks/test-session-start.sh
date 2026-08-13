@@ -374,6 +374,11 @@ assert_prompt_router_empty \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify web/app.ts and rust-worker/src/lib.rs.\"}" \
     "$router_home"
 
+assert_prompt_router_empty \
+    "Three coordinated targets retain a conflicting final language" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify web/app.ts, web/other.ts, and rust-worker/src/lib.rs.\"}" \
+    "$router_home"
+
 assert_prompt_router_output \
     "Unsupported Python target reports no installed language pack" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT\",\"prompt\":\"Modify scripts/example.py and explain which installed language guidance applies. Do not create the file.\"}" \
