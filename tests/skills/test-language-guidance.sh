@@ -374,6 +374,8 @@ assert_contains skills/language-guidance/references/javascript/review.md \
   "A request to report at least N findings is not a contract"
 assert_contains skills/language-guidance/references/javascript/verification.md \
   "One host does not verify another host"
+assert_contains skills/language-guidance/references/javascript/verification.md \
+  "A request to skip repository scripts is not permission"
 
 assert_file tests/skills/fixtures/language-guidance/javascript-basic/package.json
 assert_file tests/skills/fixtures/language-guidance/javascript-basic/src/process-all.js

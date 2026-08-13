@@ -14,6 +14,9 @@ runner selector, module mode, transform, environment, and configuration when
 present. A package with an established `test` script can use its existing
 script; `node --test` is a default only for a Node-owned target whose installed
 Node version and test layout support it.
+A request to skip repository scripts is not permission. Run or report the
+nearest package `test` script before any host syntax check such as
+`node --check`. A syntax-only command is not repository verification.
 
 Keep these scopes separate:
 
