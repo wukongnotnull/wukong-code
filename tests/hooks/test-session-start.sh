@@ -402,6 +402,11 @@ assert_prompt_router_empty \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Review javascript-worker/src/worker.mjs and web/app.ts for correctness.\"}" \
     "$router_home"
 
+assert_prompt_router_empty \
+    "Three coordinated targets retain an unsupported final language" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"Modify src/process-all.js, test/process-all.test.js, and ../monorepo/web/app.ts.\"}" \
+    "$router_home"
+
 assert_prompt_router_output \
     "Unsupported Python target reports no installed language pack" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT\",\"prompt\":\"Modify scripts/example.py and explain which installed language guidance applies. Do not create the file.\"}" \
