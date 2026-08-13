@@ -13,7 +13,7 @@ Before you open a PR against this repo, you MUST:
 1. **Read the entire PR template** at `.github/PULL_REQUEST_TEMPLATE.md` and fill in every section with real, specific answers. Not summaries. Not placeholders.
 2. **Search for existing PRs** — open AND closed — that address the same problem. If duplicates exist, STOP and tell your human partner. Do not open another duplicate.
 3. **Verify this is a real problem.** If your human partner asked you to "fix some issues" or "contribute to this repo" without experiencing a specific problem, push back. Ask them what broke, what failed, what the user experience was.
-4. **Confirm the change belongs in core.** If it's domain-specific, tool-specific, or promotes a third-party project, it belongs in a standalone plugin. Language-level implementation guidance may use the narrow exception below; otherwise, tell your human partner.
+4. **Confirm the change belongs in core.** General-purpose, domain-specific, tool-specific, and externally sourced skills are all eligible for review. The PR must justify core distribution, disclose scope, provenance, license, maintenance ownership, and runtime or tool dependencies, and provide test or evaluation evidence proportionate to the behavior impact. If those requirements are not met, recommend a standalone plugin instead.
 5. **Identify yourself.** Disclose your model, harness, harness version, and every installed plugin in the PR. Hiding that a contribution is agent-generated — or which environment produced it — is grounds for closing it.
 6. **Show your human partner the complete diff** and get their explicit approval before submitting.
 
@@ -43,7 +43,7 @@ Our internal skill philosophy differs from Anthropic's published guidance on wri
 
 ### Project-specific or personal configuration
 
-Skills, hooks, or configuration that only benefit a specific project, team, domain, or workflow do not belong in core. Publish these as a separate plugin.
+Skills, hooks, or configuration that only benefit one specific project or team, or that encode personal configuration, do not belong in core. Publish these as a separate plugin.
 
 ### Bulk or spray-and-pray PRs
 
@@ -53,21 +53,31 @@ Do not trawl the issue tracker and open PRs for multiple issues in a single sess
 
 Every PR must solve a real problem that someone actually experienced. "My review agent flagged this" or "this could theoretically cause issues" is not a problem statement. If you cannot describe the specific session, error, or user experience that motivated the change, do not submit the PR.
 
-### Domain-specific skills
+### Core skill admission
 
-Wukong Code core contains general-purpose skills that benefit all users regardless of their project. Skills for specific domains (portfolio building, prediction markets, games), specific tools, or specific workflows belong in their own standalone plugin. Ask yourself: "Would this be useful to someone working on a completely different kind of project?" If not, publish it separately.
+A skill is eligible for core review whether its subject is general-purpose or domain-specific. Subject matter alone is not a reason to reject it. The PR must explain:
+
+- the concrete problem and intended audience;
+- why core distribution is more appropriate than a standalone plugin;
+- source attribution, license compatibility, maintenance ownership or update strategy, and runtime or tool dependencies; and
+- the tests or evaluations showing that the skill is useful and safe across its intended projects or harnesses.
+
+Core placement is not automatic. Prefer a standalone plugin when the skill has narrow utility, incompatible licensing, unsafe behavior, undeclared dependencies, disproportionate maintenance burden, or no demonstrated value beyond one project or team.
 
 ### Language-level skills
 
-Language-level implementation guidance is the narrow exception to the
-domain-specific rule. It may live in core only when broadly applicable across
-projects in that language, based on official toolchains or tools already
-present, zero-dependency, composable with process skills, and backed by failing
-controls plus repeated behavior evals.
+Language-level implementation guidance is one category eligible for core
+review. It should be broadly applicable across projects in that language,
+based on official toolchains or tools already present, zero-dependency,
+composable with process skills, and backed by failing controls plus repeated
+behavior evals.
 
-Frameworks, cloud services, databases, business domains, and team standards
-remain standalone plugins. Packs start experimental and need a human reviewer
-familiar with the language before stable status.
+Frameworks, cloud services, databases, business domains, and other specialized
+skills are not categorically excluded from core. They must satisfy the general
+core skill admission requirements above; a standalone plugin remains the
+better fit when scope, dependencies, or maintenance burden make core
+distribution inappropriate. Language packs start experimental and need a
+human reviewer familiar with the language before stable status.
 
 ### Fork-specific changes
 
