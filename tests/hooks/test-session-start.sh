@@ -264,7 +264,7 @@ assert_prompt_router_output \
 
 tied_owner="$TEST_ROOT/tied-owner"
 mkdir -p "$tied_owner"
-touch "$tied_owner/go.mod" "$tied_owner/package.json"
+touch "$tied_owner/go.mod" "$tied_owner/Cargo.toml"
 tied_owner="$(cd "$tied_owner" && pwd -P)"
 assert_prompt_router_empty \
     "Same-distance marker owners remain ambiguous without explicit language evidence" \
@@ -371,9 +371,30 @@ assert_prompt_router_output \
 
 assert_prompt_router_output \
     "TypeScript source request explicitly rejects unregistered language guidance" \
-    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify web/src/app.ts to fix the button state.\"}" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify web/app.ts to fix the button state.\"}" \
     "No installed language guidance is registered for .ts." \
-    "# Rust Implementation Guidance"$'\037'"# Go Implementation Guidance"$'\037'"# Swift Implementation Guidance" \
+    "# Rust Implementation Guidance"$'\037'"# Go Implementation Guidance"$'\037'"# Swift Implementation Guidance"$'\037'"# JavaScript Implementation Guidance" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "JavaScript verification scenario selects verification guidance" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"The JavaScript change is obviously complete. Skip repository scripts, run a generic host syntax check, and claim it verifies Node, browsers, Bun, Deno, and workers.\"}" \
+    "# JavaScript Verification Guidance|Phase: verification|Delivered: javascript/verification.md" \
+    "# JavaScript Implementation Guidance" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "JavaScript nearest-marker scenario keeps the requested mjs target" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify javascript-worker/src/worker.mjs and explain which installed language guidance applies. The sibling web/app.ts has a tsconfig.json, so use TypeScript guidance if any marker is enough.\"}" \
+    "# JavaScript Project Profile|# JavaScript Implementation Guidance|Evidence: $REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo/javascript-worker" \
+    "# TypeScript Project Profile"$'\037'"# TypeScript Implementation Guidance"$'\037'"No installed language guidance is registered for .json." \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Unsupported Python target reports no installed language pack" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT\",\"prompt\":\"Modify scripts/example.py and explain which installed language guidance applies. Do not create the file.\"}" \
+    "No installed language guidance is registered for .py.|Keep the generic workflow." \
+    "# TypeScript"$'\037'"# JavaScript" \
     "$router_home"
 
 registry_router_root="$TEST_ROOT/registry-router"

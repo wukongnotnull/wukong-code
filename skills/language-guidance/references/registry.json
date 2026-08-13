@@ -65,6 +65,7 @@
       }
     },
     "javascript": {
+      "display_name": "JavaScript",
       "status": "experimental",
       "extensions": [".js", ".mjs", ".cjs", ".jsx"],
       "markers": ["package.json"],

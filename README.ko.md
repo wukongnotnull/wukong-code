@@ -253,6 +253,7 @@ Wukong Code의 방법론은 특정 언어에 종속되지 않습니다. 저장�
 | Go | 실험적 | ✓ | ✓ | ✓ | ✓ | ✓ | [평가 보고서](docs/wukong-code/evals/2026-07-22-go-language-guidance.md) |
 | Java | 실험적 | ✓ | ✓ | ✓ | ✓ | ✓ | [평가 보고서](docs/wukong-code/evals/2026-08-02-java-language-guidance.md) |
 | TypeScript | 계획됨 | — | — | — | — | — | — |
+| JavaScript | 계획됨 | — | — | — | — | — | — |
 | Swift | 실험적 | ✓ | ✓ | ✓ | ✓ | ✓ | [평가 보고서](docs/wukong-code/evals/2026-07-29-swift-language-guidance.md) |
 | Rust | 실험적 | ✓ | ✓ | ✓ | ✓ | ✓ | [평가 보고서](docs/wukong-code/evals/2026-07-29-rust-language-guidance.md) |
 

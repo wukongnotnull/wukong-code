@@ -253,6 +253,7 @@ Wukong Code 的方法論保持語言無關。當儲存庫證據能確定受支�
 | Go | 實驗性 | ✓ | ✓ | ✓ | ✓ | ✓ | [評估報告](docs/wukong-code/evals/2026-07-22-go-language-guidance.md) |
 | Java | 實驗性 | ✓ | ✓ | ✓ | ✓ | ✓ | [評估報告](docs/wukong-code/evals/2026-08-02-java-language-guidance.md) |
 | TypeScript | 規劃中 | — | — | — | — | — | — |
+| JavaScript | 規劃中 | — | — | — | — | — | — |
 | Swift | 實驗性 | ✓ | ✓ | ✓ | ✓ | ✓ | [評估報告](docs/wukong-code/evals/2026-07-29-swift-language-guidance.md) |
 | Rust | 實驗性 | ✓ | ✓ | ✓ | ✓ | ✓ | [評估報告](docs/wukong-code/evals/2026-07-29-rust-language-guidance.md) |
 
