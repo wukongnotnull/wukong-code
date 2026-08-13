@@ -364,6 +364,8 @@ assert_contains skills/language-guidance/references/javascript/testing.md \
   "Valid RED reaches the new test"
 assert_contains skills/language-guidance/references/javascript/debugging.md \
   "Reproduce under the owning runtime and module mode"
+assert_contains skills/language-guidance/references/javascript/debugging.md \
+  "If the existing test, log, or user-supplied symptom does not observe the claimed behavior, the symptom is undefined"
 assert_contains skills/language-guidance/references/javascript/review.md \
   "Zero findings is valid"
 assert_contains skills/language-guidance/references/javascript/verification.md \
