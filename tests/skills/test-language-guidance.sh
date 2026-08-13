@@ -78,6 +78,7 @@ if [[ -f "$skill" ]]; then
   assert_contains "$skill" "A requested test-source edit selects the testing phase even when the task also requests a production-source edit."
   assert_contains "$skill" "Explicit failure investigation, code review, and completion verification intent takes precedence over generic no-edit analysis."
   assert_contains "$skill" "Every selected reference file must be read before substantive source analysis; locating its registry entry or path is not loading it."
+  assert_contains "$skill" "If the primary process later becomes TDD or testing after an implementation decision"
   assert_max_lines "$skill" 180
 fi
 
