@@ -259,8 +259,8 @@ assert_prompt_router_empty \
     "$router_home"
 
 assert_prompt_router_output \
-    "TypeScript marker routes a marker-only production prompt" \
-    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/typescript-basic\",\"prompt\":\"Change processAll to preserve order.\"}" \
+    "Nearest TypeScript marker routes a marker-only production prompt" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo/web\",\"prompt\":\"Change processAll to preserve order.\"}" \
     "# TypeScript Project Profile|# TypeScript Implementation Guidance|Delivered: typescript/profile.md, typescript/implementation.md" \
     "# Rust Project Profile"$'\037'"# Go Project Profile" \
     "$router_home"

@@ -17,7 +17,6 @@ ACTION_TARGET = re.compile(
     r"(?:the\s+)?([\w./-]+\.[A-Za-z0-9]+)\b",
     re.IGNORECASE,
 )
-GENERIC_OWNERSHIP_MARKERS = {"package.json"}
 TESTING_PRESSURE_WORKFLOW = """Mandatory primary workflow for this request:
 
 Before source analysis, a plan, or an edit, invoke and read `wukong-code:test-driven-development`.
@@ -150,26 +149,20 @@ def target_language(prompt: str, cwd: Path, languages: dict[str, Any]) -> tuple[
         owner = owner_for(cwd, languages[language]["markers"])
         return (language, owner) if owner else None
 
-    candidates: list[tuple[str, Path, int, bool]] = []
+    candidates: list[tuple[str, Path, int]] = []
     for language, data in languages.items():
         match = owner_with_distance(cwd, data["markers"])
         if match:
             owner, distance = match
-            has_specific_marker = any(
-                marker not in GENERIC_OWNERSHIP_MARKERS and (owner / marker).exists()
-                for marker in data["markers"]
-            )
-            candidates.append((language, owner, distance, has_specific_marker))
+            candidates.append((language, owner, distance))
     if not candidates:
         return None
-    nearest_distance = min(distance for _, _, distance, _ in candidates)
+    nearest_distance = min(distance for _, _, distance in candidates)
     nearest = [
-        (language, owner, has_specific_marker)
-        for language, owner, distance, has_specific_marker in candidates
+        (language, owner)
+        for language, owner, distance in candidates
         if distance == nearest_distance
     ]
-    if any(has_specific_marker for _, _, has_specific_marker in nearest):
-        nearest = [candidate for candidate in nearest if candidate[2]]
     return (nearest[0][0], nearest[0][1]) if len(nearest) == 1 else None
 
 
