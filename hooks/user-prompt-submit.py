@@ -52,12 +52,17 @@ def read_input() -> dict[str, Any] | None:
     return payload
 
 
-def owner_for(directory: Path, markers: list[str]) -> Path | None:
+def owner_with_distance(directory: Path, markers: list[str]) -> tuple[Path, int] | None:
     current = directory.resolve(strict=False)
-    for candidate in (current, *current.parents):
+    for distance, candidate in enumerate((current, *current.parents)):
         if any((candidate / marker).exists() for marker in markers):
-            return candidate
+            return candidate, distance
     return None
+
+
+def owner_for(directory: Path, markers: list[str]) -> Path | None:
+    match = owner_with_distance(directory, markers)
+    return match[0] if match else None
 
 
 def extension_languages(languages: dict[str, Any]) -> dict[str, str]:
@@ -109,12 +114,21 @@ def target_language(prompt: str, cwd: Path, languages: dict[str, Any]) -> tuple[
         owner = owner_for(cwd, languages[language]["markers"])
         return (language, owner) if owner else None
 
-    candidates: list[tuple[str, Path]] = []
+    candidates: list[tuple[str, Path, int]] = []
     for language, data in languages.items():
-        owner = owner_for(cwd, data["markers"])
-        if owner:
-            candidates.append((language, owner))
-    return candidates[0] if len(candidates) == 1 else None
+        match = owner_with_distance(cwd, data["markers"])
+        if match:
+            owner, distance = match
+            candidates.append((language, owner, distance))
+    if not candidates:
+        return None
+    nearest_distance = min(distance for _, _, distance in candidates)
+    nearest = [
+        (language, owner)
+        for language, owner, distance in candidates
+        if distance == nearest_distance
+    ]
+    return nearest[0] if len(nearest) == 1 else None
 
 
 def unregistered_source_extension(prompt: str, languages: dict[str, Any]) -> str | None:

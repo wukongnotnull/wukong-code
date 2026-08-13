@@ -3,7 +3,9 @@
 > **Draft, not publication evidence.** Static contracts and local fixtures have
 > been exercised. No fresh-session behavior cohort and no JavaScript-aware human
 > review have been completed. JS1-JS6 below are scenario definitions, not
-> measured outcomes. The public README status must remain unchanged.
+> measured outcomes. The development sequence below was observed interactively,
+> but its raw command output and intermediate repository states were not checked
+> in. The public README status must remain unchanged.
 
 ## Scope and source distillation
 
@@ -45,22 +47,30 @@ claims use MDN. The pack gives no Bun- or Deno-specific command/API claim; it
 requires consulting the owning runtime documentation when repository evidence
 selects either host.
 
-## Static and fixture RED/GREEN
+## Development-session observations
 
-The first RED added the exact JavaScript registry contract, six reference-file
-requirements, semantic phrases, zero-dependency fixtures, and JS1-JS6 scenario
-definitions before any JavaScript pack existed.
+Development-session observations were not preserved as raw output or intermediate commits and are not independently verifiable publication evidence.
+They describe the TDD sequence used to develop the candidate, but a reviewer
+cannot reconstruct each intermediate state from this repository.
+
+During the development session, the first RED added the exact JavaScript
+registry contract, six reference-file requirements, semantic phrases,
+zero-dependency fixtures, and JS1-JS6 scenario definitions before any
+JavaScript pack existed.
 
 - `bash tests/skills/test-language-guidance.sh` exited 1. Existing Go, Swift,
   Rust, and Java checks remained green; failures named the absent JavaScript
   registry entry, six phase files, and fixtures.
-- After adding the fixture only, `(cd tests/skills/fixtures/language-guidance/
+- The session then added the fixture only. `(cd tests/skills/fixtures/language-guidance/
   javascript-basic && npm test)` passed three Node standard-library tests, while
   the language contract remained red only for the registry and references.
-- After adding profile/implementation, the contract remained red for the four
-  absent phases. After adding testing/debugging, it remained red for the two
-  absent phases. After review/verification, the fixture passed 3/3 and the
-  language contract reported `STATUS: PASSED`.
+- The session reported that after adding profile/implementation, the contract
+  remained red for the four absent phases. After adding testing/debugging, it
+  remained red for the two absent phases. After review/verification, the
+  fixture passed 3/3 and the language contract reported `STATUS: PASSED`.
+
+These statements are development notes, not a stored raw record. Only the final
+candidate checks below are directly reproducible from a committed tree.
 
 The fixture declares Node `>=22`, ESM, `node --test`, and no dependency field.
 The floor follows this repository's recorded
@@ -69,6 +79,23 @@ the related CI workflow was later removed, so this is fixture compatibility
 intent rather than a current CI matrix. The observed host (`node v25.8.1`) is
 execution evidence only and does not prove the declared floor or another
 runtime.
+
+## Reproducible final-candidate checks
+
+Run these commands from the repository root on the final candidate commit:
+
+```bash
+bash tests/hooks/test-session-start.sh
+(cd tests/skills/fixtures/language-guidance/javascript-basic && npm test)
+bash tests/skills/test-language-guidance.sh
+bash tests/skills/test-skill-slim-gates.sh
+bash tests/codex/test-package-codex-plugin.sh
+git diff --check
+```
+
+Record their complete output and exact commit when producing publication
+evidence. A later successful rerun validates that final tree only; it does not
+retroactively make the uncommitted intermediate RED/GREEN states reproducible.
 
 ## Behavior scenarios awaiting execution
 
