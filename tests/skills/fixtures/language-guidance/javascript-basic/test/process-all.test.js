@@ -33,6 +33,18 @@ test("rejects non-string external values before invoking the processor", async (
   assert.equal(calls, 0);
 });
 
+test("rejects sparse arrays before invoking the processor", async () => {
+  let calls = 0;
+
+  await assert.rejects(
+    processAll(new Array(1), () => {
+      calls += 1;
+    }),
+    { name: "TypeError", message: "expected an array of strings" },
+  );
+  assert.equal(calls, 0);
+});
+
 test("preserves processor rejection identity", async () => {
   const failure = new Error("processor failed");
 

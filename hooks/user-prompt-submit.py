@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Inject one evidence-backed language reference for a Codex user prompt."""
+"""Inject one or two evidence-backed language references for a Codex user prompt."""
 
 from __future__ import annotations
 
@@ -12,6 +12,12 @@ from typing import Any
 
 DOCUMENTATION_EXTENSIONS = {".adoc", ".md", ".rst", ".txt"}
 SOURCE_EXTENSION = re.compile(r"(?<![\w.])([\w./-]+\.[A-Za-z0-9]+)\b")
+ACTION_TARGET = re.compile(
+    r"\b(?:change|modify|make|add|implement|fix|refactor|update)\s+"
+    r"(?:the\s+)?([\w./-]+\.[A-Za-z0-9]+)\b",
+    re.IGNORECASE,
+)
+GENERIC_OWNERSHIP_MARKERS = {"package.json"}
 TESTING_PRESSURE_WORKFLOW = """Mandatory primary workflow for this request:
 
 Before source analysis, a plan, or an edit, invoke and read `wukong-code:test-driven-development`.
@@ -20,7 +26,10 @@ The requested source change requires a new focused test and an observed valid RE
 """
 
 
-def explicit_language_guidance_workflow(language_name: str, phase: str, relative_path: str) -> str:
+def explicit_language_guidance_workflow(
+    language_name: str, phase: str, relative_paths: list[str]
+) -> str:
+    loaded = ", ".join(relative_paths)
     return f"""Strict explicit language-guidance decision is required.
 
 The user explicitly invoked `$language-guidance`. Before any substantive
@@ -28,7 +37,7 @@ analysis, command, or conclusion, begin the response with these exact labels on
 separate lines:
 Detected: {language_name} — <repository evidence>
 Phase: {phase}
-Loaded: {relative_path}
+Loaded: {loaded}
 
 Read the delivered reference before continuing. A no-command constraint blocks
 project commands, not repository inspection or the selected reference. Do not
@@ -82,10 +91,34 @@ def named_language(prompt: str, languages: dict[str, Any]) -> str | None:
     return matches[-1] if matches else None
 
 
-def target_language(prompt: str, cwd: Path, languages: dict[str, Any]) -> tuple[str, Path] | None:
+def prompt_target(prompt: str, languages: dict[str, Any]) -> Path | None:
     source_matches = SOURCE_EXTENSION.findall(prompt)
-    if source_matches:
-        target = Path(source_matches[-1])
+    if not source_matches:
+        return None
+
+    action_match = ACTION_TARGET.search(prompt)
+    if action_match:
+        return Path(action_match.group(1))
+
+    extension_map = extension_languages(languages)
+    registered_sources = [
+        Path(match) for match in source_matches if Path(match).suffix.lower() in extension_map
+    ]
+    if len(registered_sources) == 1:
+        return registered_sources[0]
+    if len(registered_sources) > 1:
+        return None
+
+    marker_names = {
+        marker for data in languages.values() for marker in data["markers"]
+    }
+    marker_targets = [Path(match) for match in source_matches if Path(match).name in marker_names]
+    return marker_targets[0] if len(marker_targets) == 1 else None
+
+
+def target_language(prompt: str, cwd: Path, languages: dict[str, Any]) -> tuple[str, Path] | None:
+    target = prompt_target(prompt, languages)
+    if target is not None:
         extension = target.suffix.lower()
         try:
             candidate = (cwd / target).resolve(strict=False)
@@ -109,33 +142,42 @@ def target_language(prompt: str, cwd: Path, languages: dict[str, Any]) -> tuple[
             return language, owner or candidate.parent
         return None
 
+    if SOURCE_EXTENSION.search(prompt):
+        return None
+
     language = named_language(prompt, languages)
     if language:
         owner = owner_for(cwd, languages[language]["markers"])
         return (language, owner) if owner else None
 
-    candidates: list[tuple[str, Path, int]] = []
+    candidates: list[tuple[str, Path, int, bool]] = []
     for language, data in languages.items():
         match = owner_with_distance(cwd, data["markers"])
         if match:
             owner, distance = match
-            candidates.append((language, owner, distance))
+            has_specific_marker = any(
+                marker not in GENERIC_OWNERSHIP_MARKERS and (owner / marker).exists()
+                for marker in data["markers"]
+            )
+            candidates.append((language, owner, distance, has_specific_marker))
     if not candidates:
         return None
-    nearest_distance = min(distance for _, _, distance in candidates)
+    nearest_distance = min(distance for _, _, distance, _ in candidates)
     nearest = [
-        (language, owner)
-        for language, owner, distance in candidates
+        (language, owner, has_specific_marker)
+        for language, owner, distance, has_specific_marker in candidates
         if distance == nearest_distance
     ]
-    return nearest[0] if len(nearest) == 1 else None
+    if any(has_specific_marker for _, _, has_specific_marker in nearest):
+        nearest = [candidate for candidate in nearest if candidate[2]]
+    return (nearest[0][0], nearest[0][1]) if len(nearest) == 1 else None
 
 
 def unregistered_source_extension(prompt: str, languages: dict[str, Any]) -> str | None:
-    source_matches = SOURCE_EXTENSION.findall(prompt)
-    if not source_matches:
+    target = prompt_target(prompt, languages)
+    if target is None:
         return None
-    extension = Path(source_matches[-1]).suffix.lower()
+    extension = target.suffix.lower()
     if extension in extension_languages(languages) or extension in DOCUMENTATION_EXTENSIONS:
         return None
     return extension
@@ -147,7 +189,10 @@ def phase_for(prompt: str) -> str | None:
         return "debugging"
     if re.search(r"\breview(?:ing)?\b", prompt):
         return "review"
-    if re.search(r"\b(verify|verification|exact checks?|claim(?:ing)? (?:this )?complete)\b", prompt):
+    if re.search(
+        r"\b(verif(?:y|ies|ied|ying|ication)|exact checks?|claim(?:ing)? (?:this )?complete)\b",
+        prompt,
+    ):
         return "verification"
     if re.search(
         r"\b(skip|skipping).*(?:failing|failed).*\btest\b|\bproduction (?:is )?blocked\b|"
@@ -213,25 +258,32 @@ def main() -> None:
         if not selection or not phase:
             return
         language, owner = selection
-        relative_path = languages[language]["phases"][phase]
-        reference = safe_reference(plugin_root, relative_path)
-        if reference is None:
+        phase_paths = languages[language]["phases"]
+        relative_paths = (
+            [phase_paths["profile"], phase_paths["implementation"]]
+            if phase == "implementation"
+            else [phase_paths[phase]]
+        )
+        references = [safe_reference(plugin_root, relative_path) for relative_path in relative_paths]
+        if any(reference is None for reference in references):
             return
-        body = reference.read_text(encoding="utf-8").strip()
+        bodies = [reference.read_text(encoding="utf-8").strip() for reference in references if reference]
     except (KeyError, OSError, TypeError, ValueError, json.JSONDecodeError):
         return
 
-    language_name = language.capitalize()
+    language_name = languages[language].get("display_name", language.capitalize())
     workflow = TESTING_PRESSURE_WORKFLOW if phase == "testing" else ""
     if "$language-guidance" in payload["prompt"]:
-        workflow += explicit_language_guidance_workflow(language_name, phase, relative_path)
+        workflow += explicit_language_guidance_workflow(language_name, phase, relative_paths)
+    delivered = ", ".join(relative_paths)
+    body = "\n\n".join(bodies)
     context = (
         "Deterministic Codex language routing\n\n"
         f"Language: {language_name}\n"
         f"Evidence: {owner}\n"
         f"Phase: {phase}\n"
-        f"Delivered: {relative_path}\n\n"
-        "This hook has already delivered the sole selected language guidance for this turn; "
+        f"Delivered: {delivered}\n\n"
+        "This hook has already delivered the selected language guidance for this turn; "
         "do not select another language or phase unless new user evidence supersedes it.\n\n"
         f"{workflow}{body}\n"
     )

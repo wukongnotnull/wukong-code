@@ -126,6 +126,7 @@ expected = {
         ],
     },
     "typescript": {
+        "display_name": "TypeScript",
         "status": "experimental",
         "extensions": [".ts", ".tsx"],
         "markers": ["tsconfig.json"],
@@ -139,6 +140,7 @@ expected = {
         },
     },
     "javascript": {
+        "display_name": "JavaScript",
         "status": "experimental",
         "extensions": [".js", ".mjs", ".cjs", ".jsx"],
         "markers": ["package.json"],
@@ -158,6 +160,8 @@ required_phases = {
 }
 for language, contract in expected.items():
     entry = data["languages"][language]
+    if "display_name" in contract:
+        assert entry["display_name"] == contract["display_name"]
     assert entry["status"] == contract["status"]
     assert entry["extensions"] == contract["extensions"]
     assert entry["markers"] == contract["markers"]
@@ -394,6 +398,8 @@ fi
 
 assert_contains tests/skills/language-guidance-scenarios.md "## JS1 — JavaScript implementation"
 assert_contains tests/skills/language-guidance-scenarios.md "## JS6 — JavaScript nearest marker"
+assert_contains tests/skills/language-guidance-scenarios.md "## TS1 — TypeScript implementation"
+assert_contains tests/skills/language-guidance-scenarios.md "## TS6 — TypeScript nearest marker"
 
 javascript_eval=docs/wukong-code/evals/2026-08-13-javascript-language-guidance.md
 assert_file "$javascript_eval"
@@ -448,6 +454,11 @@ assert_contains README.md "| Go | Experimental |"
 assert_contains README.md "| Java | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-08-02-java-language-guidance.md) |"
 assert_contains README.md "| Swift | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-07-29-swift-language-guidance.md) |"
 assert_contains README.md "| Rust | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-07-29-rust-language-guidance.md) |"
+assert_contains README.md "| JavaScript | Planned | — | — | — | — | — | — |"
+assert_contains README.zh-CN.md "| JavaScript | 计划中 |"
+assert_contains README.zh-TW.md "| JavaScript | 規劃中 |"
+assert_contains README.ja.md "| JavaScript | 計画中 |"
+assert_contains README.ko.md "| JavaScript | 계획됨 |"
 assert_contains CLAUDE.md "### Language-level skills"
 assert_contains .github/PULL_REQUEST_TEMPLATE.md "## Language-pack evidence"
 assert_contains docs/testing.md "test-language-guidance.sh"
