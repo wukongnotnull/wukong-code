@@ -264,7 +264,7 @@ assert_prompt_router_output \
 
 tied_owner="$TEST_ROOT/tied-owner"
 mkdir -p "$tied_owner"
-touch "$tied_owner/go.mod" "$tied_owner/Cargo.toml"
+touch "$tied_owner/go.mod" "$tied_owner/package.json"
 tied_owner="$(cd "$tied_owner" && pwd -P)"
 assert_prompt_router_empty \
     "Same-distance marker owners remain ambiguous without explicit language evidence" \
