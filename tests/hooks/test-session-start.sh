@@ -397,6 +397,11 @@ assert_prompt_router_output \
     "# Rust Review Guidance" \
     "$router_home"
 
+assert_prompt_router_empty \
+    "Mixed registered and unsupported review targets do not claim a sole language selection" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Review javascript-worker/src/worker.mjs and web/app.ts for correctness.\"}" \
+    "$router_home"
+
 assert_prompt_router_output \
     "Unsupported Python target reports no installed language pack" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT\",\"prompt\":\"Modify scripts/example.py and explain which installed language guidance applies. Do not create the file.\"}" \
