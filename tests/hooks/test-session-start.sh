@@ -403,6 +403,11 @@ assert_prompt_router_empty \
     "$router_home"
 
 assert_prompt_router_empty \
+    "Three coordinated targets retain a conflicting final language" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify web/app.ts, web/other.ts, and rust-worker/src/lib.rs.\"}" \
+    "$router_home"
+
+assert_prompt_router_empty \
     "Mixed registered and unsupported review targets do not claim a sole language selection" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Review javascript-worker/src/worker.mjs and unsupported/worker.py for correctness.\"}" \
     "$router_home"
