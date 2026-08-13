@@ -227,7 +227,7 @@ The Pi package loads the skills and injects the `using-wukong-code` bootstrap at
 
 ### Product Design
 
-Includes these ten Product Design skills:
+Version `6.3.0` bundles these ten Product Design skills:
 
 | Skill | Purpose |
 | --- | --- |
@@ -241,6 +241,10 @@ Includes these ten Product Design skills:
 | `product-design-image-to-code` | Implements a selected visual source as a responsive, interactive frontend |
 | `product-design-design-qa` | Compares the rendered implementation with its visual source and gates handoff |
 | `product-design-share` | Publishes a runnable prototype and returns a shareable link when requested |
+
+They are imported from Product Design `0.1.52`. Their MIT provenance is
+recorded in [`product-design.lock.json`](product-design.lock.json) and
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
 
 ---
 
@@ -292,6 +296,26 @@ No. Core is zero-dependency and its language packs do not install tools or repla
 **Where do the behavior evals live?**
 
 Skill-behavior evals live in [wukong-code-evals](https://github.com/wukongnotnull/wukong-code-evals), cloned locally into `evals/`. Plugin-infrastructure tests remain in `tests/`.
+
+---
+
+## Contributing
+
+Wukong Code accepts new skills after maintainer review when they solve a
+concrete problem, have a clear intended audience, and can be maintained safely
+across supported harnesses. Domain-specific and externally sourced skills are eligible
+for core review; contributors must disclose the source, license, dependency impact,
+tests or evaluations, and maintenance or update strategy. Core skills remain
+zero-dependency unless a separately documented harness-support exception applies.
+
+1. Fork the repository and create a focused branch from `main`.
+2. Read and complete every section of `.github/PULL_REQUEST_TEMPLATE.md`.
+3. Use `writing-skills` when creating or changing behavior-shaping skill content.
+4. Run the relevant infrastructure tests and behavior evaluations.
+5. Show a human the complete proposed diff and obtain approval before submission.
+6. Submit one focused PR targeting `main`.
+
+See `skills/writing-skills/SKILL.md` for the complete skill-development guide.
 
 ---
 
