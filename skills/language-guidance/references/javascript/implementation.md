@@ -24,6 +24,9 @@ Apply only rules whose conditions occur in the target and owning host.
   ordering, duplication, key, and iteration behavior. Choose from the accepted
   input and observable output contract, not from style preference.
 
+If you invoke TDD or inspect tests to decide whether an edit is needed, read javascript/testing.md first.
+The delivered implementation reference does not replace testing guidance.
+
 ## Errors, Promises, and Cleanup
 
 - Preserve error identity, message, cause, and host-specific metadata needed by

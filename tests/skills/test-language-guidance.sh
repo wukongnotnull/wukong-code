@@ -79,6 +79,8 @@ if [[ -f "$skill" ]]; then
   assert_contains "$skill" "Explicit failure investigation, code review, and completion verification intent takes precedence over generic no-edit analysis."
   assert_contains "$skill" "Every selected reference file must be read before substantive source analysis; locating its registry entry or path is not loading it."
   assert_contains "$skill" "If the primary process later becomes TDD or testing after an implementation decision"
+  assert_contains "$skill" "including invoking \`wukong-code:test-driven-development\`"
+  assert_contains "$skill" "read that file before inspecting tests, running tests, or concluding no production edit is needed"
   assert_max_lines "$skill" 180
 fi
 
@@ -363,6 +365,8 @@ assert_contains skills/language-guidance/references/javascript/profile.md \
   "JavaScript syntax does not identify its host environment"
 assert_contains skills/language-guidance/references/javascript/implementation.md \
   "Missing, undefined, null, and an absent property are distinct contracts"
+assert_contains skills/language-guidance/references/javascript/implementation.md \
+  "If you invoke TDD or inspect tests to decide whether an edit is needed, read javascript/testing.md first."
 assert_contains skills/language-guidance/references/javascript/testing.md \
   "Valid RED reaches the new test"
 assert_contains skills/language-guidance/references/javascript/debugging.md \

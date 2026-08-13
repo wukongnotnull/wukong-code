@@ -336,9 +336,15 @@ def main() -> None:
         f"Phase: {phase}\n"
         f"Delivered: {delivered}\n\n"
         "This hook has already delivered the selected language guidance for this turn; "
-        "do not select another language or phase unless new user evidence supersedes it.\n\n"
-        f"{workflow}{body}\n"
+        "do not select another language unless new user evidence supersedes it.\n"
     )
+    if phase == "implementation":
+        context += (
+            "If the primary process later becomes TDD or testing, read the selected "
+            "language's testing.md before inspecting tests, running tests, or concluding "
+            "no production edit is needed.\n"
+        )
+    context += f"\n{workflow}{body}\n"
     print(
         json.dumps(
             {

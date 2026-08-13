@@ -377,6 +377,13 @@ assert_prompt_router_output \
     "$router_home"
 
 assert_prompt_router_output \
+    "JavaScript production edit reminds the model to read testing.md after a TDD switch" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"Modify src/process-all.js to preserve result order when processors complete out of order. Explain your first actions before editing.\"}" \
+    "# JavaScript Implementation Guidance|Delivered: javascript/profile.md, javascript/implementation.md|If the primary process later becomes TDD or testing|testing.md before inspecting tests" \
+    "do not select another language or phase" \
+    "$router_home"
+
+assert_prompt_router_output \
     "TypeScript source request injects TypeScript implementation guidance" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify web/app.ts to fix the button state.\"}" \
     "# TypeScript Project Profile|# TypeScript Implementation Guidance|Delivered: typescript/profile.md, typescript/implementation.md" \

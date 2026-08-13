@@ -76,7 +76,7 @@ and state this decision:
 Print each field on its own line exactly as shown. Do not combine, paraphrase, or rename any label.
 List only selected reference paths after `Loaded:`; never use pending, next, or future-tense wording.
 After emitting a decision, do not load another language reference unless you first emit a new complete `Detected:`, `Phase:`, and `Loaded:` decision listing the replacement set.
-If the primary process later becomes TDD or testing after an implementation decision, emit a replacement `Detected:`, `Phase:`, and `Loaded:` decision that includes `<language>/testing.md` before discussing, writing, or skipping tests. Locating `testing.md` is not loading it.
+If the primary process later becomes TDD or testing after an implementation decision, including invoking `wukong-code:test-driven-development`, emit a replacement `Detected:`, `Phase:`, and `Loaded:` decision that includes `<language>/testing.md` and read that file before inspecting tests, running tests, or concluding no production edit is needed. Locating `testing.md` is not loading it.
 
 For automatic selection, language-guidance may provide this decision when
 loaded; automatic selection does not promise invocation or visible output.
