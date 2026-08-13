@@ -4,9 +4,11 @@
 
 This document records static RED/GREEN work and locally available packaging
 checks. It is **not** a completed behavior evaluation. No fresh no-guidance or
-with-guidance sessions were run, no transcript identifiers exist, and no
-TypeScript-aware human review has occurred. The public README status therefore
-remains `Planned`; this draft does not justify Experimental publication.
+with-guidance sessions were run, and no transcript identifiers exist. Human
+partner `wukongnotnull` reviewed and approved the complete TypeScript diff on
+2026-08-13 and confirmed familiarity with TypeScript compiler, module,
+declaration, and runtime behavior. The public README status therefore remains
+`Planned`; this draft does not justify Experimental publication.
 
 The registry entry uses the language-pack contract's candidate status value
 `experimental`, but that internal value is not a public release claim. The
@@ -119,8 +121,10 @@ cohort or execution of the TypeScript fixture.
 - Run and publish the complete no-guidance RED, candidate GREEN, adversarial,
   nearest-marker, unsupported-language, docs-only, and cross-language
   regression cohorts from a frozen committed artifact.
-- Obtain review of the complete TypeScript references and fixture from a human
-  familiar with TypeScript compiler, module, declaration, and runtime behavior.
+- Human partner `wukongnotnull` reviewed and approved the complete proposed diff
+  on 2026-08-13 and confirmed familiarity with TypeScript compiler, module,
+  declaration, and runtime behavior. The human language-review gate is complete;
+  the behavior-evaluation gate remains open.
 - Repeat all local commands after the final evidence commit and verify the
   packaged archive contains all six TypeScript references.
 - Keep both READMEs at `Planned` until every gate passes. If any behavior case
