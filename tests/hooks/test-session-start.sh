@@ -397,14 +397,18 @@ assert_prompt_router_output \
     "# JavaScript Review Guidance"$'\037'"# Rust Review Guidance" \
     "$router_home"
 
-assert_prompt_router_empty \
-    "Cross-language actionable targets do not claim a sole language selection" \
+assert_prompt_router_output \
+    "Cross-language actionable targets tell the model not to load either pack" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify web/app.ts and rust-worker/src/lib.rs.\"}" \
+    "Multiple registered languages are in scope|TypeScript|Rust|Do not invoke language-guidance" \
+    "# TypeScript Implementation Guidance"$'\037'"# Rust Implementation Guidance"$'\037'"Delivered: typescript/"$'\037'"Delivered: rust/" \
     "$router_home"
 
-assert_prompt_router_empty \
-    "Three coordinated targets retain a conflicting final language" \
+assert_prompt_router_output \
+    "Three coordinated targets retain a conflicting final language and abstain explicitly" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify web/app.ts, web/other.ts, and rust-worker/src/lib.rs.\"}" \
+    "Multiple registered languages are in scope|TypeScript|Rust|Do not invoke language-guidance" \
+    "# TypeScript Implementation Guidance"$'\037'"# Rust Implementation Guidance" \
     "$router_home"
 
 assert_prompt_router_empty \

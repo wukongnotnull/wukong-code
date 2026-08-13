@@ -70,6 +70,7 @@ if [[ -f "$skill" ]]; then
   assert_contains "$skill" "Primary process remains authoritative"
   assert_contains "$skill" "at most two"
   assert_contains "$skill" "Do not guess"
+  assert_contains "$skill" "source targets in two or more registered languages"
   assert_contains "$skill" "| Design or plan with no requested source edit | profile |"
   assert_contains "$skill" "| Requested production-source edit, including brainstorming or pre-edit analysis | implementation |"
   assert_contains "$skill" "load both profile and implementation before discussing the approach."

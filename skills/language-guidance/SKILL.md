@@ -28,6 +28,9 @@ Evaluate in order:
 Read references/registry.json for supported identifiers. Nearest markers beat
 unrelated root files. **Do not guess.** Ask or return no selection when
 evidence conflicts.
+If a prompt names source targets in two or more registered languages, do not
+emit `Detected:`, `Phase:`, or `Loaded:` and do not read either language pack.
+State each target scope separately and keep the generic workflow.
 
 ## Phase Selection
 

@@ -151,6 +151,21 @@ def target_selection(
     return None
 
 
+def mixed_registered_languages(
+    prompt: str, cwd: Path, languages: dict[str, Any]
+) -> list[str] | None:
+    targets = prompt_targets(prompt, languages)
+    if len(targets) < 2:
+        return None
+    names: list[str] = []
+    for target in targets:
+        selection = target_selection(target, cwd, languages)
+        if selection is not None:
+            names.append(selection[0])
+    unique = list(dict.fromkeys(names))
+    return unique if len(unique) > 1 else None
+
+
 def target_language(prompt: str, cwd: Path, languages: dict[str, Any]) -> tuple[str, Path] | None:
     targets = prompt_targets(prompt, languages)
     if targets:
@@ -249,6 +264,30 @@ def main() -> None:
         selection = target_language(payload["prompt"], cwd, languages)
         phase = phase_for(payload["prompt"])
         unsupported_extension = unregistered_source_extension(payload["prompt"], languages)
+        mixed = mixed_registered_languages(payload["prompt"], cwd, languages)
+        if mixed:
+            display = ", ".join(
+                languages[name].get("display_name", name.capitalize()) for name in mixed
+            )
+            context = (
+                "Deterministic Codex language routing\n\n"
+                f"Multiple registered languages are in scope: {display}.\n"
+                "Do not invoke language-guidance, emit a language decision, or load either "
+                "language's references. State each target scope separately and keep the "
+                "generic workflow until the human partner selects one target.\n"
+            )
+            print(
+                json.dumps(
+                    {
+                        "hookSpecificOutput": {
+                            "hookEventName": "UserPromptSubmit",
+                            "additionalContext": context,
+                        }
+                    },
+                    ensure_ascii=False,
+                )
+            )
+            return
         if not selection and unsupported_extension and phase:
             context = (
                 "Deterministic Codex language routing\n\n"
