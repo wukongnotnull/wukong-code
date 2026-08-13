@@ -333,9 +333,9 @@ assert_prompt_router_output \
     "$router_home"
 
 assert_prompt_router_output \
-    "TypeScript source request explicitly rejects unregistered language guidance" \
+    "TypeScript source request injects TypeScript implementation guidance" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify web/src/app.ts to fix the button state.\"}" \
-    "No installed language guidance is registered for .ts." \
+    "# TypeScript Implementation Guidance" \
     "# Rust Implementation Guidance"$'\037'"# Go Implementation Guidance"$'\037'"# Swift Implementation Guidance" \
     "$router_home"
 
