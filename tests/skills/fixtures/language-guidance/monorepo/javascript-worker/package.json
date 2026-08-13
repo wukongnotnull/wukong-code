@@ -1,0 +1,8 @@
+{
+  "name": "language-guidance-javascript-worker",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  }
+}

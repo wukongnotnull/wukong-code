@@ -55,7 +55,7 @@ assert_file "$skill"
 assert_file "$registry"
 assert_file skills/language-guidance/references/shared/language-pack-contract.md
 
-for language in go swift rust java typescript; do
+for language in go swift rust java typescript javascript; do
   for phase in profile implementation testing debugging review verification; do
     assert_file "skills/language-guidance/references/$language/$phase.md"
   done
@@ -89,7 +89,9 @@ import sys
 root = pathlib.Path("skills/language-guidance/references")
 data = json.loads(pathlib.Path(sys.argv[1]).read_text())
 assert data["version"] == 1
-assert set(data["languages"]) == {"go", "swift", "rust", "java", "typescript"}
+assert set(data["languages"]) == {
+    "go", "swift", "rust", "java", "typescript", "javascript"
+}
 
 expected = {
     "go": {
@@ -136,6 +138,19 @@ expected = {
             "verification": "typescript/verification.md",
         },
     },
+    "javascript": {
+        "status": "experimental",
+        "extensions": [".js", ".mjs", ".cjs", ".jsx"],
+        "markers": ["package.json"],
+        "phases": {
+            "profile": "javascript/profile.md",
+            "implementation": "javascript/implementation.md",
+            "testing": "javascript/testing.md",
+            "debugging": "javascript/debugging.md",
+            "review": "javascript/review.md",
+            "verification": "javascript/verification.md",
+        },
+    },
 }
 
 required_phases = {
@@ -151,6 +166,10 @@ for language, contract in expected.items():
     assert set(entry["phases"]) == required_phases
     for relative in entry["phases"].values():
         assert (root / relative).is_file(), relative
+
+assert data["languages"]["javascript"]["phases"] == {
+    phase: f"javascript/{phase}.md" for phase in required_phases
+}
 PY
   then pass "registry contract"; else fail "registry contract"; fi
 fi
@@ -169,9 +188,11 @@ for phase in profile implementation testing debugging review verification; do
   [[ -f "$file" ]] && assert_max_lines "$file" 200
 done
 
-for phase in profile implementation testing debugging review verification; do
-  file="skills/language-guidance/references/typescript/$phase.md"
-  [[ -f "$file" ]] && assert_max_lines "$file" 200
+for language in typescript javascript; do
+  for phase in profile implementation testing debugging review verification; do
+    file="skills/language-guidance/references/$language/$phase.md"
+    [[ -f "$file" ]] && assert_max_lines "$file" 200
+  done
 done
 
 assert_contains skills/language-guidance/references/swift/profile.md "SwiftPM success does not prove an"
@@ -329,6 +350,50 @@ then
 else
   fail "$typescript_manifest dependency or script contract"
 fi
+
+assert_contains skills/language-guidance/references/javascript/profile.md \
+  "JavaScript syntax does not identify its host environment"
+assert_contains skills/language-guidance/references/javascript/implementation.md \
+  "Missing, undefined, null, and an absent property are distinct contracts"
+assert_contains skills/language-guidance/references/javascript/testing.md \
+  "Valid RED reaches the new test"
+assert_contains skills/language-guidance/references/javascript/debugging.md \
+  "Reproduce under the owning runtime and module mode"
+assert_contains skills/language-guidance/references/javascript/review.md \
+  "Zero findings is valid"
+assert_contains skills/language-guidance/references/javascript/verification.md \
+  "One host does not verify another host"
+
+assert_file tests/skills/fixtures/language-guidance/javascript-basic/package.json
+assert_file tests/skills/fixtures/language-guidance/javascript-basic/src/process-all.js
+assert_file tests/skills/fixtures/language-guidance/javascript-basic/test/process-all.test.js
+assert_file tests/skills/fixtures/language-guidance/monorepo/javascript-worker/package.json
+assert_file tests/skills/fixtures/language-guidance/monorepo/javascript-worker/src/worker.mjs
+assert_contains tests/skills/fixtures/language-guidance/javascript-basic/package.json \
+  '"test": "node --test"'
+assert_contains tests/skills/fixtures/language-guidance/javascript-basic/package.json \
+  '"type": "module"'
+assert_contains tests/skills/fixtures/language-guidance/javascript-basic/package.json \
+  '"node": ">=22"'
+assert_contains tests/skills/fixtures/language-guidance/javascript-basic/src/process-all.js \
+  'Array.isArray(raw)'
+assert_contains tests/skills/fixtures/language-guidance/javascript-basic/src/process-all.js \
+  'Promise.all(raw.map('
+assert_contains tests/skills/fixtures/language-guidance/javascript-basic/test/process-all.test.js \
+  'preserves input order'
+assert_contains tests/skills/fixtures/language-guidance/javascript-basic/test/process-all.test.js \
+  'rejects non-string external values'
+if [[ ! -f tests/skills/fixtures/language-guidance/javascript-basic/package.json ]]; then
+  fail "JavaScript fixture manifest missing dependency policy target"
+elif grep -qE '"(dependencies|devDependencies|optionalDependencies|peerDependencies)"[[:space:]]*:' \
+  tests/skills/fixtures/language-guidance/javascript-basic/package.json; then
+  fail "JavaScript fixture declares dependencies"
+else
+  pass "JavaScript fixture declares no dependencies"
+fi
+
+assert_contains tests/skills/language-guidance-scenarios.md "## JS1 — JavaScript implementation"
+assert_contains tests/skills/language-guidance-scenarios.md "## JS6 — JavaScript nearest marker"
 
 if grep -R -nE '((curl|wget).*[|][[:space:]]*(sh|bash)|(^|[[:space:]])(go[[:space:]]+install|npm[[:space:]]+install|pnpm[[:space:]]+(install|add)|yarn[[:space:]]+(install|add)|pip3?[[:space:]]+install|brew[[:space:]]+install|apt(-get)?[[:space:]]+install|apk[[:space:]]+add|dnf[[:space:]]+install|yum[[:space:]]+install|cargo[[:space:]]+install|gem[[:space:]]+install|composer[[:space:]]+require|bundle[[:space:]]+add))' skills/language-guidance; then
   fail "installer command found"
