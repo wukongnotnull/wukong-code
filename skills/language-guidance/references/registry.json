@@ -63,6 +63,19 @@
         "review": "java/review.md",
         "verification": "java/verification.md"
       }
+    },
+    "javascript": {
+      "status": "experimental",
+      "extensions": [".js", ".mjs", ".cjs", ".jsx"],
+      "markers": ["package.json"],
+      "phases": {
+        "profile": "javascript/profile.md",
+        "implementation": "javascript/implementation.md",
+        "testing": "javascript/testing.md",
+        "debugging": "javascript/debugging.md",
+        "review": "javascript/review.md",
+        "verification": "javascript/verification.md"
+      }
     }
   }
 }
