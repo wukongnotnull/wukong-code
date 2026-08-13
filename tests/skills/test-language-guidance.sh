@@ -395,6 +395,11 @@ fi
 assert_contains tests/skills/language-guidance-scenarios.md "## JS1 — JavaScript implementation"
 assert_contains tests/skills/language-guidance-scenarios.md "## JS6 — JavaScript nearest marker"
 
+javascript_eval=docs/wukong-code/evals/2026-08-13-javascript-language-guidance.md
+assert_file "$javascript_eval"
+assert_contains "$javascript_eval" \
+  "Development-session observations were not preserved as raw output or intermediate commits and are not independently verifiable publication evidence."
+
 if grep -R -nE '((curl|wget).*[|][[:space:]]*(sh|bash)|(^|[[:space:]])(go[[:space:]]+install|npm[[:space:]]+install|pnpm[[:space:]]+(install|add)|yarn[[:space:]]+(install|add)|pip3?[[:space:]]+install|brew[[:space:]]+install|apt(-get)?[[:space:]]+install|apk[[:space:]]+add|dnf[[:space:]]+install|yum[[:space:]]+install|cargo[[:space:]]+install|gem[[:space:]]+install|composer[[:space:]]+require|bundle[[:space:]]+add))' skills/language-guidance; then
   fail "installer command found"
 else

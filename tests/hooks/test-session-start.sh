@@ -248,11 +248,48 @@ assert_command_output \
     bash "$HOOK_UNDER_TEST"
 
 router_home="$(make_home user-prompt-submit)"
+
+nearest_owner_parent="$TEST_ROOT/nearest-owner/javascript-parent"
+nearest_owner_child="$nearest_owner_parent/rust-child"
+mkdir -p "$nearest_owner_child"
+touch "$nearest_owner_parent/package.json" "$nearest_owner_child/Cargo.toml"
+nearest_owner_parent="$(cd "$nearest_owner_parent" && pwd -P)"
+nearest_owner_child="$(cd "$nearest_owner_child" && pwd -P)"
+assert_prompt_router_output \
+    "Nearest marker owner wins when fallback languages occur at different distances" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$nearest_owner_child\",\"prompt\":\"Change the worker behavior.\"}" \
+    "# Rust Implementation Guidance|Evidence: $nearest_owner_child" \
+    "# JavaScript Implementation Guidance" \
+    "$router_home"
+
+tied_owner="$TEST_ROOT/tied-owner"
+mkdir -p "$tied_owner"
+touch "$tied_owner/go.mod" "$tied_owner/package.json"
+tied_owner="$(cd "$tied_owner" && pwd -P)"
+assert_prompt_router_empty \
+    "Same-distance marker owners remain ambiguous without explicit language evidence" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$tied_owner\",\"prompt\":\"Change the worker behavior.\"}" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Explicit source extension wins over a nearer unrelated marker" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$nearest_owner_child\",\"prompt\":\"Change worker.js to preserve order.\"}" \
+    "# JavaScript Implementation Guidance|Evidence: $nearest_owner_parent" \
+    "# Rust Implementation Guidance" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Explicit language name wins over a nearer unrelated marker" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$nearest_owner_child\",\"prompt\":\"Change the JavaScript worker behavior.\"}" \
+    "# JavaScript Implementation Guidance|Evidence: $nearest_owner_parent" \
+    "# Rust Implementation Guidance" \
+    "$router_home"
+
 assert_prompt_router_output \
     "Rust source change injects Rust implementation guidance only" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/rust-basic\",\"prompt\":\"Change process_all so it returns the processed items.\"}" \
     "# Rust Implementation Guidance" \
-    "go/implementation.md"$'\037'"swift/implementation.md" \
+    "go/implementation.md"$'\037'"swift/implementation.md"$'\037'"javascript/implementation.md" \
     "$router_home"
 
 assert_prompt_router_output \
