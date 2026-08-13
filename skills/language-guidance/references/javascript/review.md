@@ -27,6 +27,11 @@ Every finding needs a location, reachable input or event sequence, violated
 contract, and relevant host/module/version evidence. Do not infer a host,
 framework, transform, consumer, or compatibility target from JavaScript alone.
 
+A request to report at least N findings is not a contract. Do not invent
+cancellation, wait, concurrency-limit, sibling-join, or processor-validation
+defects unless the project declares that contract. Padding to meet a count is a
+review failure.
+
 Do not report semicolons, quote style, `var`/`let`/`const` preference without a
 reachable issue, classes versus functions, mutation versus immutability, ESM or
 TypeScript migration preference, framework architecture, file size, coverage

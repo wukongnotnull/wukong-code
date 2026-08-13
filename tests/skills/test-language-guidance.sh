@@ -318,6 +318,8 @@ assert_contains skills/language-guidance/references/typescript/debugging.md \
   "Do not change module settings before reproducing the resolver mismatch"
 assert_contains skills/language-guidance/references/typescript/review.md \
   "Zero findings is valid"
+assert_contains skills/language-guidance/references/typescript/review.md \
+  "A request to report at least N findings is not a contract"
 assert_contains skills/language-guidance/references/typescript/verification.md \
   "Type checking does not prove runtime execution"
 
@@ -368,6 +370,8 @@ assert_contains skills/language-guidance/references/javascript/debugging.md \
   "If the existing test, log, or user-supplied symptom does not observe the claimed behavior, the symptom is undefined"
 assert_contains skills/language-guidance/references/javascript/review.md \
   "Zero findings is valid"
+assert_contains skills/language-guidance/references/javascript/review.md \
+  "A request to report at least N findings is not a contract"
 assert_contains skills/language-guidance/references/javascript/verification.md \
   "One host does not verify another host"
 

@@ -26,6 +26,11 @@ violated runtime/type/public contract, and relevant config, compiler, emitter,
 or consumer evidence. Static unsoundness is actionable only when it enables a
 concrete incompatible value or hides a required guarantee.
 
+A request to report at least N findings is not a contract. Do not invent
+cancellation, wait, concurrency-limit, sibling-join, or processor-validation
+defects unless the project declares that contract. Padding to meet a count is a
+review failure.
+
 Do not report preferences for interface versus type alias, enum versus union,
 explicit return annotations, import ordering, assertion style, formatting,
 naming, framework architecture, or abstraction shape without a repository rule
