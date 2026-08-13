@@ -105,6 +105,7 @@ language controls from one frozen candidate artifact.
 
 | Command | Result |
 | --- | --- |
+| `bash tests/hooks/test-session-start.sh` | PASS — TypeScript source routing injects TypeScript implementation guidance while existing Go, Swift, Rust, and Java routing controls remain green |
 | `bash tests/skills/test-language-guidance.sh` | PASS — `STATUS: PASSED`, including TypeScript registry, six phases, fixtures, invariant phrases, and existing language controls |
 | `bash tests/skills/test-skill-slim-gates.sh` | PASS — all four governed skills remained within line limits |
 | `bash tests/codex/test-package-codex-plugin.sh` | PASS — all Codex ZIP/tar archive and manifest checks passed |
