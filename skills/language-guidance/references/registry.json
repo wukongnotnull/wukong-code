@@ -63,6 +63,19 @@
         "review": "java/review.md",
         "verification": "java/verification.md"
       }
+    },
+    "typescript": {
+      "status": "experimental",
+      "extensions": [".ts", ".tsx"],
+      "markers": ["tsconfig.json"],
+      "phases": {
+        "profile": "typescript/profile.md",
+        "implementation": "typescript/implementation.md",
+        "testing": "typescript/testing.md",
+        "debugging": "typescript/debugging.md",
+        "review": "typescript/review.md",
+        "verification": "typescript/verification.md"
+      }
     }
   }
 }

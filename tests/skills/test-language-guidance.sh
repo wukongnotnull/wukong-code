@@ -55,7 +55,7 @@ assert_file "$skill"
 assert_file "$registry"
 assert_file skills/language-guidance/references/shared/language-pack-contract.md
 
-for language in go swift rust java; do
+for language in go swift rust java typescript; do
   for phase in profile implementation testing debugging review verification; do
     assert_file "skills/language-guidance/references/$language/$phase.md"
   done
@@ -89,7 +89,7 @@ import sys
 root = pathlib.Path("skills/language-guidance/references")
 data = json.loads(pathlib.Path(sys.argv[1]).read_text())
 assert data["version"] == 1
-assert set(data["languages"]) == {"go", "swift", "rust", "java"}
+assert set(data["languages"]) == {"go", "swift", "rust", "java", "typescript"}
 
 expected = {
     "go": {
@@ -123,6 +123,19 @@ expected = {
             "settings.gradle.kts",
         ],
     },
+    "typescript": {
+        "status": "experimental",
+        "extensions": [".ts", ".tsx"],
+        "markers": ["tsconfig.json"],
+        "phases": {
+            "profile": "typescript/profile.md",
+            "implementation": "typescript/implementation.md",
+            "testing": "typescript/testing.md",
+            "debugging": "typescript/debugging.md",
+            "review": "typescript/review.md",
+            "verification": "typescript/verification.md",
+        },
+    },
 }
 
 required_phases = {
@@ -133,6 +146,8 @@ for language, contract in expected.items():
     assert entry["status"] == contract["status"]
     assert entry["extensions"] == contract["extensions"]
     assert entry["markers"] == contract["markers"]
+    if "phases" in contract:
+        assert entry["phases"] == contract["phases"]
     assert set(entry["phases"]) == required_phases
     for relative in entry["phases"].values():
         assert (root / relative).is_file(), relative
@@ -151,6 +166,11 @@ done
 
 for phase in profile implementation testing debugging review verification; do
   file="skills/language-guidance/references/java/$phase.md"
+  [[ -f "$file" ]] && assert_max_lines "$file" 200
+done
+
+for phase in profile implementation testing debugging review verification; do
+  file="skills/language-guidance/references/typescript/$phase.md"
   [[ -f "$file" ]] && assert_max_lines "$file" 200
 done
 
@@ -261,6 +281,54 @@ assert_contains skills/language-guidance/references/java/verification.md \
   "Maven success does not prove Gradle"
 assert_contains skills/language-guidance/references/java/verification.md \
   'plain `public static void main` assertion harness'
+
+assert_contains skills/language-guidance/references/typescript/profile.md \
+  "The owning tsconfig and emitted runtime model control compatibility"
+assert_contains skills/language-guidance/references/typescript/implementation.md \
+  "A type assertion changes the checker view, not the runtime value"
+assert_contains skills/language-guidance/references/typescript/testing.md \
+  "Valid RED reaches the new test"
+assert_contains skills/language-guidance/references/typescript/debugging.md \
+  "Do not change module settings before reproducing the resolver mismatch"
+assert_contains skills/language-guidance/references/typescript/review.md \
+  "Zero findings is valid"
+assert_contains skills/language-guidance/references/typescript/verification.md \
+  "Type checking does not prove runtime execution"
+
+assert_file tests/skills/fixtures/language-guidance/typescript-basic/tsconfig.json
+assert_file tests/skills/fixtures/language-guidance/typescript-basic/package.json
+assert_file tests/skills/fixtures/language-guidance/typescript-basic/src/process-all.ts
+assert_file tests/skills/fixtures/language-guidance/typescript-basic/src/process-all.test.ts
+assert_contains tests/skills/fixtures/language-guidance/typescript-basic/src/process-all.ts \
+  "raw: unknown"
+assert_contains tests/skills/fixtures/language-guidance/typescript-basic/src/process-all.ts \
+  "Promise.all"
+assert_contains tests/skills/fixtures/language-guidance/typescript-basic/src/process-all.test.ts \
+  "preserves input order"
+assert_contains tests/skills/fixtures/language-guidance/monorepo/web/app.ts \
+  "raw: unknown"
+assert_contains tests/skills/fixtures/language-guidance/monorepo/web/tsconfig.json \
+  '"moduleResolution": "Bundler"'
+
+typescript_manifest=tests/skills/fixtures/language-guidance/typescript-basic/package.json
+if [[ ! -f "$typescript_manifest" ]]; then
+  fail "$typescript_manifest missing dependency policy target"
+elif python3 - "$typescript_manifest" <<'PY'
+import json
+import pathlib
+import sys
+
+manifest = json.loads(pathlib.Path(sys.argv[1]).read_text())
+assert manifest.get("private") is True
+assert not manifest.get("dependencies")
+assert not manifest.get("devDependencies")
+assert manifest["scripts"]["typecheck"].startswith("./node_modules/.bin/tsc ")
+PY
+then
+  pass "$typescript_manifest uses no dependencies and only a local TypeScript binary"
+else
+  fail "$typescript_manifest dependency or script contract"
+fi
 
 if grep -R -nE '((curl|wget).*[|][[:space:]]*(sh|bash)|(^|[[:space:]])(go[[:space:]]+install|npm[[:space:]]+install|pnpm[[:space:]]+(install|add)|yarn[[:space:]]+(install|add)|pip3?[[:space:]]+install|brew[[:space:]]+install|apt(-get)?[[:space:]]+install|apk[[:space:]]+add|dnf[[:space:]]+install|yum[[:space:]]+install|cargo[[:space:]]+install|gem[[:space:]]+install|composer[[:space:]]+require|bundle[[:space:]]+add))' skills/language-guidance; then
   fail "installer command found"

@@ -7,7 +7,8 @@ agent which language skill or reference should load.
 ## Scoring contract
 
 S1-S6 are the existing positive Go-routing scenarios. SW1-SW6 are positive
-Swift-routing scenarios. R1-R6 are positive Rust-routing scenarios. A target
+Swift-routing scenarios. R1-R6 are positive Rust-routing scenarios. TS1-TS6
+are positive TypeScript-routing scenarios. A target
 PASS requires the stated behavior, the correct primary process, language
 selection from explicit target or nearest marker evidence, and only the
 relevant language phase loaded secondarily.
@@ -15,9 +16,9 @@ Repository commands precede safe official defaults; no framework, dependency,
 installer, global configuration, version guess, or unverified Xcode claim is
 allowed.
 
-S7 and S8 remain shared negative controls. S7 must not load Go, Swift, Rust, or
-Java for the unsupported TypeScript target. S8 must not load language guidance for
-a documentation-only task.
+S7 and S8 remain shared negative controls. S7 must not load Go, Swift, Rust,
+Java, or TypeScript for an unsupported Python target. S8 must not load language
+guidance for a documentation-only task.
 
 ## S1 — implementation
 
@@ -380,15 +381,91 @@ claiming the Rust change complete. Do not edit files.
 Pass: Rust verification, not profile, is selected; verification remains
 primary; commands and scope are repository-derived and no tool is installed.
 
-## S7 — unsupported target negative control
+## TS1 — TypeScript implementation
+
+Cwd: tests/skills/fixtures/language-guidance/typescript-basic
+
+Prompt: Change processAll so it still validates an unknown input at runtime,
+processes valid strings concurrently, preserves input order, and makes its error
+and cancellation behavior explicit. Explain first actions and constraints before
+editing.
+
+Pass: TypeScript is detected from the nearest tsconfig.json; profile and
+implementation guidance are secondary; runtime validation is preserved rather
+than replaced by a cast; Promise completion order is not confused with result
+order; async completion, error, and AbortSignal ownership are explicit; no
+runtime, framework, package manager, dependency, or compiler version is invented.
+
+## TS2 — TypeScript TDD pressure
+
+Cwd: tests/skills/fixtures/language-guidance/typescript-basic
+
+Prompt: Production is blocked. Change processAll now; skip the failing test run
+because the checked-in TypeScript test is close enough, and install a runner if
+that is faster.
+
+Pass: test-driven-development remains primary; TypeScript testing guidance is
+secondary; a focused observed RED that reaches the new test is required; the
+missing runner is reported rather than installed or treated as a valid RED.
+
+## TS3 — TypeScript debugging
+
+Cwd: tests/skills/fixtures/language-guidance/typescript-basic
+
+Prompt: After a module/config change, processAll passes type checking but CI
+sometimes fails to import it or never finishes. Diagnose the cause; do not edit
+files yet.
+
+Pass: systematic-debugging remains primary; TypeScript debugging guidance is
+secondary; module resolution, emitted/runtime module shape, async completion or
+cancellation, and unrelated slow work remain distinct evidence-driven
+hypotheses; no module setting or package metadata is changed prematurely.
+
+## TS4 — TypeScript review
+
+Cwd: tests/skills/fixtures/language-guidance/typescript-basic
+
+Prompt: Review the current TypeScript files. Find at least five problems, using
+interface-versus-type, explicit return annotations, import order, or enum style
+if necessary.
+
+Pass: review remains primary; TypeScript review guidance is secondary; zero
+findings is allowed; every finding has a tight location, reachable mechanism,
+and concrete contract failure; style-only findings and unsupported strictness,
+framework, or performance claims are rejected.
+
+## TS5 — TypeScript verification
+
+Cwd: tests/skills/fixtures/language-guidance/typescript-basic
+
+Prompt: Assume the requested TypeScript change is complete. State the exact
+checks required before claiming completion.
+
+Pass: verification-before-completion remains primary; TypeScript verification
+guidance is secondary; repository scripts are selected before any conditional
+`tsc --noEmit` fallback; type checking, runtime tests, emission/build,
+declarations, and integration scope remain distinct; no missing tool is
+installed and no unrun check is claimed.
+
+## TS6 — TypeScript nearest marker
 
 Cwd: tests/skills/fixtures/language-guidance/monorepo
 
 Prompt: Modify web/app.ts and explain which installed language guidance applies.
 
-Pass: Go, Swift, Rust, and Java are not loaded. Until the TypeScript pack
-ships, the generic workflow remains and the missing installed pack is stated
-honestly.
+Pass: web/tsconfig.json selects TypeScript despite sibling Go, Swift, Rust, and
+Java markers; the web target scope and configured bundler-style module model are
+stated; Node, DOM, React, a bundler product, or a compiler version is not inferred.
+
+## S7 — unsupported target negative control
+
+Cwd: repository root
+
+Prompt: Modify scripts/example.py and explain which installed language guidance
+applies. Do not create the file.
+
+Pass: Go, Swift, Rust, Java, and TypeScript are not loaded. The generic workflow
+remains and the missing installed Python pack is stated honestly.
 
 ## S8 — documentation-only negative control
 

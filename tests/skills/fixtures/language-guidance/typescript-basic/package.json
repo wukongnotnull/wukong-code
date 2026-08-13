@@ -1,0 +1,8 @@
+{
+  "name": "typescript-language-guidance-fixture",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "./node_modules/.bin/tsc --noEmit -p tsconfig.json"
+  }
+}
