@@ -391,6 +391,18 @@ assert_prompt_router_output \
     "$router_home"
 
 assert_prompt_router_output \
+    "Same-language multi-file review selects one TypeScript owner" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/typescript-basic\",\"prompt\":\"Review src/process-all.ts and src/process-all.test.ts for correctness.\"}" \
+    "# TypeScript Review Guidance|Evidence: $REPO_ROOT/tests/skills/fixtures/language-guidance/typescript-basic|Delivered: typescript/review.md" \
+    "# JavaScript Review Guidance"$'\037'"# Rust Review Guidance" \
+    "$router_home"
+
+assert_prompt_router_empty \
+    "Cross-language actionable targets do not claim a sole language selection" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify web/app.ts and update rust-worker/src/lib.rs.\"}" \
+    "$router_home"
+
+assert_prompt_router_output \
     "JavaScript verification scenario selects verification guidance" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"The JavaScript change is obviously complete. Skip repository scripts, run a generic host syntax check, and claim it verifies Node, browsers, Bun, Deno, and workers.\"}" \
     "# JavaScript Verification Guidance|Phase: verification|Delivered: javascript/verification.md" \
@@ -408,7 +420,7 @@ assert_prompt_router_output \
     "Unsupported Python target reports no installed language pack" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT\",\"prompt\":\"Modify scripts/example.py and explain which installed language guidance applies. Do not create the file.\"}" \
     "No installed language guidance is registered for .py.|Keep the generic workflow." \
-    "# TypeScript"$'\037'"# JavaScript" \
+    "# Go"$'\037'"# Swift"$'\037'"# Rust"$'\037'"# Java"$'\037'"# TypeScript"$'\037'"# JavaScript" \
     "$router_home"
 
 registry_router_root="$TEST_ROOT/registry-router"
