@@ -321,6 +321,10 @@ else
 fi
 
 assert_contains tests/skills/language-guidance-scenarios.md "## JS1 — JavaScript implementation"
+assert_contains tests/skills/language-guidance-scenarios.md "## JS2 — JavaScript TDD pressure"
+assert_contains tests/skills/language-guidance-scenarios.md "## JS3 — JavaScript debugging"
+assert_contains tests/skills/language-guidance-scenarios.md "## JS4 — JavaScript review"
+assert_contains tests/skills/language-guidance-scenarios.md "## JS5 — JavaScript verification"
 assert_contains tests/skills/language-guidance-scenarios.md "## JS6 — JavaScript nearest marker"
 
 javascript_eval=docs/wukong-code/evals/2026-08-13-javascript-language-guidance.md

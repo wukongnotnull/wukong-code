@@ -391,6 +391,13 @@ assert_prompt_router_output \
     "$router_home"
 
 assert_prompt_router_output \
+    "Same-language multi-file review selects one JavaScript owner" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"Review src/process-all.js and test/process-all.test.js for correctness.\"}" \
+    "# JavaScript Review Guidance|Evidence: $REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic|Delivered: javascript/review.md" \
+    "# Rust Review Guidance" \
+    "$router_home"
+
+assert_prompt_router_output \
     "Unsupported Python target reports no installed language pack" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT\",\"prompt\":\"Modify scripts/example.py and explain which installed language guidance applies. Do not create the file.\"}" \
     "No installed language guidance is registered for .py.|Keep the generic workflow." \
