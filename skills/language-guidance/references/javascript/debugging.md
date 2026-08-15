@@ -25,8 +25,8 @@ Systematic debugging remains authoritative. Reproduce under the owning runtime a
 
 When evidence is absent, do not select a leading, likely, or most likely cause.
 Keep module mode, host APIs, promise settlement, event-loop liveness,
-cancellation, stale transformed output, and unrelated slow work distinct until
-a focused reproducer eliminates branches.
+cancellation, stale transformed output, and unrelated slow work distinct
+until an existing test, log, or user-supplied failing assertion eliminates branches.
 
 If the existing test, log, or user-supplied symptom does not observe the claimed behavior, the symptom is undefined.
 A self-authored fail-fast, hang, or cleanup probe does not define that user symptom.

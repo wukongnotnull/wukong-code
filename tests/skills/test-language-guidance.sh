@@ -379,6 +379,8 @@ assert_contains skills/language-guidance/references/javascript/debugging.md \
   "If the existing suite passes and does not observe completion order, do not name Promise.all fail-fast as the cause of that test."
 assert_contains skills/language-guidance/references/javascript/debugging.md \
   "Keep those branches open until an existing test, log, or user-supplied failing assertion observes them."
+assert_contains skills/language-guidance/references/javascript/debugging.md \
+  "until an existing test, log, or user-supplied failing assertion eliminates branches."
 assert_contains skills/language-guidance/references/javascript/review.md \
   "Zero findings is valid"
 assert_contains skills/language-guidance/references/javascript/review.md \
