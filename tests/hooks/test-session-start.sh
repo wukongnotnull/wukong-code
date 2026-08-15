@@ -335,6 +335,13 @@ assert_prompt_router_output \
     "$router_home"
 
 assert_prompt_router_output \
+    "JavaScript debugging request forbids naming an unobserved fail-fast cause" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"Investigate why test/process-all.test.js sometimes observes the wrong completion behavior. Do not edit yet.\"}" \
+    "Mandatory investigation constraint|# JavaScript Debugging Guidance|Delivered: javascript/debugging.md|A self-authored fail-fast, hang, or cleanup probe does not define the user symptom.|If the existing suite passes and does not observe completion order, do not name Promise.all fail-fast as the cause of that test." \
+    "# JavaScript Implementation Guidance"$'\037'"javascript/implementation.md" \
+    "$router_home"
+
+assert_prompt_router_output \
     "Go review request injects Go review guidance" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/go-basic\",\"prompt\":\"Review main.go for correctness and error handling.\"}" \
     "# Go Review Guidance" \

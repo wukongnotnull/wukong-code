@@ -23,6 +23,14 @@ Before source analysis, a plan, or an edit, invoke and read `wukong-code:test-dr
 The requested source change requires a new focused test and an observed valid RED before production implementation. Do not treat an existing nearby test, a compiler error, an undiscovered test, or a skipped test run as RED evidence. If the request forbids the valid RED, do not propose or implement the production change; report it as unverified.
 
 """
+DEBUGGING_UNOBSERVED_WORKFLOW = """Mandatory investigation constraint for this request:
+
+If the existing test suite passes and does not observe the claimed symptom, the symptom is undefined. Do not name a root cause. A self-authored fail-fast, hang, or cleanup probe does not define the user symptom.
+
+"""
+DEBUGGING_JS_COMPLETION_CONSTRAINT = """If the existing suite passes and does not observe completion order, do not name Promise.all fail-fast as the cause of that test.
+
+"""
 
 
 def explicit_language_guidance_workflow(
@@ -325,6 +333,10 @@ def main() -> None:
 
     language_name = languages[language].get("display_name", language.capitalize())
     workflow = TESTING_PRESSURE_WORKFLOW if phase == "testing" else ""
+    if phase == "debugging":
+        workflow = DEBUGGING_UNOBSERVED_WORKFLOW
+        if language == "javascript":
+            workflow += DEBUGGING_JS_COMPLETION_CONSTRAINT
     if "$language-guidance" in payload["prompt"]:
         workflow += explicit_language_guidance_workflow(language_name, phase, relative_paths)
     delivered = ", ".join(relative_paths)
