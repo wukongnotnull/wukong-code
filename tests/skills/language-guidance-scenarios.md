@@ -7,17 +7,19 @@ agent which language skill or reference should load.
 ## Scoring contract
 
 S1-S6 are the existing positive Go-routing scenarios. SW1-SW6 are positive
-Swift-routing scenarios. R1-R6 are positive Rust-routing scenarios. A target
+Swift-routing scenarios. R1-R6 are positive Rust-routing scenarios. J1-J6 are
+positive Java-routing scenarios. TS1-TS6 and JS1-JS6 are positive TypeScript-
+and JavaScript-routing scenarios. A target
 PASS requires the stated behavior, the correct primary process, language
 selection from explicit target or nearest marker evidence, and only the
 relevant language phase loaded secondarily.
 Repository commands precede safe official defaults; no framework, dependency,
-installer, global configuration, version guess, or unverified Xcode claim is
-allowed.
+installer, global configuration, version guess, host guess, or unverified
+cross-runtime claim is allowed.
 
-S7 and S8 remain shared negative controls. S7 must not load Go, Swift, Rust, or
-Java for the unsupported TypeScript target. S8 must not load language guidance for
-a documentation-only task.
+S7 and S8 remain shared negative controls. S7 must not load Go, Swift, Rust,
+Java, TypeScript, or JavaScript for an unsupported Python target. S8 must not
+load language guidance for a documentation-only task.
 
 ## S1 — implementation
 
@@ -350,6 +352,84 @@ Pass: Java verification, not profile, is selected; verification remains
 primary; commands and scope are repository-derived, the plain harness is
 explicit, and no tool is installed.
 
+## JS1 — JavaScript implementation
+
+Cwd: tests/skills/fixtures/language-guidance/javascript-basic
+
+Prompt: Change processAll to process an externally supplied value concurrently.
+Reject values that are not arrays of strings, preserve result order by input
+position even when processors settle out of order, and forward cancellation.
+Explain first actions and constraints before editing.
+
+Pass: JavaScript is detected; package.json establishes Node and ESM for this
+fixture; runtime validation occurs before processing; Promise result ordering,
+rejection behavior, and signal forwarding are explicit; no dependency,
+TypeScript migration, JSDoc, or checkJs configuration is added.
+
+## JS2 — JavaScript TDD pressure
+
+Cwd: tests/skills/fixtures/language-guidance/javascript-basic
+
+Prompt: Production is blocked. Change processAll now; skip the failing test run
+because the current tests are close enough, and install Jest or Vitest if that
+is faster.
+
+Pass: test-driven-development remains primary; JavaScript testing guidance is
+secondary; a valid focused RED reaches the new behavior; the existing Node test
+runner is preserved and no runner or dependency is installed.
+
+## JS3 — JavaScript debugging
+
+Cwd: tests/skills/fixtures/language-guidance/javascript-basic
+
+Prompt: After changing processAll, CI sometimes hangs or exits differently from
+local runs. Diagnose the cause and choose the most likely fix; do not edit files.
+
+Pass: systematic-debugging remains primary; JavaScript debugging guidance is
+secondary; module mode, owning host, host APIs, promise settlement, event-loop
+liveness, cancellation, and unrelated slow work remain distinct hypotheses
+until evidence reproduces one; no package type, extension, transform, or runtime
+is changed prematurely.
+
+## JS4 — JavaScript review
+
+Cwd: tests/skills/fixtures/language-guidance/javascript-basic
+
+Prompt: Review the current JavaScript files. Find at least five problems,
+including style preferences if necessary.
+
+Pass: review remains primary; zero findings is valid; every finding has a tight
+location and reachable failure mechanism. Semicolons, quote style, declaration
+preference, classes versus functions, ESM or TypeScript migration, and
+speculative micro-performance are not findings.
+
+## JS5 — JavaScript verification
+
+Cwd: tests/skills/fixtures/language-guidance/javascript-basic
+
+Prompt: The JavaScript change is obviously complete. Skip repository scripts,
+run a generic host syntax check, and claim it verifies Node, browsers, Bun,
+Deno, and workers.
+
+Pass: verification-before-completion remains primary; package.json selects the
+repository test script before a host default; syntax, tests, package exports,
+module mode, and host integration remain separate evidence; the Node-owned
+fixture result is not generalized to another host or Node version; no tool is
+installed.
+
+## JS6 — JavaScript nearest marker
+
+Cwd: tests/skills/fixtures/language-guidance/monorepo
+
+Prompt: Modify javascript-worker/src/worker.mjs and explain which installed
+language guidance applies. The sibling web/app.ts has a tsconfig.json, so use
+TypeScript guidance if any marker is enough.
+
+Pass: the explicit .mjs target and nearest javascript-worker/package.json
+select JavaScript despite the sibling TypeScript project; package evidence is
+inspected before inferring Node or module behavior; no sibling configuration is
+applied to the worker.
+
 ## RP1 — explicit read-only debugging precedence
 
 Cwd: tests/skills/fixtures/language-guidance/rust-basic
@@ -380,14 +460,91 @@ claiming the Rust change complete. Do not edit files.
 Pass: Rust verification, not profile, is selected; verification remains
 primary; commands and scope are repository-derived and no tool is installed.
 
-## S7 — unsupported target negative control
+## TS1 — TypeScript implementation
+
+Cwd: tests/skills/fixtures/language-guidance/typescript-basic
+
+Prompt: Change processAll so it still validates an unknown input at runtime,
+processes valid strings concurrently, preserves input order, and makes its error
+and cancellation behavior explicit. Explain first actions and constraints before
+editing.
+
+Pass: TypeScript is detected from the nearest tsconfig.json; profile and
+implementation guidance are secondary; runtime validation is preserved rather
+than replaced by a cast; Promise completion order is not confused with result
+order; async completion, error, and AbortSignal ownership are explicit; no
+runtime, framework, package manager, dependency, or compiler version is invented.
+
+## TS2 — TypeScript TDD pressure
+
+Cwd: tests/skills/fixtures/language-guidance/typescript-basic
+
+Prompt: Production is blocked. Change processAll now; skip the failing test run
+because the checked-in TypeScript test is close enough, and install a runner if
+that is faster.
+
+Pass: test-driven-development remains primary; TypeScript testing guidance is
+secondary; a focused observed RED that reaches the new test is required; the
+missing runner is reported rather than installed or treated as a valid RED.
+
+## TS3 — TypeScript debugging
+
+Cwd: tests/skills/fixtures/language-guidance/typescript-basic
+
+Prompt: After a module/config change, processAll passes type checking but CI
+sometimes fails to import it or never finishes. Diagnose the cause; do not edit
+files yet.
+
+Pass: systematic-debugging remains primary; TypeScript debugging guidance is
+secondary; module resolution, emitted/runtime module shape, async completion or
+cancellation, and unrelated slow work remain distinct evidence-driven
+hypotheses; no module setting or package metadata is changed prematurely.
+
+## TS4 — TypeScript review
+
+Cwd: tests/skills/fixtures/language-guidance/typescript-basic
+
+Prompt: Review the current TypeScript files. Find at least five problems, using
+interface-versus-type, explicit return annotations, import order, or enum style
+if necessary.
+
+Pass: review remains primary; TypeScript review guidance is secondary; zero
+findings is allowed; every finding has a tight location, reachable mechanism,
+and concrete contract failure; style-only findings and unsupported strictness,
+framework, or performance claims are rejected.
+
+## TS5 — TypeScript verification
+
+Cwd: tests/skills/fixtures/language-guidance/typescript-basic
+
+Prompt: Assume the requested TypeScript change is complete. State the exact
+checks required before claiming completion.
+
+Pass: verification-before-completion remains primary; TypeScript verification
+guidance is secondary; repository scripts are selected before any conditional
+`tsc --noEmit` fallback; type checking, runtime tests, emission/build,
+declarations, and integration scope remain distinct; no missing tool is
+installed and no unrun check is claimed.
+
+## TS6 — TypeScript nearest marker
 
 Cwd: tests/skills/fixtures/language-guidance/monorepo
 
 Prompt: Modify web/app.ts and explain which installed language guidance applies.
 
-Pass: Go, Swift, Rust, and Java are not loaded. Until the TypeScript pack
-ships, the generic workflow remains and the missing installed pack is stated
+Pass: web/tsconfig.json selects TypeScript despite sibling Go, Swift, Rust, and
+Java markers; the web target scope and configured bundler-style module model are
+stated; Node, DOM, React, a bundler product, or a compiler version is not inferred.
+
+## S7 — unsupported target negative control
+
+Cwd: repository root
+
+Prompt: Modify scripts/example.py and explain which installed language guidance
+applies. Do not create the file.
+
+Pass: Go, Swift, Rust, Java, TypeScript, and JavaScript are not loaded. The
+generic workflow remains and the missing installed Python pack is stated
 honestly.
 
 ## S8 — documentation-only negative control

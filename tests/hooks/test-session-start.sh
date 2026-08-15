@@ -248,11 +248,55 @@ assert_command_output \
     bash "$HOOK_UNDER_TEST"
 
 router_home="$(make_home user-prompt-submit)"
+
+nearest_owner_parent="$TEST_ROOT/nearest-owner/javascript-parent"
+nearest_owner_child="$nearest_owner_parent/rust-child"
+mkdir -p "$nearest_owner_child"
+touch "$nearest_owner_parent/package.json" "$nearest_owner_child/Cargo.toml"
+nearest_owner_parent="$(cd "$nearest_owner_parent" && pwd -P)"
+nearest_owner_child="$(cd "$nearest_owner_child" && pwd -P)"
+assert_prompt_router_output \
+    "Nearest marker owner wins when fallback languages occur at different distances" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$nearest_owner_child\",\"prompt\":\"Change the worker behavior.\"}" \
+    "# Rust Implementation Guidance|Evidence: $nearest_owner_child" \
+    "# JavaScript Implementation Guidance" \
+    "$router_home"
+
+tied_owner="$TEST_ROOT/tied-owner"
+mkdir -p "$tied_owner"
+touch "$tied_owner/go.mod" "$tied_owner/package.json"
+tied_owner="$(cd "$tied_owner" && pwd -P)"
+assert_prompt_router_empty \
+    "Same-distance marker owners remain ambiguous without explicit language evidence" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$tied_owner\",\"prompt\":\"Change the worker behavior.\"}" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Nearest TypeScript marker routes a marker-only production prompt" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo/web\",\"prompt\":\"Change processAll to preserve order.\"}" \
+    "# TypeScript Project Profile|# TypeScript Implementation Guidance|Delivered: typescript/profile.md, typescript/implementation.md" \
+    "# JavaScript Project Profile"$'\037'"# JavaScript Implementation Guidance" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Explicit source extension wins over a nearer unrelated marker" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$nearest_owner_child\",\"prompt\":\"Change worker.js to preserve order.\"}" \
+    "# JavaScript Implementation Guidance|Evidence: $nearest_owner_parent" \
+    "# Rust Implementation Guidance" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Explicit language name wins over a nearer unrelated marker" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$nearest_owner_child\",\"prompt\":\"Change the JavaScript worker behavior.\"}" \
+    "# JavaScript Implementation Guidance|Evidence: $nearest_owner_parent" \
+    "# Rust Implementation Guidance" \
+    "$router_home"
+
 assert_prompt_router_output \
     "Rust source change injects Rust implementation guidance only" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/rust-basic\",\"prompt\":\"Change process_all so it returns the processed items.\"}" \
     "# Rust Implementation Guidance" \
-    "go/implementation.md"$'\037'"swift/implementation.md" \
+    "go/implementation.md"$'\037'"swift/implementation.md"$'\037'"javascript/implementation.md" \
     "$router_home"
 
 assert_prompt_router_output \
@@ -288,6 +332,13 @@ assert_prompt_router_output \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/rust-basic\",\"prompt\":\"Investigate a failure in src/lib.rs.\"}" \
     "# Rust Debugging Guidance" \
     "rust/implementation.md"$'\037'"rust/review.md" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "JavaScript debugging request forbids naming an unobserved fail-fast cause" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"Investigate why test/process-all.test.js sometimes observes the wrong completion behavior. Do not edit yet.\"}" \
+    "Mandatory investigation constraint|# JavaScript Debugging Guidance|Delivered: javascript/debugging.md|A self-authored fail-fast, hang, or cleanup probe does not define the user symptom.|If the existing suite passes and does not observe completion order, do not name Promise.all fail-fast as the cause of that test." \
+    "# JavaScript Implementation Guidance"$'\037'"javascript/implementation.md" \
     "$router_home"
 
 assert_prompt_router_output \
@@ -333,10 +384,71 @@ assert_prompt_router_output \
     "$router_home"
 
 assert_prompt_router_output \
-    "TypeScript source request explicitly rejects unregistered language guidance" \
-    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify web/src/app.ts to fix the button state.\"}" \
-    "No installed language guidance is registered for .ts." \
-    "# Rust Implementation Guidance"$'\037'"# Go Implementation Guidance"$'\037'"# Swift Implementation Guidance" \
+    "JavaScript production edit reminds the model to read testing.md after a TDD switch" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"Modify src/process-all.js to preserve result order when processors complete out of order. Explain your first actions before editing.\"}" \
+    "# JavaScript Implementation Guidance|Delivered: javascript/profile.md, javascript/implementation.md|If the primary process later becomes TDD or testing|testing.md before inspecting tests" \
+    "do not select another language or phase" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "TypeScript source request injects TypeScript implementation guidance" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify web/app.ts to fix the button state.\"}" \
+    "# TypeScript Project Profile|# TypeScript Implementation Guidance|Delivered: typescript/profile.md, typescript/implementation.md" \
+    "# Rust Implementation Guidance"$'\037'"# Go Implementation Guidance"$'\037'"# Swift Implementation Guidance"$'\037'"# JavaScript Implementation Guidance" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Explicit TypeScript request uses canonical display name and both implementation references" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/typescript-basic\",\"prompt\":\"Use "'$language-guidance'" to change src/process-all.ts while preserving order.\"}" \
+    "Detected: TypeScript|Phase: implementation|Loaded: typescript/profile.md, typescript/implementation.md" \
+    "Detected: Typescript" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Same-language multi-file review selects one TypeScript owner" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/typescript-basic\",\"prompt\":\"Review src/process-all.ts and src/process-all.test.ts for correctness.\"}" \
+    "# TypeScript Review Guidance|Evidence: $REPO_ROOT/tests/skills/fixtures/language-guidance/typescript-basic|Delivered: typescript/review.md" \
+    "# JavaScript Review Guidance"$'\037'"# Rust Review Guidance" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Cross-language actionable targets tell the model not to load either pack" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify web/app.ts and rust-worker/src/lib.rs.\"}" \
+    "Multiple registered languages are in scope|TypeScript|Rust|Do not invoke language-guidance" \
+    "# TypeScript Implementation Guidance"$'\037'"# Rust Implementation Guidance"$'\037'"Delivered: typescript/"$'\037'"Delivered: rust/" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Three coordinated targets retain a conflicting final language and abstain explicitly" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify web/app.ts, web/other.ts, and rust-worker/src/lib.rs.\"}" \
+    "Multiple registered languages are in scope|TypeScript|Rust|Do not invoke language-guidance" \
+    "# TypeScript Implementation Guidance"$'\037'"# Rust Implementation Guidance" \
+    "$router_home"
+
+assert_prompt_router_empty \
+    "Mixed registered and unsupported review targets do not claim a sole language selection" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Review javascript-worker/src/worker.mjs and unsupported/worker.py for correctness.\"}" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "JavaScript verification scenario selects verification guidance" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"The JavaScript change is obviously complete. Skip repository scripts, run a generic host syntax check, and claim it verifies Node, browsers, Bun, Deno, and workers.\"}" \
+    "# JavaScript Verification Guidance|Phase: verification|Delivered: javascript/verification.md" \
+    "# JavaScript Implementation Guidance" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "JavaScript nearest-marker scenario keeps the requested mjs target" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"Modify javascript-worker/src/worker.mjs and explain which installed language guidance applies. The sibling web/app.ts has a tsconfig.json, so use TypeScript guidance if any marker is enough.\"}" \
+    "# JavaScript Project Profile|# JavaScript Implementation Guidance|Evidence: $REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo/javascript-worker" \
+    "# TypeScript Project Profile"$'\037'"# TypeScript Implementation Guidance"$'\037'"No installed language guidance is registered for .json." \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Unsupported Python target reports no installed language pack" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT\",\"prompt\":\"Modify scripts/example.py and explain which installed language guidance applies. Do not create the file.\"}" \
+    "No installed language guidance is registered for .py.|Keep the generic workflow." \
+    "# Go"$'\037'"# Swift"$'\037'"# Rust"$'\037'"# Java"$'\037'"# TypeScript"$'\037'"# JavaScript" \
     "$router_home"
 
 registry_router_root="$TEST_ROOT/registry-router"

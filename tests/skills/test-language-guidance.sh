@@ -55,7 +55,7 @@ assert_file "$skill"
 assert_file "$registry"
 assert_file skills/language-guidance/references/shared/language-pack-contract.md
 
-for language in go swift rust java; do
+for language in go swift rust java typescript javascript; do
   for phase in profile implementation testing debugging review verification; do
     assert_file "skills/language-guidance/references/$language/$phase.md"
   done
@@ -70,6 +70,7 @@ if [[ -f "$skill" ]]; then
   assert_contains "$skill" "Primary process remains authoritative"
   assert_contains "$skill" "at most two"
   assert_contains "$skill" "Do not guess"
+  assert_contains "$skill" "source targets in two or more registered languages"
   assert_contains "$skill" "| Design or plan with no requested source edit | profile |"
   assert_contains "$skill" "| Requested production-source edit, including brainstorming or pre-edit analysis | implementation |"
   assert_contains "$skill" "load both profile and implementation before discussing the approach."
@@ -77,6 +78,9 @@ if [[ -f "$skill" ]]; then
   assert_contains "$skill" "A requested test-source edit selects the testing phase even when the task also requests a production-source edit."
   assert_contains "$skill" "Explicit failure investigation, code review, and completion verification intent takes precedence over generic no-edit analysis."
   assert_contains "$skill" "Every selected reference file must be read before substantive source analysis; locating its registry entry or path is not loading it."
+  assert_contains "$skill" "If the primary process later becomes TDD or testing after an implementation decision"
+  assert_contains "$skill" "including invoking \`wukong-code:test-driven-development\`"
+  assert_contains "$skill" "read that file before inspecting tests, running tests, or concluding no production edit is needed"
   assert_max_lines "$skill" 180
 fi
 
@@ -89,7 +93,9 @@ import sys
 root = pathlib.Path("skills/language-guidance/references")
 data = json.loads(pathlib.Path(sys.argv[1]).read_text())
 assert data["version"] == 1
-assert set(data["languages"]) == {"go", "swift", "rust", "java"}
+assert set(data["languages"]) == {
+    "go", "swift", "rust", "java", "typescript", "javascript"
+}
 
 expected = {
     "go": {
@@ -123,6 +129,34 @@ expected = {
             "settings.gradle.kts",
         ],
     },
+    "typescript": {
+        "display_name": "TypeScript",
+        "status": "experimental",
+        "extensions": [".ts", ".tsx"],
+        "markers": ["tsconfig.json"],
+        "phases": {
+            "profile": "typescript/profile.md",
+            "implementation": "typescript/implementation.md",
+            "testing": "typescript/testing.md",
+            "debugging": "typescript/debugging.md",
+            "review": "typescript/review.md",
+            "verification": "typescript/verification.md",
+        },
+    },
+    "javascript": {
+        "display_name": "JavaScript",
+        "status": "experimental",
+        "extensions": [".js", ".mjs", ".cjs", ".jsx"],
+        "markers": ["package.json"],
+        "phases": {
+            "profile": "javascript/profile.md",
+            "implementation": "javascript/implementation.md",
+            "testing": "javascript/testing.md",
+            "debugging": "javascript/debugging.md",
+            "review": "javascript/review.md",
+            "verification": "javascript/verification.md",
+        },
+    },
 }
 
 required_phases = {
@@ -130,12 +164,20 @@ required_phases = {
 }
 for language, contract in expected.items():
     entry = data["languages"][language]
+    if "display_name" in contract:
+        assert entry["display_name"] == contract["display_name"]
     assert entry["status"] == contract["status"]
     assert entry["extensions"] == contract["extensions"]
     assert entry["markers"] == contract["markers"]
+    if "phases" in contract:
+        assert entry["phases"] == contract["phases"]
     assert set(entry["phases"]) == required_phases
     for relative in entry["phases"].values():
         assert (root / relative).is_file(), relative
+
+assert data["languages"]["javascript"]["phases"] == {
+    phase: f"javascript/{phase}.md" for phase in required_phases
+}
 PY
   then pass "registry contract"; else fail "registry contract"; fi
 fi
@@ -152,6 +194,13 @@ done
 for phase in profile implementation testing debugging review verification; do
   file="skills/language-guidance/references/java/$phase.md"
   [[ -f "$file" ]] && assert_max_lines "$file" 200
+done
+
+for language in typescript javascript; do
+  for phase in profile implementation testing debugging review verification; do
+    file="skills/language-guidance/references/$language/$phase.md"
+    [[ -f "$file" ]] && assert_max_lines "$file" 200
+  done
 done
 
 assert_contains skills/language-guidance/references/swift/profile.md "SwiftPM success does not prove an"
@@ -262,6 +311,131 @@ assert_contains skills/language-guidance/references/java/verification.md \
 assert_contains skills/language-guidance/references/java/verification.md \
   'plain `public static void main` assertion harness'
 
+assert_contains skills/language-guidance/references/typescript/profile.md \
+  "The owning tsconfig and emitted runtime model control compatibility"
+assert_contains skills/language-guidance/references/typescript/implementation.md \
+  "A type assertion changes the checker view, not the runtime value"
+assert_contains skills/language-guidance/references/typescript/testing.md \
+  "Valid RED reaches the new test"
+assert_contains skills/language-guidance/references/typescript/debugging.md \
+  "Do not change module settings before reproducing the resolver mismatch"
+assert_contains skills/language-guidance/references/typescript/review.md \
+  "Zero findings is valid"
+assert_contains skills/language-guidance/references/typescript/review.md \
+  "A request to report at least N findings is not a contract"
+assert_contains skills/language-guidance/references/typescript/verification.md \
+  "Type checking does not prove runtime execution"
+
+assert_file tests/skills/fixtures/language-guidance/typescript-basic/tsconfig.json
+assert_file tests/skills/fixtures/language-guidance/typescript-basic/package.json
+assert_file tests/skills/fixtures/language-guidance/typescript-basic/src/process-all.ts
+assert_file tests/skills/fixtures/language-guidance/typescript-basic/src/process-all.test.ts
+assert_contains tests/skills/fixtures/language-guidance/typescript-basic/src/process-all.ts \
+  "raw: unknown"
+assert_contains tests/skills/fixtures/language-guidance/typescript-basic/src/process-all.ts \
+  "Promise.all"
+assert_contains tests/skills/fixtures/language-guidance/typescript-basic/src/process-all.test.ts \
+  "preserves input order"
+assert_contains tests/skills/fixtures/language-guidance/monorepo/web/app.ts \
+  "raw: unknown"
+assert_contains tests/skills/fixtures/language-guidance/monorepo/web/tsconfig.json \
+  '"moduleResolution": "Bundler"'
+
+typescript_manifest=tests/skills/fixtures/language-guidance/typescript-basic/package.json
+if [[ ! -f "$typescript_manifest" ]]; then
+  fail "$typescript_manifest missing dependency policy target"
+elif python3 - "$typescript_manifest" <<'PY'
+import json
+import pathlib
+import sys
+
+manifest = json.loads(pathlib.Path(sys.argv[1]).read_text())
+assert manifest.get("private") is True
+assert not manifest.get("dependencies")
+assert not manifest.get("devDependencies")
+assert manifest["scripts"]["typecheck"].startswith("./node_modules/.bin/tsc ")
+PY
+then
+  pass "$typescript_manifest uses no dependencies and only a local TypeScript binary"
+else
+  fail "$typescript_manifest dependency or script contract"
+fi
+
+assert_contains skills/language-guidance/references/javascript/profile.md \
+  "JavaScript syntax does not identify its host environment"
+assert_contains skills/language-guidance/references/javascript/implementation.md \
+  "Missing, undefined, null, and an absent property are distinct contracts"
+assert_contains skills/language-guidance/references/javascript/implementation.md \
+  "If you invoke TDD or inspect tests to decide whether an edit is needed, read javascript/testing.md first."
+assert_contains skills/language-guidance/references/javascript/testing.md \
+  "Valid RED reaches the new test"
+assert_contains skills/language-guidance/references/javascript/debugging.md \
+  "Reproduce under the owning runtime and module mode"
+assert_contains skills/language-guidance/references/javascript/debugging.md \
+  "If the existing test, log, or user-supplied symptom does not observe the claimed behavior, the symptom is undefined"
+assert_contains skills/language-guidance/references/javascript/debugging.md \
+  "A self-authored fail-fast, hang, or cleanup probe does not define that user symptom."
+assert_contains skills/language-guidance/references/javascript/debugging.md \
+  "If the existing suite passes and does not observe completion order, do not name Promise.all fail-fast as the cause of that test."
+assert_contains skills/language-guidance/references/javascript/debugging.md \
+  "Keep those branches open until an existing test, log, or user-supplied failing assertion observes them."
+assert_contains skills/language-guidance/references/javascript/debugging.md \
+  "until an existing test, log, or user-supplied failing assertion eliminates branches."
+assert_contains skills/language-guidance/references/javascript/review.md \
+  "Zero findings is valid"
+assert_contains skills/language-guidance/references/javascript/review.md \
+  "A request to report at least N findings is not a contract"
+assert_contains skills/language-guidance/references/javascript/verification.md \
+  "One host does not verify another host"
+assert_contains skills/language-guidance/references/javascript/verification.md \
+  "A request to skip repository scripts is not permission"
+
+assert_file tests/skills/fixtures/language-guidance/javascript-basic/package.json
+assert_file tests/skills/fixtures/language-guidance/javascript-basic/src/process-all.js
+assert_file tests/skills/fixtures/language-guidance/javascript-basic/test/process-all.test.js
+assert_file tests/skills/fixtures/language-guidance/monorepo/javascript-worker/package.json
+assert_file tests/skills/fixtures/language-guidance/monorepo/javascript-worker/src/worker.mjs
+assert_contains tests/skills/fixtures/language-guidance/javascript-basic/package.json \
+  '"test": "node --test"'
+assert_contains tests/skills/fixtures/language-guidance/javascript-basic/package.json \
+  '"type": "module"'
+assert_contains tests/skills/fixtures/language-guidance/javascript-basic/package.json \
+  '"node": ">=22"'
+assert_contains tests/skills/fixtures/language-guidance/javascript-basic/src/process-all.js \
+  'Array.isArray(raw)'
+assert_contains tests/skills/fixtures/language-guidance/javascript-basic/src/process-all.js \
+  'Promise.all(raw.map('
+assert_contains tests/skills/fixtures/language-guidance/javascript-basic/test/process-all.test.js \
+  'preserves input order'
+assert_contains tests/skills/fixtures/language-guidance/javascript-basic/test/process-all.test.js \
+  'rejects non-string external values'
+if [[ ! -f tests/skills/fixtures/language-guidance/javascript-basic/package.json ]]; then
+  fail "JavaScript fixture manifest missing dependency policy target"
+elif grep -qE '"(dependencies|devDependencies|optionalDependencies|peerDependencies)"[[:space:]]*:' \
+  tests/skills/fixtures/language-guidance/javascript-basic/package.json; then
+  fail "JavaScript fixture declares dependencies"
+else
+  pass "JavaScript fixture declares no dependencies"
+fi
+
+assert_contains tests/skills/language-guidance-scenarios.md "## JS1 — JavaScript implementation"
+assert_contains tests/skills/language-guidance-scenarios.md "## JS2 — JavaScript TDD pressure"
+assert_contains tests/skills/language-guidance-scenarios.md "## JS3 — JavaScript debugging"
+assert_contains tests/skills/language-guidance-scenarios.md "## JS4 — JavaScript review"
+assert_contains tests/skills/language-guidance-scenarios.md "## JS5 — JavaScript verification"
+assert_contains tests/skills/language-guidance-scenarios.md "## JS6 — JavaScript nearest marker"
+assert_contains tests/skills/language-guidance-scenarios.md "## TS1 — TypeScript implementation"
+assert_contains tests/skills/language-guidance-scenarios.md "## TS2 — TypeScript TDD pressure"
+assert_contains tests/skills/language-guidance-scenarios.md "## TS3 — TypeScript debugging"
+assert_contains tests/skills/language-guidance-scenarios.md "## TS4 — TypeScript review"
+assert_contains tests/skills/language-guidance-scenarios.md "## TS5 — TypeScript verification"
+assert_contains tests/skills/language-guidance-scenarios.md "## TS6 — TypeScript nearest marker"
+
+javascript_eval=docs/wukong-code/evals/2026-08-13-javascript-language-guidance.md
+assert_file "$javascript_eval"
+assert_contains "$javascript_eval" \
+  "Development-session observations were not preserved as raw output or intermediate commits and are not independently verifiable publication evidence."
+
 if grep -R -nE '((curl|wget).*[|][[:space:]]*(sh|bash)|(^|[[:space:]])(go[[:space:]]+install|npm[[:space:]]+install|pnpm[[:space:]]+(install|add)|yarn[[:space:]]+(install|add)|pip3?[[:space:]]+install|brew[[:space:]]+install|apt(-get)?[[:space:]]+install|apk[[:space:]]+add|dnf[[:space:]]+install|yum[[:space:]]+install|cargo[[:space:]]+install|gem[[:space:]]+install|composer[[:space:]]+require|bundle[[:space:]]+add))' skills/language-guidance; then
   fail "installer command found"
 else
@@ -310,6 +484,11 @@ assert_contains README.md "| Go | Experimental |"
 assert_contains README.md "| Java | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-08-02-java-language-guidance.md) |"
 assert_contains README.md "| Swift | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-07-29-swift-language-guidance.md) |"
 assert_contains README.md "| Rust | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-07-29-rust-language-guidance.md) |"
+assert_contains README.md "| JavaScript | Planned | — | — | — | — | — | — |"
+assert_contains README.zh-CN.md "| JavaScript | 计划中 |"
+assert_contains README.zh-TW.md "| JavaScript | 規劃中 |"
+assert_contains README.ja.md "| JavaScript | 計画中 |"
+assert_contains README.ko.md "| JavaScript | 계획됨 |"
 assert_contains CLAUDE.md "### Language-level skills"
 assert_contains .github/PULL_REQUEST_TEMPLATE.md "## Language-pack evidence"
 assert_contains docs/testing.md "test-language-guidance.sh"

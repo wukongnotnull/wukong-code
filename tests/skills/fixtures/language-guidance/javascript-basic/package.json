@@ -1,0 +1,11 @@
+{
+  "name": "language-guidance-javascript-basic",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test"
+  }
+}
