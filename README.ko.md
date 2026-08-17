@@ -18,7 +18,7 @@
 > Wukong Code는 조합 가능한 스킬과 각 스킬을 적절한 순간에 자동으로 활성화하는 시작 지침을 코딩 에이전트에 제공합니다. 브레인스토밍과 계획부터 TDD, 리뷰, 검증까지 하나의 흐름으로 연결합니다.
 
 <p align="center">
-  <img src="./assets/readme/workflow.svg" width="100%" alt="개발 경로: 아이디어, 설계, 계획, RED, GREEN, 이후 리뷰와 검증.">
+  <img src="./assets/readme/workflow.svg" width="100%" alt="개발 경로: 설계, 계획, RED, GREEN, 이후 검증.">
 </p>
 
 ---

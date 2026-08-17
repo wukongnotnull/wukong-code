@@ -18,7 +18,7 @@
 > Wukong Code は、組み合わせ可能なスキルと、それらを適切なタイミングで自動起動させる初期指示をコーディングエージェントに提供します。ブレインストーミングと計画から TDD、レビュー、検証までを一貫して支えます。
 
 <p align="center">
-  <img src="./assets/readme/workflow.svg" width="100%" alt="開発パス: アイデア、設計、計画、RED、GREEN、その後レビューと検証。">
+  <img src="./assets/readme/workflow.svg" width="100%" alt="開発パス: 設計、計画、RED、GREEN、その後検証。">
 </p>
 
 ---

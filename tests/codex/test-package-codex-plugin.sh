@@ -232,6 +232,13 @@ language_metadata="$(read_archive_file "$archive" skills/language-guidance/agent
 assert_contains "$language_metadata" "display_name: \"Language Guidance\"" "uses source metadata"
 assert_contains "$archive_paths" "assets/app-icon.png" "archive includes app icon"
 assert_contains "$archive_paths" "assets/wukong-code-small.svg" "archive includes composer icon"
+assert_contains "$archive_paths" "assets/readme/hero.png" "archive includes published README hero"
+assert_contains "$archive_paths" "assets/readme/workflow.svg" "archive includes published README workflow"
+if printf '%s' "$archive_paths" | grep -Fq "assets/readme/source/"; then
+  fail "archive excludes README source intermediates"
+else
+  pass "archive excludes README source intermediates"
+fi
 assert_contains "$archive_paths" "references/critical-overrides.md" "archive includes Product Design shared references"
 assert_contains "$archive_paths" "scripts/bootstrap-prototype.mjs" "archive includes Product Design bootstrap script"
 assert_contains "$archive_paths" "scripts/check-product-design-import.mjs" "archive includes Product Design integrity check"

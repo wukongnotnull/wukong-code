@@ -18,7 +18,7 @@ Design first · Test-driven development · Evidence before claims
 > Wukong Code gives your coding agent a set of composable skills and the startup instructions that make those skills activate at the right moment—from brainstorming and planning to TDD, review, and verification.
 
 <p align="center">
-  <img src="./assets/readme/workflow.svg" width="100%" alt="Development path: idea, design, plan, RED, GREEN, then review and verify.">
+  <img src="./assets/readme/workflow.svg" width="100%" alt="Development path: design, plan, RED, GREEN, then verify.">
 </p>
 
 ---

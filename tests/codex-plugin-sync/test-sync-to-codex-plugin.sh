@@ -178,6 +178,7 @@ write_upstream_fixture() {
         "$repo/.kimi-plugin" \
         "$repo/.private-journal" \
         "$repo/assets" \
+        "$repo/assets/readme/source" \
         "$repo/evals/drill" \
         "$repo/hooks" \
         "$repo/scripts" \
@@ -246,6 +247,7 @@ EOF
 EOF
 
     printf 'png fixture\n' > "$repo/assets/app-icon.png"
+    printf 'source fixture\n' > "$repo/assets/readme/source/hero-subject.png"
     printf 'eval harness fixture\n' > "$repo/evals/drill/README.md"
 
     cat > "$repo/hooks/hooks-codex.json" <<'EOF'
@@ -302,6 +304,7 @@ EOF
         .pre-commit-config.yaml \
         assets/app-icon.png \
         assets/wukong-code-small.svg \
+        assets/readme/source/hero-subject.png \
         evals/drill/README.md \
         hooks/hooks-codex.json \
         hooks/run-hook.cmd \
@@ -670,6 +673,7 @@ main() {
     assert_not_contains "$preview_section" ".kimi-plugin/plugin.json" "Preview excludes Kimi manifest from Codex sync"
     assert_contains "$preview_section" "assets/wukong-code-small.svg" "Preview includes SVG asset"
     assert_contains "$preview_section" "assets/app-icon.png" "Preview includes PNG asset"
+    assert_not_contains "$preview_section" "assets/readme/source/" "Preview excludes README source intermediates"
     assert_contains "$preview_section" "hooks/hooks-codex.json" "Preview includes Codex hook manifest"
     assert_contains "$preview_section" "hooks/session-start" "Preview includes session-start hook"
     assert_contains "$preview_section" "hooks/session-start-codex" "Preview includes Codex session-start hook"

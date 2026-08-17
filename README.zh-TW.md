@@ -18,7 +18,7 @@
 > Wukong Code 為你的程式設計智慧體提供一套可組合的技能，以及確保技能在正確時機自動觸發的啟動指令——涵蓋需求探索、設計規劃、TDD、審查與最終驗證。
 
 <p align="center">
-  <img src="./assets/readme/workflow.svg" width="100%" alt="開發路徑：想法、設計、計畫、RED、GREEN，然後審查與驗證。">
+  <img src="./assets/readme/workflow.svg" width="100%" alt="開發路徑：設計、計畫、RED、GREEN，然後驗證。">
 </p>
 
 ---

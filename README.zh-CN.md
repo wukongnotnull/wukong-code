@@ -18,7 +18,7 @@
 > Wukong Code 为你的编程智能体提供一套可组合的技能，以及确保技能在正确时机自动触发的启动指令——覆盖需求探索、设计规划、TDD、评审与最终验证。
 
 <p align="center">
-  <img src="./assets/readme/workflow.svg" width="100%" alt="开发路径：想法、设计、计划、RED、GREEN，然后评审与验证。">
+  <img src="./assets/readme/workflow.svg" width="100%" alt="开发路径：设计、计划、RED、GREEN，然后验证。">
 </p>
 
 ---

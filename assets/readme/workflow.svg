@@ -2,33 +2,29 @@
      width="1200" height="168" viewBox="0 0 1200 168"
      role="img" aria-labelledby="wf-title wf-desc">
   <title id="wf-title">Wukong Code development path</title>
-  <desc id="wf-desc">Idea to design, plan, RED, GREEN, review, and verification.</desc>
+  <desc id="wf-desc">Design, plan, RED, GREEN, then verify.</desc>
   <rect width="1200" height="168" rx="24" fill="#14110C"/>
-  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" text-anchor="middle">
-    <g transform="translate(36 44)">
-      <rect width="150" height="80" rx="12" fill="#1B160F" stroke="#8A7A62" stroke-width="1.5"/>
-      <text x="75" y="47" fill="#F4E8D0">IDEA</text>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="24" text-anchor="middle">
+    <g transform="translate(36 40)">
+      <rect width="184" height="88" rx="12" fill="#1B160F" stroke="#C9A227" stroke-width="1.5"/>
+      <text x="92" y="52" fill="#F4E8D0">DESIGN</text>
     </g>
-    <g transform="translate(214 44)">
-      <rect width="150" height="80" rx="12" fill="#1B160F" stroke="#C9A227" stroke-width="1.5"/>
-      <text x="75" y="47" fill="#F4E8D0">DESIGN</text>
+    <g transform="translate(272 40)">
+      <rect width="184" height="88" rx="12" fill="#1B160F" stroke="#C9A227" stroke-width="1.5"/>
+      <text x="92" y="52" fill="#F4E8D0">PLAN</text>
     </g>
-    <g transform="translate(392 44)">
-      <rect width="150" height="80" rx="12" fill="#1B160F" stroke="#C9A227" stroke-width="1.5"/>
-      <text x="75" y="47" fill="#F4E8D0">PLAN</text>
+    <g transform="translate(508 40)">
+      <rect width="184" height="88" rx="12" fill="#1B160F" stroke="#E24A2B" stroke-width="1.5"/>
+      <text x="92" y="52" fill="#F4E8D0">RED</text>
     </g>
-    <g transform="translate(570 44)">
-      <rect width="150" height="80" rx="12" fill="#1B160F" stroke="#E24A2B" stroke-width="1.5"/>
-      <text x="75" y="47" fill="#F4E8D0">RED</text>
+    <g transform="translate(744 40)">
+      <rect width="184" height="88" rx="12" fill="#1B160F" stroke="#C9A227" stroke-width="1.5"/>
+      <text x="92" y="52" fill="#F4E8D0">GREEN</text>
     </g>
-    <g transform="translate(748 44)">
-      <rect width="150" height="80" rx="12" fill="#1B160F" stroke="#C9A227" stroke-width="1.5"/>
-      <text x="75" y="47" fill="#F4E8D0">GREEN</text>
+    <g transform="translate(980 40)">
+      <rect width="184" height="88" rx="12" fill="#1B160F" stroke="#C9A227" stroke-width="1.5"/>
+      <text x="92" y="52" fill="#F4E8D0">VERIFY</text>
     </g>
-    <g transform="translate(926 44)">
-      <rect width="238" height="80" rx="12" fill="#1B160F" stroke="#C9A227" stroke-width="1.5"/>
-      <text x="119" y="47" fill="#F4E8D0">REVIEW / VERIFY</text>
-    </g>
-    <path d="M186 84 H214 M364 84 H392 M542 84 H570 M720 84 H748 M898 84 H926" stroke="#C9A227" stroke-width="2" fill="none"/>
+    <path d="M220 84 H272 M456 84 H508 M692 84 H744 M928 84 H980" stroke="#C9A227" stroke-width="2" fill="none"/>
   </g>
 </svg>
