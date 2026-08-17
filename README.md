@@ -1,5 +1,9 @@
 # Wukong Code
 
+<p align="center">
+  <img src="./assets/readme/hero.png" width="100%" alt="Wukong Code: a complete software development methodology for coding agents. Design first, TDD, and evidence before claims.">
+</p>
+
 **A complete software development methodology for coding agents**
 
 Design first · Test-driven development · Evidence before claims
@@ -13,11 +17,15 @@ Design first · Test-driven development · Evidence before claims
 
 > Wukong Code gives your coding agent a set of composable skills and the startup instructions that make those skills activate at the right moment—from brainstorming and planning to TDD, review, and verification.
 
+<p align="center">
+  <img src="./assets/readme/workflow.svg" width="100%" alt="Development path: idea, design, plan, RED, GREEN, then review and verify.">
+</p>
+
 ---
 
 **Quick nav**
 
-[Why Wukong Code](#why-wukong-code) · [How it works](#how-it-works) · [Install](#supported-agents--installation) · [Workflow](#the-basic-workflow) · [Skills](#whats-inside) · [Language guidance](#language-guidance) · [Testing](#testing) · [FAQ](#faq) · [Contributing](#contributing) · [License](#license)
+[Why Wukong Code](#why-wukong-code) · [How it works](#how-it-works) · [Install](#supported-agents--installation) · [Workflow](#the-basic-workflow) · [Skills](#whats-inside) · [Language guidance](#language-guidance) · [FAQ](#faq) · [Contributing](#contributing) · [License](#license)
 
 ---
 

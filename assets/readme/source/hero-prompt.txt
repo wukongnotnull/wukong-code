@@ -1,0 +1,7 @@
+Asset type: transparent cutout subject for a GitHub README hero.
+Composition/framing: knees-up, generous padding, facing and gazing left toward the title.
+Color palette: ink #14110C, paper #F4E8D0, gold #C9A227, rust #E24A2B, muted taupe #8A7A62.
+Constraints: one isolated Sun Wukong craftsman-agent; golden hoop staff; no text; no letters; no logo; no watermark.
+Background: perfectly flat solid #00FF00 with no gradient, texture, floor, reflection, or shadow.
+Communication job: the repository namesake as a methodical agent under constraint, not a decorative mascot.
+ImageGen mode: Cursor GenerateImage, chroma-key #00FF00, aspect 3:4.
