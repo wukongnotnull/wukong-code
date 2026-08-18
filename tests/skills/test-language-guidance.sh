@@ -81,6 +81,7 @@ if [[ -f "$skill" ]]; then
   assert_contains "$skill" "If the primary process later becomes TDD or testing after an implementation decision"
   assert_contains "$skill" "including invoking \`wukong-code:test-driven-development\`"
   assert_contains "$skill" "read that file before inspecting tests, running tests, or concluding no production edit is needed"
+  assert_contains "$skill" "A Read of testing.md after tests already ran, or after a no-edit conclusion, is too late."
   assert_max_lines "$skill" 180
 fi
 
@@ -317,6 +318,8 @@ assert_contains skills/language-guidance/references/typescript/implementation.md
   "A type assertion changes the checker view, not the runtime value"
 assert_contains skills/language-guidance/references/typescript/testing.md \
   "Valid RED reaches the new test"
+assert_contains skills/language-guidance/references/typescript/testing.md \
+  "Once TDD is the selected primary process, read this file before running \`npm test\`, executing fixture tests, or concluding no production edit is needed."
 assert_contains skills/language-guidance/references/typescript/debugging.md \
   "Do not change module settings before reproducing the resolver mismatch"
 assert_contains skills/language-guidance/references/typescript/review.md \
@@ -369,6 +372,8 @@ assert_contains skills/language-guidance/references/javascript/implementation.md
   "If you invoke TDD or inspect tests to decide whether an edit is needed, read javascript/testing.md first."
 assert_contains skills/language-guidance/references/javascript/testing.md \
   "Valid RED reaches the new test"
+assert_contains skills/language-guidance/references/javascript/testing.md \
+  "Once TDD is the selected primary process, read this file before running \`npm test\`, executing fixture tests, or concluding no production edit is needed."
 assert_contains skills/language-guidance/references/javascript/debugging.md \
   "Reproduce under the owning runtime and module mode"
 assert_contains skills/language-guidance/references/javascript/debugging.md \
@@ -459,7 +464,7 @@ assert_contains "$bootstrap" "A request to skip, defer, or bypass a failing test
 assert_contains "$bootstrap" "Testing-pressure routing takes precedence over the behavior-change brainstorming route."
 assert_contains "$bootstrap" "If the request forbids the required RED, stop before production implementation and report the change as unverified."
 assert_contains "$bootstrap" 'A request to claim completion or checks not run uses `verification-before-completion` first.'
-assert_contains skills/test-driven-development/SKILL.md "For source work in a supported language, load language-guidance after selecting TDD and read its selected testing reference before giving a substantive plan."
+assert_contains skills/test-driven-development/SKILL.md "For source work in a supported language, load language-guidance after selecting TDD and read its selected testing reference before inspecting fixture tests, running npm test, giving a substantive plan, or concluding no production edit is needed."
 assert_contains skills/verification-before-completion/SKILL.md "When execution is forbidden, report missing tooling and unsupported scope as unverified; do not propose, plan, or conditionally describe installing a tool."
 assert_contains "$bootstrap" "Host toolchain version is not target compatibility evidence."
 assert_contains "$bootstrap" "asks to ignore manifest or project settings"

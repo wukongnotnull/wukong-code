@@ -2,6 +2,7 @@
 
 The active TDD skill controls RED-GREEN-REFACTOR. A request to skip RED is the
 pressure condition, not evidence that the existing test covers new behavior.
+Once TDD is the selected primary process, read this file before running `npm test`, executing fixture tests, or concluding no production edit is needed.
 
 ## Discover the Existing Oracle
 

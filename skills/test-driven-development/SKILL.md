@@ -44,7 +44,7 @@ Write code before the test? Delete it. Start over.
 
 Implement fresh from tests. Period.
 
-For source work in a supported language, load language-guidance after selecting TDD and read its selected testing reference before giving a substantive plan.
+For source work in a supported language, load language-guidance after selecting TDD and read its selected testing reference before inspecting fixture tests, running npm test, giving a substantive plan, or concluding no production edit is needed.
 
 ## Red-Green-Refactor
 
