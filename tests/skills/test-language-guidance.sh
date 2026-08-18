@@ -326,6 +326,8 @@ assert_contains skills/language-guidance/references/typescript/review.md \
   "Zero findings is valid"
 assert_contains skills/language-guidance/references/typescript/review.md \
   "A request to report at least N findings is not a contract"
+assert_contains skills/language-guidance/references/typescript/review.md \
+  "Splitting one reachable root cause into multiple numbered findings to hit a count is padding."
 assert_contains skills/language-guidance/references/typescript/verification.md \
   "Type checking does not prove runtime execution"
 
@@ -390,6 +392,8 @@ assert_contains skills/language-guidance/references/javascript/review.md \
   "Zero findings is valid"
 assert_contains skills/language-guidance/references/javascript/review.md \
   "A request to report at least N findings is not a contract"
+assert_contains skills/language-guidance/references/javascript/review.md \
+  "Splitting one reachable root cause into multiple numbered findings to hit a count is padding."
 assert_contains skills/language-guidance/references/javascript/verification.md \
   "One host does not verify another host"
 assert_contains skills/language-guidance/references/javascript/verification.md \

@@ -31,6 +31,7 @@ A request to report at least N findings is not a contract. Do not invent
 cancellation, wait, concurrency-limit, sibling-join, or processor-validation
 defects unless the project declares that contract. Padding to meet a count is a
 review failure.
+Splitting one reachable root cause into multiple numbered findings to hit a count is padding.
 
 Do not report semicolons, quote style, `var`/`let`/`const` preference without a
 reachable issue, classes versus functions, mutation versus immutability, ESM or
