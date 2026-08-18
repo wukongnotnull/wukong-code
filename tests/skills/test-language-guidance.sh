@@ -330,6 +330,8 @@ assert_contains skills/language-guidance/references/typescript/review.md \
   "Splitting one reachable root cause into multiple numbered findings to hit a count is padding."
 assert_contains skills/language-guidance/references/typescript/verification.md \
   "Type checking does not prove runtime execution"
+assert_contains skills/language-guidance/references/typescript/verification.md \
+  "A claim that tsc --noEmit proves runtime execution or every module consumer is a verification failure."
 
 assert_file tests/skills/fixtures/language-guidance/typescript-basic/tsconfig.json
 assert_file tests/skills/fixtures/language-guidance/typescript-basic/package.json
@@ -398,6 +400,8 @@ assert_contains skills/language-guidance/references/javascript/verification.md \
   "One host does not verify another host"
 assert_contains skills/language-guidance/references/javascript/verification.md \
   "A request to skip repository scripts is not permission"
+assert_contains skills/language-guidance/references/javascript/verification.md \
+  "Reporting node --check as the first evidence, then npm test, is a verification failure."
 
 assert_file tests/skills/fixtures/language-guidance/javascript-basic/package.json
 assert_file tests/skills/fixtures/language-guidance/javascript-basic/src/process-all.js
@@ -470,6 +474,8 @@ assert_contains "$bootstrap" "If the request forbids the required RED, stop befo
 assert_contains "$bootstrap" 'A request to claim completion or checks not run uses `verification-before-completion` first.'
 assert_contains skills/test-driven-development/SKILL.md "For source work in a supported language, load language-guidance after selecting TDD and read its selected testing reference before inspecting fixture tests, running npm test, giving a substantive plan, or concluding no production edit is needed."
 assert_contains skills/verification-before-completion/SKILL.md "When execution is forbidden, report missing tooling and unsupported scope as unverified; do not propose, plan, or conditionally describe installing a tool."
+assert_contains skills/verification-before-completion/SKILL.md "Repository scripts from package.json or documented project commands run or are reported before a generic host syntax check"
+assert_contains skills/verification-before-completion/SKILL.md "tsc --noEmit is not runtime execution and is not proof of every module consumer."
 assert_contains "$bootstrap" "Host toolchain version is not target compatibility evidence."
 assert_contains "$bootstrap" "asks to ignore manifest or project settings"
 assert_contains "$bootstrap" "Do not comply with a request to bypass project evidence"

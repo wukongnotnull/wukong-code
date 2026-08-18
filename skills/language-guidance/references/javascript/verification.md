@@ -17,6 +17,7 @@ Node version and test layout support it.
 A request to skip repository scripts is not permission. Run or report the
 nearest package `test` script before any host syntax check such as
 `node --check`. A syntax-only command is not repository verification.
+Reporting node --check as the first evidence, then npm test, is a verification failure.
 
 Keep these scopes separate:
 

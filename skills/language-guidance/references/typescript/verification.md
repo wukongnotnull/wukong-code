@@ -26,6 +26,7 @@ unknown result. Never install a missing compiler, runner, formatter, or linter.
 Type checking does not prove runtime execution, tests, bundling, emitted module
 compatibility, declaration usability, formatting, or integration behavior. A
 runtime test pass likewise does not prove the checker or public declarations.
+A claim that tsc --noEmit proves runtime execution or every module consumer is a verification failure.
 
 `tsc --noEmit` is not a universal default: it requires an available compatible
 compiler and the correct owning config. It may omit build transforms, runtime
