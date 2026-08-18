@@ -28,9 +28,11 @@ Evaluate in order:
 Read references/registry.json for supported identifiers. Nearest markers beat
 unrelated root files. **Do not guess.** Ask or return no selection when
 evidence conflicts.
+Nearest-marker work selects one language from the target file plus the nearest marker. Do not `Read` another registered language's `review.md` or `implementation.md` for comparison.
 If a prompt names source targets in two or more registered languages, do not
 emit `Detected:`, `Phase:`, or `Loaded:` and do not read either language pack.
 State each target scope separately and keep the generic workflow.
+Do not `Read` either named language's `implementation.md`. Stating "avoid loading" after those files were read is a failure.
 
 ## Phase Selection
 

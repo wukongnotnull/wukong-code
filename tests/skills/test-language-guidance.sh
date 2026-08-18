@@ -82,6 +82,10 @@ if [[ -f "$skill" ]]; then
   assert_contains "$skill" "including invoking \`wukong-code:test-driven-development\`"
   assert_contains "$skill" "read that file before inspecting tests, running tests, or concluding no production edit is needed"
   assert_contains "$skill" "A Read of testing.md after tests already ran, or after a no-edit conclusion, is too late."
+  assert_contains "$skill" "Nearest-marker work selects one language from the target file plus the nearest marker."
+  assert_contains "$skill" "Do not \`Read\` another registered language's \`review.md\` or \`implementation.md\` for comparison."
+  assert_contains "$skill" "Do not \`Read\` either named language's \`implementation.md\`."
+  assert_contains "$skill" "Stating \"avoid loading\" after those files were read is a failure."
   assert_max_lines "$skill" 180
 fi
 
