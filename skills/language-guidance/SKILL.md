@@ -80,6 +80,7 @@ List only selected reference paths after `Loaded:`; never use pending, next, or 
 After emitting a decision, do not load another language reference unless you first emit a new complete `Detected:`, `Phase:`, and `Loaded:` decision listing the replacement set.
 If the primary process later becomes TDD or testing after an implementation decision, including invoking `wukong-code:test-driven-development`, emit a replacement `Detected:`, `Phase:`, and `Loaded:` decision that includes `<language>/testing.md` and read that file before inspecting tests, running tests, or concluding no production edit is needed. Locating `testing.md` is not loading it.
 A Read of testing.md after tests already ran, or after a no-edit conclusion, is too late.
+Do not Read fixture test files until testing.md has been read.
 
 For automatic selection, language-guidance may provide this decision when
 loaded; automatic selection does not promise invocation or visible output.
