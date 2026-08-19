@@ -33,6 +33,7 @@ If a prompt names source targets in two or more registered languages, do not
 emit `Detected:`, `Phase:`, or `Loaded:` and do not read either language pack.
 State each target scope separately and keep the generic workflow.
 Do not `Read` either named language's `implementation.md`. Stating "avoid loading" after those files were read is a failure.
+Do not open, glob, or Read references/*/implementation.md when the prompt names two or more registered languages, including to confirm they should not be loaded.
 
 ## Phase Selection
 

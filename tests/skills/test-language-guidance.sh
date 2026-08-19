@@ -87,6 +87,7 @@ if [[ -f "$skill" ]]; then
   assert_contains "$skill" "Do not \`Read\` another registered language's \`review.md\` or \`implementation.md\` for comparison."
   assert_contains "$skill" "Do not \`Read\` either named language's \`implementation.md\`."
   assert_contains "$skill" "Stating \"avoid loading\" after those files were read is a failure."
+  assert_contains "$skill" "Do not open, glob, or Read references/*/implementation.md when the prompt names two or more registered languages, including to confirm they should not be loaded."
   assert_max_lines "$skill" 180
 fi
 
