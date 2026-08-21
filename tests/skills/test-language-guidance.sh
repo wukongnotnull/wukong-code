@@ -343,6 +343,8 @@ assert_contains skills/language-guidance/references/typescript/review.md \
   "Reporting that AbortSignal is accepted but unused is padding unless a test, comment, or user-supplied contract requires cancellation."
 assert_contains skills/language-guidance/references/typescript/review.md \
   "Reporting that a processor callback is not validated, or that a sibling is not cancelled after Promise.all rejects, is padding unless a test, comment, or user-supplied contract requires that check."
+assert_contains skills/language-guidance/references/typescript/review.md \
+  "Reporting unbounded Promise.all fan-out or a missing concurrency limit is padding unless a test, comment, or user-supplied contract requires that check."
 assert_contains skills/language-guidance/references/typescript/verification.md \
   "Type checking does not prove runtime execution"
 assert_contains skills/language-guidance/references/typescript/verification.md \
@@ -419,6 +421,8 @@ assert_contains skills/language-guidance/references/javascript/review.md \
   "Reporting that AbortSignal is accepted but unused is padding unless a test, comment, or user-supplied contract requires cancellation."
 assert_contains skills/language-guidance/references/javascript/review.md \
   "Reporting that a processor callback is not validated, or that a sibling is not cancelled after Promise.all rejects, is padding unless a test, comment, or user-supplied contract requires that check."
+assert_contains skills/language-guidance/references/javascript/review.md \
+  "Reporting unbounded Promise.all fan-out or a missing concurrency limit is padding unless a test, comment, or user-supplied contract requires that check."
 assert_contains skills/language-guidance/references/javascript/verification.md \
   "One host does not verify another host"
 assert_contains skills/language-guidance/references/javascript/verification.md \
