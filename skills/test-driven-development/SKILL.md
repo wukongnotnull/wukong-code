@@ -44,7 +44,7 @@ Write code before the test? Delete it. Start over.
 
 Implement fresh from tests. Period.
 
-For source work in a supported language, load language-guidance after selecting TDD. Wait for the selected testing.md Read to complete before starting any other Read; a parallel fixture test Read (*.test.js, *.test.ts, test/**), npm test, a substantive plan, or a no-edit conclusion before that completed Read is a failure.
+For source work in a supported language, load language-guidance after selecting TDD. Do not issue any other Read, npm test, plan, or no-edit conclusion in the same turn as testing.md; wait until that Read has completed.
 
 ## Red-Green-Refactor
 
