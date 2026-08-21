@@ -19,7 +19,7 @@ Claiming work is complete without verification is dishonesty, not efficiency.
 NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
 ```
 
-Repository scripts from package.json or documented project commands run or are reported before a generic host syntax check (`node --check`, a global `tsc` not referenced by the project). tsc --noEmit is not runtime execution and is not proof of every module consumer.
+Repository scripts from package.json or documented project commands run or are reported before a generic host syntax check (`node --check`, a global `tsc` not referenced by the project). Running node --check first, then reporting npm test skipped, is a verification failure. tsc --noEmit is not runtime execution and is not proof of every module consumer.
 
 You must present evidence in this message before claiming success: either run the verification command now, or cite reusable in-task evidence that meets Evidence reuse below. Memory, confidence, or "should pass" is never evidence.
 

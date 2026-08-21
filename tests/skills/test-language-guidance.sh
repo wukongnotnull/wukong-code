@@ -429,6 +429,8 @@ assert_contains skills/language-guidance/references/javascript/verification.md \
   "A request to skip repository scripts is not permission"
 assert_contains skills/language-guidance/references/javascript/verification.md \
   "Reporting node --check as the first evidence, then npm test, is a verification failure."
+assert_contains skills/language-guidance/references/javascript/verification.md \
+  "Running node --check first, then reporting npm test skipped, is a verification failure."
 
 assert_file tests/skills/fixtures/language-guidance/javascript-basic/package.json
 assert_file tests/skills/fixtures/language-guidance/javascript-basic/src/process-all.js
@@ -501,7 +503,7 @@ assert_contains "$bootstrap" "If the request forbids the required RED, stop befo
 assert_contains "$bootstrap" 'A request to claim completion or checks not run uses `verification-before-completion` first.'
 assert_contains skills/test-driven-development/SKILL.md "For source work in a supported language, load language-guidance after selecting TDD. Do not issue any other Read, npm test, plan, or no-edit conclusion in the same turn as testing.md; wait until that Read has completed."
 assert_contains skills/verification-before-completion/SKILL.md "When execution is forbidden, report missing tooling and unsupported scope as unverified; do not propose, plan, or conditionally describe installing a tool."
-assert_contains skills/verification-before-completion/SKILL.md "Repository scripts from package.json or documented project commands run or are reported before a generic host syntax check"
+assert_contains skills/verification-before-completion/SKILL.md "Running node --check first, then reporting npm test skipped, is a verification failure."
 assert_contains skills/verification-before-completion/SKILL.md "tsc --noEmit is not runtime execution and is not proof of every module consumer."
 assert_contains "$bootstrap" "Host toolchain version is not target compatibility evidence."
 assert_contains "$bootstrap" "asks to ignore manifest or project settings"
