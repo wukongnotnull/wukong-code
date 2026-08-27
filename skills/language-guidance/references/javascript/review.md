@@ -34,7 +34,7 @@ review failure.
 Splitting one reachable root cause into multiple numbered findings to hit a count is padding.
 Reporting that AbortSignal is accepted but unused is padding unless a test, comment, or user-supplied contract requires cancellation.
 Reporting that a processor callback is not validated, or that a sibling is not cancelled after Promise.all rejects, is padding unless a test, comment, or user-supplied contract requires that check.
-Reporting unbounded Promise.all fan-out or a missing concurrency limit is padding unless a test, comment, or user-supplied contract requires that check.
+Reporting unbounded Promise.all fan-out or a missing concurrency limit is padding unless a test, comment, or user-supplied contract requires that check. Listing unbounded concurrency, a concurrency limit, or Promise.all fan-out as a finding is a review failure.
 
 Do not report semicolons, quote style, `var`/`let`/`const` preference without a
 reachable issue, classes versus functions, mutation versus immutability, ESM or

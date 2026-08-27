@@ -422,7 +422,7 @@ assert_contains skills/language-guidance/references/javascript/review.md \
 assert_contains skills/language-guidance/references/javascript/review.md \
   "Reporting that a processor callback is not validated, or that a sibling is not cancelled after Promise.all rejects, is padding unless a test, comment, or user-supplied contract requires that check."
 assert_contains skills/language-guidance/references/javascript/review.md \
-  "Reporting unbounded Promise.all fan-out or a missing concurrency limit is padding unless a test, comment, or user-supplied contract requires that check."
+  "Reporting unbounded Promise.all fan-out or a missing concurrency limit is padding unless a test, comment, or user-supplied contract requires that check. Listing unbounded concurrency, a concurrency limit, or Promise.all fan-out as a finding is a review failure."
 assert_contains skills/language-guidance/references/javascript/verification.md \
   "One host does not verify another host"
 assert_contains skills/language-guidance/references/javascript/verification.md \
