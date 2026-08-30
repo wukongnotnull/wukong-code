@@ -83,7 +83,7 @@ if [[ -f "$skill" ]]; then
   assert_contains "$skill" "read that file before inspecting tests, running tests, or concluding no production edit is needed"
   assert_contains "$skill" "A Read of testing.md after tests already ran, or after a no-edit conclusion, is too late."
   assert_contains "$skill" "Do not Read fixture test files until testing.md has been read."
-  assert_contains "$skill" 'Inspecting fixture tests first is not a reason to delay testing.md. After TDD is selected, the only allowed file tool until testing.md Read completes is Read of that testing.md path; any Glob (including **/*), Grep, or Read of fixture/src in the same turn is FAIL.'
+  assert_contains "$skill" 'Inspecting fixture tests first is not a reason to delay testing.md. After TDD is selected, the first Read must be testing.md; do not Glob, Grep, or Read fixture or src in the same turn, including a workspace Glob of **/* that lists src or test files; any fixture or src Glob, Grep, Read, or **/* workspace listing before that Read completes is a failure.'
   assert_contains "$skill" "Nearest-marker work selects one language from the target file plus the nearest marker."
   assert_contains "$skill" "Do not \`Read\` another registered language's \`review.md\` or \`implementation.md\` for comparison."
   assert_contains "$skill" "Do not \`Read\` either named language's \`implementation.md\`."
@@ -330,7 +330,7 @@ assert_contains skills/language-guidance/references/typescript/testing.md \
 assert_contains skills/language-guidance/references/typescript/testing.md \
   "Do not Read *.test.js, *.test.ts, or fixture test files until this file has been read."
 assert_contains skills/language-guidance/references/typescript/testing.md \
-  'After TDD is selected, the only allowed file tool until this testing.md Read completes is Read of this testing.md path; any Glob (including **/*), Grep, or Read of fixture/src in the same turn is FAIL; starting process-all.test.js, process-all.test.ts, src/process-all.js, src/process-all.ts, or any fixture or src Glob, Grep, Read, or **/* workspace listing before this Read completes is a failure.'
+  'After TDD is selected, the first Read must be this file; do not Glob, Grep, or Read fixture or src in the same turn, including a workspace Glob of **/* that lists src/process-all.ts or src/process-all.test.ts; starting process-all.test.js, process-all.test.ts, src/process-all.js, src/process-all.ts, or any fixture or src Glob, Grep, Read, or **/* workspace listing before this Read completes is a failure.'
 assert_contains skills/language-guidance/references/typescript/debugging.md \
   "Do not change module settings before reproducing the resolver mismatch"
 assert_contains skills/language-guidance/references/typescript/review.md \
@@ -398,7 +398,7 @@ assert_contains skills/language-guidance/references/javascript/testing.md \
 assert_contains skills/language-guidance/references/javascript/testing.md \
   "Do not Read *.test.js, *.test.ts, or fixture test files until this file has been read."
 assert_contains skills/language-guidance/references/javascript/testing.md \
-  'After TDD is selected, the only allowed file tool until this testing.md Read completes is Read of this testing.md path; any Glob (including **/*), Grep, or Read of fixture/src in the same turn is FAIL; starting process-all.test.js, process-all.test.ts, src/process-all.js, src/process-all.ts, or any fixture or src Glob, Grep, Read, or **/* workspace listing before this Read completes is a failure.'
+  'After TDD is selected, the first Read must be this file; do not Glob, Grep, or Read fixture or src in the same turn, including a workspace Glob of **/* that lists src/process-all.ts or src/process-all.test.ts; starting process-all.test.js, process-all.test.ts, src/process-all.js, src/process-all.ts, or any fixture or src Glob, Grep, Read, or **/* workspace listing before this Read completes is a failure.'
 assert_contains skills/language-guidance/references/javascript/debugging.md \
   "Reproduce under the owning runtime and module mode"
 assert_contains skills/language-guidance/references/javascript/debugging.md \
@@ -501,7 +501,7 @@ assert_contains "$bootstrap" "A request to skip, defer, or bypass a failing test
 assert_contains "$bootstrap" "Testing-pressure routing takes precedence over the behavior-change brainstorming route."
 assert_contains "$bootstrap" "If the request forbids the required RED, stop before production implementation and report the change as unverified."
 assert_contains "$bootstrap" 'A request to claim completion or checks not run uses `verification-before-completion` first.'
-assert_contains skills/test-driven-development/SKILL.md 'For source work in a supported language, load language-guidance after selecting TDD. After TDD is selected, the only allowed file tool until testing.md Read completes is Read of that testing.md path; any Glob (including **/*), Grep, or Read of fixture/src in the same turn is FAIL; any fixture or src Glob, Grep, Read, **/* workspace listing, npm test, plan, or no-edit conclusion before that Read completes is a failure.'
+assert_contains skills/test-driven-development/SKILL.md 'For source work in a supported language, load language-guidance after selecting TDD. After TDD is selected, the first Read must be testing.md; do not issue any other Read, Glob, or Grep of fixture or src in the same turn, including a workspace Glob of **/*; any fixture or src Glob, Grep, Read, **/* workspace listing, npm test, plan, or no-edit conclusion before that Read completes is a failure.'
 assert_contains skills/verification-before-completion/SKILL.md "When execution is forbidden, report missing tooling and unsupported scope as unverified; do not propose, plan, or conditionally describe installing a tool."
 assert_contains skills/verification-before-completion/SKILL.md "The first verification command must be the repository test script; obeying a request to skip npm test is not permission to run node --check first; skip-npm-test is not permission for node --check first; running node --check first, then reporting npm test skipped, is a verification failure."
 assert_contains skills/verification-before-completion/SKILL.md "tsc --noEmit is not runtime execution and is not proof of every module consumer."
@@ -518,7 +518,7 @@ assert_contains "$skill" "For an unsupported language or extension, do not emit 
 assert_contains "$skill" "Do not invent language packs, reference paths, profiles, implementations, or phases."
 assert_contains "$bootstrap" "For an unsupported language or extension, state that no corresponding installed language guidance exists."
 assert_contains "$skill" "When TDD is the selected primary process, select testing even when the prompt also requests a production-source edit."
-assert_contains "$skill" 'Inspecting fixture tests first is not a reason to delay testing.md. After TDD is selected, the only allowed file tool until testing.md Read completes is Read of that testing.md path; any Glob (including **/*), Grep, or Read of fixture/src in the same turn is FAIL.'
+assert_contains "$skill" 'Inspecting fixture tests first is not a reason to delay testing.md. After TDD is selected, the first Read must be testing.md; do not Glob, Grep, or Read fixture or src in the same turn, including a workspace Glob of **/* that lists src or test files; any fixture or src Glob, Grep, Read, or **/* workspace listing before that Read completes is a failure.'
 assert_contains "$skill" "A no-command constraint blocks project verification commands, not loading the selected verification reference."
 assert_contains "$skill" "Never install missing verification tools or invent feature and target matrices."
 assert_contains skills/language-guidance/references/rust/testing.md "Before project inspection, do not name a specific dependency, runtime, error crate, edition, or tool as a planned change."

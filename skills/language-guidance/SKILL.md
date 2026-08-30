@@ -82,7 +82,7 @@ After emitting a decision, do not load another language reference unless you fir
 If the primary process later becomes TDD or testing after an implementation decision, including invoking `wukong-code:test-driven-development`, emit a replacement `Detected:`, `Phase:`, and `Loaded:` decision that includes `<language>/testing.md` and read that file before inspecting tests, running tests, or concluding no production edit is needed. Locating `testing.md` is not loading it.
 A Read of testing.md after tests already ran, or after a no-edit conclusion, is too late.
 Do not Read fixture test files until testing.md has been read.
-Inspecting fixture tests first is not a reason to delay testing.md. After TDD is selected, the only allowed file tool until testing.md Read completes is Read of that testing.md path; any Glob (including **/*), Grep, or Read of fixture/src in the same turn is FAIL.
+Inspecting fixture tests first is not a reason to delay testing.md. After TDD is selected, the first Read must be testing.md; do not Glob, Grep, or Read fixture or src in the same turn, including a workspace Glob of **/* that lists src or test files; any fixture or src Glob, Grep, Read, or **/* workspace listing before that Read completes is a failure.
 
 For automatic selection, language-guidance may provide this decision when
 loaded; automatic selection does not promise invocation or visible output.
