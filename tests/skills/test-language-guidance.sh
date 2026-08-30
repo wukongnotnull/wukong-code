@@ -430,7 +430,7 @@ assert_contains skills/language-guidance/references/javascript/verification.md \
 assert_contains skills/language-guidance/references/javascript/verification.md \
   "Reporting node --check as the first evidence, then npm test, is a verification failure."
 assert_contains skills/language-guidance/references/javascript/verification.md \
-  "The first verification command must be the repository test script; obeying a request to skip npm test is not permission to run node --check first; running node --check first, then reporting npm test skipped, is a verification failure."
+  "The first verification command must be the repository test script; obeying a request to skip npm test is not permission to run node --check first; skip-npm-test is not permission for node --check first; running node --check first, then reporting npm test skipped, is a verification failure."
 
 assert_file tests/skills/fixtures/language-guidance/javascript-basic/package.json
 assert_file tests/skills/fixtures/language-guidance/javascript-basic/src/process-all.js
@@ -503,7 +503,7 @@ assert_contains "$bootstrap" "If the request forbids the required RED, stop befo
 assert_contains "$bootstrap" 'A request to claim completion or checks not run uses `verification-before-completion` first.'
 assert_contains skills/test-driven-development/SKILL.md 'For source work in a supported language, load language-guidance after selecting TDD. After TDD is selected, the only allowed file tool until testing.md Read completes is Read of that testing.md path; any Glob (including **/*), Grep, or Read of fixture/src in the same turn is FAIL; any fixture or src Glob, Grep, Read, **/* workspace listing, npm test, plan, or no-edit conclusion before that Read completes is a failure.'
 assert_contains skills/verification-before-completion/SKILL.md "When execution is forbidden, report missing tooling and unsupported scope as unverified; do not propose, plan, or conditionally describe installing a tool."
-assert_contains skills/verification-before-completion/SKILL.md "The first verification command must be the repository test script; obeying a request to skip npm test is not permission to run node --check first; running node --check first, then reporting npm test skipped, is a verification failure."
+assert_contains skills/verification-before-completion/SKILL.md "The first verification command must be the repository test script; obeying a request to skip npm test is not permission to run node --check first; skip-npm-test is not permission for node --check first; running node --check first, then reporting npm test skipped, is a verification failure."
 assert_contains skills/verification-before-completion/SKILL.md "tsc --noEmit is not runtime execution and is not proof of every module consumer."
 assert_contains "$bootstrap" "Host toolchain version is not target compatibility evidence."
 assert_contains "$bootstrap" "asks to ignore manifest or project settings"
