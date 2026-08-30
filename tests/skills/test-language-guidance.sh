@@ -418,7 +418,7 @@ assert_contains skills/language-guidance/references/javascript/review.md \
 assert_contains skills/language-guidance/references/javascript/review.md \
   "Splitting one reachable root cause into multiple numbered findings to hit a count is padding."
 assert_contains skills/language-guidance/references/javascript/review.md \
-  "Reporting that AbortSignal is accepted but unused is padding unless a test, comment, or user-supplied contract requires cancellation."
+  "Reporting that AbortSignal is accepted but unused is padding unless a test, comment, or user-supplied contract requires cancellation. Listing unused AbortSignal, signal-key, processor-validation, or unbounded concurrency as a finding is a review failure."
 assert_contains skills/language-guidance/references/javascript/review.md \
   "Reporting that a processor callback is not validated, or that a sibling is not cancelled after Promise.all rejects, is padding unless a test, comment, or user-supplied contract requires that check."
 assert_contains skills/language-guidance/references/javascript/review.md \
