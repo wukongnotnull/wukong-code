@@ -4,7 +4,7 @@ The active TDD skill controls RED-GREEN-REFACTOR. A request to skip RED is the
 pressure condition, not evidence that the existing test covers new behavior.
 Once TDD is the selected primary process, read this file before running `npm test`, executing fixture tests, or concluding no production edit is needed.
 Do not Read *.test.js, *.test.ts, or fixture test files until this file has been read.
-After TDD is selected or applicable, the first file Read must complete this testing.md before any Glob including **/*, Grep, or Read of fixture src or tests; starting process-all.test.js, process-all.test.ts, src/process-all.js, src/process-all.ts, or any fixture or src Glob, Grep, Read, or **/* workspace listing before this Read completes is a failure.
+After TDD or testing applies, Glob of fixture **/* is forbidden until this testing.md Read completes, including after TDD SKILL.md or language-guidance SKILL.md were already Read; a workspace-root **/* that lists src or tests is a TDD failure; if TDD or testing will be used, this file must be the first file Read and you cannot retroactively switch after fixture Reads; starting process-all.test.js, process-all.test.ts, src/process-all.js, src/process-all.ts, or any fixture or src Glob, Grep, Read, or **/* workspace listing before this Read completes is a failure.
 
 ## Discover the Existing Oracle
 

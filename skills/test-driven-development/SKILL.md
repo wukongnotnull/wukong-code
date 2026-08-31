@@ -44,7 +44,7 @@ Write code before the test? Delete it. Start over.
 
 Implement fresh from tests. Period.
 
-For source work in a supported language, load language-guidance after selecting TDD. After TDD is selected or applicable, the first file Read must complete testing.md before any Glob including **/*, Grep, or Read of fixture src or tests; any fixture or src Glob, Grep, Read, **/* workspace listing, npm test, plan, or no-edit conclusion before that Read completes is a failure.
+For source work in a supported language, load language-guidance after selecting TDD. After TDD or testing applies, Glob of fixture **/* is forbidden until testing.md Read completes, including after TDD SKILL.md or language-guidance SKILL.md were already Read; a workspace-root **/* that lists src or tests is a TDD failure; if TDD or testing will be used, testing.md must be the first file Read and you cannot retroactively switch after fixture Reads; any fixture or src Glob, Grep, Read, **/* workspace listing, npm test, plan, or no-edit conclusion before that Read completes is a failure.
 
 ## Red-Green-Refactor
 
