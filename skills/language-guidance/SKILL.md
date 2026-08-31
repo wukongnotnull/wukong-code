@@ -33,7 +33,7 @@ If a prompt names source targets in two or more registered languages, do not
 emit `Detected:`, `Phase:`, or `Loaded:` and do not read either language pack.
 State each target scope separately and keep the generic workflow.
 Do not `Read` either named language's `implementation.md`. Stating "avoid loading" after those files were read is a failure.
-A Glob of skills/language-guidance/references or Read of typescript/implementation.md or rust/implementation.md is a failure when the prompt names TypeScript and Rust, including to confirm they should not be loaded.
+A Glob of skills/language-guidance or its references pack, including **/skills/language-guidance/**, or a Read of typescript/implementation.md or rust/implementation.md is a failure when the prompt names TypeScript and Rust or the selected language is javascript; symmetrically, do not Read javascript/implementation.md or rust/implementation.md when the selected language is typescript, including to confirm they should not be loaded.
 
 ## Phase Selection
 
@@ -82,7 +82,7 @@ After emitting a decision, do not load another language reference unless you fir
 If the primary process later becomes TDD or testing after an implementation decision, including invoking `wukong-code:test-driven-development`, emit a replacement `Detected:`, `Phase:`, and `Loaded:` decision that includes `<language>/testing.md` and read that file before inspecting tests, running tests, or concluding no production edit is needed. Locating `testing.md` is not loading it.
 A Read of testing.md after tests already ran, or after a no-edit conclusion, is too late.
 Do not Read fixture test files until testing.md has been read.
-Inspecting fixture tests first is not a reason to delay testing.md. After TDD is selected, the first Read must be testing.md; do not Glob, Grep, or Read fixture or src in the same turn, including a workspace Glob of **/* that lists src or test files; any fixture or src Glob, Grep, Read, or **/* workspace listing before that Read completes is a failure.
+Inspecting fixture tests first is not a reason to delay testing.md. After TDD is selected or applicable, the first file Read must complete testing.md before any Glob including **/*, Grep, or Read of fixture src or tests; any fixture or src Glob, Grep, Read, or **/* workspace listing before that Read completes is a failure.
 
 For automatic selection, language-guidance may provide this decision when
 loaded; automatic selection does not promise invocation or visible output.
