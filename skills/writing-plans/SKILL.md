@@ -146,7 +146,7 @@ Every step must contain the actual content an engineer needs. These are **plan f
 
 ## Self-Review
 
-After writing the complete plan, look at the spec with fresh eyes and check the plan against it. This is a checklist you run yourself — not a subagent dispatch.
+After writing the complete plan, look at the spec with fresh eyes and check the plan against it:
 
 **1. Spec coverage:** Skim each section/requirement in the spec. Can you point to a task that implements it? List any gaps.
 
@@ -154,7 +154,17 @@ After writing the complete plan, look at the spec with fresh eyes and check the 
 
 **3. Type consistency:** Do the types, method signatures, and property names you used in later tasks match what you defined in earlier tasks? A function called `clearLayers()` in Task 3 but `clearFullLayers()` in Task 7 is a bug.
 
-If you find issues, fix them inline. No need to re-review — just fix and move on. If you find a spec requirement with no task, add the task.
+Fix any issues inline before dispatching the plan reviewer.
+
+## Plan Review Loop
+
+After self-review passes:
+
+1. **Dispatch plan reviewer** — use `skills/writing-plans/plan-document-reviewer-prompt.md` with a general-purpose subagent; substitute the plan and spec file paths.
+2. If **Issues Found**: fix the plan, re-dispatch reviewer, repeat until **Approved**.
+3. If loop exceeds 5 iterations, surface to your human partner.
+
+Reviewers are advisory — explain disagreements if you believe feedback is incorrect.
 
 ## Execution Handoff
 

@@ -56,7 +56,7 @@ When Depth routing selected **Full**, you MUST create a task for each of these i
 4. **Propose 2-3 approaches** — with trade-offs and your recommendation
 5. **Present design** — in sections scaled to their complexity, get user approval after each section
 6. **Write design doc** — save to `docs/wukong-code/specs/YYYY-MM-DD-HHmm-<topic>-design.md` and commit
-7. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
+7. **Spec review loop** — inline self-review, then dispatch spec reviewer (see below)
 8. **User reviews written spec** — ask user to review the spec file before proceeding
 9. **Transition to implementation** — invoke writing-plans skill to create implementation plan
 
@@ -70,15 +70,19 @@ When Depth routing selected **Full**, you MUST create a task for each of these i
 - Use elements-of-style:writing-clearly-and-concisely skill if available
 - Commit the design document to git
 
-**Spec Self-Review:**
-After writing the spec document, look at it with fresh eyes:
+**Spec Review Loop:**
+After writing the spec document:
 
-1. **Placeholder scan:** Any "TBD", "TODO", incomplete sections, or vague requirements? Fix them.
-2. **Internal consistency:** Do any sections contradict each other? Does the architecture match the feature descriptions?
-3. **Scope check:** Is this focused enough for a single implementation plan, or does it need decomposition?
-4. **Ambiguity check:** Could any requirement be interpreted two different ways? If so, pick one and make it explicit.
+1. **Inline self-review** — quick check for placeholders, contradictions, ambiguity, scope:
+   - Any "TBD", "TODO", incomplete sections, or vague requirements? Fix them.
+   - Internal contradictions or architecture mismatches? Fix them.
+   - Focused enough for one plan, or needs decomposition? Fix or split.
+   - Ambiguous requirements? Pick one interpretation and make it explicit.
+2. **Dispatch spec reviewer** — use `skills/brainstorming/spec-document-reviewer-prompt.md` with a general-purpose subagent; substitute the spec file path.
+3. If **Issues Found**: fix the spec, re-dispatch reviewer, repeat until **Approved**.
+4. If loop exceeds 5 iterations, surface to your human partner.
 
-Fix any issues inline. No need to re-review — just fix and move on.
+Reviewers are advisory — explain disagreements if you believe feedback is incorrect.
 
 **User Review Gate:**
 After the spec review loop passes, ask the user to review the written spec before proceeding:

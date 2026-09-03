@@ -90,6 +90,12 @@ assert_file skills/brainstorming/SKILL.md
 assert_contains skills/brainstorming/SKILL.md \
   "If TDD will apply to implementation source or tests, use README, package metadata, and docs only"
 
+echo "=== document review dispatch ==="
+assert_contains skills/brainstorming/SKILL.md "spec-document-reviewer-prompt.md"
+assert_contains skills/brainstorming/SKILL.md "Dispatch spec reviewer"
+assert_contains skills/writing-plans/SKILL.md "plan-document-reviewer-prompt.md"
+assert_contains skills/writing-plans/SKILL.md "Dispatch plan reviewer"
+
 if (( fail )); then
   echo "STATUS: FAILED"
   exit 1
