@@ -78,7 +78,7 @@ After writing the spec document:
    - Internal contradictions or architecture mismatches? Fix them.
    - Focused enough for one plan, or needs decomposition? Fix or split.
    - Ambiguous requirements? Pick one interpretation and make it explicit.
-2. **Dispatch spec reviewer** — use `skills/brainstorming/spec-document-reviewer-prompt.md` with a general-purpose subagent; substitute the spec file path.
+2. **Dispatch spec reviewer** — use `skills/brainstorming/spec-document-reviewer-prompt.md` with a general-purpose subagent; substitute the spec file path. If your harness has no subagent dispatch tool, repeat the inline self-review checklist with fresh eyes instead; do not skip review.
 3. If **Issues Found**: fix the spec, re-dispatch reviewer, repeat until **Approved**.
 4. If loop exceeds 5 iterations, surface to your human partner.
 

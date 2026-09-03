@@ -160,7 +160,7 @@ Fix any issues inline before dispatching the plan reviewer.
 
 After self-review passes:
 
-1. **Dispatch plan reviewer** — use `skills/writing-plans/plan-document-reviewer-prompt.md` with a general-purpose subagent; substitute the plan and spec file paths.
+1. **Dispatch plan reviewer** — use `skills/writing-plans/plan-document-reviewer-prompt.md` with a general-purpose subagent; substitute the plan and spec file paths. If your harness has no subagent dispatch tool, repeat the self-review checklist with fresh eyes instead; do not skip review.
 2. If **Issues Found**: fix the plan, re-dispatch reviewer, repeat until **Approved**.
 3. If loop exceeds 5 iterations, surface to your human partner.
 
@@ -168,7 +168,7 @@ Reviewers are advisory — explain disagreements if you believe feedback is inco
 
 ## Execution Handoff
 
-After saving the plan, offer execution choice:
+After the plan review loop passes, offer execution choice:
 
 **"Plan complete and saved to `docs/wukong-code/plans/<filename>.md`. Two execution options:**
 

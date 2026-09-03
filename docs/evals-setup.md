@@ -33,6 +33,10 @@ runner scripts (`run-cohort.sh`, `run-cursor-cohort.sh`).
 | **Core plugin** | `npm run test:extended` | Every PR/push (`.github/workflows/test.yml`) | No |
 | **Full behavioral** | Drill / Cursor cohort matrices | Manual on-demand; nightly when secrets and budget are configured | Yes |
 
+The static workflow pins `wukong-code-evals` at harness commit
+`39cbbec9d5842edd47ead87fcd6e1fc1399b4287`. Bump that SHA when manifest
+validation should track a newer harness release.
+
 Full LLM sessions are slow (minutes per scenario) and are intentionally
 outside the required PR gate. Use static manifest validation to catch broken
 scenario definitions early; run behavioral cohorts before claiming publication

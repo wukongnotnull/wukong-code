@@ -35,7 +35,9 @@ Live in `tests/`. Currently:
 - `tests/codex-plugin-sync/` — bash sync verification.
 - `tests/kimi/` — bash/Python checks for Kimi plugin manifest wiring.
 - `tests/cursor/` — bash checks for Cursor plugin manifest and sessionStart hook wiring.
-- `tests/test-automation/` — static contract for `scripts/test.sh` suite ordering and CI wiring.
+- `tests/test-automation/` — static contract for `scripts/test.sh` suite ordering and CI wiring. When adding or reordering core tests, update `tests/test-automation/test-test-runner.sh` `CORE_LOG` in the same change.
+
+Core tests use `rg` (ripgrep) in several scripts; CI installs it via `.github/workflows/test.yml`.
 - `tests/claude-code/test-helpers.sh`, `analyze-token-usage.py` — utilities used by remaining bash tests.
 - `tests/claude-code/test-subagent-driven-development.sh` — agent-can-describe-SDD test (no drill counterpart; tests description-recall, not behavior).
 - `tests/claude-code/test-subagent-driven-development-integration.sh` — extended SDD integration with token analysis (drill covers the YAGNI subset; bash adds commit-count, Claude Code task-tracking, and token telemetry assertions).

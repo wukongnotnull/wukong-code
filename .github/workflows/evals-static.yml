@@ -12,7 +12,9 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Clone eval harness
-        run: git clone --depth 1 https://github.com/wukongnotnull/wukong-code-evals.git evals
+        run: |
+          git clone https://github.com/wukongnotnull/wukong-code-evals.git evals
+          git -C evals checkout 39cbbec9d5842edd47ead87fcd6e1fc1399b4287
       - name: Validate language-guidance manifests
         run: |
           python3 evals/scripts/validate-manifest.py \
