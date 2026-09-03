@@ -137,6 +137,11 @@ command -v git >/dev/null || die "git not found in PATH"
 command -v jq >/dev/null || die "jq not found in PATH"
 command -v python3 >/dev/null || die "python3 not found in PATH"
 command -v tar >/dev/null || die "tar not found in PATH"
+if tar --version 2>/dev/null | grep -qi gnu; then
+  TAR_OWNER_FLAGS=(--owner=0 --group=0)
+else
+  TAR_OWNER_FLAGS=(--uid 0 --gid 0 --uname '' --gname '')
+fi
 command -v gzip >/dev/null || die "gzip not found in PATH"
 command -v shasum >/dev/null || die "shasum not found in PATH"
 if [[ "$FORMAT" == "zip" ]]; then
@@ -341,7 +346,7 @@ PY
     (
       cd "$STAGE"
       rm -f "$OUTPUT"
-      COPYFILE_DISABLE=1 tar -cf - --no-recursion --format ustar --uid 0 --gid 0 --uname '' --gname '' -T "$ARCHIVE_LIST" |
+      COPYFILE_DISABLE=1 tar -cf - --no-recursion --format ustar "${TAR_OWNER_FLAGS[@]}" -T "$ARCHIVE_LIST" |
         gzip -9n >"$OUTPUT"
     )
     ;;
