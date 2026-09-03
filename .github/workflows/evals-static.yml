@@ -1,0 +1,20 @@
+name: Evals (static)
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Weekly manifest validation — no API keys required.
+    - cron: '0 6 * * 1'
+
+jobs:
+  validate-manifests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Clone eval harness
+        run: git clone --depth 1 https://github.com/wukongnotnull/wukong-code-evals.git evals
+      - name: Validate language-guidance manifests
+        run: |
+          python3 evals/scripts/validate-manifest.py \
+            evals/scenarios/javascript.jsonl \
+            evals/scenarios/typescript.jsonl
