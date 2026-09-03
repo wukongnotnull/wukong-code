@@ -266,13 +266,13 @@ Wukong Code 的方法论保持语言无关。当仓库证据能够确定受支�
 | ---------- | --- | --- | --- | --- | --- | --- | -------------------------------------------------------------------- |
 | Go         | 实验性 | ✓   | ✓   | ✓   | ✓   | ✓   | [评估报告](docs/wukong-code/evals/2026-07-22-go-language-guidance.md)    |
 | Java       | 实验性 | ✓   | ✓   | ✓   | ✓   | ✓   | [评估报告](docs/wukong-code/evals/2026-08-02-java-language-guidance.md)  |
-| TypeScript | 实验性 | ✓   | ✓   | ✓   | ✓   | ✓   | 评估仍在积累                                                         |
-| JavaScript | 实验性 | ✓   | ✓   | ✓   | ✓   | ✓   | 评估仍在积累                                                         |
+| TypeScript | 实验性 | ✓   | ✓   | ✓   | ✓   | ✓   | [Cursor recapture-15 草案](docs/wukong-code/evals/2026-09-01-typescript-language-guidance-cursor-recapture-15.md) — 发布评估待定 |
+| JavaScript | 实验性 | ✓   | ✓   | ✓   | ✓   | ✓   | [Cursor recapture-15 草案](docs/wukong-code/evals/2026-09-01-javascript-language-guidance-cursor-recapture-15.md) — 发布评估待定 |
 | Swift      | 实验性 | ✓   | ✓   | ✓   | ✓   | ✓   | [评估报告](docs/wukong-code/evals/2026-07-29-swift-language-guidance.md) |
 | Rust       | 实验性 | ✓   | ✓   | ✓   | ✓   | ✓   | [评估报告](docs/wukong-code/evals/2026-07-29-rust-language-guidance.md)  |
 
 
-**实验性**表示该指导包已在核心发布，真实项目证据仍在积累。Evidence 列仅在已有报告时给出链接。框架、云服务、数据库和团队专用指导不属于核心范围。
+**实验性**表示该指导包已在核心发布，真实项目证据仍在积累。Evidence 列仅在已有报告时给出链接；标注*发布评估待定*的草案尚未通过全部行为族或人工评审门禁。框架、云服务、数据库和团队专用指导不属于核心范围。
 
 ---
 
