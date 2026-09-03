@@ -243,7 +243,7 @@ function isFullDocument(html) {
 }
 
 function wrapInFrame(content) {
-  return renderBranding(frameTemplate).replace('<!-- CONTENT -->', content);
+  return renderBranding(frameTemplate).split('<!-- CONTENT -->').join(content);
 }
 
 function getNewestScreen() {
@@ -663,7 +663,8 @@ function startServer() {
     const info = JSON.stringify({
       type: 'server-started', port: Number(PORT), host: HOST,
       url_host: URL_HOST, url: companionUrl(),
-      screen_dir: CONTENT_DIR, state_dir: STATE_DIR, idle_timeout_ms: IDLE_TIMEOUT_MS
+      session_dir: SESSION_DIR, screen_dir: CONTENT_DIR, state_dir: STATE_DIR,
+      idle_timeout_ms: IDLE_TIMEOUT_MS
     });
     console.log(info);
     // server-info embeds the key — keep it owner-only.
@@ -699,6 +700,7 @@ module.exports = {
   computeAcceptKey,
   encodeFrame,
   decodeFrame,
+  wrapInFrame,
   browserLauncherForPlatform,
   OPCODES,
   MAX_FRAME_PAYLOAD_BYTES

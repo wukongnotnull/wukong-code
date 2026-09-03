@@ -211,6 +211,17 @@ async function runTests() {
       assert(res.body.includes('data-choice="a"'), 'Fragment interactive elements intact');
     });
 
+    await test('wraps fragments that contain $&, $\', and $$ without interpreting them', async () => {
+      const fragment = '<p>use $& and $\' and $$ here</p>';
+      fs.writeFileSync(path.join(CONTENT_DIR, 'dollar-fragment.html'), fragment);
+      await sleep(300);
+
+      const res = await fetch(`http://localhost:${TEST_PORT}/`);
+      assert(res.body.includes('<div class="header">'), 'Fragment should get header chrome');
+      assert(res.body.includes(fragment), 'Dollar sequences must appear verbatim');
+      assert(!res.body.includes('use <!-- CONTENT -->'), '$& must not expand to the placeholder');
+    });
+
     await test('serves newest file by mtime', async () => {
       fs.writeFileSync(path.join(CONTENT_DIR, 'older.html'), '<h2>Older</h2>');
       await sleep(100);

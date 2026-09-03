@@ -473,6 +473,20 @@ assert_prompt_router_output \
     "$router_home" \
     "$registry_router_root"
 
+assert_prompt_router_output \
+    "English Let's go does not select Go or drop the JavaScript nearest marker" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"Let's go implement a change.\"}" \
+    "# JavaScript Implementation Guidance" \
+    "# Go Implementation Guidance"$'\037'"Delivered: go/" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Two named languages abstain instead of last-in-registry JavaScript" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT\",\"prompt\":\"Review this rust project, don't use javascript.\"}" \
+    "Multiple registered languages are in scope|Rust|JavaScript|Do not invoke language-guidance" \
+    "# JavaScript Implementation Guidance"$'\037'"# Rust Implementation Guidance"$'\037'"Delivered: javascript/"$'\037'"Delivered: rust/" \
+    "$router_home"
+
 assert_prompt_router_empty \
     "Documentation typo does not inject language guidance" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT\",\"prompt\":\"Fix a typo in README.md.\"}" \

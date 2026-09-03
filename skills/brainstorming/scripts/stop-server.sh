@@ -2,9 +2,9 @@
 # Stop the brainstorm server and clean up
 # Usage: stop-server.sh <session_dir>
 #
-# Kills the server process. Only deletes session directory if it's
-# under /tmp (ephemeral). Persistent directories (.wukong-code/) are
-# kept so mockups can be reviewed later.
+# Kills the server process. Only deletes session directories this
+# script creates under /tmp/brainstorm-*. Persistent directories
+# (.wukong-code/) and other /tmp paths are kept.
 
 SESSION_DIR="$1"
 
@@ -109,9 +109,13 @@ if [[ -f "$PID_FILE" ]]; then
   rm -f "$PID_FILE" "$SERVER_ID_FILE" "${STATE_DIR}/server.log"
   mark_stopped "stop-server.sh"
 
-  # Only delete ephemeral /tmp directories
-  if [[ "$SESSION_DIR" == /tmp/* ]]; then
-    rm -rf "$SESSION_DIR"
+  # Only delete ephemeral /tmp/brainstorm-* directories this script creates.
+  # Resolve the real path so /tmp/foo/.. and /tmp/brainstorm-x/../elsewhere
+  # cannot escape that prefix. /tmp is /private/tmp on macOS after pwd -P.
+  if resolved="$(cd "$SESSION_DIR" && pwd -P 2>/dev/null)"; then
+    if [[ "$resolved" =~ ^(/private)?/tmp/brainstorm-[^/]+$ ]]; then
+      rm -rf "$resolved"
+    fi
   fi
 
   echo '{"status": "stopped"}'

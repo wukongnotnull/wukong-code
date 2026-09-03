@@ -266,8 +266,8 @@ Wukong Code 的方法论保持语言无关。当仓库证据能够确定受支�
 | ---------- | --- | --- | --- | --- | --- | --- | -------------------------------------------------------------------- |
 | Go         | 实验性 | ✓   | ✓   | ✓   | ✓   | ✓   | [评估报告](docs/wukong-code/evals/2026-07-22-go-language-guidance.md)    |
 | Java       | 实验性 | ✓   | ✓   | ✓   | ✓   | ✓   | [评估报告](docs/wukong-code/evals/2026-08-02-java-language-guidance.md)  |
-| TypeScript | 计划中 | —   | —   | —   | —   | —   | —                                                                    |
-| JavaScript | 计划中 | —   | —   | —   | —   | —   | —                                                                    |
+| TypeScript | 实验性 | ✓   | ✓   | ✓   | ✓   | ✓   | 评估仍在积累                                                         |
+| JavaScript | 实验性 | ✓   | ✓   | ✓   | ✓   | ✓   | 评估仍在积累                                                         |
 | Swift      | 实验性 | ✓   | ✓   | ✓   | ✓   | ✓   | [评估报告](docs/wukong-code/evals/2026-07-29-swift-language-guidance.md) |
 | Rust       | 实验性 | ✓   | ✓   | ✓   | ✓   | ✓   | [评估报告](docs/wukong-code/evals/2026-07-29-rust-language-guidance.md)  |
 

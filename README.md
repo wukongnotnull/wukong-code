@@ -264,8 +264,8 @@ Wukong Code remains language-agnostic at the methodology level. When repository 
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Go | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-07-22-go-language-guidance.md) |
 | Java | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-08-02-java-language-guidance.md) |
-| TypeScript | Planned | — | — | — | — | — | — |
-| JavaScript | Planned | — | — | — | — | — | — |
+| TypeScript | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | Evals are still accumulating |
+| JavaScript | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | Evals are still accumulating |
 | Swift | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-07-29-swift-language-guidance.md) |
 | Rust | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-07-29-rust-language-guidance.md) |
 

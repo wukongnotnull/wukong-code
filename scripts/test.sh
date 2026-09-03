@@ -26,12 +26,14 @@ run() {
 run_core() {
   run bash tests/skills/test-core-skill-admission-policy.sh
   run bash tests/skills/test-language-guidance.sh
+  run bash tests/skills/test-visual-companion.sh
   run bash tests/skills/test-skill-slim-gates.sh
   run bash tests/skills/test-gemini-retirement.sh
   run bash tests/hooks/test-session-start.sh
   run bash tests/opencode/run-tests.sh
   run bash tests/kimi/run-tests.sh
   run node --test tests/pi/test-pi-extension.mjs
+  run node --test tests/brainstorm-server/wrap-frame.test.cjs
   run bash tests/codex/test-marketplace-manifest.sh
   run bash tests/codex/test-package-codex-plugin.sh
   run bash tests/codex-plugin-sync/test-sync-to-codex-plugin.sh

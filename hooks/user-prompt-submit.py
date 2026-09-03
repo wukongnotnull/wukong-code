@@ -89,13 +89,59 @@ def extension_languages(languages: dict[str, Any]) -> dict[str, str]:
     }
 
 
+_LETS_GO_PREFIX = re.compile(r"let'?s\s+$", re.IGNORECASE)
+_GO_LANGUAGE_CONTEXT = re.compile(
+    r"\bgolang\b"
+    r"|\bgo\s+language\b"
+    r"|\blanguage\s+(?:is\s+)?go\b"
+    r"|\b(?:the\s+)?go\s+(?:project|package|module|code|program|source|files?|review|implementation|guidance)\b"
+    r"|\b(?:in|using|with)\s+go\b",
+    re.IGNORECASE,
+)
+
+
+def _is_lets_go_prefix(prompt: str, index: int) -> bool:
+    return bool(_LETS_GO_PREFIX.search(prompt[:index]))
+
+
+def _go_language_matches(prompt: str) -> list[re.Match[str]]:
+    matches: dict[int, re.Match[str]] = {}
+    if "$language-guidance" in prompt:
+        for match in re.finditer(r"\bgo(?:lang)?\b", prompt, re.IGNORECASE):
+            if not _is_lets_go_prefix(prompt, match.start()):
+                matches[match.start()] = match
+    for match in _GO_LANGUAGE_CONTEXT.finditer(prompt):
+        matches[match.start()] = match
+    for match in re.finditer(r"\bGo\b", prompt):
+        if not _is_lets_go_prefix(prompt, match.start()):
+            matches[match.start()] = match
+    return [matches[index] for index in sorted(matches)]
+
+
+def named_language_matches(prompt: str, language: str) -> list[re.Match[str]]:
+    if language == "go":
+        return _go_language_matches(prompt)
+    return list(re.finditer(rf"\b{re.escape(language)}\b", prompt, re.IGNORECASE))
+
+
+def named_languages(prompt: str, languages: dict[str, Any]) -> list[str]:
+    found: list[tuple[int, str]] = []
+    for language in languages:
+        matches = named_language_matches(prompt, language)
+        if matches:
+            found.append((matches[0].start(), language))
+    found.sort()
+    return [name for _, name in found]
+
+
 def named_language(prompt: str, languages: dict[str, Any]) -> str | None:
-    matches = [
-        language
-        for language in languages
-        if re.search(rf"\b{re.escape(language)}\b", prompt, re.IGNORECASE)
-    ]
-    return matches[-1] if matches else None
+    names = named_languages(prompt, languages)
+    return names[0] if len(names) == 1 else None
+
+
+def mixed_named_languages(prompt: str, languages: dict[str, Any]) -> list[str] | None:
+    names = named_languages(prompt, languages)
+    return names if len(names) > 1 else None
 
 
 def prompt_targets(prompt: str, languages: dict[str, Any]) -> list[Path]:
@@ -186,8 +232,11 @@ def target_language(prompt: str, cwd: Path, languages: dict[str, Any]) -> tuple[
     if SOURCE_EXTENSION.search(prompt):
         return None
 
-    language = named_language(prompt, languages)
-    if language:
+    names = named_languages(prompt, languages)
+    if len(names) > 1:
+        return None
+    if len(names) == 1:
+        language = names[0]
         owner = owner_for(cwd, languages[language]["markers"])
         return (language, owner) if owner else None
 
@@ -273,6 +322,8 @@ def main() -> None:
         phase = phase_for(payload["prompt"])
         unsupported_extension = unregistered_source_extension(payload["prompt"], languages)
         mixed = mixed_registered_languages(payload["prompt"], cwd, languages)
+        if mixed is None and not prompt_targets(payload["prompt"], languages):
+            mixed = mixed_named_languages(payload["prompt"], languages)
         if mixed:
             display = ", ".join(
                 languages[name].get("display_name", name.capitalize()) for name in mixed

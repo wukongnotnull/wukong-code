@@ -529,11 +529,41 @@ assert_contains README.md "| Go | Experimental |"
 assert_contains README.md "| Java | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-08-02-java-language-guidance.md) |"
 assert_contains README.md "| Swift | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-07-29-swift-language-guidance.md) |"
 assert_contains README.md "| Rust | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-07-29-rust-language-guidance.md) |"
-assert_contains README.md "| JavaScript | Planned | — | — | — | — | — | — |"
-assert_contains README.zh-CN.md "| JavaScript | 计划中 |"
-assert_contains README.zh-TW.md "| JavaScript | 規劃中 |"
-assert_contains README.ja.md "| JavaScript | 計画中 |"
-assert_contains README.ko.md "| JavaScript | 계획됨 |"
+assert_contains README.md "| TypeScript | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | Evals are still accumulating |"
+assert_contains README.md "| JavaScript | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | Evals are still accumulating |"
+assert_contains README.zh-CN.md "| TypeScript | 实验性 |"
+assert_contains README.zh-CN.md "| JavaScript | 实验性 |"
+assert_contains README.zh-TW.md "| TypeScript | 實驗性 |"
+assert_contains README.zh-TW.md "| JavaScript | 實驗性 |"
+assert_contains README.ja.md "| TypeScript | 実験的 |"
+assert_contains README.ja.md "| JavaScript | 実験的 |"
+assert_contains README.ko.md "| TypeScript | 실험적 |"
+assert_contains README.ko.md "| JavaScript | 실험적 |"
+if python3 - "$registry" <<'PY'
+import json
+import pathlib
+import sys
+
+data = json.loads(pathlib.Path(sys.argv[1]).read_text())
+readme = pathlib.Path("README.md").read_text()
+for language, entry in data["languages"].items():
+    name = entry.get("display_name", language[:1].upper() + language[1:])
+    if entry.get("status") != "experimental":
+        continue
+    marker = f"| {name} | Experimental |"
+    if marker not in readme:
+        raise SystemExit(f"README.md status drifted from registry for {name}")
+    row = next((line for line in readme.splitlines() if line.startswith(f"| {name} |")), "")
+    if row.count("✓") < 5:
+        raise SystemExit(f"README.md phase columns drifted from registry for {name}")
+    if "| Planned |" in row or row.rstrip().endswith("| — |"):
+        raise SystemExit(f"README.md denies an existing experimental pack for {name}")
+PY
+then
+  pass "README.md language table matches registry status"
+else
+  fail "README.md language table drifted from registry"
+fi
 assert_contains CLAUDE.md "### Language-level skills"
 assert_contains .github/PULL_REQUEST_TEMPLATE.md "## Language-pack evidence"
 assert_contains docs/testing.md "test-language-guidance.sh"

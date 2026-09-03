@@ -178,5 +178,78 @@ else
   bad "killed process despite malformed instance id" "$OUT"
 fi
 
+start_owned_server() {
+  local sess="$1"
+  mkdir -p "$sess/content" "$sess/state"
+  local server_id
+  server_id="$(new_server_id)"
+  printf '%s\n' "$server_id" > "$sess/state/server-instance-id"
+  BRAINSTORM_DIR="$sess" BRAINSTORM_PORT=0 node "$SERVER" "--brainstorm-server-id=$server_id" > /dev/null 2>&1 &
+  local srv=$!
+  track_pid "$srv"
+  disown "$srv" 2>/dev/null || true
+  local _
+  for _ in $(seq 1 40); do
+    [[ -f "$sess/state/server-info" ]] && break
+    sleep 0.1
+  done
+  echo "$srv" > "$sess/state/server.pid"
+  printf '%s\n' "$srv"
+}
+
+# --- Test 7: /tmp sessions that are not /tmp/brainstorm-* must not be deleted ---
+CANARY="$(mktemp -d /tmp/stop-canary.XXXXXX)"; track_dir "$CANARY"
+SRV="$(start_owned_server "$CANARY")"
+OUT="$("$STOP" "$CANARY")"
+sleep 0.3
+if kill -0 "$SRV" 2>/dev/null; then
+  bad "/tmp canary outside brainstorm-* still running after stop" "$OUT"
+else
+  wait "$SRV" 2>/dev/null || true
+  untrack_pid "$SRV"
+  if [[ -d "$CANARY" ]]; then
+    ok "/tmp canary that is not brainstorm-* is kept after stop"
+  else
+    bad "/tmp canary that is not brainstorm-* was deleted" "$OUT"
+  fi
+fi
+
+# --- Test 8: crafted /tmp/.../.. path must not delete the resolved canary ---
+CANARY="$(mktemp -d /tmp/stop-canary.XXXXXX)"; track_dir "$CANARY"
+SRV="$(start_owned_server "$CANARY")"
+CRAFTED="$CANARY/../$(basename "$CANARY")"
+OUT="$("$STOP" "$CRAFTED")"
+sleep 0.3
+if kill -0 "$SRV" 2>/dev/null; then
+  bad "crafted /tmp/.../.. stop left the server running" "$OUT"
+else
+  wait "$SRV" 2>/dev/null || true
+  untrack_pid "$SRV"
+  if [[ -d "$CANARY" ]]; then
+    ok "crafted /tmp/.../.. path does not delete the canary"
+  else
+    bad "crafted /tmp/.../.. path deleted the canary" "$OUT"
+  fi
+fi
+
+# --- Test 9: real /tmp/brainstorm-* ephemeral sessions are deleted ---
+SESS="$(mktemp -d /tmp/brainstorm-XXXXXX)"
+SRV="$(start_owned_server "$SESS")"
+OUT="$("$STOP" "$SESS")"
+sleep 0.3
+if kill -0 "$SRV" 2>/dev/null; then
+  track_dir "$SESS"
+  bad "ephemeral /tmp/brainstorm-* server still running after stop" "$OUT"
+else
+  wait "$SRV" 2>/dev/null || true
+  untrack_pid "$SRV"
+  if [[ -d "$SESS" ]]; then
+    track_dir "$SESS"
+    bad "ephemeral /tmp/brainstorm-* session should be deleted" "$OUT"
+  else
+    ok "ephemeral /tmp/brainstorm-* session is deleted"
+  fi
+fi
+
 echo "--- Results: $PASS passed, $FAIL failed ---"
 [ "$FAIL" -eq 0 ] || exit 1

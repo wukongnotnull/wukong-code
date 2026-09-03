@@ -260,8 +260,8 @@ Wukong Code の方法論は言語に依存しません。リポジトリの根�
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Go | 実験的 | ✓ | ✓ | ✓ | ✓ | ✓ | [評価レポート](docs/wukong-code/evals/2026-07-22-go-language-guidance.md) |
 | Java | 実験的 | ✓ | ✓ | ✓ | ✓ | ✓ | [評価レポート](docs/wukong-code/evals/2026-08-02-java-language-guidance.md) |
-| TypeScript | 計画中 | — | — | — | — | — | — |
-| JavaScript | 計画中 | — | — | — | — | — | — |
+| TypeScript | 実験的 | ✓ | ✓ | ✓ | ✓ | ✓ | 評価はまだ蓄積中 |
+| JavaScript | 実験的 | ✓ | ✓ | ✓ | ✓ | ✓ | 評価はまだ蓄積中 |
 | Swift | 実験的 | ✓ | ✓ | ✓ | ✓ | ✓ | [評価レポート](docs/wukong-code/evals/2026-07-29-swift-language-guidance.md) |
 | Rust | 実験的 | ✓ | ✓ | ✓ | ✓ | ✓ | [評価レポート](docs/wukong-code/evals/2026-07-29-rust-language-guidance.md) |
 
