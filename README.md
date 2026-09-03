@@ -264,12 +264,12 @@ Wukong Code remains language-agnostic at the methodology level. When repository 
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Go | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-07-22-go-language-guidance.md) |
 | Java | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-08-02-java-language-guidance.md) |
-| TypeScript | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | Evals are still accumulating |
-| JavaScript | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | Evals are still accumulating |
+| TypeScript | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Cursor recapture-15 draft](docs/wukong-code/evals/2026-09-01-typescript-language-guidance-cursor-recapture-15.md) — publication eval pending |
+| JavaScript | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Cursor recapture-15 draft](docs/wukong-code/evals/2026-09-01-javascript-language-guidance-cursor-recapture-15.md) — publication eval pending |
 | Swift | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-07-29-swift-language-guidance.md) |
 | Rust | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-07-29-rust-language-guidance.md) |
 
-**Experimental** means the pack is published in core while real-project evidence is still accumulating. The Evidence column lists a report when one exists. Framework, cloud-service, database, and team-specific guidance stays outside core.
+**Experimental** means the pack is published in core while real-project evidence is still accumulating. The Evidence column lists a report when one exists; drafts marked *publication eval pending* have not cleared every behavior family or human reviewer gate. Framework, cloud-service, database, and team-specific guidance stays outside core.
 
 ---
 
