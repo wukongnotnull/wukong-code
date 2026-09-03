@@ -260,12 +260,12 @@ Wukong Code の方法論は言語に依存しません。リポジトリの根�
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Go | 実験的 | ✓ | ✓ | ✓ | ✓ | ✓ | [評価レポート](docs/wukong-code/evals/2026-07-22-go-language-guidance.md) |
 | Java | 実験的 | ✓ | ✓ | ✓ | ✓ | ✓ | [評価レポート](docs/wukong-code/evals/2026-08-02-java-language-guidance.md) |
-| TypeScript | 実験的 | ✓ | ✓ | ✓ | ✓ | ✓ | 評価はまだ蓄積中 |
-| JavaScript | 実験的 | ✓ | ✓ | ✓ | ✓ | ✓ | 評価はまだ蓄積中 |
+| TypeScript | 実験的 | ✓ | ✓ | ✓ | ✓ | ✓ | [Cursor recapture-15 草案](docs/wukong-code/evals/2026-09-01-typescript-language-guidance-cursor-recapture-15.md) — 公開評価保留 |
+| JavaScript | 実験的 | ✓ | ✓ | ✓ | ✓ | ✓ | [Cursor recapture-15 草案](docs/wukong-code/evals/2026-09-01-javascript-language-guidance-cursor-recapture-15.md) — 公開評価保留 |
 | Swift | 実験的 | ✓ | ✓ | ✓ | ✓ | ✓ | [評価レポート](docs/wukong-code/evals/2026-07-29-swift-language-guidance.md) |
 | Rust | 実験的 | ✓ | ✓ | ✓ | ✓ | ✓ | [評価レポート](docs/wukong-code/evals/2026-07-29-rust-language-guidance.md) |
 
-**実験的**とは、パックがコアに公開済みであり、実プロジェクトでの根拠を蓄積中であることを意味します。Evidence 列は報告がある場合のみ掲載します。フレームワーク、クラウドサービス、データベース、チーム固有のガイダンスはコアの対象外です。
+**実験的**とは、パックがコアに公開済みであり、実プロジェクトでの根拠を蓄積中であることを意味します。Evidence 列は報告がある場合のみ掲載します。*公開評価保留*とある草案は、全行動ファミリーまたは人間レビューのゲートをまだ通過していません。フレームワーク、クラウドサービス、データベース、チーム固有のガイダンスはコアの対象外です。
 
 ---
 

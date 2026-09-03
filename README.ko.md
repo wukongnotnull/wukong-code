@@ -260,12 +260,12 @@ Wukong Code의 방법론은 특정 언어에 종속되지 않습니다. 저장�
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Go | 실험적 | ✓ | ✓ | ✓ | ✓ | ✓ | [평가 보고서](docs/wukong-code/evals/2026-07-22-go-language-guidance.md) |
 | Java | 실험적 | ✓ | ✓ | ✓ | ✓ | ✓ | [평가 보고서](docs/wukong-code/evals/2026-08-02-java-language-guidance.md) |
-| TypeScript | 실험적 | ✓ | ✓ | ✓ | ✓ | ✓ | 평가는 계속 축적 중 |
-| JavaScript | 실험적 | ✓ | ✓ | ✓ | ✓ | ✓ | 평가는 계속 축적 중 |
+| TypeScript | 실험적 | ✓ | ✓ | ✓ | ✓ | ✓ | [Cursor recapture-15 초안](docs/wukong-code/evals/2026-09-01-typescript-language-guidance-cursor-recapture-15.md) — 공개 평가 보류 |
+| JavaScript | 실험적 | ✓ | ✓ | ✓ | ✓ | ✓ | [Cursor recapture-15 초안](docs/wukong-code/evals/2026-09-01-javascript-language-guidance-cursor-recapture-15.md) — 공개 평가 보류 |
 | Swift | 실험적 | ✓ | ✓ | ✓ | ✓ | ✓ | [평가 보고서](docs/wukong-code/evals/2026-07-29-swift-language-guidance.md) |
 | Rust | 실험적 | ✓ | ✓ | ✓ | ✓ | ✓ | [평가 보고서](docs/wukong-code/evals/2026-07-29-rust-language-guidance.md) |
 
-**실험적**은 팩이 코어에 공개된 상태이며 실제 프로젝트 근거를 계속 축적하고 있다는 뜻입니다. Evidence 열은 보고서가 있을 때만 링크를 둡니다. 프레임워크, 클라우드 서비스, 데이터베이스, 팀별 가이드는 코어 범위에 포함되지 않습니다.
+**실험적**은 팩이 코어에 공개된 상태이며 실제 프로젝트 근거를 계속 축적하고 있다는 뜻입니다. Evidence 열은 보고서가 있을 때만 링크를 둡니다. *공개 평가 보류*로 표시된 초안은 모든 행동 패밀리 또는 인간 검토 게이트를 아직 통과하지 않았습니다. 프레임워크, 클라우드 서비스, 데이터베이스, 팀별 가이드는 코어 범위에 포함되지 않습니다.
 
 ---
 

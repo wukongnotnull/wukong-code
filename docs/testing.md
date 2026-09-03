@@ -7,6 +7,10 @@ Wukong Code has two distinct kinds of tests, each in its own directory:
 
 ## Local deterministic checks
 
+GitHub Actions runs the extended suite for pull requests and pushes to `main` and `dev`.
+Use `npm run test:extended` locally to reproduce that gate; `npm test` remains the
+quicker core suite. Manual workflow dispatch can run either suite.
+
 Run the default deterministic checks locally with:
 
 ```bash
@@ -30,6 +34,10 @@ Live in `tests/`. Currently:
 - `tests/opencode/` — bash tests for OpenCode plugin loading, bootstrap caching, and tool registration.
 - `tests/codex-plugin-sync/` — bash sync verification.
 - `tests/kimi/` — bash/Python checks for Kimi plugin manifest wiring.
+- `tests/cursor/` — bash checks for Cursor plugin manifest and sessionStart hook wiring.
+- `tests/test-automation/` — static contract for `scripts/test.sh` suite ordering and CI wiring. When adding or reordering core tests, update `tests/test-automation/test-test-runner.sh` `CORE_LOG` in the same change.
+
+Core tests use `rg` (ripgrep) in several scripts; CI installs it via `.github/workflows/test.yml`.
 - `tests/claude-code/test-helpers.sh`, `analyze-token-usage.py` — utilities used by remaining bash tests.
 - `tests/claude-code/test-subagent-driven-development.sh` — agent-can-describe-SDD test (no drill counterpart; tests description-recall, not behavior).
 - `tests/claude-code/test-subagent-driven-development-integration.sh` — extended SDD integration with token analysis (drill covers the YAGNI subset; bash adds commit-count, Claude Code task-tracking, and token telemetry assertions).
@@ -53,7 +61,7 @@ in `docs/wukong-code/evals`. Static strings are not behavior evidence.
 
 ## Skill behavior evals
 
-Live in `evals/`. Drill is the harness; scenarios live at `evals/scenarios/*.yaml`. See `evals/README.md` for setup. Quick start:
+Live in `evals/`. Drill is the harness; scenarios live at `evals/scenarios/*.yaml`. See `evals/README.md` for setup after cloning — start at [docs/evals-setup.md](evals-setup.md). Quick start:
 
 ```bash
 cd evals
@@ -62,4 +70,14 @@ export ANTHROPIC_API_KEY=sk-...
 uv run drill run triggering-test-driven-development -b claude
 ```
 
-Drill scenarios are slow (3-30+ minutes each) and run real LLM sessions. They are not part of CI today; the natural follow-up is a tiered model (fast subset on PR, full sweep nightly + on-demand).
+Drill scenarios are slow (3-30+ minutes each) and run real LLM sessions. They are not part of the required PR gate.
+
+**Tiered automation:**
+
+| Tier | Command / workflow | Gate |
+| --- | --- | --- |
+| Static manifest validation | `.github/workflows/evals-static.yml` | Weekly + manual dispatch |
+| Plugin deterministic | `npm run test:extended` | Every PR/push |
+| Full behavioral cohorts | Drill / Cursor runners under `evals/` | Manual; requires API credentials |
+
+See [docs/evals-setup.md](evals-setup.md) for clone instructions, isolation requirements, and the full tiered model.

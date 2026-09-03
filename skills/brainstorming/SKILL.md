@@ -34,7 +34,7 @@ Offer alternatives only when they materially change cost, risk, or UX. Visual co
 
 You MUST create a task for each of these and complete them in order:
 
-1. **Explore project context** — check files, docs, recent commits
+1. **Explore project context** — check files, docs, recent commits. If TDD will apply to implementation source or tests, use README, package metadata, and docs only — not fixture src, tests, or workspace `**/*` listings.
 2. **Clarify only if needed** — at most a few targeted questions; skip if acceptance criteria are already explicit
 3. **Present approach** — at most 5 bullets; get one approval (HARD-GATE still applies)
 4. **Exit** — follow Condensed exits below
@@ -50,13 +50,13 @@ After approval:
 
 When Depth routing selected **Full**, you MUST create a task for each of these items and complete them in order:
 
-1. **Explore project context** — check files, docs, recent commits
+1. **Explore project context** — check files, docs, recent commits. If TDD will apply to implementation source or tests, use README, package metadata, and docs only — not fixture src, tests, or workspace `**/*` listings.
 2. **Offer the visual companion just-in-time** — NOT upfront. The first time a question would genuinely be clearer shown than described, offer it then (its own message); on approval its browser tab opens for you. If no visual question ever arises, never offer it. See the Visual Companion section below.
 3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
 4. **Propose 2-3 approaches** — with trade-offs and your recommendation
 5. **Present design** — in sections scaled to their complexity, get user approval after each section
 6. **Write design doc** — save to `docs/wukong-code/specs/YYYY-MM-DD-HHmm-<topic>-design.md` and commit
-7. **Spec self-review** — quick inline check for placeholders, contradictions, ambiguity, scope (see below)
+7. **Spec review loop** — inline self-review, then dispatch spec reviewer (see below)
 8. **User reviews written spec** — ask user to review the spec file before proceeding
 9. **Transition to implementation** — invoke writing-plans skill to create implementation plan
 
@@ -70,15 +70,19 @@ When Depth routing selected **Full**, you MUST create a task for each of these i
 - Use elements-of-style:writing-clearly-and-concisely skill if available
 - Commit the design document to git
 
-**Spec Self-Review:**
-After writing the spec document, look at it with fresh eyes:
+**Spec Review Loop:**
+After writing the spec document:
 
-1. **Placeholder scan:** Any "TBD", "TODO", incomplete sections, or vague requirements? Fix them.
-2. **Internal consistency:** Do any sections contradict each other? Does the architecture match the feature descriptions?
-3. **Scope check:** Is this focused enough for a single implementation plan, or does it need decomposition?
-4. **Ambiguity check:** Could any requirement be interpreted two different ways? If so, pick one and make it explicit.
+1. **Inline self-review** — quick check for placeholders, contradictions, ambiguity, scope:
+   - Any "TBD", "TODO", incomplete sections, or vague requirements? Fix them.
+   - Internal contradictions or architecture mismatches? Fix them.
+   - Focused enough for one plan, or needs decomposition? Fix or split.
+   - Ambiguous requirements? Pick one interpretation and make it explicit.
+2. **Dispatch spec reviewer** — use `skills/brainstorming/spec-document-reviewer-prompt.md` with a general-purpose subagent; substitute the spec file path. If your harness has no subagent dispatch tool, repeat the inline self-review checklist with fresh eyes instead; do not skip review.
+3. If **Issues Found**: fix the spec, re-dispatch reviewer, repeat until **Approved**.
+4. If loop exceeds 5 iterations, surface to your human partner.
 
-Fix any issues inline. No need to re-review — just fix and move on.
+Reviewers are advisory — explain disagreements if you believe feedback is incorrect.
 
 **User Review Gate:**
 After the spec review loop passes, ask the user to review the written spec before proceeding:
