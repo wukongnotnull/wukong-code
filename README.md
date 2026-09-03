@@ -269,7 +269,7 @@ Wukong Code remains language-agnostic at the methodology level. When repository 
 | Swift | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-07-29-swift-language-guidance.md) |
 | Rust | Experimental | ✓ | ✓ | ✓ | ✓ | ✓ | [Eval report](docs/wukong-code/evals/2026-07-29-rust-language-guidance.md) |
 
-**Experimental** means initial behavior evals exist while real-project evidence is still accumulating. Framework, cloud-service, database, and team-specific guidance stays outside core.
+**Experimental** means the pack is published in core while real-project evidence is still accumulating. The Evidence column lists a report when one exists. Framework, cloud-service, database, and team-specific guidance stays outside core.
 
 ---
 

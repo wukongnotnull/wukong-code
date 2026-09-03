@@ -564,6 +564,11 @@ then
 else
   fail "README.md language table drifted from registry"
 fi
+if grep -q 'means initial behavior evals exist' README.md; then
+  fail "Experimental definition overclaims that evals already exist for every language"
+else
+  pass "Experimental definition does not require evals for every language"
+fi
 assert_contains CLAUDE.md "### Language-level skills"
 assert_contains .github/PULL_REQUEST_TEMPLATE.md "## Language-pack evidence"
 assert_contains docs/testing.md "test-language-guidance.sh"

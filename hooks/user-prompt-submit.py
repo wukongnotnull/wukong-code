@@ -89,33 +89,36 @@ def extension_languages(languages: dict[str, Any]) -> dict[str, str]:
     }
 
 
-_LETS_GO_PREFIX = re.compile(r"let'?s\s+$", re.IGNORECASE)
-_GO_LANGUAGE_CONTEXT = re.compile(
-    r"\bgolang\b"
-    r"|\bgo\s+language\b"
-    r"|\blanguage\s+(?:is\s+)?go\b"
-    r"|\b(?:the\s+)?go\s+(?:project|package|module|code|program|source|files?|review|implementation|guidance)\b"
-    r"|\b(?:in|using|with)\s+go\b",
+_GO_TOKEN = re.compile(r"\bgo(?:lang)?\b", re.IGNORECASE)
+_ENGLISH_GO_PREFIX = re.compile(r"(?:let'?s|please)\s+$", re.IGNORECASE)
+_ENGLISH_GO_AHEAD = re.compile(r"^\s+ahead\b", re.IGNORECASE)
+_ENGLISH_GO_IMPERATIVE = re.compile(
+    r"^\s+(?:implement|fix|add|change|update|make|modify|refactor|write|create|run)\b",
     re.IGNORECASE,
 )
+_SENTENCE_START = re.compile(r"(?:\A|[.!?]\s+)\Z")
 
 
-def _is_lets_go_prefix(prompt: str, index: int) -> bool:
-    return bool(_LETS_GO_PREFIX.search(prompt[:index]))
+def _is_english_go_idiom(prompt: str, match: re.Match[str]) -> bool:
+    if match.group(0).lower() != "go":
+        return False
+    prefix = prompt[: match.start()]
+    suffix = prompt[match.end() :]
+    if _ENGLISH_GO_PREFIX.search(prefix):
+        return True
+    if _ENGLISH_GO_AHEAD.match(suffix):
+        return True
+    return bool(
+        _SENTENCE_START.search(prefix) and _ENGLISH_GO_IMPERATIVE.match(suffix)
+    )
 
 
 def _go_language_matches(prompt: str) -> list[re.Match[str]]:
-    matches: dict[int, re.Match[str]] = {}
-    if "$language-guidance" in prompt:
-        for match in re.finditer(r"\bgo(?:lang)?\b", prompt, re.IGNORECASE):
-            if not _is_lets_go_prefix(prompt, match.start()):
-                matches[match.start()] = match
-    for match in _GO_LANGUAGE_CONTEXT.finditer(prompt):
-        matches[match.start()] = match
-    for match in re.finditer(r"\bGo\b", prompt):
-        if not _is_lets_go_prefix(prompt, match.start()):
-            matches[match.start()] = match
-    return [matches[index] for index in sorted(matches)]
+    return [
+        match
+        for match in _GO_TOKEN.finditer(prompt)
+        if not _is_english_go_idiom(prompt, match)
+    ]
 
 
 def named_language_matches(prompt: str, language: str) -> list[re.Match[str]]:

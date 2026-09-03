@@ -44,6 +44,18 @@ if [[ -f "$GUIDE" ]]; then
   else
     fail "$GUIDE stop command must use quoted \"\$SESSION_DIR\""
   fi
+
+  if grep -Eqi 'Only `/tmp` sessions get deleted|/tmp` sessions get deleted' "$GUIDE"; then
+    fail "$GUIDE must not claim every /tmp session is deleted"
+  else
+    pass "$GUIDE does not claim every /tmp session is deleted"
+  fi
+
+  if grep -q '/tmp/brainstorm-' "$GUIDE"; then
+    pass "$GUIDE names /tmp/brainstorm-* as the deleted prefix"
+  else
+    fail "$GUIDE must name /tmp/brainstorm-* as the deleted prefix"
+  fi
 fi
 
 if [[ -f "$SERVER" ]]; then
