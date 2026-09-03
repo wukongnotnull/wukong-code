@@ -56,7 +56,7 @@ without repeating it.
 
 **Finding connection info:** The server writes its startup JSON to `$STATE_DIR/server-info`. If you launched the server in the background and didn't capture stdout, read that file to get the URL and port. When using `--project-dir`, check `<project>/.wukong-code/brainstorm/` for the session directory.
 
-**Note:** Pass the project root as `--project-dir` so mockups persist in `.wukong-code/brainstorm/` and survive server restarts. Without it, files go to `/tmp` and get cleaned up. Remind the user to add `.wukong-code/` to `.gitignore` if it's not already there.
+**Note:** Pass the project root as `--project-dir` so mockups persist in `.wukong-code/brainstorm/` and survive server restarts. Without it, files go to `/tmp/brainstorm-*` and that session directory is deleted on stop. Remind the user to add `.wukong-code/` to `.gitignore` if it's not already there.
 
 **Launching the server by platform:**
 
@@ -284,7 +284,7 @@ If `$STATE_DIR/events` doesn't exist, the user didn't interact with the browser 
 skills/brainstorming/scripts/stop-server.sh "$SESSION_DIR"
 ```
 
-If the session used `--project-dir`, mockup files persist in `.wukong-code/brainstorm/` for later reference. Only `/tmp` sessions get deleted on stop.
+If the session used `--project-dir`, mockup files persist in `.wukong-code/brainstorm/` for later reference. Only `/tmp/brainstorm-*` sessions get deleted on stop. Other `/tmp` paths are kept.
 
 ## Reference
 

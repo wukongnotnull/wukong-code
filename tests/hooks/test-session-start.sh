@@ -480,6 +480,57 @@ assert_prompt_router_output \
     "# Go Implementation Guidance"$'\037'"Delivered: go/" \
     "$router_home"
 
+assert_prompt_router_empty \
+    "Leftover go tests does not fall through to the JavaScript nearest marker" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"Fix the go tests.\"}" \
+    "$router_home"
+
+assert_prompt_router_empty \
+    "Leftover go function does not fall through to the JavaScript nearest marker" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"Implement a go function.\"}" \
+    "$router_home"
+
+assert_prompt_router_empty \
+    "Leftover go tests after add does not fall through to the JavaScript nearest marker" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"Add go tests.\"}" \
+    "$router_home"
+
+assert_prompt_router_empty \
+    "Leftover go worker does not fall through to the JavaScript nearest marker" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"Change the go worker.\"}" \
+    "$router_home"
+
+assert_prompt_router_empty \
+    "Leftover use go does not fall through to the JavaScript nearest marker" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"Use go to implement this.\"}" \
+    "$router_home"
+
+assert_prompt_router_empty \
+    "Named golang does not fall through to the JavaScript nearest marker" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"golang implement a change.\"}" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "English Go implement does not select Go or drop the JavaScript nearest marker" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"Go implement a change.\"}" \
+    "# JavaScript Implementation Guidance" \
+    "# Go Implementation Guidance"$'\037'"Delivered: go/" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "English Go ahead does not select Go or drop the JavaScript nearest marker" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"Go ahead and implement a change.\"}" \
+    "# JavaScript Implementation Guidance" \
+    "# Go Implementation Guidance"$'\037'"Delivered: go/" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "English Let's go review does not select Go or drop the JavaScript nearest marker" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"Let's go review this.\"}" \
+    "# JavaScript Review Guidance" \
+    "# Go Review Guidance"$'\037'"Delivered: go/" \
+    "$router_home"
+
 assert_prompt_router_output \
     "Two named languages abstain instead of last-in-registry JavaScript" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT\",\"prompt\":\"Review this rust project, don't use javascript.\"}" \
