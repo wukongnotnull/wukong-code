@@ -85,6 +85,11 @@ assert_contains skills/receiving-code-review/references/examples.md "Performativ
 assert_contains skills/receiving-code-review/references/external-review-and-yagni.md "be skeptical, but check carefully"
 assert_max_lines skills/receiving-code-review/SKILL.md 160
 
+echo "=== brainstorming TDD fixture boundary ==="
+assert_file skills/brainstorming/SKILL.md
+assert_contains skills/brainstorming/SKILL.md \
+  "If TDD will apply to implementation source or tests, use README, package metadata, and docs only"
+
 if (( fail )); then
   echo "STATUS: FAILED"
   exit 1
