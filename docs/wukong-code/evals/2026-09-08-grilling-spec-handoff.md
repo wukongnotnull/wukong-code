@@ -6,9 +6,13 @@
 - RED used current skills before the persist edit. GREEN used the candidate
   `skills/grilling/SKILL.md` and, for U1, candidate
   `skills/using-wukong-code/SKILL.md`.
-- Isolation: each probe was a fresh subagent. Actors did not receive the
-  intended answer or scoring rubric.
-- Every flagged output was read manually.
+- Isolation: RED used the pre-change skills in this checkout. The first
+  GREEN run in this checkout is discarded: those actors read the design
+  spec, plan, and/or `grilling-scenarios.md`. GREEN pass evidence is the
+  2026-09-09 recapture in `/tmp/grilling-green-iso-61685` (candidate
+  skills + `go-basic` only; no repo docs or rubric).
+- Every flagged output was read manually. Raw files now contain the
+  complete user-facing replies, not summaries.
 - Raw evidence:
   [RED](raw/2026-09-08-grilling-spec-handoff/red.md),
   [GREEN](raw/2026-09-08-grilling-spec-handoff/green.md).
@@ -35,10 +39,10 @@ U1 router persist-first.
 
 | Probe | Result | Notes |
 | --- | --- | --- |
-| M4/M5 confirmation | TARGET PASS | Wrote `2026-09-08-2235-in-process-request-deduplication-design.md`, committed spec only, asked for file review |
-| M6 written spec approved | TARGET PASS | Persist on 确认; writing-plans only after `按这个写计划`; no product code |
-| M7 early stop | TARGET PASS | Partial record; no spec; no commit after persist-era guidance |
-| U1 router | TARGET PASS | Both skills loaded; persist-first; no plan |
+| M4/M5 confirmation | TARGET PASS | Isolated recapture: wrote spec under `/tmp/grilling-green-iso-61685`, reported commit failure (not a git repo), asked for file review |
+| M6 written spec approved | TARGET PASS | Isolated sequential turns: persist+review on 确认 only, then `按这个写计划` unlocked writing-plans |
+| M7 early stop | TARGET PASS | Isolated: partial record; no spec write; no commit |
+| U1 router | TARGET PASS | Isolated: both skills loaded; persist-first; no plan |
 
 ## RED-to-GREEN Failure Mapping
 
@@ -59,7 +63,7 @@ contract.
 | --- | --- | --- |
 | leftover old grilling copy absent | PASS | `Write it to a file only when explicitly`, `ask exactly one next-step`, and `Take no next action` return no matches |
 | `grilling` listed in using-wukong-code primary process list | PASS | Primary-process line includes `grilling`; plan-mode exception present |
-| `test-skill-slim-gates.sh` | PASS | STATUS: PASSED |
+| `test-skill-slim-gates.sh` | N/A for this change | Script passed (STATUS: PASSED) but it slims other skills; it does not score grilling leftovers or router text |
 | `docs/wukong-code/specs/2026-07-26-grilling-design.md` unchanged | PASS | `git diff main --` empty |
 | `skills/brainstorming/**` unchanged | PASS | `git diff main --` empty |
 | `skills/writing-plans/**` unchanged | PASS | `git diff main --` empty |
@@ -68,6 +72,9 @@ contract.
 ## Limitations
 
 - Probes start at HANDOFF or early-stop; they do not re-score S1–S5.
-- Positive GREEN actors were pointed at candidate skill paths.
+- GREEN pass evidence is the isolated `/tmp` recapture, not the first
+  same-checkout GREEN run.
+- Isolated persist could not `git commit` (no repo). Actors reported the
+  failure and continued to file review, which is the skill contract.
 - `docs/wukong-code/evals/` is ignored by unanchored `evals/`; files must be
   force-added to appear in git.

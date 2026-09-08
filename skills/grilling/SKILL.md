@@ -232,6 +232,6 @@ record.
 | Unknown-root-cause failure | Exit to systematic debugging |
 | Before confirmation | Read-only research and one recommended decision per turn |
 | Upstream decision changes | Reopen only affected downstream nodes |
-| Human partner stops | Emit a partial record and take no action |
+| Human partner stops | Emit a partial record; do not write or commit a spec |
 | Record confirmed | Write and commit the spec, then wait for file review |
 | Written spec approved | Load `writing-plans` as the next primary process |
