@@ -133,8 +133,9 @@ the primary process only at step 6.
 Replace every leftover grilling sentence that still describes the old
 second-authorization or next-step menu, including all of:
 
-- CONFIRMATION-GATE: confirmation approves the record, not implementation,
-  and the agent must take no next action until a separate authorization;
+- CONFIRMATION-GATE: only the leftover sentence that confirmation approves
+  the record and that the agent must take no next action until a separate
+  authorization. Keep the pre-confirmation read-only paragraph;
 - HANDOFF: present the record, ask exactly one next-step decision, and do
   not invoke another process;
 - Completion Gate: emit the record in the conversation and write it to a
@@ -286,6 +287,9 @@ Add:
 | M6 written spec approved | `writing-plans` is loaded only after file approval |
 | M7 early stop | Same as current M3: conversation-only partial record; no spec file; no commit |
 | U1 router alignment | With both `using-wukong-code` and `grilling` loaded: after confirmation the agent persists first; it does not skip persist or start a plan because the router forbids auto-chaining |
+
+M4 as rewritten overlaps M5 and M6. Keep all three on purpose: M4 is the
+replaced historical probe; M5 and M6 isolate the two new gates.
 
 Do not rerun the full 2026-07-26 five-scenario GREEN matrix unless a HANDOFF
 edit regresses the pre-confirmation Turn Contract. Do not add brainstorming
