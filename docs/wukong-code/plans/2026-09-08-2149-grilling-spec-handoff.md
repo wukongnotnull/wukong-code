@@ -524,9 +524,8 @@ Do not stage `skills/using-wukong-code/SKILL.md` here.
 ### Task 4: Router alignment (GREEN U1)
 
 **Files:**
-- Modify: `skills/using-wukong-code/SKILL.md:26`
-- Modify: `skills/using-wukong-code/SKILL.md:32-35` (Skill Priority grilling example)
-- Modify: `skills/using-wukong-code/SKILL.md:37-66`
+- Modify: `skills/using-wukong-code/SKILL.md` (plan-mode line, Skill Priority grilling example, Scope routing, primary-process list)
+- Modify: `docs/wukong-code/evals/raw/2026-09-08-grilling-spec-handoff/green.md` (append U1)
 - Test: U1 from `tests/skills/grilling-scenarios.md`
 
 **Interfaces:**
