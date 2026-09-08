@@ -23,7 +23,7 @@ Check explicit testing and verification pressure before applying the general bra
 - A source change that asks to skip, defer, or bypass a failing test invokes `test-driven-development` first and requires a valid RED before production implementation.
 - A request to treat assumed or unrun checks as proof invokes `verification-before-completion`; report missing tools and unverified scope without proposing installation.
 
-**Before entering plan mode:** if you haven't already brainstormed, invoke the brainstorming skill first.
+**Before entering plan mode:** if you haven't already brainstormed, invoke the brainstorming skill first. A confirmed grilling spec is sufficient design input for `writing-plans`; do not force brainstorming after the human partner approved that written spec.
 
 Then announce "Using [skill] to [purpose]" and follow the skill exactly. If it has a checklist, create a todo per item.
 
@@ -32,6 +32,7 @@ Then announce "Using [skill] to [purpose]" and follow the skill exactly. If it h
 When multiple skills apply, process skills come first — they set the approach, then domain or implementation skills carry it out. Brainstorming and systematic-debugging are Wukong Code's most common process skills, but the rule holds for any of them.
 
 - "Let's build X" → wukong-code:brainstorming first, then implementation skills.
+- Explicit grilling / "逐题问清楚" → wukong-code:grilling first.
 - "Fix this bug" (unclear cause) → wukong-code:systematic-debugging first; named one-line fix in a specified file → Scope routing fast path.
 
 ## Scope routing
@@ -40,12 +41,23 @@ Pick the smallest process skill that fits. Do **not** auto-chain
 brainstorming → writing-plans → using-git-worktrees → subagent-driven-development
 for mechanical work.
 
+An explicit grilling request selects `grilling` as the primary process even
+when brainstorming could also apply. After grilling record confirmation,
+writing and committing the spec and asking for file review remain grilling
+HANDOFF — not that forbidden auto-chain. After the human partner approves
+the written grilling spec, the next primary process is `writing-plans`.
+That handoff is allowed. Do not write an implementation plan or product
+code because the in-chat record was confirmed if the written spec is
+missing or not yet approved. Do not preload `writing-plans` during the
+grilling interview or persist.
+
 | User intent | Route |
 |-------------|--------|
 | Source change request that asks to skip, defer, or bypass a failing test | `test-driven-development` first (then domain guidance) |
 | Claim completion or checks that were not run | `verification-before-completion` first (then domain guidance) |
 | Source change in an identified project from an approved visual target or implementation specification, or a named component behavior with requested tests | `test-driven-development` first, then the focused domain guidance |
 | New feature, behavior change, or ambiguous product intent ("let's build X", "add Y") | `brainstorming` first (then plans / SDD as that skill directs) |
+| Explicit deep interview / grilling request | `grilling` first. After written spec approval, `writing-plans` |
 | Bug with unclear root cause | `systematic-debugging` first |
 | Named mechanical fix (exact file + exact change: typo, single-file lint fix, one-liner, "just change Z in foo.ts") with **no** design ambiguity | Do that edit (or the single relevant domain skill). Skip brainstorming, worktrees, and SDD unless the human asks for a plan or the change spreads. |
 | Multi-step implementation with a written plan | `executing-plans` or `subagent-driven-development` as appropriate; use worktrees when those skills require isolation |
@@ -63,7 +75,7 @@ A request to claim completion or checks not run uses `verification-before-comple
 
 Classify with Scope routing, then load skills.
 
-- Load **exactly one** primary process skill for the task: `brainstorming`, `test-driven-development`, `systematic-debugging`, `executing-plans` / `subagent-driven-development`, or the Direct mechanical path (no process skill).
+- Load **exactly one** primary process skill for the task: `brainstorming`, `grilling`, `test-driven-development`, `systematic-debugging`, `executing-plans` / `subagent-driven-development`, or the Direct mechanical path (no process skill). Keep `grilling` primary until the written spec is approved.
 - Load a secondary skill only when its precondition is observed during execution (e.g. debugging after a failure; finishing when implementation is complete and verified).
 - Do **not** reload a skill unchanged within the same task.
 - Do **not** preload multiple workflow skills because they "might" apply.

@@ -70,4 +70,20 @@ items listed. Explicitly no spec, no commit, no implementation.
 
 ## U1
 
-Reserved for Task 4 after `using-wukong-code` is edited.
+**Actor:** general-purpose subagent told it is the primary conversation
+agent. Loaded candidate `skills/using-wukong-code/SKILL.md` then candidate
+`skills/grilling/SKILL.md`.
+
+**Prompt shape:** confirmed record, no written-spec approval. Human: `确认`.
+
+### Behavior
+
+Actor persisted
+`docs/wukong-code/specs/2026-09-08-2242-in-process-request-deduplication-design.md`,
+committed that file only, asked for file review. Did not start
+`writing-plans`. Did not treat router auto-chain rules as a reason to skip
+persist.
+
+### Verdict
+
+**TARGET PASS**
