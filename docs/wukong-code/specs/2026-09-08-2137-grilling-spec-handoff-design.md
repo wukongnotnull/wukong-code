@@ -130,14 +130,26 @@ the primary process only at step 6.
 | Confirm the in-chat record | Write spec + commit spec | Implementation, `writing-plans` |
 | Approve the written spec | Invoke `writing-plans` | Product implementation |
 
-Replace the current CONFIRMATION-GATE sentence that confirmation approves
-the record and that the agent must take no next action until a separate
-next-step authorization. The separate authorization is now approval of the
-written spec, and it authorizes planning only.
+Replace every leftover grilling sentence that still describes the old
+second-authorization or next-step menu, including all of:
 
-Replace the current HANDOFF rule that asks exactly one recommended next-step
-decision and forbids invoking another process. After confirmation the next
-action is persist, not a menu of possible next skills.
+- CONFIRMATION-GATE: confirmation approves the record, not implementation,
+  and the agent must take no next action until a separate authorization;
+- HANDOFF: present the record, ask exactly one next-step decision, and do
+  not invoke another process;
+- Completion Gate: emit the record in the conversation and write it to a
+  file only when explicitly authorized;
+- Quick Reference row "Record confirmed": ask one recommended next-step
+  decision and wait.
+
+After confirmation the next action is persist, not a menu of next skills.
+The remaining authorization is approval of the written spec, and it
+authorizes `writing-plans` only.
+
+Written-spec approval is any explicit go-ahead on the file (for example
+yes, LGTM, proceed, 可以, 没问题, 按这个写计划). Silence, tone, and
+"looks fine" aimed at the in-chat record do not count. If the human
+partner asks for changes, that is not approval.
 
 ## Spec Artifact
 
@@ -236,6 +248,10 @@ Required routing rules:
 5. Without a written spec, or before the human partner approves that file,
    do not write an implementation plan or product code on the grounds that
    the in-chat record was already confirmed.
+6. The existing line "Before entering plan mode: if you haven't already
+   brainstormed, invoke the brainstorming skill first" must not force
+   brainstorming after a grilling written spec is approved. A confirmed
+   grilling spec is sufficient design input for `writing-plans`.
 
 Do not change `brainstorming` or `writing-plans`. `writing-plans` already
 accepts a spec path.
