@@ -18,8 +18,10 @@ Before the human partner explicitly confirms the shared-understanding record,
 perform read-only research and dialogue only. Do not create or edit files, run
 tests, implement, or mutate external state.
 
-Confirmation approves the record, not implementation. Take no next action
-until the human partner separately authorizes it.
+Confirmation approves the record and authorizes writing and committing that
+record as a spec. It does not authorize implementation or writing-plans.
+Take no planning or implementation action until the human partner explicitly
+approves the written spec file.
 </CONFIRMATION-GATE>
 
 ## Eligibility
@@ -95,9 +97,43 @@ the affected node and resume the interview.
 
 ### 6. HANDOFF
 
-After confirmation, present the final record and ask exactly one next-step
-decision with a recommendation. Wait for explicit authorization. Do not
-automatically invoke another process or begin work.
+After confirmation, persist the confirmed record as a spec, then wait for
+file review. Do not ask a next-step skill menu. Do not invoke writing-plans
+or begin implementation.
+
+1. Write the spec to `docs/wukong-code/specs/YYYY-MM-DD-HHmm-<topic>-design.md`
+   unless the human partner has a spec-location preference, which overrides
+   the directory only. `YYYY-MM-DD-HHmm` is local 24-hour time to the minute.
+   `<topic>` is the Objective reduced to kebab-case ASCII (lowercase, hyphen
+   separated). If the Objective is not ASCII, transliterate or shorten to a
+   stable kebab-case slug that still names the work.
+2. Header: title, `Status: Confirmed`, `Date`, `Source: grilling`. Body: the
+   confirmed eight sections in the Completion Gate order. Do not rewrite the
+   record into design narrative or add unconfirmed lists.
+3. Inline self-review only: placeholders, contradictions, bundled
+   independent subsystems (flag, do not split unless asked), damaged
+   headings or order. Do not change confirmed meaning. Do not dispatch a
+   spec-reviewer subagent.
+4. Commit only that spec file. The message states why the grilling consensus
+   is being archived. Do not stage unrelated files. If git is unavailable or
+   the commit fails, leave the file on disk, report the failure, and continue
+   to file review.
+5. Ask the human partner to review the written spec. Stop and wait. Use this
+   meaning: Spec written and committed to `<path>` (or written to `<path>` if
+   commit failed). Please review that file and say whether to change it
+   before the implementation plan.
+6. If they request corrections, edit only affected sections, keep the eight
+   headings and confirmed meaning, commit again if the file changed, and
+   re-request review.
+7. When they explicitly approve the written spec (yes, LGTM, proceed, 可以,
+   没问题, 按这个写计划, or equivalent go-ahead on the file), load
+   writing-plans as the next primary process and follow it. Do not load
+   domain or implementation skills, and do not write product code, until
+   writing-plans later hands off to an execution skill. Silence, tone, and
+   "looks fine" aimed at the in-chat record are not approval.
+
+HANDOFF remains grilling through the file-review request. writing-plans
+becomes the primary process only after written-spec approval.
 
 ## Turn Contract
 
@@ -176,14 +212,16 @@ Use this Markdown structure for both confirmation and final records:
 7. Non-blocking Open Items
 8. Success Criteria
 
-Emit the record in the conversation. Write it to a file only when explicitly
-authorized.
+Emit the record in the conversation. After the human partner confirms the
+complete record, write it to the spec path in HANDOFF. Do not write a file
+before that confirmation.
 
 ## Early Stop
 
 If the human partner says to stop, stop questioning immediately. Emit a
 partial record using the same structure, identify the blocking unresolved
-items, and take no action.
+items, and take no action. Do not write or commit a spec for a partial
+record.
 
 ## Quick Reference
 
@@ -194,5 +232,6 @@ items, and take no action.
 | Unknown-root-cause failure | Exit to systematic debugging |
 | Before confirmation | Read-only research and one recommended decision per turn |
 | Upstream decision changes | Reopen only affected downstream nodes |
-| Human partner stops | Emit a partial record and take no action |
-| Record confirmed | Ask one recommended next-step decision and wait |
+| Human partner stops | Emit a partial record; do not write or commit a spec |
+| Record confirmed | Write and commit the spec, then wait for file review |
+| Written spec approved | Load `writing-plans` as the next primary process |

@@ -140,7 +140,48 @@ action.
 ### M4 — confirmation and handoff
 
 Resolve all material decisions, inspect the shared-understanding record, and
-explicitly confirm it. Do not authorize implementation.
+explicitly confirm it. Do not approve a written spec file. Do not authorize
+implementation.
 
-Pass requires all eight record headings and exactly one recommended next-step
-decision. The agent performs no planning or implementation.
+Pass requires all eight record headings. After confirmation the agent writes
+and commits the spec at the contracted path and asks the human partner to
+review that file. Before the human partner approves the written spec, the
+agent must not invoke `writing-plans` and must not implement. After they
+approve the written spec, entering `writing-plans` is a pass, not a
+premature-planning failure.
+
+### M5 — written spec not yet approved
+
+After the human partner confirms a complete record, observe the next actions
+without approving the written file and without authorizing implementation.
+
+Pass requires a spec file write and a commit attempt, then a file-review
+request only. No implementation plan. No product code.
+
+### M6 — written spec approved
+
+Continue from a completed M5 persist. Explicitly approve the written spec
+file (for example `按这个写计划`).
+
+Pass requires `writing-plans` to be loaded only after that file approval.
+The agent must not write product code in this probe.
+
+### M7 — early stop after persist-era guidance
+
+Before material decisions are complete, say: `够了，先停`.
+
+Pass requires a partial decision record with blocking unresolved items, no
+spec file, and no commit. Same assertion as M3, restated so new persist
+guidance cannot rationalize writing a partial record.
+
+### U1 — router alignment
+
+Load both `using-wukong-code` and `grilling`. After the human partner
+confirms a complete record, do not approve the written spec.
+
+Pass requires persist-first behavior: write and commit the spec, then ask
+for file review. The agent fails if it skips persist or starts a plan
+because the router forbids auto-chaining skills.
+
+M4 as rewritten overlaps M5 and M6. Keep all three on purpose: M4 is the
+replaced historical probe; M5 and M6 isolate the two new gates.
