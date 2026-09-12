@@ -252,6 +252,7 @@ git -C "$REPO_ROOT" archive --format=tar "$REF" -- \
   hooks/session-start \
   hooks/user-prompt-submit \
   hooks/user-prompt-submit.py \
+  hooks/language_router.py \
   product-design.lock.json \
   references \
   scripts/bootstrap-prototype.mjs \

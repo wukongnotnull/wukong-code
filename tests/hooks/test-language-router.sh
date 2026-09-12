@@ -428,6 +428,22 @@ assert_prompt_router_empty \
     "not-json" \
     "$router_home"
 
+if grep -qE 'assert_prompt_router_|run-hook.cmd" user-prompt-submit|hooks/user-prompt-submit' \
+    "$SCRIPT_DIR/test-session-start.sh"; then
+    fail "SessionStart tests must not contain language-router cases"
+else
+    pass "Language-router cases stay out of test-session-start.sh"
+fi
+
+echo "Language-router skill/hook contract"
+if output="$(CONTRACT_HOME="$router_home" python3 "$SCRIPT_DIR/language-router-contract.py")"; then
+    printf '%s\n' "$output"
+    pass "Shared (prompt, cwd) fixtures match hook output and SKILL.md priority"
+else
+    printf '%s\n' "$output"
+    fail "Shared (prompt, cwd) fixtures match hook output and SKILL.md priority"
+fi
+
 if [[ "$FAILURES" -gt 0 ]]; then
     echo "STATUS: FAILED ($FAILURES failure(s))"
     exit 1
