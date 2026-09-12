@@ -4,6 +4,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 SCRIPT_UNDER_TEST="$REPO_ROOT/scripts/package-codex-plugin.sh"
+MANIFEST_HELPER="$REPO_ROOT/scripts/codex-package-manifest.py"
+CODEX_PACKAGE_MANIFEST="$REPO_ROOT/codex-package.manifest.json"
 
 FAILURES=0
 TEST_ROOT="$(mktemp -d)"
@@ -133,6 +135,28 @@ EOF
 
 echo "Codex package archive tests"
 
+if python3 "$MANIFEST_HELPER" validate "$CODEX_PACKAGE_MANIFEST"; then
+  pass "Codex package manifest validates"
+else
+  fail "Codex package manifest validates"
+fi
+
+mapfile -t SHIPPED_SCRIPTS < <(python3 "$MANIFEST_HELPER" scripts "$CODEX_PACKAGE_MANIFEST")
+archive_from_manifest="$(python3 "$MANIFEST_HELPER" archive-paths "$CODEX_PACKAGE_MANIFEST")"
+assert_contains "$archive_from_manifest" "references" "manifest lists references/"
+assert_contains "$archive_from_manifest" "templates" "manifest lists templates/"
+if [[ ${#SHIPPED_SCRIPTS[@]} -gt 0 ]]; then
+  pass "manifest lists shipped Product Design scripts"
+else
+  fail "manifest lists shipped Product Design scripts"
+fi
+
+publish_hardcodes="$(
+  grep -E 'bootstrap-prototype\.mjs|check-product-design-import\.mjs|check-sites-starter-contract\.mjs' \
+    "$SCRIPT_UNDER_TEST" || true
+)"
+assert_equals "$publish_hardcodes" "" "package script does not hardcode Product Design script names"
+
 # Package the candidate working tree without mutating the real index or HEAD.
 # The packaging script intentionally archives a Git ref, even with
 # `--allow-dirty`, so using HEAD here would test stale committed content.
@@ -241,15 +265,17 @@ else
   pass "archive excludes README source intermediates"
 fi
 assert_contains "$archive_paths" "references/critical-overrides.md" "archive includes Product Design shared references"
-assert_contains "$archive_paths" "scripts/bootstrap-prototype.mjs" "archive includes Product Design bootstrap script"
-assert_contains "$archive_paths" "scripts/check-product-design-import.mjs" "archive includes Product Design integrity check"
-assert_contains "$archive_paths" "scripts/check-sites-starter-contract.mjs" "archive includes Product Design template contract check"
+assert_contains "$archive_paths" "codex-package.manifest.json" "archive includes Codex package manifest"
+for shipped_script in "${SHIPPED_SCRIPTS[@]}"; do
+  assert_contains "$archive_paths" "$shipped_script" "archive includes $shipped_script"
+done
 assert_contains "$archive_paths" "templates/prototype/package.json" "archive includes Product Design web starter"
 assert_contains "$archive_paths" "templates/mobile-app/package.json" "archive includes Product Design mobile starter"
 assert_contains "$archive_paths" "product-design.lock.json" "archive includes Product Design provenance lock"
 assert_contains "$archive_paths" "THIRD_PARTY_NOTICES.md" "archive includes third-party license boundary"
 
-if integrity_output="$(node "$extracted/scripts/check-product-design-import.mjs" --root "$extracted" 2>&1)"; then
+integrity_check="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1], encoding="utf-8"))["integrity_check"])' "$CODEX_PACKAGE_MANIFEST")"
+if integrity_output="$(node "$extracted/$integrity_check" --root "$extracted" 2>&1)"; then
   pass "packaged Product Design content matches its integrity lock"
 else
   fail "packaged Product Design content matches its integrity lock"
@@ -257,8 +283,16 @@ else
 fi
 
 unexpected_product_design_scripts="$(
-  printf '%s\n' "$archive_paths" |
-    awk '$0 ~ /^scripts\// && $0 != "scripts/bootstrap-prototype.mjs" && $0 != "scripts/check-product-design-import.mjs" && $0 != "scripts/check-sites-starter-contract.mjs"'
+  printf '%s\n' "$archive_paths" | python3 -c '
+import sys
+
+allowed = set(sys.argv[1:])
+allowed.add("scripts/")
+for line in sys.stdin:
+    path = line.rstrip("\n")
+    if path.startswith("scripts/") and path not in allowed:
+        print(path)
+' "${SHIPPED_SCRIPTS[@]}"
 )"
 assert_equals "$unexpected_product_design_scripts" "" "archive excludes unrelated root scripts"
 

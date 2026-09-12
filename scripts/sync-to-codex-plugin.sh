@@ -79,15 +79,9 @@ EXCLUDES=(
   "/tmp/"
 )
 
-# The flattened Product Design integration needs three root helpers at runtime.
-# These ordered include rules must be evaluated before the /scripts/***
-# exclusion so no other repository-maintenance script enters the Codex plugin.
-ROOT_SCRIPT_INCLUDES=(
-  "/scripts/"
-  "/scripts/bootstrap-prototype.mjs"
-  "/scripts/check-product-design-import.mjs"
-  "/scripts/check-sites-starter-contract.mjs"
-)
+# Root script includes come only from codex-package.manifest.json. The
+# /scripts/*** exclude stays so repository-maintenance scripts stay out.
+# The helper builds /scripts/ plus each shipped file; do not handwrite them.
 
 # =============================================================================
 # Ignored-path helpers
@@ -325,6 +319,13 @@ fi
 # =============================================================================
 # Build rsync args
 # =============================================================================
+
+MANIFEST_HELPER="$SCRIPT_DIR/codex-package-manifest.py"
+CODEX_PACKAGE_MANIFEST="$UPSTREAM/codex-package.manifest.json"
+[[ -f "$MANIFEST_HELPER" ]] || die "missing Codex package manifest helper: $MANIFEST_HELPER"
+[[ -f "$CODEX_PACKAGE_MANIFEST" ]] || die "missing Codex package manifest: $CODEX_PACKAGE_MANIFEST"
+mapfile -t ROOT_SCRIPT_INCLUDES < <(python3 "$MANIFEST_HELPER" rsync-includes "$CODEX_PACKAGE_MANIFEST")
+[[ ${#ROOT_SCRIPT_INCLUDES[@]} -gt 0 ]] || die "Codex package manifest produced no script includes"
 
 RSYNC_ARGS=(-av --delete --delete-excluded)
 for pat in "${ROOT_SCRIPT_INCLUDES[@]}"; do RSYNC_ARGS+=(--include="$pat"); done

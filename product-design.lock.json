@@ -28,12 +28,13 @@
     "references/product-design-host-capabilities.md",
     "references/wukong-product-design-composition.md",
     "scripts/bootstrap-prototype.mjs",
+    "scripts/check-product-design-import.mjs",
     "scripts/check-sites-starter-contract.mjs",
     "templates"
   ],
   "integrity": {
     "algorithm": "sha256-path-content-v1",
-    "value": "f2afa2c8bc749e2dea2415779e5a3e021d24b419f47aba06bff9b2e01e65fe74"
+    "value": "c42f27156f1599ec7f3600d407262b068b3fe0647e0c939625d90cb1578edcd0"
   },
   "local_adaptations": [
     "Collision-free product-design skill namespace",
@@ -42,6 +43,7 @@
     "Codex packaging and sync integration",
     "Deterministic integrated-content integrity lock",
     "Anthropic visual-direction guidance folded into Product Design ideation",
-    "Gemini integration retirement"
+    "Gemini integration retirement",
+    "Integrity checker listed in imported_roots; Codex package/sync read codex-package.manifest.json"
   ]
 }

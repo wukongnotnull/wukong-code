@@ -189,9 +189,12 @@ write_upstream_fixture() {
     fi
 
     cp "$SYNC_SCRIPT_SOURCE" "$repo/scripts/sync-to-codex-plugin.sh"
-    printf 'bootstrap fixture\n' > "$repo/scripts/bootstrap-prototype.mjs"
-    printf 'integrity fixture\n' > "$repo/scripts/check-product-design-import.mjs"
-    printf 'contract fixture\n' > "$repo/scripts/check-sites-starter-contract.mjs"
+    cp "$REPO_ROOT/scripts/codex-package-manifest.py" "$repo/scripts/codex-package-manifest.py"
+    cp "$REPO_ROOT/codex-package.manifest.json" "$repo/codex-package.manifest.json"
+    while IFS= read -r shipped; do
+        mkdir -p "$repo/$(dirname "$shipped")"
+        printf '%s fixture\n' "$(basename "$shipped" .mjs)" > "$repo/$shipped"
+    done < <(python3 "$REPO_ROOT/scripts/codex-package-manifest.py" scripts "$REPO_ROOT/codex-package.manifest.json")
     printf 'source-only fixture\n' > "$repo/scripts/release-local.sh"
 
     cat > "$repo/package.json" <<EOF
@@ -311,12 +314,14 @@ EOF
         hooks/session-start \
         hooks/session-start-codex \
         package.json \
-        scripts/bootstrap-prototype.mjs \
-        scripts/check-product-design-import.mjs \
-        scripts/check-sites-starter-contract.mjs \
+        codex-package.manifest.json \
+        scripts/codex-package-manifest.py \
         scripts/release-local.sh \
         scripts/sync-to-codex-plugin.sh \
         skills/example/SKILL.md
+    while IFS= read -r shipped; do
+        git -C "$repo" add "$shipped"
+    done < <(python3 "$REPO_ROOT/scripts/codex-package-manifest.py" scripts "$REPO_ROOT/codex-package.manifest.json")
     git -C "$repo" add -f .private-journal/keep.txt
 
     commit_fixture "$repo" "Initial upstream fixture"
@@ -423,9 +428,11 @@ echo run-hook fixture
 EOF
     chmod +x "$repo/plugins/wukong-code/hooks/session-start" "$repo/plugins/wukong-code/hooks/session-start-codex" "$repo/plugins/wukong-code/hooks/run-hook.cmd"
 
-    printf 'bootstrap fixture\n' > "$repo/plugins/wukong-code/scripts/bootstrap-prototype.mjs"
-    printf 'integrity fixture\n' > "$repo/plugins/wukong-code/scripts/check-product-design-import.mjs"
-    printf 'contract fixture\n' > "$repo/plugins/wukong-code/scripts/check-sites-starter-contract.mjs"
+    cp "$REPO_ROOT/codex-package.manifest.json" "$repo/plugins/wukong-code/codex-package.manifest.json"
+    while IFS= read -r shipped; do
+        mkdir -p "$repo/plugins/wukong-code/$(dirname "$shipped")"
+        printf '%s fixture\n' "$(basename "$shipped" .mjs)" > "$repo/plugins/wukong-code/$shipped"
+    done < <(python3 "$REPO_ROOT/scripts/codex-package-manifest.py" scripts "$REPO_ROOT/codex-package.manifest.json")
 
     cat > "$repo/plugins/wukong-code/skills/example/SKILL.md" <<'EOF'
 # Example Skill
@@ -449,12 +456,13 @@ EOF
         plugins/wukong-code/hooks/run-hook.cmd \
         plugins/wukong-code/hooks/session-start \
         plugins/wukong-code/hooks/session-start-codex \
-        plugins/wukong-code/scripts/bootstrap-prototype.mjs \
-        plugins/wukong-code/scripts/check-product-design-import.mjs \
-        plugins/wukong-code/scripts/check-sites-starter-contract.mjs \
+        plugins/wukong-code/codex-package.manifest.json \
         plugins/wukong-code/skills/example/agents/openai.yaml \
         plugins/wukong-code/skills/example/SKILL.md \
         plugins/wukong-code/.private-journal/keep.txt
+    while IFS= read -r shipped; do
+        git -C "$repo" add "plugins/wukong-code/$shipped"
+    done < <(python3 "$REPO_ROOT/scripts/codex-package-manifest.py" scripts "$REPO_ROOT/codex-package.manifest.json")
 
     commit_fixture "$repo" "Initial synced destination fixture"
 }
@@ -678,11 +686,13 @@ main() {
     assert_contains "$preview_section" "hooks/session-start" "Preview includes session-start hook"
     assert_contains "$preview_section" "hooks/session-start-codex" "Preview includes Codex session-start hook"
     assert_contains "$preview_section" "hooks/run-hook.cmd" "Preview includes hook command wrapper"
-    assert_contains "$preview_section" "scripts/bootstrap-prototype.mjs" "Preview includes Product Design bootstrap helper"
-    assert_contains "$preview_section" "scripts/check-product-design-import.mjs" "Preview includes Product Design integrity helper"
-    assert_contains "$preview_section" "scripts/check-sites-starter-contract.mjs" "Preview includes Product Design contract helper"
+    while IFS= read -r shipped; do
+        assert_contains "$preview_section" "$shipped" "Preview includes $shipped"
+    done < <(python3 "$REPO_ROOT/scripts/codex-package-manifest.py" scripts "$REPO_ROOT/codex-package.manifest.json")
+    assert_contains "$preview_section" "codex-package.manifest.json" "Preview includes Codex package manifest"
     assert_not_contains "$preview_section" "scripts/release-local.sh" "Preview excludes unrelated root scripts"
     assert_not_contains "$preview_section" "scripts/sync-to-codex-plugin.sh" "Preview excludes the sync script itself"
+    assert_not_contains "$preview_section" "scripts/codex-package-manifest.py" "Preview excludes the Codex package manifest helper"
     assert_contains "$preview_section" ".private-journal/keep.txt" "Preview includes tracked ignored file"
     assert_not_contains "$preview_section" ".private-journal/leak.txt" "Preview excludes ignored untracked file"
     assert_not_contains "$preview_section" "ignored-cache/" "Preview excludes pure ignored directories"
@@ -749,6 +759,9 @@ Locally modified fixture content." "Dirty local apply preserves tracked working-
     assert_not_contains "$script_source" "regenerated inline" "Source drops regenerated inline phrasing"
     assert_not_contains "$script_source" "Brand Assets directory" "Source drops Brand Assets directory phrasing"
     assert_not_contains "$script_source" "--assets-src" "Source drops --assets-src"
+    assert_not_contains "$script_source" "bootstrap-prototype.mjs" "Source does not hardcode Product Design bootstrap script"
+    assert_not_contains "$script_source" "check-product-design-import.mjs" "Source does not hardcode Product Design integrity script"
+    assert_not_contains "$script_source" "check-sites-starter-contract.mjs" "Source does not hardcode Product Design contract script"
 
     if [[ $FAILURES -ne 0 ]]; then
         echo ""
