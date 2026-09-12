@@ -29,12 +29,31 @@ WUKONG_SESSION_START_LIB_ONLY=1 source "$HOOK"
 
 echo "=== Canonical harness tool mappings ==="
 
-for harness in pi opencode kimi codex antigravity; do
-  expected="$REFERENCES/${harness}-tools.md"
-  if [[ ! -f "$expected" ]]; then
-    fail "missing $expected"
+# Every on-disk mapping must have a contract: injector equality, skillInstructions
+# equality, or pointer-only (SessionStart cannot detect the harness).
+mapping_contract() {
+  case "$1" in
+    opencode) printf '%s' inject_opencode ;;
+    pi) printf '%s' inject_pi ;;
+    kimi) printf '%s' skill_instructions ;;
+    codex|antigravity) printf '%s' pointer_only ;;
+    cursor|claude|copilot) printf '%s' shape_a_session_start ;;
+    *) printf '%s' unknown ;;
+  esac
+}
+
+shopt -s nullglob
+found_mappings=0
+for expected in "$REFERENCES"/*-tools.md; do
+  found_mappings=$((found_mappings + 1))
+  harness="$(basename "$expected")"
+  harness="${harness%-tools.md}"
+  contract="$(mapping_contract "$harness")"
+  if [[ "$contract" == unknown ]]; then
+    fail "unclassified mapping ${harness}-tools.md — add an injector / skillInstructions assertion"
     continue
   fi
+  pass "${harness}-tools.md has contract ${contract}"
   if ! got="$(read_harness_tools "$REPO_ROOT" "$harness")"; then
     fail "bash read_harness_tools could not read $harness"
     continue
@@ -43,6 +62,27 @@ for harness in pi opencode kimi codex antigravity; do
     pass "bash read_harness_tools $harness equals ${harness}-tools.md"
   else
     fail "bash read_harness_tools $harness does not equal the reference file"
+  fi
+done
+shopt -u nullglob
+
+if [[ "$found_mappings" -eq 0 ]]; then
+  fail "no references/*-tools.md files found"
+fi
+
+for required in pi opencode kimi codex antigravity; do
+  if [[ -f "$REFERENCES/${required}-tools.md" ]]; then
+    pass "required mapping ${required}-tools.md exists"
+  else
+    fail "missing required mapping ${required}-tools.md"
+  fi
+done
+
+for gone in claude-code-tools.md copilot-tools.md; do
+  if [[ -e "$REFERENCES/$gone" ]]; then
+    fail "deleted mapping $gone must not return"
+  else
+    pass "$gone stays deleted (no dedicated Claude/Copilot mapping file)"
   fi
 done
 
@@ -157,6 +197,121 @@ if grep -Fq 'read_harness_tools' "$HOOK" && ! grep -Fq 'todowrite' "$HOOK"; then
 else
   fail "session-start is missing read_harness_tools or still embeds a mapping table"
 fi
+
+session_start_context() {
+  local home="$1"
+  shift
+  local output
+  if ! output="$(env -i PATH="${PATH:-}" HOME="$home" "$@" 2>&1)"; then
+    printf '%s' ""
+    return 1
+  fi
+  printf '%s' "$output" | node -e '
+const fs = require("fs");
+const payload = JSON.parse(fs.readFileSync(0, "utf8"));
+const context = payload.additional_context
+  || payload.additionalContext
+  || (payload.hookSpecificOutput && payload.hookSpecificOutput.additionalContext)
+  || "";
+process.stdout.write(context);
+'
+}
+
+# Shape A injects references/<detected>-tools.md when that file exists.
+# Detected names are cursor / claude / copilot; those files are absent today.
+# The hook derives PLUGIN_ROOT from its own path (the temp tree). The env vars
+# below only select the JSON branch / detect_session_harness name.
+assert_shape_a_injects_mapping() {
+  local harness="$1"
+  shift
+  local token="CANONICAL_${harness}_MAPPING_$$"
+  local tmp
+  tmp="$(mktemp -d)"
+  mkdir -p "$tmp/home" "$tmp/skills/using-wukong-code/references" "$tmp/hooks"
+  cp "$HOOK" "$tmp/hooks/session-start"
+  chmod +x "$tmp/hooks/session-start"
+  cp "$SKILL" "$tmp/skills/using-wukong-code/SKILL.md"
+  printf '%s\n' "$token" > "$tmp/skills/using-wukong-code/references/${harness}-tools.md"
+
+  local context
+  if ! context="$(session_start_context "$tmp/home" "$@" bash "$tmp/hooks/session-start")"; then
+    fail "Shape A $harness SessionStart exited non-zero when ${harness}-tools.md exists"
+    rm -rf "$tmp"
+    return
+  fi
+  if [[ "$context" == *"$token"* ]]; then
+    pass "Shape A $harness SessionStart injects ${harness}-tools.md"
+  else
+    fail "Shape A $harness SessionStart did not inject ${harness}-tools.md"
+  fi
+  rm -rf "$tmp"
+}
+
+echo "=== Shape A SessionStart mapping injection ==="
+
+assert_shape_a_injects_mapping \
+  claude \
+  CLAUDE_PLUGIN_ROOT=/tmp/wukong-canonical-claude
+
+assert_shape_a_injects_mapping \
+  cursor \
+  CURSOR_PLUGIN_ROOT=/tmp/wukong-canonical-cursor \
+  CLAUDE_PLUGIN_ROOT=/tmp/wukong-canonical-claude
+
+assert_shape_a_injects_mapping \
+  copilot \
+  COPILOT_CLI=1 \
+  CLAUDE_PLUGIN_ROOT=/tmp/wukong-canonical-claude
+
+echo "=== Live SessionStart must not inline another harness mapping ==="
+
+live_home="$(mktemp -d)"
+
+assert_live_session_omits_other_mappings() {
+  local label="$1"
+  shift
+  local context
+  if ! context="$(session_start_context "$live_home" "$@" bash "$HOOK")"; then
+    fail "$label SessionStart exited non-zero"
+    return
+  fi
+  local needle
+  local failed=0
+  while IFS= read -r needle; do
+    [[ -n "$needle" ]] || continue
+    if [[ "$context" == *"$needle"* ]]; then
+      fail "$label SessionStart inlined another harness mapping ($needle)"
+      failed=1
+    fi
+  done <<EOF
+Tool Mapping for OpenCode
+Kimi Code tool mapping
+pi-subagents
+spawn_agent
+IsSkillFile
+EOF
+  if [[ "$failed" -eq 0 ]]; then
+    pass "$label SessionStart does not inline OpenCode/Pi/Kimi/Codex/Antigravity mappings"
+  fi
+}
+
+assert_live_session_omits_other_mappings \
+  "Claude" \
+  CLAUDE_PLUGIN_ROOT="$REPO_ROOT"
+assert_live_session_omits_other_mappings \
+  "Cursor" \
+  CURSOR_PLUGIN_ROOT="$REPO_ROOT" \
+  CLAUDE_PLUGIN_ROOT="$REPO_ROOT"
+assert_live_session_omits_other_mappings \
+  "Copilot" \
+  COPILOT_CLI=1 \
+  CLAUDE_PLUGIN_ROOT="$REPO_ROOT"
+assert_live_session_omits_other_mappings \
+  "Codex-shaped" \
+  PLUGIN_ROOT="$REPO_ROOT" \
+  CLAUDE_PLUGIN_ROOT="$REPO_ROOT"
+
+rm -rf "$live_home"
 
 if [[ "$FAILURES" -gt 0 ]]; then
   echo "STATUS: FAILED ($FAILURES failure(s))"

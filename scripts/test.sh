@@ -31,6 +31,7 @@ run_core() {
   run bash tests/skills/test-skill-slim-gates.sh
   run bash tests/skills/test-gemini-retirement.sh
   run bash tests/hooks/test-session-start.sh
+  run bash tests/hooks/test-language-router.sh
   run bash tests/hooks/test-tool-mapping-canonical.sh
   run bash tests/opencode/run-tests.sh
   run bash tests/kimi/run-tests.sh
