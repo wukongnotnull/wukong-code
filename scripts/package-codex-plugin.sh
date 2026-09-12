@@ -39,12 +39,13 @@ Options:
   --keep-stage             Print and keep the temporary staging directory.
   -h, --help               Show this help.
 
-The archive is rootless: .codex-plugin/, assets/, skills/, references/,
-templates/, the three Product Design support scripts, the Codex SessionStart hook
-files, README.md, LICENSE, THIRD_PARTY_NOTICES.md, product-design.lock.json, and
-CODE_OF_CONDUCT.md sit at the archive root. Source-only repo files,
-cross-harness hook configuration, tests, docs, and other harness manifests are
-intentionally not shipped.
+The archive is rootless: .codex-plugin/, assets/, skills/, the Product Design
+roots listed in codex-package.manifest.json (runtime scripts, optional integrity
+check, templates/, references/), the Codex SessionStart hook files, README.md,
+LICENSE, THIRD_PARTY_NOTICES.md, product-design.lock.json,
+codex-package.manifest.json, and CODE_OF_CONDUCT.md sit at the archive root.
+Source-only repo files, cross-harness hook configuration, tests, docs, and other
+harness manifests are intentionally not shipped.
 EOF
 }
 
@@ -240,6 +241,16 @@ prepare_metadata_root() {
 
 METADATA_ROOT="$(prepare_metadata_root "$METADATA_SOURCE")"
 
+MANIFEST_HELPER="$SCRIPT_DIR/codex-package-manifest.py"
+[[ -f "$MANIFEST_HELPER" ]] || die "missing Codex package manifest helper: $MANIFEST_HELPER"
+if ! manifest_json="$(git -C "$REPO_ROOT" show "$REF:codex-package.manifest.json")"; then
+  die "git ref is missing codex-package.manifest.json: $REF"
+fi
+mapfile -t CODEX_PACKAGE_ARCHIVE_PATHS < <(printf '%s\n' "$manifest_json" | python3 "$MANIFEST_HELPER" archive-paths -)
+mapfile -t CODEX_PACKAGE_SCRIPTS < <(printf '%s\n' "$manifest_json" | python3 "$MANIFEST_HELPER" scripts -)
+[[ ${#CODEX_PACKAGE_ARCHIVE_PATHS[@]} -gt 0 ]] || die "Codex package manifest produced no archive paths"
+[[ ${#CODEX_PACKAGE_SCRIPTS[@]} -gt 0 ]] || die "Codex package manifest produced no shipped scripts"
+
 git -C "$REPO_ROOT" archive --format=tar "$REF" -- \
   .codex-plugin \
   CODE_OF_CONDUCT.md \
@@ -254,12 +265,9 @@ git -C "$REPO_ROOT" archive --format=tar "$REF" -- \
   hooks/user-prompt-submit.py \
   hooks/language_router.py \
   product-design.lock.json \
-  references \
-  scripts/bootstrap-prototype.mjs \
-  scripts/check-product-design-import.mjs \
-  scripts/check-sites-starter-contract.mjs \
+  codex-package.manifest.json \
   skills \
-  templates \
+  "${CODEX_PACKAGE_ARCHIVE_PATHS[@]}" \
   | tar -xf - -C "$STAGE"
 
 VERSION="$(jq -r '.version // empty' "$STAGE/.codex-plugin/plugin.json")"
@@ -371,8 +379,16 @@ unexpected_paths="$(
     grep -E '(^wukong-code/|^\.agents/|^hooks/(hooks\.json|hooks-cursor\.json)$|^package\.json$|^\.git|^\.pytest_cache|^\.ruff_cache|^tests/|^docs/|^evals/|^lib/|^\.claude|^\.cursor|^\.kimi|^\.opencode|^\.pi|^AGENTS\.md$|^CLAUDE\.md$|^GEMINI\.md$|^RELEASE-NOTES\.md$|^CHANGELOG\.md$)' || true
 )"
 unexpected_scripts="$(
-  printf '%s\n' "$archive_paths" |
-    awk '$0 ~ /^scripts\// && $0 != "scripts/" && $0 != "scripts/bootstrap-prototype.mjs" && $0 != "scripts/check-product-design-import.mjs" && $0 != "scripts/check-sites-starter-contract.mjs"'
+  printf '%s\n' "$archive_paths" | python3 -c '
+import sys
+
+allowed = set(sys.argv[1:])
+allowed.add("scripts/")
+for line in sys.stdin:
+    path = line.rstrip("\n")
+    if path.startswith("scripts/") and path not in allowed:
+        print(path)
+' "${CODEX_PACKAGE_SCRIPTS[@]}"
 )"
 if [[ -n "$unexpected_paths" || -n "$unexpected_scripts" ]]; then
   printf '%s\n' "$unexpected_paths" "$unexpected_scripts" | sed '/^$/d; s/^/  /' >&2

@@ -1,0 +1,10 @@
+{
+  "runtime_scripts": [
+    "scripts/bootstrap-prototype.mjs",
+    "scripts/check-sites-starter-contract.mjs"
+  ],
+  "integrity_check": "scripts/check-product-design-import.mjs",
+  "ship_integrity_check": true,
+  "templates": "templates",
+  "references": "references"
+}

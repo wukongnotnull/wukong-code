@@ -191,10 +191,12 @@ grep -Fq "sequential fallback" "$REPO_ROOT/references/product-design-host-capabi
   fail "host capability contract does not define a sequential fallback"
 
 python3 - "$REPO_ROOT/product-design.lock.json" <<'PY'
+from pathlib import Path
 import json
 import sys
 
-with open(sys.argv[1], encoding="utf-8") as lock_file:
+lock_path = Path(sys.argv[1])
+with lock_path.open(encoding="utf-8") as lock_file:
     lock = json.load(lock_file)
 
 expected = {
@@ -227,11 +229,22 @@ expected_imported_roots = [
     "references/product-design-host-capabilities.md",
     "references/wukong-product-design-composition.md",
     "scripts/bootstrap-prototype.mjs",
+    "scripts/check-product-design-import.mjs",
     "scripts/check-sites-starter-contract.mjs",
     "templates",
 ]
 if lock.get("imported_roots") != expected_imported_roots:
     raise SystemExit("product-design.lock.json must use the exact imported source boundary")
+
+manifest = json.loads((lock_path.parent / "codex-package.manifest.json").read_text(encoding="utf-8"))
+imported_roots = lock["imported_roots"]
+for script in manifest["runtime_scripts"]:
+    if script not in imported_roots:
+        raise SystemExit(f"imported_roots is missing runtime script {script}")
+if manifest.get("ship_integrity_check") and manifest.get("integrity_check") not in imported_roots:
+    raise SystemExit("imported_roots omits the shipped Product Design integrity check")
+if manifest.get("templates") not in imported_roots:
+    raise SystemExit("imported_roots is missing the Codex package templates root")
 PY
 
 python3 - "$REPO_ROOT" <<'PY'
