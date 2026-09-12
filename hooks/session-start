@@ -1,27 +1,65 @@
 #!/usr/bin/env bash
 # SessionStart hook for wukong-code plugin
+#
+# Harness tool mappings live only in
+# skills/using-wukong-code/references/<harness>-tools.md. This hook reads that
+# file when one exists for the detected Shape A harness and wraps it with the
+# skill body. Do not hand-write a second mapping table here.
 
 set -euo pipefail
 
 # Determine plugin root directory
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+# Same frontmatter contract as .opencode/plugins/wukong-code.js and
+# .pi/extensions/wukong-code.ts. Tests compare the stripped bodies.
+strip_yaml_frontmatter() {
+  printf '%s' "$1" | awk '
+    BEGIN { in_fm=0; done_fm=0 }
+    NR==1 && /^---$/ { in_fm=1; next }
+    in_fm && /^---$/ { in_fm=0; done_fm=1; next }
+    in_fm { next }
+    { print }
+  ' | sed -e '1{/./!d;}'
+}
+
+harness_tools_path() {
+  local plugin_root="$1"
+  local harness="$2"
+  printf '%s' "${plugin_root}/skills/using-wukong-code/references/${harness}-tools.md"
+}
+
+read_harness_tools() {
+  local path
+  path="$(harness_tools_path "$1" "$2")"
+  [[ -f "$path" ]] || return 1
+  cat "$path"
+}
+
+detect_session_harness() {
+  if [[ -n "${CURSOR_PLUGIN_ROOT:-}" ]]; then
+    printf '%s' cursor
+  elif [[ -n "${CLAUDE_PLUGIN_ROOT:-}" ]] && [[ -z "${COPILOT_CLI:-}" ]]; then
+    printf '%s' claude
+  elif [[ -n "${COPILOT_CLI:-}" ]]; then
+    printf '%s' copilot
+  else
+    printf '%s' unknown
+  fi
+}
+
+# Allow contract tests to source the helpers without emitting hook JSON.
+if [[ "${BASH_SOURCE[0]}" != "$0" ]] && [[ "${WUKONG_SESSION_START_LIB_ONLY:-}" == "1" ]]; then
+  return 0
+fi
 
 # Read using-wukong-code content and strip YAML frontmatter (align with OpenCode/Pi).
 using_wukong_code_raw=$(cat "${PLUGIN_ROOT}/skills/using-wukong-code/SKILL.md" 2>&1 || echo "Error reading using-wukong-code skill")
 if [[ "$using_wukong_code_raw" == Error* ]]; then
   using_wukong_code_content="$using_wukong_code_raw"
 else
-  # Same regex contract as .opencode/plugins/wukong-code.js and .pi/extensions/wukong-code.ts
-  using_wukong_code_content=$(printf '%s' "$using_wukong_code_raw" | awk '
-    BEGIN { in_fm=0; done_fm=0 }
-    NR==1 && /^---$/ { in_fm=1; next }
-    in_fm && /^---$/ { in_fm=0; done_fm=1; next }
-    in_fm { next }
-    { print }
-  ')
-  # Trim leading blank lines after strip
-  using_wukong_code_content=$(printf '%s' "$using_wukong_code_content" | sed -e '1{/./!d;}')
+  using_wukong_code_content="$(strip_yaml_frontmatter "$using_wukong_code_raw")"
 fi
 
 # Escape string for JSON embedding using bash parameter substitution.
@@ -38,7 +76,13 @@ escape_for_json() {
 }
 
 using_wukong_code_escaped=$(escape_for_json "$using_wukong_code_content")
-session_context="<EXTREMELY_IMPORTANT>\nYou have wukong-code.\n\n**Below is the full content of your 'wukong-code:using-wukong-code' skill - your introduction to using skills. For all other skills, use the 'Skill' tool:**\n\n${using_wukong_code_escaped}\n</EXTREMELY_IMPORTANT>"
+mapping_escaped=""
+detected_harness="$(detect_session_harness)"
+if mapping_raw="$(read_harness_tools "$PLUGIN_ROOT" "$detected_harness")"; then
+  mapping_escaped=$(escape_for_json "$mapping_raw")
+  mapping_escaped="\n\n${mapping_escaped}"
+fi
+session_context="<EXTREMELY_IMPORTANT>\nYou have wukong-code.\n\n**Below is the full content of your 'wukong-code:using-wukong-code' skill - your introduction to using skills. For all other skills, use the 'Skill' tool:**\n\n${using_wukong_code_escaped}${mapping_escaped}\n</EXTREMELY_IMPORTANT>"
 
 # Output context injection as JSON.
 # Cursor hooks expect additional_context (snake_case).

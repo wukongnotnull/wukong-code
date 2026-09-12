@@ -53,6 +53,7 @@ const result = {
   staleTaskMapping: bootstrapText(firstOutput).includes('`Task` tool with subagents'),
   mapsSubagentToTask: bootstrapText(firstOutput).includes('`task` with `subagent_type: "general"`'),
   mapsMutationToApplyPatch: bootstrapText(firstOutput).includes('`apply_patch`'),
+  mapsCanonicalToolsFile: bootstrapContainsCanonicalTools(firstOutput),
   firstReadCount: afterFirst.readCount,
   secondReadCount: afterSecond.readCount,
   firstExistsCount: afterFirst.existsCount,
@@ -115,6 +116,14 @@ function bootstrapText(output) {
   )?.text || '';
 }
 
+function bootstrapContainsCanonicalTools(output) {
+  const pluginDir = pluginPath.replace(/\\/g, '/').replace(/\/[^/]+$/, '');
+  const toolsPath = `${pluginDir}/../../skills/using-wukong-code/references/opencode-tools.md`;
+  if (!originalExistsSync(toolsPath)) return false;
+  const mapping = originalReadFileSync(toolsPath, 'utf8').replace(/\s+$/, '');
+  return bootstrapText(output).includes(mapping);
+}
+
 function assertPresentBootstrap(result) {
   const failures = [];
   if (result.firstBootstrapParts !== 1) {
@@ -143,6 +152,9 @@ function assertPresentBootstrap(result) {
   }
   if (!result.mapsMutationToApplyPatch) {
     failures.push('expected OpenCode bootstrap to map file mutation to apply_patch');
+  }
+  if (!result.mapsCanonicalToolsFile) {
+    failures.push('expected OpenCode bootstrap to contain references/opencode-tools.md verbatim');
   }
   if (result.bootstrapStartsWithFrontmatter) {
     failures.push('expected stripped bootstrap body not to start with YAML frontmatter ---');

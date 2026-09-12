@@ -75,6 +75,7 @@ for test_path in \
   tests/skills/test-skill-slim-gates.sh \
   tests/skills/test-gemini-retirement.sh \
   tests/hooks/test-session-start.sh \
+  tests/hooks/test-tool-mapping-canonical.sh \
   tests/opencode/run-tests.sh \
   tests/kimi/run-tests.sh \
   tests/cursor/run-tests.sh \
@@ -120,10 +121,11 @@ tests/skills/test-visual-companion.sh
 tests/skills/test-skill-slim-gates.sh
 tests/skills/test-gemini-retirement.sh
 tests/hooks/test-session-start.sh
+tests/hooks/test-tool-mapping-canonical.sh
 tests/opencode/run-tests.sh
 tests/kimi/run-tests.sh
 tests/cursor/run-tests.sh
-node --test tests/pi/test-pi-extension.mjs
+node --experimental-strip-types --test tests/pi/test-pi-extension.mjs
 node --test tests/brainstorm-server/wrap-frame.test.cjs
 tests/codex/test-marketplace-manifest.sh
 tests/codex/test-package-codex-plugin.sh

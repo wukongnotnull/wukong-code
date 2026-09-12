@@ -9,6 +9,8 @@ Skills speak in actions ("dispatch a subagent", "create a todo", "read a file").
 | Task tracking (`TodoWrite`, "create a todo", "mark complete") | Use an installed todo/task tool if available, otherwise track tasks in the plan or `TODO.md` |
 | Read / write / edit files | `read`, `write`, `edit` |
 | Run shell commands | `bash` |
+| Search file contents / find files by name / list directories | optional `grep`, `find`, `ls` |
+
 
 ## Subagents
 

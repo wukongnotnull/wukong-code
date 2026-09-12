@@ -85,7 +85,12 @@ test('startup context injects the bootstrap as one user message until agent_end'
   assert.equal(result.messages.length, 2);
   assert.equal(result.messages[0].role, 'user');
   assert.match(textOf(result.messages[0]), /You have wukong-code/);
-  assert.match(textOf(result.messages[0]), /Pi tool mapping/);
+  const piTools = (await readFile(piToolsPath, 'utf8')).replace(/\s+$/, '');
+  assert.equal(
+    textOf(result.messages[0]).includes(piTools),
+    true,
+    'injected mapping must equal references/pi-tools.md',
+  );
   assert.equal(result.messages[1], originalMessages[0]);
 
   const repeatedProviderRequest = await context({ type: 'context', messages: originalMessages }, {});
@@ -141,7 +146,13 @@ test('pi tools reference documents pi-specific mappings', async () => {
   assert.equal(existsSync(piToolsPath), true, 'pi-tools.md should exist');
   const text = await readFile(piToolsPath, 'utf8');
 
-  for (const expected of ['Skill', 'Task', 'TodoWrite', 'read', 'write', 'edit', 'bash']) {
+  for (const expected of ['Skill', 'Task', 'TodoWrite', 'read', 'write', 'edit', 'bash', 'grep', 'find', 'ls']) {
     assert.match(text, new RegExp(expected));
   }
+});
+
+test('extension source reads pi-tools.md instead of an inline mapping table', async () => {
+  const source = await readFile(extensionPath, 'utf8');
+  assert.match(source, /pi-tools\.md/);
+  assert.doesNotMatch(source, /function piToolMapping/);
 });

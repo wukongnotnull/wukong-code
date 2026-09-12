@@ -563,7 +563,7 @@ assert_command_output \
     "Codex emits nested SessionStart additionalContext" \
     "nested" \
     "You have wukong-code" \
-    "" \
+    "Tool Mapping for OpenCode"$'\037'"Kimi Code tool mapping" \
     "$codex_home" \
     PLUGIN_ROOT="$REPO_ROOT" \
     CLAUDE_PLUGIN_ROOT="$REPO_ROOT" \

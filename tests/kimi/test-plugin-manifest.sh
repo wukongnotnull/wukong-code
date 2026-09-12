@@ -33,6 +33,16 @@ instructions = manifest.get("skillInstructions")
 if not isinstance(instructions, str) or not instructions.strip():
     raise AssertionError("skillInstructions must be a non-empty string")
 
+tools_path = manifest_path.parents[1] / "skills/using-wukong-code/references/kimi-tools.md"
+tools = tools_path.read_text(encoding="utf-8")
+if tools.endswith("\n"):
+    tools = tools[:-1]
+if instructions != tools:
+    raise AssertionError(
+        "skillInstructions must equal skills/using-wukong-code/references/kimi-tools.md "
+        "(run .kimi-plugin/sync-skill-instructions.sh after editing the reference file)"
+    )
+
 for token in [
     "AskUserQuestion",
     "TodoList",

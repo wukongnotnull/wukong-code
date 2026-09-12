@@ -42,9 +42,9 @@ into the harness's native tools. Three components:
 
 2. **Tool mapping (per-harness).** Each harness needs the action vocabulary
    translated into its real tool names. That translation lives in
-   `skills/using-wukong-code/references/<harness>-tools.md` and/or inline in the
-   harness's bootstrap injector (see Part 5). It says, e.g., "*dispatch a
-   subagent* → call `task` with `subagent_type`."
+   `skills/using-wukong-code/references/<harness>-tools.md`. Injectors read that
+   file and wrap it; they do not keep a second handwritten table. It says, e.g.,
+   "*dispatch a subagent* → call `task` with `subagent_type`."
 
 3. **Bootstrap (per-harness).** At the start of every session, the full
    `skills/using-wukong-code/SKILL.md` is injected into the model's context,
@@ -134,8 +134,8 @@ A port is finished when **all** of these are true:
 
 1. The `using-wukong-code` bootstrap loads at session start, every session, with
    no per-session opt-in.
-2. A tool mapping exists for the harness (in
-   `references/<harness>-tools.md`, inline in the bootstrap, or both — per Part 5).
+2. A tool mapping exists for the harness in
+   `references/<harness>-tools.md`. Injectors read that file (Part 5).
 3. Skills can actually be invoked — natively, or via the documented
    read-`SKILL.md` fallback — and the model follows them.
 4. **The acceptance test passes.** In a clean session, the user message:
@@ -393,7 +393,8 @@ real branch.
 **Shape B — assemble the string in code, then inject as a user message.** Here
 you build the bootstrap yourself: read `SKILL.md`, strip its YAML frontmatter,
 and assemble `<EXTREMELY_IMPORTANT>` + a short preamble that the skill is already
-loaded and must not be re-invoked + the stripped body + the inline tool mapping +
+loaded and must not be re-invoked + the stripped body + the tool mapping read
+from `references/<harness>-tools.md` +
 `</EXTREMELY_IMPORTANT>`. One subtlety the references disagree on: OpenCode's
 preamble says "do NOT use the skill tool…" (assumes a `skill` tool exists), while
 pi's just says "do not try to load using-wukong-code again." If your harness has
@@ -476,10 +477,10 @@ Where the mapping lives depends on shape:
   The agent reaches it from the bootstrap — `SKILL.md`'s "Platform Adaptation"
   section links the per-harness references files. (Shape A harnesses have no
   instructions file; the mapping is *not* inlined into the hook output.)
-- **Shape B:** the mapping is typically inlined into the bootstrap string you
-  inject (see the `toolMapping` constant in `wukong-code.js`). pi keeps it in
-  *both* places — `piToolMapping()` inline **and** `references/pi-tools.md`. If
-  you maintain it in two places, update both, or the port is half-done.
+- **Shape B:** put the mapping in
+  `skills/using-wukong-code/references/<harness>-tools.md`. The injector reads
+  that file and appends it inside the `<EXTREMELY_IMPORTANT>` wrapper. Do not
+  hand-write a second mapping table in JS/TS.
 - **Shape C:** put it in `references/<harness>-tools.md` and pull it into the
   always-loaded instructions file through the target harness's documented
   include or embedding mechanism.
@@ -774,9 +775,9 @@ Use this as the live index; when in doubt, read the files, not this table.
 | Codex | `.codex-plugin/plugin.json` + `hooks/hooks-codex.json` | shell hook → `hooks/session-start` (`hookSpecificOutput.additionalContext`); `UserPromptSubmit` language routing | `references/codex-tools.md` | `tests/codex/`, `tests/codex-plugin-sync/` | fork sync (`scripts/sync-to-codex-plugin.sh`) |
 | Cursor | `.cursor-plugin/plugin.json` + `hooks/hooks-cursor.json` | shell hook → `hooks/session-start` (`additional_context`) | `references/claude-code-tools.md` | `tests/hooks/` | hand-authored |
 | Copilot CLI | (shares Claude Code hook path; `COPILOT_CLI` env) | shell hook → `hooks/session-start` (`additionalContext`) | `references/copilot-tools.md` | `tests/hooks/` | — |
-| Kimi Code | `.kimi-plugin/plugin.json` | manifest `sessionStart.skill` loads `using-wukong-code` | inline `skillInstructions` in manifest | `tests/kimi/` | marketplace or `/plugins install` GitHub URL |
-| OpenCode | `.opencode/plugins/wukong-code.js` (declared via root `package.json` `main`) | in-process: `config` hook registers skills dir; `experimental.chat.messages.transform` injects user message | inline in `wukong-code.js` | `tests/opencode/` | `opencode.json` plugin git URL |
-| pi | `.pi/extensions/wukong-code.ts` | in-process: `resources_discover` registers skills; `context` event injects user message; lifecycle-flag + compaction-aware | `piToolMapping()` inline **and** `references/pi-tools.md` | `tests/pi/` | repo-root `package.json` fields |
+| Kimi Code | `.kimi-plugin/plugin.json` | manifest `sessionStart.skill` loads `using-wukong-code` | `references/kimi-tools.md` (copied into manifest `skillInstructions`) | `tests/kimi/` | marketplace or `/plugins install` GitHub URL |
+| OpenCode | `.opencode/plugins/wukong-code.js` (declared via root `package.json` `main`) | in-process: `config` hook registers skills dir; `experimental.chat.messages.transform` injects user message | `references/opencode-tools.md` | `tests/opencode/` | `opencode.json` plugin git URL |
+| pi | `.pi/extensions/wukong-code.ts` | in-process: `resources_discover` registers skills; `context` event injects user message; lifecycle-flag + compaction-aware | `references/pi-tools.md` | `tests/pi/` | repo-root `package.json` fields |
 
 ## Appendix B — Gotchas that have bitten porters
 
@@ -800,8 +801,8 @@ Use this as the live index; when in doubt, read the files, not this table.
 - **Hunting for a skill-registration API that doesn't exist.** A harness with no
   skill system (not just no `Skill` tool) has nothing to register — the model
   reads `SKILL.md` on demand. Don't assume a `skillPaths` equivalent exists.
-- **Mapping in two places.** For in-process plugins the mapping may live both
-  inline and in a `references/` file (pi). Update both.
+- **Mapping in two places.** Don't. The reference file is the only source;
+  injectors read it.
 - **The "never read skill files" line.** It means "don't bypass your platform's
   skill-loading mechanism," not "never use file-read." On a no-skill-tool harness
   that mechanism *is* reading `SKILL.md` — say so explicitly in the mapping

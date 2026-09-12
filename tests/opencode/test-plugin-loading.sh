@@ -51,6 +51,14 @@ else
     exit 1
 fi
 
+echo "Test 3b: Checking OpenCode tool mapping reference..."
+if [ -f "$WUKONG_CODE_SKILLS_DIR/using-wukong-code/references/opencode-tools.md" ]; then
+    echo "  [PASS] opencode-tools.md exists"
+else
+    echo "  [FAIL] opencode-tools.md not found (required for bootstrap mapping)"
+    exit 1
+fi
+
 # Test 4: Verify plugin JavaScript syntax (basic check)
 echo "Test 4: Checking plugin JavaScript syntax..."
 if node --check "$WUKONG_CODE_PLUGIN_FILE" 2>/dev/null; then

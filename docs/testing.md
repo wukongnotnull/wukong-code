@@ -31,6 +31,7 @@ relevant runner under `tests/` or the Drill workflow under `evals/`.
 Live in `tests/`. Currently:
 
 - `tests/brainstorm-server/` — node test suite for the brainstorm server JS code.
+- `tests/hooks/test-tool-mapping-canonical.sh` — injected mapping / `skillInstructions` must equal `references/<harness>-tools.md`.
 - `tests/opencode/` — bash tests for OpenCode plugin loading, bootstrap caching, and tool registration.
 - `tests/codex-plugin-sync/` — bash sync verification.
 - `tests/kimi/` — bash/Python checks for Kimi plugin manifest wiring.
