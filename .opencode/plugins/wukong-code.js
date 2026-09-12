@@ -12,13 +12,20 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Simple frontmatter extraction (avoid dependency on skills-core for bootstrap)
+// Same frontmatter contract as hooks/session-start (tested in
+// tests/hooks/test-tool-mapping-canonical.sh). Keep the regex; do not add a
+// second handwritten tool-mapping table in this file.
+export const stripYamlFrontmatter = (content) => {
+  const match = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+  return match ? match[2] : content;
+};
+
 const extractAndStripFrontmatter = (content) => {
   const match = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
   if (!match) return { frontmatter: {}, content };
 
   const frontmatterStr = match[1];
-  const body = match[2];
+  const body = stripYamlFrontmatter(content);
   const frontmatter = {};
 
   for (const line of frontmatterStr.split('\n')) {
@@ -70,21 +77,15 @@ export const WukongCodePlugin = async ({ client, directory }) => {
       return null;
     }
 
+    const toolsPath = path.join(wukongCodeSkillsDir, 'using-wukong-code', 'references', 'opencode-tools.md');
+    if (!fs.existsSync(toolsPath)) {
+      _bootstrapCache = null;
+      return null;
+    }
+
     const fullContent = fs.readFileSync(skillPath, 'utf8');
     const { content } = extractAndStripFrontmatter(fullContent);
-
-    const toolMapping = `**Tool Mapping for OpenCode:**
-When skills request actions, substitute OpenCode equivalents:
-- Create or update todos → \`todowrite\`
-- \`Subagent (general-purpose):\` → \`task\` with \`subagent_type: "general"\`
-- Invoke a skill → OpenCode's native \`skill\` tool
-- Read files → \`read\`
-- Create, edit, or delete files → \`apply_patch\`
-- Run shell commands → \`bash\`
-- Search files → \`grep\`, \`glob\`
-- Fetch a URL → \`webfetch\`
-
-Use OpenCode's native \`skill\` tool to list and load skills.`;
+    const toolMapping = fs.readFileSync(toolsPath, 'utf8').replace(/\s+$/, '');
 
     _bootstrapCache = `<EXTREMELY_IMPORTANT>
 You have wukong-code.

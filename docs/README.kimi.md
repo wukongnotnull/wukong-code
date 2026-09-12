@@ -36,7 +36,9 @@ The manifest does three things:
 
 1. Points Kimi Code at the existing `skills/` directory.
 2. Loads `using-wukong-code` at session start through `sessionStart.skill`.
-3. Provides Kimi-specific tool mapping through `skillInstructions`.
+3. Provides Kimi-specific tool mapping through `skillInstructions`, generated
+   from `skills/using-wukong-code/references/kimi-tools.md` (run
+   `.kimi-plugin/sync-skill-instructions.sh` after editing that file).
 
 Kimi Code reads Wukong Code skills from this repository. There are no copied skills, symlinks, hooks, or extra runtime dependencies.
 
