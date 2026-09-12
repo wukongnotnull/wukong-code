@@ -277,7 +277,7 @@ hints the model might read a file does not satisfy the session-start requirement
 | runs a shell command at session start and reads its stdout | A (shell-hook) | Cursor (`hooks/session-start` + `hooks/hooks-cursor.json` + `.cursor-plugin/`) |
 | is a JS/TS plugin host with session/message lifecycle callbacks | B (in-process) | OpenCode (`.opencode/`) — or pi (`.pi/`) if it has no native skill tool |
 | ships an extension-declared context file it always loads | C (instructions-file) | a verified extension-owned context file |
-| has a plugin install command and a manifest `contextFileName` (or equivalent) the installer keeps | C via the plugin installer | Antigravity (`.antigravity-plugin/` — `agy plugin install` ships a generated context file; verify the installer preserves it — Part 6) |
+| has a plugin install command and a manifest `contextFileName` (or equivalent) the installer keeps | C via the plugin installer | a verified extension-owned context file. This repo's Antigravity path is **not** that shape: there is no `.antigravity-plugin/`; `agy plugin install` loads this plugin and runs the existing SessionStart hook |
 
 Most real harnesses fit one row cleanly; the last is the hybrid case (rule 2 still
 holds — the bootstrap rides the install mechanism, never a user-config edit).
@@ -474,9 +474,14 @@ or the equivalent before relying on it). A `skills` path field is *not* portable
 Where the mapping lives depends on shape:
 
 - **Shape A:** put it in `skills/using-wukong-code/references/<harness>-tools.md`.
-  The agent reaches it from the bootstrap — `SKILL.md`'s "Platform Adaptation"
-  section links the per-harness references files. (Shape A harnesses have no
-  instructions file; the mapping is *not* inlined into the hook output.)
+  `hooks/session-start` inlines that file when it exists for the *detected*
+  harness name (`cursor`, `claude`, or `copilot`). Those files do not exist
+  today, so Claude / Cursor / Copilot SessionStart is skill body only. Codex
+  shares `CLAUDE_PLUGIN_ROOT` and is detected as `claude`, so
+  `codex-tools.md` is not inlined — the agent reaches it from `SKILL.md`'s
+  Platform Adaptation links. Do not revive the deleted
+  `claude-code-tools.md` / `copilot-tools.md` names; detection looks for
+  `claude-tools.md` / `copilot-tools.md`.
 - **Shape B:** put the mapping in
   `skills/using-wukong-code/references/<harness>-tools.md`. The injector reads
   that file and appends it inside the `<EXTREMELY_IMPORTANT>` wrapper. Do not
@@ -513,10 +518,12 @@ honors the rule rather than breaking it. Distinguish three cases:
    the way `references/pi-tools.md` states it.
 
    **For the bootstrap itself, prefer a declared context file (Part 6).** If the
-   harness has a `contextFileName`-style manifest field — as Antigravity does —
-   ship a generated context file through the installer: it's guaranteed-loaded and
-   carries both the `using-wukong-code` content and the tool mapping. That is the
-   strong, preferred path.
+   harness has a `contextFileName`-style manifest field, ship a generated
+   context file through the installer: it's guaranteed-loaded and carries both
+   the `using-wukong-code` content and the tool mapping. That is the strong,
+   preferred path when the field exists. This repo's Antigravity integration
+   does **not** ship that: there is no `.antigravity-plugin/` and no generated
+   context file; `agy plugin install` runs the existing SessionStart hook.
 
    **Fallback — the surfaced skill index.** If there's no context-file field but
    the harness surfaces each installed skill's name + description at session start,
@@ -562,8 +569,12 @@ harness that has no skill system — case 3 has none.
 Match the existing per-harness test style:
 
 - **Shape A:** assert the hook's stdout has the exact JSON shape your harness
-  consumes, and that it contains the bootstrap. See `tests/hooks/test-session-start.sh`,
-  which validates each harness's output shape.
+  consumes, and that it contains the bootstrap. See `tests/hooks/test-session-start.sh`
+  for SessionStart JSON. Codex `UserPromptSubmit` language-router cases live in
+  `tests/hooks/test-language-router.sh`. Mapping injection must equal
+  `references/<harness>-tools.md` — extend `tests/hooks/test-tool-mapping-canonical.sh`,
+  do not add a second mapping contract file. Do not put `tests/claude-code/`
+  in the core `scripts/test.sh` gate.
 - **Shape B:** a unit test that fakes the harness's plugin API and asserts the
   lifecycle handlers register, the bootstrap injects once, the dedup guard
   works, and (if relevant) compaction re-injection works. See
@@ -665,7 +676,7 @@ it. Distribution differs per harness ecosystem — find yours:
 | External marketplace fork, synced by script | Codex | `scripts/sync-to-codex-plugin.sh` rsyncs the tracked plugin files into a separate fork repo and opens a PR. Read its include/exclude list so you ship the right tree (it deliberately drops repo-internal dirs and other harnesses' dotdirs). |
 | Git-URL extension install | Kimi Code, OpenCode | Users install from a git URL (Kimi Code `/plugins install …`; an `opencode.json` `plugin` array entry). Document the exact command. |
 | Package-manifest fields | pi | Declared through fields in the repo-root `package.json`; users install via the harness's package command. |
-| Local installer (plugin install) | Antigravity (`agy`) | A small `install.sh` that runs the harness's own `agy plugin install` against a staging dir holding the manifest, the skills, and a generated `contextFileName` context file (the bootstrap). Everything arrives through the install mechanism — *not* by editing the user's config (see below). |
+| Local installer (plugin install) | Antigravity (`agy`) | `agy plugin install <repo-url>` installs this plugin as-is. There is no `.antigravity-plugin/install.sh` and no generated `contextFileName` file in this tree. Bootstrap is the existing SessionStart hook. |
 
 Then:
 
@@ -681,14 +692,13 @@ Then:
     session), that is the strongest clean bootstrap: declare it, and the installer
     preserves it *and* the harness loads it. Generate it at install time from the
     live `using-wukong-code/SKILL.md` + the tool mapping (wrapped in
-    `<EXTREMELY_IMPORTANT>`) so the installed bootstrap never drifts. This is what
-    `.antigravity-plugin/install.sh` does — `agy plugin install` reports
-    `✔ context : ANTIGRAVITY.md`, and a clean session reads `using-wukong-code`'s
-    SKILL.md, loads `brainstorming`, and enters the brainstorming flow before any
-    code. **Verify with a marker** that the installer keeps the file and the
-    harness loads it: one porter wrongly concluded it couldn't, because they
-    shipped the file *without* declaring `contextFileName` and it was stripped as
-    unrecognized.
+    `<EXTREMELY_IMPORTANT>`) so the installed bootstrap never drifts. This repo
+    does **not** currently ship `.antigravity-plugin/install.sh` or a generated
+    `ANTIGRAVITY.md`; Antigravity installs the plugin and uses SessionStart.
+    **Verify with a marker** that the installer keeps a declared context file
+    and the harness loads it: one porter wrongly concluded it couldn't, because
+    they shipped the file *without* declaring `contextFileName` and it was
+    stripped as unrecognized.
   - **Otherwise lean on the installed `using-wukong-code` skill itself.** If the
     harness surfaces each installed skill's name + description at session start,
     the `using-wukong-code` description ("Use when starting any conversation…")
@@ -771,13 +781,15 @@ Use this as the live index; when in doubt, read the files, not this table.
 
 | Harness | Entry point | Bootstrap mechanism | Tool mapping | Tests | Distribution |
 |---|---|---|---|---|---|
-| Claude Code | `.claude-plugin/plugin.json` + `hooks/hooks.json` | shell hook → `hooks/session-start` (`hookSpecificOutput.additionalContext`) | native `Skill` tool; `references/claude-code-tools.md` | `tests/hooks/` | marketplace |
-| Codex | `.codex-plugin/plugin.json` + `hooks/hooks-codex.json` | shell hook → `hooks/session-start` (`hookSpecificOutput.additionalContext`); `UserPromptSubmit` language routing | `references/codex-tools.md` | `tests/codex/`, `tests/codex-plugin-sync/` | fork sync (`scripts/sync-to-codex-plugin.sh`) |
-| Cursor | `.cursor-plugin/plugin.json` + `hooks/hooks-cursor.json` | shell hook → `hooks/session-start` (`additional_context`) | `references/claude-code-tools.md` | `tests/hooks/` | hand-authored |
-| Copilot CLI | (shares Claude Code hook path; `COPILOT_CLI` env) | shell hook → `hooks/session-start` (`additionalContext`) | `references/copilot-tools.md` | `tests/hooks/` | — |
-| Kimi Code | `.kimi-plugin/plugin.json` | manifest `sessionStart.skill` loads `using-wukong-code` | `references/kimi-tools.md` (copied into manifest `skillInstructions`) | `tests/kimi/` | marketplace or `/plugins install` GitHub URL |
-| OpenCode | `.opencode/plugins/wukong-code.js` (declared via root `package.json` `main`) | in-process: `config` hook registers skills dir; `experimental.chat.messages.transform` injects user message | `references/opencode-tools.md` | `tests/opencode/` | `opencode.json` plugin git URL |
-| pi | `.pi/extensions/wukong-code.ts` | in-process: `resources_discover` registers skills; `context` event injects user message; lifecycle-flag + compaction-aware | `references/pi-tools.md` | `tests/pi/` | repo-root `package.json` fields |
+| Claude Code | `.claude-plugin/plugin.json` + `hooks/hooks.json` | shell hook → `hooks/session-start` (`hookSpecificOutput.additionalContext`) | native `Skill` tool. No `references/claude-code-tools.md` (deleted). SessionStart inlines a mapping only if `references/claude-tools.md` exists; it does not. | `tests/hooks/test-session-start.sh`, `tests/hooks/test-tool-mapping-canonical.sh` | marketplace |
+| Codex | `.codex-plugin/plugin.json` + `hooks/hooks-codex.json` | shell hook → `hooks/session-start` (same nested JSON; Codex shares `CLAUDE_PLUGIN_ROOT` so it is detected as `claude` and does **not** inline `codex-tools.md`); `UserPromptSubmit` language routing | `references/codex-tools.md` (Platform Adaptation pointer) | `tests/hooks/test-session-start.sh`, `tests/hooks/test-language-router.sh`, `tests/hooks/test-tool-mapping-canonical.sh`, `tests/codex/`, `tests/codex-plugin-sync/` | fork sync (`scripts/sync-to-codex-plugin.sh`) |
+| Cursor | `.cursor-plugin/plugin.json` + `hooks/hooks-cursor.json` | shell hook → `hooks/session-start` (`additional_context`) | no dedicated mapping file (`claude-code-tools.md` deleted; `cursor-tools.md` does not exist) | `tests/hooks/test-session-start.sh`, `tests/hooks/test-tool-mapping-canonical.sh`, `tests/cursor/` | marketplace (`/add-plugin`) |
+| Copilot CLI | shares Claude plugin; `COPILOT_CLI=1` | shell hook → `hooks/session-start` (`additionalContext`) | no `references/copilot-tools.md` (deleted). SessionStart would inline `copilot-tools.md` if that file existed. | `tests/hooks/test-session-start.sh`, `tests/hooks/test-tool-mapping-canonical.sh` | marketplace |
+| Kimi Code | `.kimi-plugin/plugin.json` | manifest `sessionStart.skill` loads `using-wukong-code` | `references/kimi-tools.md` (copied into manifest `skillInstructions`) | `tests/kimi/`, `tests/hooks/test-tool-mapping-canonical.sh` | marketplace or `/plugins install` GitHub URL |
+| OpenCode | `.opencode/plugins/wukong-code.js` (declared via root `package.json` `main`) | in-process: `config` hook registers skills dir; `experimental.chat.messages.transform` injects user message | `references/opencode-tools.md` | `tests/opencode/`, `tests/hooks/test-tool-mapping-canonical.sh` | `opencode.json` plugin git URL |
+| pi | `.pi/extensions/wukong-code.ts` | in-process: `resources_discover` registers skills; `context` event injects user message; lifecycle-flag + compaction-aware | `references/pi-tools.md` | `tests/pi/`, `tests/hooks/test-tool-mapping-canonical.sh` | repo-root `package.json` fields |
+| Antigravity | no `.antigravity-plugin/` in this tree | `agy plugin install <repo-url>` loads this plugin and runs the existing SessionStart hook. No generated `contextFileName` file is shipped. | `references/antigravity-tools.md` (Platform Adaptation pointer; SessionStart cannot detect agy, so the file is not inlined) | `tests/antigravity/` (extended suite), `tests/hooks/test-tool-mapping-canonical.sh` | `agy plugin install` |
+| Factory Droid | reuses the Claude Code plugin | no new files | same as Claude Code | — | `droid plugin install` |
 
 ## Appendix B — Gotchas that have bitten porters
 

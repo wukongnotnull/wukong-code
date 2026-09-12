@@ -75,6 +75,7 @@ for test_path in \
   tests/skills/test-skill-slim-gates.sh \
   tests/skills/test-gemini-retirement.sh \
   tests/hooks/test-session-start.sh \
+  tests/hooks/test-language-router.sh \
   tests/hooks/test-tool-mapping-canonical.sh \
   tests/opencode/run-tests.sh \
   tests/kimi/run-tests.sh \
@@ -121,6 +122,7 @@ tests/skills/test-visual-companion.sh
 tests/skills/test-skill-slim-gates.sh
 tests/skills/test-gemini-retirement.sh
 tests/hooks/test-session-start.sh
+tests/hooks/test-language-router.sh
 tests/hooks/test-tool-mapping-canonical.sh
 tests/opencode/run-tests.sh
 tests/kimi/run-tests.sh
@@ -139,6 +141,9 @@ EOF
 : >"$LOG"
 run_fixture --suite core
 assert_equals "$(cat "$LOG")" "$CORE_LOG" "core suite command order"
+if grep -Fq 'tests/claude-code/' <<<"$CORE_LOG"; then
+  fail "core suite must not include tests/claude-code/"
+fi
 
 : >"$LOG"
 run_fixture --suite extended

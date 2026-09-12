@@ -31,7 +31,9 @@ relevant runner under `tests/` or the Drill workflow under `evals/`.
 Live in `tests/`. Currently:
 
 - `tests/brainstorm-server/` — node test suite for the brainstorm server JS code.
-- `tests/hooks/test-tool-mapping-canonical.sh` — injected mapping / `skillInstructions` must equal `references/<harness>-tools.md`.
+- `tests/hooks/test-session-start.sh` — SessionStart JSON shapes (Claude / Cursor / Copilot / Codex). Language-router cases are not here.
+- `tests/hooks/test-language-router.sh` — Codex `UserPromptSubmit` language-router cases.
+- `tests/hooks/test-tool-mapping-canonical.sh` — injected mapping / `skillInstructions` must equal `references/<harness>-tools.md`. New `*-tools.md` files fail until classified. `tests/claude-code/` stays out of the core gate.
 - `tests/opencode/` — bash tests for OpenCode plugin loading, bootstrap caching, and tool registration.
 - `tests/codex-plugin-sync/` — bash sync verification.
 - `tests/kimi/` — bash/Python checks for Kimi plugin manifest wiring.
