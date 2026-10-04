@@ -483,6 +483,18 @@ assert_contains "$javascript_eval" \
 # tree keeps only human-readable indexes and transcripts.
 raw_evals=docs/wukong-code/evals/raw
 raw_eval_limit=262144
+# The root-level evals/ harness clone is gitignored; that rule must not also
+# swallow the tracked eval reports, or every new report needs git add -f.
+if git check-ignore -q "$raw_evals/new-report.md"; then
+  fail ".gitignore ignores new files under $raw_evals ($(git check-ignore -v "$raw_evals/new-report.md" | cut -f1))"
+else
+  pass ".gitignore leaves $raw_evals addable"
+fi
+if git check-ignore -q evals/README.md; then
+  pass ".gitignore still ignores the root evals/ harness clone"
+else
+  fail ".gitignore no longer ignores the root evals/ harness clone"
+fi
 if tracked_jsonl="$(git ls-files "$raw_evals" | grep -E '\.jsonl$' || true)" && [[ -n "$tracked_jsonl" ]]; then
   fail "$raw_evals tracks JSONL session captures; keep them in git history:"$'\n'"$tracked_jsonl"
 else
