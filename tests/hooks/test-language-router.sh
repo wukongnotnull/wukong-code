@@ -353,6 +353,27 @@ assert_prompt_router_output \
     "$router_home" \
     "$registry_router_root"
 
+# The installed plugin directory must stay clean: importing language_router
+# on every prompt must not leave hooks/__pycache__ behind.
+bytecode_root="$TEST_ROOT/bytecode-router"
+mkdir -p "$bytecode_root"
+cp -R "$REPO_ROOT/hooks" "$bytecode_root/hooks"
+cp -R "$REPO_ROOT/skills" "$bytecode_root/skills"
+rm -rf "$bytecode_root/hooks/__pycache__"
+assert_prompt_router_output \
+    "Router still routes from a copied plugin root before the bytecode check" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/go-basic\",\"prompt\":\"Change fetch.go to preserve order.\"}" \
+    "# Go Implementation Guidance" \
+    "# Rust Implementation Guidance" \
+    "$router_home" \
+    "$bytecode_root"
+if [[ -e "$bytecode_root/hooks/__pycache__" ]]; then
+    fail "UserPromptSubmit hook writes hooks/__pycache__ into the plugin directory"
+    ls "$bytecode_root/hooks/__pycache__" | sed 's/^/      /'
+else
+    pass "UserPromptSubmit hook leaves no hooks/__pycache__ in the plugin directory"
+fi
+
 assert_prompt_router_output \
     "English Let's go does not select Go or drop the JavaScript nearest marker" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"Let's go implement a change.\"}" \

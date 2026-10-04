@@ -15,6 +15,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 HOOKS = REPO_ROOT / "hooks"
 SKILL = REPO_ROOT / "skills" / "language-guidance" / "SKILL.md"
 
+sys.dont_write_bytecode = True
 sys.path.insert(0, str(HOOKS))
 from language_router import decide  # noqa: E402
 
