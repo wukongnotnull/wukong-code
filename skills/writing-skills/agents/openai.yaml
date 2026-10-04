@@ -1,0 +1,6 @@
+interface:
+  display_name: "Writing Skills"
+  short_description: "Create and verify skills before deployment"
+  default_prompt: "Use $writing-skills to create, edit, or verify this skill before deployment."
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Requesting Code Review"
+  short_description: "Request focused code review before merging"
+  default_prompt: "Use $requesting-code-review to request a focused review of this work before merging."
+policy:
+  allow_implicit_invocation: true

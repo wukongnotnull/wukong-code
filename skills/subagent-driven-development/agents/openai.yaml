@@ -1,0 +1,6 @@
+interface:
+  display_name: "Subagent-Driven Development"
+  short_description: "Execute implementation plans with staged subagent reviews"
+  default_prompt: "Use $subagent-driven-development to execute this implementation plan with staged subagent reviews."
+policy:
+  allow_implicit_invocation: true

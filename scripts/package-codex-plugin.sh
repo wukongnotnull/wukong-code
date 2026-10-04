@@ -3,9 +3,10 @@
 # Package the Wukong Code Codex plugin as a rootless archive for portal upload.
 #
 # The Codex portal artifact differs from the old openai/plugins sync flow:
-# it is a standalone archive, but it still needs the OpenAI-owned
-# skills/*/agents/openai.yaml metadata that used to be preserved from the
-# destination plugin repo. Seed that metadata from a prior official package.
+# it is a standalone archive, but it still needs skills/*/agents/openai.yaml
+# for every packaged skill. Prefer source-tree yaml. When a skill is missing
+# that file, seed it from a prior official package. A complete source tree
+# does not require --metadata-source.
 
 set -euo pipefail
 
@@ -30,10 +31,12 @@ Options:
   --format FORMAT          Archive format: zip or tar.gz. Default: zip.
                            If --output ends in .zip, .tar.gz, or .tgz, that
                            extension is used when --format is omitted.
-  --metadata-source PATH   Prior official package directory, .zip, or .tar.gz used to
-                           seed skills/*/agents/openai.yaml.
+  --metadata-source PATH   Optional prior official package directory, .zip, or .tar.gz
+                           used to seed skills/*/agents/openai.yaml when the source
+                           tree is missing them.
                            Default: ../_tmp/sup-codex-packaging/wukong-code,
-                           falling back to wukong-code.zip, then wukong-code.tar.gz
+                           falling back to wukong-code.zip, then wukong-code.tar.gz.
+                           Unused when every packaged skill already has yaml.
   --ref REF                Git ref to package. Default: HEAD.
   --allow-dirty            Permit a dirty working tree. The archive still uses --ref.
   --keep-stage             Print and keep the temporary staging directory.
@@ -171,8 +174,6 @@ if [[ -z "$METADATA_SOURCE" ]]; then
     METADATA_SOURCE="$REPO_ROOT/../_tmp/sup-codex-packaging/wukong-code.zip"
   elif [[ -f "$REPO_ROOT/../_tmp/sup-codex-packaging/wukong-code.tar.gz" ]]; then
     METADATA_SOURCE="$REPO_ROOT/../_tmp/sup-codex-packaging/wukong-code.tar.gz"
-  else
-    die "no metadata source found; pass --metadata-source <prior package dir, zip, or tar.gz>"
   fi
 fi
 
@@ -239,7 +240,10 @@ prepare_metadata_root() {
     die "metadata source does not contain a skills/ directory: $source"
 }
 
-METADATA_ROOT="$(prepare_metadata_root "$METADATA_SOURCE")"
+METADATA_ROOT=""
+if [[ -n "$METADATA_SOURCE" ]]; then
+  METADATA_ROOT="$(prepare_metadata_root "$METADATA_SOURCE")"
+fi
 
 MANIFEST_HELPER="$SCRIPT_DIR/codex-package-manifest.py"
 [[ -f "$MANIFEST_HELPER" ]] || die "missing Codex package manifest helper: $MANIFEST_HELPER"
@@ -295,16 +299,19 @@ while IFS= read -r skill_dir; do
   if [[ -f "$source_metadata" ]]; then
     continue
   fi
-  if [[ ! -f "$fallback_metadata" ]]; then
-    echo "Missing OpenAI agent metadata for skill: $skill_name" >&2
-    missing_metadata=1
+  if [[ -n "$METADATA_ROOT" && -f "$fallback_metadata" ]]; then
+    mkdir -p "$skill_dir/agents"
+    cp "$fallback_metadata" "$skill_dir/agents/openai.yaml"
     continue
   fi
-  mkdir -p "$skill_dir/agents"
-  cp "$fallback_metadata" "$skill_dir/agents/openai.yaml"
+  echo "Missing OpenAI agent metadata for skill: $skill_name" >&2
+  missing_metadata=1
 done < <(find "$STAGE/skills" -mindepth 1 -maxdepth 1 -type d -print | sort)
 
 if [[ "$missing_metadata" -ne 0 ]]; then
+  if [[ -z "$METADATA_SOURCE" ]]; then
+    die "no metadata source found; pass --metadata-source <prior package dir, zip, or tar.gz>"
+  fi
   die "metadata source is incomplete"
 fi
 
