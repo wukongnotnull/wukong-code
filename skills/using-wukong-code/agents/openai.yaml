@@ -1,0 +1,6 @@
+interface:
+  display_name: "Using Wukong Code"
+  short_description: "Establish how and when to use Wukong Code skills"
+  default_prompt: "Use $using-wukong-code to find and invoke the right skill before responding."
+policy:
+  allow_implicit_invocation: true

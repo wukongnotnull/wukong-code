@@ -1,0 +1,6 @@
+interface:
+  display_name: "Using Git Worktrees"
+  short_description: "Isolate feature work with native tools or a git worktree"
+  default_prompt: "Use $using-git-worktrees to isolate this feature work before implementation."
+policy:
+  allow_implicit_invocation: true

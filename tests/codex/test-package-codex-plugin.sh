@@ -191,6 +191,19 @@ else
   printf '%s\n' "$output" | sed 's/^/      /'
 fi
 
+self_contained_archive="$TEST_ROOT/wukong-code-no-metadata-source.zip"
+if self_contained_output="$("$SCRIPT_UNDER_TEST" --allow-dirty --ref "$candidate_ref" --output "$self_contained_archive" 2>&1)"; then
+  pass "package script succeeds without metadata source"
+else
+  fail "package script succeeds without metadata source"
+  printf '%s\n' "$self_contained_output" | sed 's/^/      /'
+fi
+if [[ -f "$archive" && -f "$self_contained_archive" ]] && cmp -s "$archive" "$self_contained_archive"; then
+  pass "complete source tree does not use fallback metadata"
+else
+  fail "complete source tree does not use fallback metadata"
+fi
+
 if [[ -f "$archive" ]]; then
   pass "package script writes archive"
 else
@@ -255,6 +268,8 @@ assert_contains "$archive_paths" "skills/brainstorming/agents/openai.yaml" "arch
 assert_contains "$archive_paths" "skills/language-guidance/agents/openai.yaml" "archive keeps source metadata"
 language_metadata="$(read_archive_file "$archive" skills/language-guidance/agents/openai.yaml)"
 assert_contains "$language_metadata" "display_name: \"Language Guidance\"" "uses source metadata"
+brainstorming_metadata="$(read_archive_file "$archive" skills/brainstorming/agents/openai.yaml)"
+assert_contains "$brainstorming_metadata" "display_name: \"Brainstorming\"" "source yaml wins over fixture"
 assert_contains "$archive_paths" "assets/app-icon.png" "archive includes app icon"
 assert_contains "$archive_paths" "assets/wukong-code-small.svg" "archive includes composer icon"
 assert_contains "$archive_paths" "assets/readme/hero.png" "archive includes published README hero"
@@ -386,8 +401,35 @@ mkdir -p "$incomplete_metadata/skills/brainstorming/agents"
 cp "$metadata_source/skills/brainstorming/agents/openai.yaml" \
   "$incomplete_metadata/skills/brainstorming/agents/openai.yaml"
 
+complete_with_incomplete_fallback="$TEST_ROOT/complete-source-incomplete-fallback.zip"
+if output="$("$SCRIPT_UNDER_TEST" --allow-dirty --ref "$candidate_ref" --metadata-source "$incomplete_metadata" --output "$complete_with_incomplete_fallback" 2>&1)"; then
+  pass "complete source tree ignores incomplete metadata source"
+else
+  fail "complete source tree ignores incomplete metadata source"
+  printf '%s\n' "$output" | sed 's/^/      /'
+fi
+if [[ -f "$archive" && -f "$complete_with_incomplete_fallback" ]] && cmp -s "$archive" "$complete_with_incomplete_fallback"; then
+  pass "incomplete fallback is unused when source yaml is complete"
+else
+  fail "incomplete fallback is unused when source yaml is complete"
+fi
+
+partial_index="$TEST_ROOT/partial-index"
+GIT_INDEX_FILE="$partial_index" git -C "$REPO_ROOT" read-tree "$candidate_tree"
+GIT_INDEX_FILE="$partial_index" git -C "$REPO_ROOT" rm -q --cached --ignore-unmatch \
+  skills/writing-plans/agents/openai.yaml
+partial_tree="$(GIT_INDEX_FILE="$partial_index" git -C "$REPO_ROOT" write-tree)"
+partial_ref="$(
+  GIT_AUTHOR_NAME="Wukong Code Tests" \
+  GIT_AUTHOR_EMAIL="tests@wukong-code.local" \
+  GIT_COMMITTER_NAME="Wukong Code Tests" \
+  GIT_COMMITTER_EMAIL="tests@wukong-code.local" \
+    git -C "$REPO_ROOT" commit-tree "$partial_tree" -p HEAD \
+      -m "Temporary Codex packaging candidate missing one skill yaml"
+)"
+
 set +e
-missing_output="$("$SCRIPT_UNDER_TEST" --allow-dirty --ref "$candidate_ref" --metadata-source "$incomplete_metadata" --output "$TEST_ROOT/missing.tar.gz" 2>&1)"
+missing_output="$("$SCRIPT_UNDER_TEST" --allow-dirty --ref "$partial_ref" --metadata-source "$incomplete_metadata" --output "$TEST_ROOT/missing.tar.gz" 2>&1)"
 missing_status=$?
 set -e
 if [[ "$missing_status" -ne 0 ]]; then
@@ -396,6 +438,8 @@ else
   fail "package script rejects incomplete metadata source"
 fi
 assert_contains "$missing_output" "ERROR: metadata source is incomplete" "incomplete metadata reports clear error"
+assert_contains "$missing_output" "Missing OpenAI agent metadata for skill: writing-plans" \
+  "incomplete metadata names the skill still missing yaml"
 
 dirty_repo="$TEST_ROOT/dirty-repo"
 git clone -q --no-local "$REPO_ROOT" "$dirty_repo"

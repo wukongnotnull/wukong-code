@@ -1,0 +1,6 @@
+interface:
+  display_name: "Finishing a Development Branch"
+  short_description: "Wrap up implementation work and choose the right integration path"
+  default_prompt: "Use $finishing-a-development-branch to choose how to merge, open a PR, or clean up this completed work."
+policy:
+  allow_implicit_invocation: true
