@@ -105,10 +105,43 @@ printf '\n' >> "${WUKONG_TEST_RUNNER_LOG}"
 EOF
 chmod +x "$FIXTURE/bin/npm"
 
+# Host tools scripts/test.sh preflights. Stubbed so the contract holds on a
+# machine that lacks one of them; the stubs are never invoked because every
+# test entry point above is also a stub.
+PREFLIGHT_TOOLS=(git python3 rg rsync jq zip unzip tar gzip shasum)
+for tool in "${PREFLIGHT_TOOLS[@]}"; do
+  printf '#!/usr/bin/env bash\nexit 0\n' >"$FIXTURE/bin/$tool"
+  chmod +x "$FIXTURE/bin/$tool"
+done
+
+# Minimal PATH for the negative preflight case: only what scripts/test.sh
+# itself needs to reach the preflight (bash, dirname, cat).
+mkdir -p "$FIXTURE/minbin"
+for tool in bash dirname cat; do
+  ln -s "$(command -v "$tool")" "$FIXTURE/minbin/$tool"
+done
+
 run_fixture() {
   (
     cd "$FIXTURE"
     PATH="$FIXTURE/bin:$PATH" \
+      WUKONG_TEST_RUNNER_LOG="$LOG" \
+      bash scripts/test.sh "$@"
+  )
+}
+
+run_fixture_without_tool() {
+  local missing_tool="$1"
+  shift
+  local tools_dir="$TEST_ROOT/tools-without-$missing_tool"
+  mkdir -p "$tools_dir"
+  for tool in "$FIXTURE"/bin/*; do
+    [[ "$(basename "$tool")" == "$missing_tool" ]] && continue
+    ln -s "$tool" "$tools_dir/$(basename "$tool")"
+  done
+  (
+    cd "$FIXTURE"
+    PATH="$FIXTURE/minbin:$tools_dir" \
       WUKONG_TEST_RUNNER_LOG="$LOG" \
       bash scripts/test.sh "$@"
   )
@@ -166,6 +199,31 @@ fi
 if run_fixture --suite unknown >/dev/null 2>&1; then
   fail "unknown suite exits successfully"
 fi
+
+: >"$LOG"
+if preflight_output="$(run_fixture_without_tool rsync --suite core 2>&1)"; then
+  fail "core suite runs without rsync on PATH"
+else
+  status=$?
+  [[ "$status" -eq 3 ]] || fail "missing-tool preflight exits with $status instead of 3"
+fi
+[[ "$preflight_output" == *"missing required host tools"* ]] || fail "preflight output omits the missing-tools header"
+[[ "$preflight_output" == *"rsync (used by tests/codex-plugin-sync)"* ]] || fail "preflight output does not name rsync and the test that needs it"
+[[ "$preflight_output" == *"docs/testing.md"* ]] || fail "preflight output does not point at docs/testing.md"
+[[ ! -s "$LOG" ]] || fail "preflight failure still ran tests"
+
+: >"$LOG"
+if preflight_output="$(run_fixture_without_tool npm --suite extended 2>&1)"; then
+  fail "extended suite runs without npm on PATH"
+else
+  status=$?
+  [[ "$status" -eq 3 ]] || fail "extended missing-tool preflight exits with $status instead of 3"
+fi
+[[ "$preflight_output" == *"npm (used by tests/brainstorm-server)"* ]] || fail "extended preflight does not name npm"
+
+: >"$LOG"
+run_fixture_without_tool npm --suite core >/dev/null 2>&1 || fail "core suite must not require npm"
+assert_equals "$(cat "$LOG")" "$CORE_LOG" "core suite runs without npm on PATH"
 
 : >"$LOG"
 if WUKONG_TEST_RUNNER_FAIL_PATH="tests/hooks/test-session-start.sh" run_fixture --suite core >/dev/null 2>&1; then

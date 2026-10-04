@@ -597,6 +597,16 @@ main() {
 
     echo "=== Test: sync-to-codex-plugin dry-run regression ==="
 
+    # gh is faked below; rsync, git, and python3 are the real thing. Report a
+    # missing one here so it does not surface as ~27 unrelated assertion failures.
+    local tool
+    for tool in rsync git python3; do
+        if ! command -v "$tool" >/dev/null 2>&1; then
+            echo "  [FAIL] required host tool '$tool' is not on PATH (see docs/testing.md)" >&2
+            exit 1
+        fi
+    done
+
     TEST_ROOT="$(mktemp -d)"
     trap cleanup EXIT
 

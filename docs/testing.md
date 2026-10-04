@@ -26,6 +26,25 @@ npm run test:extended
 Tests that need a host CLI, credentials, or real LLM sessions remain manual: use the
 relevant runner under `tests/` or the Drill workflow under `evals/`.
 
+### Host tools the suites expect
+
+`scripts/test.sh` checks for these before running anything and exits `3` with
+the full list of missing tools, so a missing tool shows up once by name instead
+of as unrelated assertion failures inside one test.
+
+| Tool | Used by | Notes |
+| --- | --- | --- |
+| `bash` 4+, `git` | every test | |
+| `node` 22+ | `tests/pi`, `tests/brainstorm-server`, `tests/product-design` | `--experimental-strip-types` needs 22+ |
+| `python3` | `tests/hooks`, `tests/kimi`, `tests/codex-plugin-sync` | |
+| `rg` (ripgrep) | `tests/skills`, `tests/product-design` | CI installs it in `.github/workflows/test.yml` |
+| `rsync` | `tests/codex-plugin-sync` | the sync script under test shells out to it; `gh` is faked |
+| `jq`, `zip`, `unzip`, `tar`, `gzip`, `shasum` | `tests/codex/test-package-codex-plugin.sh` | archive build and inspection |
+| `npm` | extended suite only (`tests/brainstorm-server`) | |
+
+`shellcheck` is used by `scripts/lint-shell.sh`, which is not part of either
+suite; `tests/shell-lint/` stubs it.
+
 ## Plugin tests
 
 Live in `tests/`. Currently:
@@ -40,7 +59,6 @@ Live in `tests/`. Currently:
 - `tests/cursor/` — bash checks for Cursor plugin manifest and sessionStart hook wiring.
 - `tests/test-automation/` — static contract for `scripts/test.sh` suite ordering and CI wiring. When adding or reordering core tests, update `tests/test-automation/test-test-runner.sh` `CORE_LOG` in the same change.
 
-Core tests use `rg` (ripgrep) in several scripts; CI installs it via `.github/workflows/test.yml`.
 - `tests/claude-code/test-helpers.sh`, `analyze-token-usage.py` — utilities used by remaining bash tests.
 - `tests/claude-code/test-subagent-driven-development.sh` — agent-can-describe-SDD test (no drill counterpart; tests description-recall, not behavior).
 - `tests/claude-code/test-subagent-driven-development-integration.sh` — extended SDD integration with token analysis (drill covers the YAGNI subset; bash adds commit-count, Claude Code task-tracking, and token telemetry assertions).
