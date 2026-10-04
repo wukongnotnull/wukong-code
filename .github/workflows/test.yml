@@ -29,6 +29,16 @@ jobs:
           cache-dependency-path: tests/brainstorm-server/package-lock.json
       - run: npm run test:extended
 
+  lint:
+    if: github.event_name != 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - run: shellcheck --version
+      - name: Lint every tracked shell script
+        run: bash scripts/lint-shell.sh --all
+
   manual:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest

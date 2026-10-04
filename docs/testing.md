@@ -43,7 +43,11 @@ of as unrelated assertion failures inside one test.
 | `npm` | extended suite only (`tests/brainstorm-server`) | |
 
 `shellcheck` is used by `scripts/lint-shell.sh`, which is not part of either
-suite; `tests/shell-lint/` stubs it.
+suite; `tests/shell-lint/` stubs it. GitHub Actions runs
+`bash scripts/lint-shell.sh --all` as a separate `lint` job on the same pull
+requests and pushes as the test job, so a ShellCheck warning (severity
+`warning` or above) in any tracked shell script fails CI. Reproduce it locally
+with the same command; `ubuntu-latest` runners ship `shellcheck` preinstalled.
 
 ## Plugin tests
 
