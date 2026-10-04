@@ -14,7 +14,6 @@
       "RELEASE-NOTES.md",
       "README.md",
       "docs",
-      "test-core-integration.sh",
       "node_modules",
       ".git",
       ".version-bump.json",

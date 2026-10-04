@@ -235,7 +235,7 @@ The Pi package loads the skills and injects the `using-wukong-code` bootstrap at
 
 ### Product Design
 
-Version `6.3.0` bundles these ten Product Design skills:
+Version `6.4.0` bundles these ten Product Design skills:
 
 | Skill | Purpose |
 | --- | --- |
