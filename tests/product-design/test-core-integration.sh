@@ -190,19 +190,26 @@ fi
 grep -Fq "sequential fallback" "$REPO_ROOT/references/product-design-host-capabilities.md" ||
   fail "host capability contract does not define a sequential fallback"
 
-python3 - "$REPO_ROOT/product-design.lock.json" <<'PY'
+# The plugin version comes from package.json so a release bump does not need
+# to edit this test; scripts/bump-version.sh keeps the declared files in sync.
+WUKONG_VERSION="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["version"])' "$REPO_ROOT/package.json")"
+[[ "$WUKONG_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] ||
+  fail "package.json version '$WUKONG_VERSION' is not semver"
+
+python3 - "$REPO_ROOT/product-design.lock.json" "$WUKONG_VERSION" <<'PY'
 from pathlib import Path
 import json
 import sys
 
 lock_path = Path(sys.argv[1])
+wukong_version = sys.argv[2]
 with lock_path.open(encoding="utf-8") as lock_file:
     lock = json.load(lock_file)
 
 expected = {
     "name": "product-design",
     "version": "0.1.52",
-    "wukong_code_version": "6.3.0",
+    "wukong_code_version": wukong_version,
     "license": "MIT",
     "distribution": "local-only",
 }
@@ -247,13 +254,13 @@ if manifest.get("templates") not in imported_roots:
     raise SystemExit("imported_roots is missing the Codex package templates root")
 PY
 
-python3 - "$REPO_ROOT" <<'PY'
+python3 - "$REPO_ROOT" "$WUKONG_VERSION" <<'PY'
 from pathlib import Path
 import json
 import sys
 
 root = Path(sys.argv[1])
-expected = "6.3.0"
+expected = sys.argv[2]
 config = json.loads((root / ".version-bump.json").read_text(encoding="utf-8"))
 
 for entry in config["files"]:
@@ -292,7 +299,7 @@ for relative in (
         raise SystemExit(f"{relative} does not advertise Product Design")
 PY
 
-grep -Fq "6.3.0" "$REPO_ROOT/README.md" ||
+grep -Fq "Version \`$WUKONG_VERSION\` bundles" "$REPO_ROOT/README.md" ||
   fail "README does not identify the local Product Design fork version"
 
 grep -Fq "Copyright (c) 2026 OpenAI" "$REPO_ROOT/THIRD_PARTY_NOTICES.md" ||
