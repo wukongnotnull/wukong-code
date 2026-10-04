@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
@@ -64,6 +64,8 @@ function getBootstrapContent(): string | null {
 		const skillContent = readFileSync(bootstrapSkillPath, "utf8");
 		const body = stripFrontmatter(skillContent);
 		const toolMapping = readFileSync(piToolsPath, "utf8").replace(/\s+$/, "");
+		const pointer = productDesignCompositionPointer(skillsDir);
+		const pointerBlock = pointer ? `\n\n${pointer}` : "";
 		cachedBootstrap = `${EXTREMELY_IMPORTANT_MARKER}
 ${BOOTSTRAP_MARKER}
 
@@ -73,13 +75,27 @@ The using-wukong-code skill content is included below and is already loaded for 
 
 ${body}
 
-${toolMapping}
+${toolMapping}${pointerBlock}
 </EXTREMELY_IMPORTANT>`;
 		return cachedBootstrap;
 	} catch {
 		cachedBootstrap = null;
 		return null;
 	}
+}
+
+export function productDesignCompositionPointer(targetSkillsDir: string): string {
+	const skillPath = resolve(targetSkillsDir, "product-design", "SKILL.md");
+	const pointerPath = resolve(
+		targetSkillsDir,
+		"using-wukong-code",
+		"references",
+		"product-design-composition-pointer.md",
+	);
+	if (!existsSync(skillPath) || !existsSync(pointerPath)) {
+		return "";
+	}
+	return readFileSync(pointerPath, "utf8").replace(/\s+$/, "");
 }
 
 export function stripFrontmatter(content: string): string {

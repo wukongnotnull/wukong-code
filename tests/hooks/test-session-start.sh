@@ -218,6 +218,15 @@ assert_command_output \
     CLAUDE_PLUGIN_ROOT="$REPO_ROOT" \
     bash "$HOOK_UNDER_TEST"
 
+assert_command_output \
+    "SessionStart appends the Product Design composition pointer after bootstrap" \
+    "nested" \
+    "Process skills stay primary; Product Design is secondary." \
+    "" \
+    "$fm_home" \
+    CLAUDE_PLUGIN_ROOT="$REPO_ROOT" \
+    bash "$HOOK_UNDER_TEST"
+
 legacy_home="$(make_home legacy-warning-removed)"
 mkdir -p "$legacy_home/.config/wukong-code/skills"
 assert_command_output \

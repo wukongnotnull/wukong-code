@@ -77,6 +77,7 @@ for test_path in \
   tests/hooks/test-session-start.sh \
   tests/hooks/test-language-router.sh \
   tests/hooks/test-tool-mapping-canonical.sh \
+  tests/hooks/test-product-design-bootstrap-pointer.sh \
   tests/opencode/run-tests.sh \
   tests/kimi/run-tests.sh \
   tests/cursor/run-tests.sh \
@@ -157,6 +158,7 @@ tests/skills/test-gemini-retirement.sh
 tests/hooks/test-session-start.sh
 tests/hooks/test-language-router.sh
 tests/hooks/test-tool-mapping-canonical.sh
+tests/hooks/test-product-design-bootstrap-pointer.sh
 tests/opencode/run-tests.sh
 tests/kimi/run-tests.sh
 tests/cursor/run-tests.sh

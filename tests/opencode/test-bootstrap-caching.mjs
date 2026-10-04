@@ -54,6 +54,9 @@ const result = {
   mapsSubagentToTask: bootstrapText(firstOutput).includes('`task` with `subagent_type: "general"`'),
   mapsMutationToApplyPatch: bootstrapText(firstOutput).includes('`apply_patch`'),
   mapsCanonicalToolsFile: bootstrapContainsCanonicalTools(firstOutput),
+  hasProductDesignPointer: bootstrapText(firstOutput).includes(
+    'Process skills stay primary; Product Design is secondary.'
+  ),
   firstReadCount: afterFirst.readCount,
   secondReadCount: afterSecond.readCount,
   firstExistsCount: afterFirst.existsCount,
@@ -155,6 +158,9 @@ function assertPresentBootstrap(result) {
   }
   if (!result.mapsCanonicalToolsFile) {
     failures.push('expected OpenCode bootstrap to contain references/opencode-tools.md verbatim');
+  }
+  if (!result.hasProductDesignPointer) {
+    failures.push('expected OpenCode bootstrap to append the Product Design composition pointer');
   }
   if (result.bootstrapStartsWithFrontmatter) {
     failures.push('expected stripped bootstrap body not to start with YAML frontmatter ---');

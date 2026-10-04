@@ -73,6 +73,7 @@ run_core() {
   run bash tests/hooks/test-session-start.sh
   run bash tests/hooks/test-language-router.sh
   run bash tests/hooks/test-tool-mapping-canonical.sh
+  run bash tests/hooks/test-product-design-bootstrap-pointer.sh
   run bash tests/opencode/run-tests.sh
   run bash tests/kimi/run-tests.sh
   run bash tests/cursor/run-tests.sh

@@ -56,7 +56,8 @@ Live in `tests/`. Currently:
 - `tests/brainstorm-server/` — node test suite for the brainstorm server JS code.
 - `tests/hooks/test-session-start.sh` — SessionStart JSON shapes (Claude / Cursor / Copilot / Codex). Language-router cases are not here.
 - `tests/hooks/test-language-router.sh` — Codex `UserPromptSubmit` language-router cases.
-- `tests/hooks/test-tool-mapping-canonical.sh` — injected mapping / `skillInstructions` must equal `references/<harness>-tools.md`. New `*-tools.md` files fail until classified. `tests/claude-code/` stays out of the core gate.
+- `tests/hooks/test-tool-mapping-canonical.sh` — injected mapping / `skillInstructions` must equal `references/<harness>-tools.md` (Kimi may append the Product Design composition pointer when that skill exists). New `*-tools.md` files fail until classified. `tests/claude-code/` stays out of the core gate.
+- `tests/hooks/test-product-design-bootstrap-pointer.sh` — SessionStart / OpenCode / Pi / Kimi append the composition pointer only when `skills/product-design/SKILL.md` exists.
 - `tests/opencode/` — bash tests for OpenCode plugin loading, bootstrap caching, and tool registration.
 - `tests/codex-plugin-sync/` — bash sync verification.
 - `tests/kimi/` — bash/Python checks for Kimi plugin manifest wiring.

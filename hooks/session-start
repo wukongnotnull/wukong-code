@@ -37,6 +37,25 @@ read_harness_tools() {
   cat "$path"
 }
 
+product_design_skill_path() {
+  printf '%s' "$1/skills/product-design/SKILL.md"
+}
+
+product_design_composition_pointer_path() {
+  printf '%s' "$1/skills/using-wukong-code/references/product-design-composition-pointer.md"
+}
+
+# Delivery-layer only. Inject when the Product Design router exists; do not
+# rewrite using-wukong-code Scope routing.
+read_product_design_composition_pointer() {
+  local plugin_root="$1"
+  local skill_path pointer_path
+  skill_path="$(product_design_skill_path "$plugin_root")"
+  pointer_path="$(product_design_composition_pointer_path "$plugin_root")"
+  [[ -f "$skill_path" && -f "$pointer_path" ]] || return 1
+  cat "$pointer_path"
+}
+
 detect_session_harness() {
   if [[ -n "${CURSOR_PLUGIN_ROOT:-}" ]]; then
     printf '%s' cursor
@@ -82,7 +101,13 @@ if mapping_raw="$(read_harness_tools "$PLUGIN_ROOT" "$detected_harness")"; then
   mapping_escaped=$(escape_for_json "$mapping_raw")
   mapping_escaped="\n\n${mapping_escaped}"
 fi
-session_context="<EXTREMELY_IMPORTANT>\nYou have wukong-code.\n\n**Below is the full content of your 'wukong-code:using-wukong-code' skill - your introduction to using skills. For all other skills, use the 'Skill' tool:**\n\n${using_wukong_code_escaped}${mapping_escaped}\n</EXTREMELY_IMPORTANT>"
+pointer_escaped=""
+if pointer_raw="$(read_product_design_composition_pointer "$PLUGIN_ROOT")"; then
+  pointer_raw="${pointer_raw%$'\n'}"
+  pointer_escaped=$(escape_for_json "$pointer_raw")
+  pointer_escaped="\n\n${pointer_escaped}"
+fi
+session_context="<EXTREMELY_IMPORTANT>\nYou have wukong-code.\n\n**Below is the full content of your 'wukong-code:using-wukong-code' skill - your introduction to using skills. For all other skills, use the 'Skill' tool:**\n\n${using_wukong_code_escaped}${mapping_escaped}${pointer_escaped}\n</EXTREMELY_IMPORTANT>"
 
 # Output context injection as JSON.
 # Cursor hooks expect additional_context (snake_case).

@@ -91,6 +91,14 @@ test('startup context injects the bootstrap as one user message until agent_end'
     true,
     'injected mapping must equal references/pi-tools.md',
   );
+  assert.match(
+    textOf(result.messages[0]),
+    /Process skills stay primary; Product Design is secondary\./,
+  );
+  assert.match(
+    textOf(result.messages[0]),
+    /wukong-product-design-composition\.md/,
+  );
   assert.equal(result.messages[1], originalMessages[0]);
 
   const repeatedProviderRequest = await context({ type: 'context', messages: originalMessages }, {});
