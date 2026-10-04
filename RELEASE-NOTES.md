@@ -1,5 +1,38 @@
 # Wukong Code Release Notes
 
+## v6.4.0 (2026-10-04)
+
+### Language Guidance
+
+- **Experimental JavaScript and TypeScript packs.** `skills/language-guidance/references/{javascript,typescript}/` ship profile, implementation, testing, debugging, review, and verification references, registered in `registry.json` with `package.json` / `tsconfig.json` markers. Both are published as Experimental; the README Evidence column links the latest Cursor recapture draft and marks the publication eval as pending.
+- **Behavior repairs from live Cursor pressure.** Sentence-level fixes in `test-driven-development`, `verification-before-completion`, `language-guidance`, and the JS/TS references, each from an observed failure: after TDD is selected the next Read must be the selected language's `testing.md` (no project or fixture Reads, Greps, or `**/*` Globs first); the repository test script must be the first verification command (`node --check` first is a failure, and "skip npm test" is not permission to run it); unused `AbortSignal`, unbounded `Promise.all` fan-out, and processor-validation review findings are padding unless a test, comment, or user contract requires them; an unobserved JavaScript debugging symptom stays undefined, and a self-authored fail-fast or hang probe does not define it; cross-language pack reads are forbidden on prompts that name two languages. Unique phrases are locked by `tests/skills/test-language-guidance.sh`.
+- **Codex prompt routing hardened.** Coordinated target lists (`a.ts and b.ts`) are parsed completely; mixed-language targets and same-distance marker ties abstain explicitly instead of guessing; the nearest marker owner wins; leftover `go` in a JS/TS tree fails closed to Go instead of injecting JavaScript, while English idioms (`let's go`, `go ahead`, sentence-initial `Go implement`) still do not select Go.
+- **Registry-driven router.** `hooks/user-prompt-submit.py` is now a thin stdin/JSON wrapper around `hooks/language_router.py` `decide()`, which reads `registry.json` and the phase table rather than re-implementing them. Router cases moved from `tests/hooks/test-session-start.sh` to `tests/hooks/test-language-router.sh`.
+
+### Skills
+
+- **Grilling persists the confirmed record as a spec, then hands off to `writing-plans`.** After the human partner confirms the in-chat record, `grilling` writes the spec file and asks for file review; only after that written spec is approved does `writing-plans` become the primary process. The pre-confirmation gate stays read-only, early stop stays conversation-only, and `using-wukong-code` Scope routing names this handoff explicitly so it is not mistaken for the forbidden brainstorming → plans → worktrees → SDD auto-chain. RED/GREEN evidence in `docs/wukong-code/evals/2026-09-08-grilling-spec-handoff.md`.
+- **Spec and plan reviewer dispatch.** `brainstorming` and `writing-plans` dispatch a subagent reviewer with their existing reviewer prompt templates after inline self-review, instead of stopping at a checklist. Harnesses without subagents fall back to inline review.
+- **Frontend design folded into Product Design ideation.** The Anthropic `frontend-design` guidance now lives inside `product-design-ideate` (`references/original-visual-direction.md`) rather than as a separate top-level skill; the Apache-2.0 text is retained at `references/licenses/frontend-design-APACHE-2.0.txt` and `product-design.lock.json` records the adaptation.
+
+### Harness Support
+
+- **One tool-mapping source per harness.** OpenCode, Pi, and Kimi injectors read `skills/using-wukong-code/references/<harness>-tools.md`; `.kimi-plugin/sync-skill-instructions.sh` regenerates the Kimi `skillInstructions` from that file. `tests/hooks/test-tool-mapping-canonical.sh` fails if an injector keeps a second handwritten table or a new `*-tools.md` is left unclassified. `using-wukong-code` Platform Adaptation now lists OpenCode and Kimi. Pi's model-visible mapping changes from narrative text to the table (plus optional `grep` / `find` / `ls`).
+
+### Packaging
+
+- **Codex Product Design helpers ship from one transport manifest.** `codex-package.manifest.json` lists the runtime scripts, integrity check, templates, and references; `package-codex-plugin.sh` and `sync-to-codex-plugin.sh` read it instead of hardcoding script names, and `check-product-design-import.mjs` is listed in `product-design.lock.json` `imported_roots`.
+- README production sources (`assets/readme/source/**`) are `export-ignore` so they stay out of Codex packages. Linux CI packaging uses portable `tar` owner flags.
+
+### Testing & CI
+
+- The extended suite (`npm run test:extended`) is the PR gate again; CI installs ripgrep; Cursor manifest and sessionStart hook wiring have their own tests under `tests/cursor/`.
+- Tiered eval documentation (`docs/evals-setup.md`) and a weekly static manifest-validation workflow (`.github/workflows/evals-static.yml`).
+
+### Documentation
+
+- README gets a project-native hero and workflow strip; the five language READMEs are synced on the JS/TS evidence column; pull requests target `main` directly.
+
 ## v6.3.0 (2026-08-11)
 
 ### Harness Support
