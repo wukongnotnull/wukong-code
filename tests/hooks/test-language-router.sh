@@ -423,6 +423,135 @@ assert_prompt_router_empty \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT\",\"prompt\":\"Fix a typo in README.md.\"}" \
     "$router_home"
 
+echo "Language-router Chinese prompt cases"
+
+assert_prompt_router_output \
+    "Chinese source edit injects Go implementation guidance" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/go-basic\",\"prompt\":\"修改 fetch.go，让它保留返回顺序。\"}" \
+    "# Go Project Profile|# Go Implementation Guidance|Phase: implementation|Delivered: go/profile.md, go/implementation.md" \
+    "# Rust Implementation Guidance"$'\037'"# JavaScript Implementation Guidance" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Chinese prose directly adjacent to a path still isolates the path" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/go-basic\",\"prompt\":\"修改fetch.go，让它保留返回顺序。\"}" \
+    "# Go Implementation Guidance|Phase: implementation" \
+    "No installed language guidance is registered" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Chinese object-fronting 把…改成 selects the fronted target" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/go-basic\",\"prompt\":\"把 fetch.go 改成并发实现。\"}" \
+    "# Go Implementation Guidance|Phase: implementation" \
+    "# Rust Implementation Guidance" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Chinese regression-test request injects Rust testing guidance" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/rust-basic\",\"prompt\":\"给 src/lib.rs 补一个回归测试。\"}" \
+    "# Rust Testing Guidance|Phase: testing|wukong-code:test-driven-development" \
+    "rust/implementation.md"$'\037'"go/testing.md" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Chinese testing pressure selects testing, not debugging, despite 失败" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/go-basic\",\"prompt\":\"线上阻塞了，先跳过失败的测试直接改 fetch.go。\"}" \
+    "# Go Testing Guidance|Phase: testing|valid RED|do not propose or implement the production change" \
+    "# Go Debugging Guidance"$'\037'"Phase: debugging" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Chinese failure investigation injects Go debugging guidance" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/go-basic\",\"prompt\":\"fetch.go 的测试失败了，查一下原因。\"}" \
+    "# Go Debugging Guidance|Phase: debugging|Mandatory investigation constraint" \
+    "# Go Testing Guidance"$'\037'"Phase: testing" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Chinese 为什么…失败 question injects Go debugging guidance" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/go-basic\",\"prompt\":\"为什么 fetch.go 的测试会失败？\"}" \
+    "# Go Debugging Guidance|Phase: debugging" \
+    "Phase: testing" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Mixed-script review request with no spaces injects Rust review guidance" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/rust-basic\",\"prompt\":\"请review一下src/lib.rs的错误处理。\"}" \
+    "# Rust Review Guidance|Phase: review|Delivered: rust/review.md" \
+    "rust/implementation.md"$'\037'"go/review.md" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Chinese completion check injects Rust verification guidance" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/rust-basic\",\"prompt\":\"验证一下 src/lib.rs 的改动是否真的完成了。\"}" \
+    "# Rust Verification Guidance|Phase: verification" \
+    "rust/implementation.md" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Chinese planning request injects Rust profile guidance only" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/rust-basic\",\"prompt\":\"规划一下 src/lib.rs 的改动方案。\"}" \
+    "# Rust Project Profile|Phase: profile|Delivered: rust/profile.md" \
+    "rust/implementation.md"$'\037'"rust/testing.md" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Chinese 和-coordinated cross-language targets abstain explicitly" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"修改 web/app.ts 和 rust-worker/src/lib.rs。\"}" \
+    "Multiple registered languages are in scope|TypeScript|Rust|Do not invoke language-guidance" \
+    "# TypeScript Implementation Guidance"$'\037'"# Rust Implementation Guidance" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Chinese 、-coordinated cross-language targets abstain explicitly" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"修改 web/app.ts、rust-worker/src/lib.rs。\"}" \
+    "Multiple registered languages are in scope|TypeScript|Rust|Do not invoke language-guidance" \
+    "# TypeScript Implementation Guidance"$'\037'"# Rust Implementation Guidance" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Chinese unsupported Python target reports no installed language pack" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT\",\"prompt\":\"修改 scripts/example.py，说明适用哪个语言指导。不要创建文件。\"}" \
+    "No installed language guidance is registered for .py.|Keep the generic workflow." \
+    "# Go"$'\037'"# Swift"$'\037'"# Rust"$'\037'"# Java"$'\037'"# TypeScript"$'\037'"# JavaScript" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Chinese 用go实现 names Go even without surrounding spaces" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/go-basic\",\"prompt\":\"用go实现一个并发抓取函数。\"}" \
+    "# Go Implementation Guidance|Phase: implementation" \
+    "# JavaScript Implementation Guidance" \
+    "$router_home"
+
+assert_prompt_router_empty \
+    "Chinese named Rust without a Rust owner does not fall through to the JavaScript marker" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"用 Rust 重写这个 worker。\"}" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Chinese two named languages abstain instead of last-in-registry JavaScript" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT\",\"prompt\":\"用 Rust 实现，不要用 JavaScript。\"}" \
+    "Multiple registered languages are in scope|Rust|JavaScript|Do not invoke language-guidance" \
+    "# JavaScript Implementation Guidance"$'\037'"# Rust Implementation Guidance" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Chinese marker-only production edit routes via the nearest JavaScript marker" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/javascript-basic\",\"prompt\":\"调整一下 worker 的行为。\"}" \
+    "# JavaScript Implementation Guidance|Phase: implementation" \
+    "# Go Implementation Guidance" \
+    "$router_home"
+
+assert_prompt_router_empty \
+    "Chinese documentation typo does not inject language guidance" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT\",\"prompt\":\"修复 README.md 里的错别字。\"}" \
+    "$router_home"
+
+assert_prompt_router_empty \
+    "Chinese explain-only request with no phase cue stays silent" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/rust-basic\",\"prompt\":\"先别动代码，解释一下 src/lib.rs 的逻辑。\"}" \
+    "$router_home"
+
 assert_prompt_router_empty \
     "Malformed hook input does not inject language guidance" \
     "not-json" \
