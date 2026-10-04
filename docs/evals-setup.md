@@ -34,8 +34,17 @@ runner scripts (`run-cohort.sh`, `run-cursor-cohort.sh`).
 | **Full behavioral** | Drill / Cursor cohort matrices | Manual on-demand; nightly when secrets and budget are configured | Yes |
 
 The static workflow pins `wukong-code-evals` at harness commit
-`39cbbec9d5842edd47ead87fcd6e1fc1399b4287`. Bump that SHA when manifest
-validation should track a newer harness release.
+`c63a0ffe6bd2333d6c564869fb18d3f1513d2bf4` on branch
+`codex/language-guidance-eval-harness` (the only branch that ships
+`scenarios/*.jsonl` and `scripts/validate-manifest.py`; `main` does not).
+Both values live in the `env` block of `.github/workflows/evals-static.yml`.
+Bump them together when manifest validation should track a newer harness
+commit; `tests/test-automation/test-test-runner.sh` fails if this document and
+the workflow disagree.
+
+If the harness branch history is rewritten, the clone step fails with an
+explicit `EVALS_COMMIT ... is not reachable` error instead of a bare
+`fatal: unable to read tree`. Re-pin to a commit that exists on the branch.
 
 Full LLM sessions are slow (minutes per scenario) and are intentionally
 outside the required PR gate. Use static manifest validation to catch broken

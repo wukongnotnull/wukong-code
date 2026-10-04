@@ -6,6 +6,14 @@ on:
     # Weekly manifest validation — no API keys required.
     - cron: '0 6 * * 1'
 
+env:
+  # Harness branch and commit that ship scenarios/*.jsonl and
+  # scripts/validate-manifest.py. Keep docs/evals-setup.md in sync
+  # (tests/test-automation/test-test-runner.sh enforces this).
+  EVALS_REPO: https://github.com/wukongnotnull/wukong-code-evals.git
+  EVALS_BRANCH: codex/language-guidance-eval-harness
+  EVALS_COMMIT: c63a0ffe6bd2333d6c564869fb18d3f1513d2bf4
+
 jobs:
   validate-manifests:
     runs-on: ubuntu-latest
@@ -13,8 +21,14 @@ jobs:
     steps:
       - name: Clone eval harness
         run: |
-          git clone https://github.com/wukongnotnull/wukong-code-evals.git evals
-          git -C evals checkout 39cbbec9d5842edd47ead87fcd6e1fc1399b4287
+          git clone --branch "$EVALS_BRANCH" "$EVALS_REPO" evals
+          if ! git -C evals cat-file -e "${EVALS_COMMIT}^{commit}" 2>/dev/null; then
+            echo "::error::EVALS_COMMIT $EVALS_COMMIT is not reachable from $EVALS_BRANCH in $EVALS_REPO." \
+                 "The harness history moved; update EVALS_COMMIT in this workflow and docs/evals-setup.md." >&2
+            echo "Branch tip is $(git -C evals rev-parse HEAD)" >&2
+            exit 1
+          fi
+          git -C evals checkout --quiet "$EVALS_COMMIT"
       - name: Validate language-guidance manifests
         run: |
           python3 evals/scripts/validate-manifest.py \

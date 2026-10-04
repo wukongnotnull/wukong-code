@@ -197,4 +197,23 @@ assert_file_contains "$REPO_ROOT/docs/testing.md" \
   'GitHub Actions runs the extended suite for pull requests and pushes to `main` and `dev`.' \
   "testing guide documents the mandatory extended CI gate"
 
+EVALS_WORKFLOW="$REPO_ROOT/.github/workflows/evals-static.yml"
+EVALS_SETUP_DOC="$REPO_ROOT/docs/evals-setup.md"
+evals_commit="$(sed -n 's/^  EVALS_COMMIT: \([0-9a-f]\{40\}\)$/\1/p' "$EVALS_WORKFLOW")"
+evals_branch="$(sed -n 's/^  EVALS_BRANCH: \(.*\)$/\1/p' "$EVALS_WORKFLOW")"
+[[ -n "$evals_commit" ]] || fail "evals-static workflow must pin a full 40-hex EVALS_COMMIT"
+[[ -n "$evals_branch" ]] || fail "evals-static workflow must name the harness EVALS_BRANCH"
+assert_file_contains "$EVALS_WORKFLOW" \
+  'git clone --branch "$EVALS_BRANCH" "$EVALS_REPO" evals' \
+  "evals-static workflow clones the harness branch that carries the pinned commit"
+assert_file_contains "$EVALS_WORKFLOW" \
+  'is not reachable from $EVALS_BRANCH' \
+  "evals-static workflow explains an unreachable pin instead of failing on checkout"
+assert_file_contains "$EVALS_SETUP_DOC" \
+  "\`$evals_commit\`" \
+  "evals setup guide documents the same harness commit as the workflow"
+assert_file_contains "$EVALS_SETUP_DOC" \
+  "\`$evals_branch\`" \
+  "evals setup guide documents the same harness branch as the workflow"
+
 echo "PASS: layered test runner contract"
