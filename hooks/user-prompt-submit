@@ -7,4 +7,7 @@ if ! command -v python3 >/dev/null 2>&1; then
     exit 0
 fi
 
-exec python3 "$SCRIPT_DIR/user-prompt-submit.py" "$(cd "$SCRIPT_DIR/.." && pwd)"
+# -B: never write hooks/__pycache__ into the installed plugin directory on
+# every prompt (it is untracked, so it dirties git status and gets rsynced
+# into the Codex plugin fork).
+exec python3 -B "$SCRIPT_DIR/user-prompt-submit.py" "$(cd "$SCRIPT_DIR/.." && pwd)"
