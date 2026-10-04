@@ -2,8 +2,8 @@
   "name": "wukong-code-dev",
   "description": "Development marketplace for Wukong Code core skills library",
   "owner": {
-    "name": "Jesse Vincent",
-    "email": "jesse@fsck.com"
+    "name": "悟空非空也",
+    "email": "1390128154@qq.com"
   },
   "plugins": [
     {
@@ -12,8 +12,8 @@
       "version": "6.4.0",
       "source": "./",
       "author": {
-        "name": "Jesse Vincent",
-        "email": "jesse@fsck.com"
+        "name": "悟空非空也",
+        "email": "1390128154@qq.com"
       }
     }
   ]

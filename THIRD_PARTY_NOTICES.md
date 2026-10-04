@@ -1,5 +1,16 @@
 # Third-Party Notices
 
+## Superpowers
+
+Wukong Code is derived from Jesse Vincent's
+[Superpowers](https://github.com/obra/superpowers) skills library (MIT). The
+core development skills, the `using-*` bootstrap pattern, the harness hooks and
+injectors, the Codex packaging and sync tooling, and the contributor
+guidelines originate there and have been renamed, extended, and re-tuned here.
+The original copyright notice is retained in [`LICENSE`](LICENSE) alongside
+this project's own. Source comments that cite upstream issue numbers link to
+`obra/superpowers` so the history behind each workaround stays reachable.
+
 ## OpenAI Product Design plugin
 
 The Product Design skills, references, helper scripts, and starter templates
