@@ -1,5 +1,26 @@
 # Wukong Code Release Notes
 
+## Unreleased
+
+Changes merged to `main` after v6.4.0. Rename this heading to the version and date when the next release PR runs `scripts/bump-version.sh`.
+
+### Language Guidance
+
+- **Codex router understands Chinese prompts.** `hooks/language_router.py` adds Chinese cues for every phase in the same precedence order as `using-wukong-code` (debugging → review → verification → testing → profile → implementation), so a Chinese prompt such as 「帮我修复 handler.ts 里的 bug」 routes to the TypeScript pack instead of abstaining. Word boundaries use explicit ASCII lookarounds because Python's `\b` treats CJK as word characters; gaps between cue words are clause-bounded (`，。；,;`) and ambiguous nouns (`验证`, `审核`, `加载`, `编辑器`, `支持`) only match in phrase shapes, so 「验证码」 or 「编辑器」 do not select a phase. English routing is unchanged: a 53-prompt differential against the previous router shows zero differences. 27 Chinese cases and 8 false-positive controls are pinned in `tests/hooks/test-language-router.sh` and `tests/hooks/language-router-contract.py`. (#41)
+- **The prompt hook leaves no `hooks/__pycache__` behind.** `hooks/user-prompt-submit` runs `python3 -B`, so the first Codex prompt no longer dirties a git-cloned plugin checkout with an untracked, un-ignored `hooks/__pycache__/` that `sync-to-codex-plugin.sh` would otherwise rsync into the Codex fork; the router test copies the plugin root and asserts the directory stays clean. (#44)
+
+### Repository & Packaging
+
+- **Rust eval session captures moved to git history.** The 48 raw JSONL captures under `docs/wukong-code/evals/raw/2026-07-29-rust-language-guidance/candidate/jsonl/` are removed from the working tree; `candidate.md` and `INTEGRITY.md` keep the SHA-256 manifest and show how to retrieve each file with `git show v6.4.0:<path>`. Tracked size drops from 13.54 MB to 5.40 MB (shallow clone 17 MB → 8.2 MB). `tests/skills/test-language-guidance.sh` fails if a `.jsonl` or any file over 256 KiB is added back under `docs/wukong-code/evals/raw/`. (#42)
+- **`.gitignore` anchors `evals/` to the repo root.** The unanchored rule also matched `docs/wukong-code/evals/`, so new eval reports there were silently ignored by `git add`; the rule is now `/evals/` and the language-guidance test checks both sides. (#43)
+- **Maintainer identity and provenance metadata unified.** Manifests, hooks, and docs name the current maintainer; `FUNDING.yml` is removed; `LICENSE` keeps the 2025 Jesse Vincent line and adds a 2026 line; `THIRD_PARTY_NOTICES.md` gains a Superpowers section; upstream issue references are qualified as `obra/superpowers#…`. (#40)
+
+### Testing & CI
+
+- **Host-tool preflight.** `scripts/test.sh` checks for every host tool the suites shell out to (`git node python3 rg rsync jq zip unzip tar gzip shasum`, plus `npm` for extended) and exits `3` with the full missing list before running anything, so a missing tool shows up once by name instead of as unrelated assertion failures. `docs/testing.md` documents the table. (#38)
+- **ShellCheck is a CI gate.** A separate `lint` job in `.github/workflows/test.yml` runs `bash scripts/lint-shell.sh --all` on every pull request and push; the 11 warning lines that had accumulated in `tests/claude-code/` (including a `$?`-after-`echo` that always reported exit code 0) are cleared. `ubuntu-latest` ships `shellcheck`, so the job adds no dependency. (#45)
+- **`evals-static` re-pinned to a reachable harness commit.** The weekly manifest-validation workflow clones the harness branch explicitly, hoists repo/branch/commit into `env`, and fails with a `::error::` naming the unreachable pin; `tests/test-automation/test-test-runner.sh` fails if `docs/evals-setup.md` and the workflow disagree on the pin. (#37)
+
 ## v6.4.0 (2026-10-04)
 
 ### Language Guidance
