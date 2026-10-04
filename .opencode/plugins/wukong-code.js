@@ -40,6 +40,20 @@ const extractAndStripFrontmatter = (content) => {
   return { frontmatter, content: body };
 };
 
+export const productDesignCompositionPointer = (skillsDir) => {
+  const skillPath = path.join(skillsDir, 'product-design', 'SKILL.md');
+  const pointerPath = path.join(
+    skillsDir,
+    'using-wukong-code',
+    'references',
+    'product-design-composition-pointer.md'
+  );
+  if (!fs.existsSync(skillPath) || !fs.existsSync(pointerPath)) {
+    return '';
+  }
+  return fs.readFileSync(pointerPath, 'utf8').replace(/\s+$/, '');
+};
+
 // Normalize a path: trim whitespace, expand ~, resolve to absolute
 const normalizePath = (p, homeDir) => {
   if (!p || typeof p !== 'string') return null;
@@ -86,6 +100,8 @@ export const WukongCodePlugin = async ({ client, directory }) => {
     const fullContent = fs.readFileSync(skillPath, 'utf8');
     const { content } = extractAndStripFrontmatter(fullContent);
     const toolMapping = fs.readFileSync(toolsPath, 'utf8').replace(/\s+$/, '');
+    const pointer = productDesignCompositionPointer(wukongCodeSkillsDir);
+    const pointerBlock = pointer ? `\n\n${pointer}` : '';
 
     _bootstrapCache = `<EXTREMELY_IMPORTANT>
 You have wukong-code.
@@ -94,7 +110,7 @@ You have wukong-code.
 
 ${content}
 
-${toolMapping}
+${toolMapping}${pointerBlock}
 </EXTREMELY_IMPORTANT>`;
 
     return _bootstrapCache;

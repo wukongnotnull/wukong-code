@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Contract: each harness mapping has one source of truth —
 # skills/using-wukong-code/references/<harness>-tools.md — and injectors wrap
-# that file instead of keeping a handwritten table.
+# that file instead of keeping a handwritten table. Kimi skillInstructions
+# may append the Product Design composition pointer after that mapping.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -90,7 +91,7 @@ skill_raw="$(cat "$SKILL")"
 export WUKONG_BASH_STRIPPED_BODY
 WUKONG_BASH_STRIPPED_BODY="$(strip_yaml_frontmatter "$skill_raw")"
 
-python3 - "$KIMI_MANIFEST" "$REFERENCES/kimi-tools.md" <<'PY'
+python3 - "$KIMI_MANIFEST" "$REFERENCES/kimi-tools.md" "$REFERENCES/product-design-composition-pointer.md" "$REPO_ROOT/skills/product-design/SKILL.md" <<'PY'
 import json
 import sys
 from pathlib import Path
@@ -99,12 +100,24 @@ manifest = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
 tools = Path(sys.argv[2]).read_text(encoding="utf-8")
 if tools.endswith("\n"):
     tools = tools[:-1]
+pointer = Path(sys.argv[3]).read_text(encoding="utf-8")
+if pointer.endswith("\n"):
+    pointer = pointer[:-1]
+pd_skill = Path(sys.argv[4])
+expected = tools
+if pd_skill.is_file():
+    expected = f"{tools}\n\n{pointer}"
 instructions = manifest.get("skillInstructions")
-if instructions != tools:
-    raise SystemExit("skillInstructions does not equal references/kimi-tools.md")
+if instructions != expected:
+    raise SystemExit(
+        "skillInstructions must equal references/kimi-tools.md "
+        "plus the Product Design pointer when that skill exists"
+    )
+if not str(instructions).startswith(tools):
+    raise SystemExit("skillInstructions lost the kimi-tools.md prefix")
 print("kimi-equal")
 PY
-pass "Kimi skillInstructions equals references/kimi-tools.md"
+pass "Kimi skillInstructions equals kimi-tools.md plus optional PD pointer"
 
 node --experimental-strip-types --input-type=module - "$REPO_ROOT" "$OPENCODE_PLUGIN" "$PI_EXTENSION" "$SKILL" <<'JS'
 import fs from 'node:fs';
@@ -231,6 +244,8 @@ assert_shape_a_injects_mapping() {
   cp "$HOOK" "$tmp/hooks/session-start"
   chmod +x "$tmp/hooks/session-start"
   cp "$SKILL" "$tmp/skills/using-wukong-code/SKILL.md"
+  cp "$REFERENCES/product-design-composition-pointer.md" \
+    "$tmp/skills/using-wukong-code/references/product-design-composition-pointer.md"
   printf '%s\n' "$token" > "$tmp/skills/using-wukong-code/references/${harness}-tools.md"
 
   local context
@@ -243,6 +258,11 @@ assert_shape_a_injects_mapping() {
     pass "Shape A $harness SessionStart injects ${harness}-tools.md"
   else
     fail "Shape A $harness SessionStart did not inject ${harness}-tools.md"
+  fi
+  if [[ "$context" == *"Process skills stay primary; Product Design is secondary."* ]]; then
+    fail "Shape A $harness SessionStart injected the PD pointer without product-design"
+  else
+    pass "Shape A $harness SessionStart omits the PD pointer when Product Design is absent"
   fi
   rm -rf "$tmp"
 }

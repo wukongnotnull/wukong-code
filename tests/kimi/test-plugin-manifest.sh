@@ -33,15 +33,27 @@ instructions = manifest.get("skillInstructions")
 if not isinstance(instructions, str) or not instructions.strip():
     raise AssertionError("skillInstructions must be a non-empty string")
 
-tools_path = manifest_path.parents[1] / "skills/using-wukong-code/references/kimi-tools.md"
+repo = manifest_path.parents[1]
+tools_path = repo / "skills/using-wukong-code/references/kimi-tools.md"
+pointer_path = repo / "skills/using-wukong-code/references/product-design-composition-pointer.md"
+pd_skill = repo / "skills/product-design/SKILL.md"
 tools = tools_path.read_text(encoding="utf-8")
 if tools.endswith("\n"):
     tools = tools[:-1]
-if instructions != tools:
+expected = tools
+if pd_skill.is_file() and pointer_path.is_file():
+    pointer = pointer_path.read_text(encoding="utf-8")
+    if pointer.endswith("\n"):
+        pointer = pointer[:-1]
+    expected = f"{tools}\n\n{pointer}"
+if instructions != expected:
     raise AssertionError(
         "skillInstructions must equal skills/using-wukong-code/references/kimi-tools.md "
-        "(run .kimi-plugin/sync-skill-instructions.sh after editing the reference file)"
+        "plus the Product Design pointer when that skill exists "
+        "(run .kimi-plugin/sync-skill-instructions.sh after editing the reference files)"
     )
+if not instructions.startswith(tools):
+    raise AssertionError("skillInstructions lost the kimi-tools.md prefix")
 
 for token in [
     "AskUserQuestion",
