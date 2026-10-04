@@ -547,6 +547,60 @@ assert_prompt_router_empty \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT\",\"prompt\":\"修复 README.md 里的错别字。\"}" \
     "$router_home"
 
+assert_prompt_router_output \
+    "Chinese 验证 as a feature noun stays implementation, not verification" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/rust-basic\",\"prompt\":\"给 src/lib.rs 添加参数验证逻辑。\"}" \
+    "# Rust Implementation Guidance|Phase: implementation" \
+    "Phase: verification"$'\037'"rust/verification.md" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Chinese 验证 in an earlier clause does not borrow 修改 from the next clause" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/go-basic\",\"prompt\":\"实现 token 验证，然后修改 fetch.go 的 handler。\"}" \
+    "# Go Implementation Guidance|Phase: implementation" \
+    "Phase: verification" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Chinese 审核流程 as a feature stays implementation, not review" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/go-basic\",\"prompt\":\"在 fetch.go 里实现审核流程。\"}" \
+    "# Go Implementation Guidance|Phase: implementation" \
+    "Phase: review" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Chinese 定位 as CSS positioning stays implementation, not debugging" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/monorepo\",\"prompt\":\"修改 web/app.ts 里弹窗的定位。\"}" \
+    "# TypeScript Implementation Guidance|Phase: implementation" \
+    "Phase: debugging" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Chinese 定位问题 is still failure investigation" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/go-basic\",\"prompt\":\"帮我定位一下 fetch.go 里的问题。\"}" \
+    "# Go Debugging Guidance|Phase: debugging" \
+    "Phase: implementation" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Chinese 挂起函数 as a feature stays implementation, not debugging" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/swift-basic\",\"prompt\":\"给 Sources/Fetcher/Fetcher.swift 实现一个挂起函数。\"}" \
+    "# Swift Implementation Guidance|Phase: implementation" \
+    "Phase: debugging" \
+    "$router_home"
+
+assert_prompt_router_output \
+    "Chinese 加载测试数据 does not read as a test-source request" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/go-basic\",\"prompt\":\"修改 fetch.go 加载测试数据的逻辑。\"}" \
+    "# Go Implementation Guidance|Phase: implementation" \
+    "Phase: testing" \
+    "$router_home"
+
+assert_prompt_router_empty \
+    "Chinese capability question 支持 go 吗 is not an edit request" \
+    "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/go-basic\",\"prompt\":\"这个库支持 go 吗？\"}" \
+    "$router_home"
+
 assert_prompt_router_empty \
     "Chinese explain-only request with no phase cue stays silent" \
     "{\"hook_event_name\":\"UserPromptSubmit\",\"cwd\":\"$REPO_ROOT/tests/skills/fixtures/language-guidance/rust-basic\",\"prompt\":\"先别动代码，解释一下 src/lib.rs 的逻辑。\"}" \

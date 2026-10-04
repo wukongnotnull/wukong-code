@@ -19,8 +19,9 @@ _PATH_START = r"(?<![A-Za-z0-9_.])"
 _PATH_END = r"(?![A-Za-z0-9_])"
 SOURCE_EXTENSION = re.compile(rf"{_PATH_START}({_PATH}){_PATH_END}")
 _ACTION_VERBS_EN = r"change|modify|make|add|implement|fix|refactor|update"
+# 编辑(?!器) keeps "编辑器" (editor, a noun) from reading as an edit request.
 _ACTION_VERBS_ZH = (
-    r"修改|更改|改动|改一下|调整|编辑|实现|添加|新增|增加|修复|修好|重构|重写|改写|迁移|更新|优化"
+    r"修改|更改|改动|改一下|调整|编辑(?!器)|实现|添加|新增|增加|修复|修好|重构|重写|改写|迁移|更新|优化"
 )
 # "修改 main.go" / "修改main.go" and object-fronting "给 main.go 加…" / "把 main.go 改成…".
 ACTION_TARGET = re.compile(
@@ -118,7 +119,8 @@ _ENGLISH_GO_IMPERATIVE = re.compile(
     r"^\s+(?:implement|fix|add|change|update|make|modify|refactor|write|create|run)\b",
     re.IGNORECASE,
 )
-_SENTENCE_START = re.compile(r"(?:\A|[.!?。！？]\s*)\Z")
+# ASCII sentence punctuation still needs whitespace; CJK full-width punctuation does not.
+_SENTENCE_START = re.compile(r"(?:\A|[.!?]\s+|[。！？]\s*)\Z")
 
 
 def _is_english_go_idiom(prompt: str, match: re.Match[str]) -> bool:
@@ -296,39 +298,49 @@ def _kw(pattern: str) -> str:
     return rf"{_NAME_START}(?:{pattern}){_NAME_END}"
 
 
+# A bounded gap that stays inside one Chinese clause, so "验证，然后修改" does not
+# pair 验证 with a 修改 from the next clause.
+_IN_CLAUSE = r"[^，。；,;!?！？]{0,20}"
+
 # Phase cues, English and Chinese, in SKILL.md precedence order: investigation,
 # review, and verification intent beat generic no-edit analysis; test-source work
-# beats a production edit. Chinese has no word boundaries, so those alternatives
-# are plain substrings chosen to be unambiguous on their own.
+# beats a production edit. The English alternatives are the original regexes with
+# ASCII boundaries. Chinese has no word boundaries, so a cue is either a word that
+# only ever means that phase (排查, 死锁, 评审) or a word that doubles as a feature
+# noun (验证 = validation, 定位 = CSS position, 审核 = approval flow, 挂起 =
+# suspend) constrained to the phrase shape that means the phase.
 _PHASE_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     (
         "debugging",
         re.compile(
             rf"{_NAME_START}(?:diagnos|hang|deadlock|investigat|failure)"
-            r"|调试|排查|排错|诊断|调查|定位|查一下|查查|查明|查清"
-            r"|卡死|卡住|挂起|死锁|崩溃|闪退|失败(?:的)?原因"
-            r"|为什么.{0,20}(?:失败|报错|出错|不通过|不对|异常)",
+            r"|调试|排查|排错|诊断|调查|卡死|卡住|挂死|挂了|挂起了|死锁|崩溃|闪退"
+            rf"|(?:查|找|定位){_IN_CLAUSE}(?:原因|根因|问题所在|问题(?:出)?在哪|哪里(?:出|有|不)|bug|故障)"
+            rf"|定位{_IN_CLAUSE}问题"
+            r"|(?:失败|报错|出错)(?:的)?原因"
+            rf"|为什么{_IN_CLAUSE}(?:失败|报错|出错|不通过|不对|异常|挂)",
         ),
     ),
-    ("review", re.compile(_kw(r"review(?:ing)?") + r"|审查|评审|审阅|审核|走查")),
+    ("review", re.compile(_kw(r"review(?:ing)?") + r"|审查|评审|审阅|走查")),
     (
         "verification",
         re.compile(
             _kw(r"verif(?:y|ies|ied|ying|ication)|exact checks?|claim(?:ing)? (?:this )?complete")
-            + r"|验证|核实|核验|确认.{0,8}(?:完成|通过|正确|无误)|证明.{0,8}完成"
-            + r"|(?:声称|宣称|标记|标注).{0,6}完成",
+            + r"|核实"
+            + rf"|(?:验证|核验)(?:一下|下)?{_IN_CLAUSE}(?:是否|有没有|是不是|完成|通过|正确|无误|生效)"
+            + r"|确认.{0,8}(?:完成|通过|正确|无误)|证明.{0,8}完成|(?:声称|宣称).{0,6}完成",
         ),
     ),
     (
         "testing",
         re.compile(
-            _kw(r"skip|skipping") + r".*" + _kw(r"failing|failed") + r".*" + _kw(r"test")
+            _kw(r"skip|skipping") + r".*(?:failing|failed).*" + _kw(r"test")
             + r"|" + _kw(r"production (?:is )?blocked")
             + r"|" + _kw(r"add|write|create|run|update") + r".*" + _kw(r"test|tests|testing")
             + r"|" + _kw(r"regression\s+test")
             + r"|跳过.{0,12}测试|不(?:要|用|必|需要)?(?:跑|运行|执行).{0,6}测试"
-            + r"|(?:线上|生产|上线|发布).{0,6}(?:阻塞|受阻|卡住|被堵|堵住)"
-            + r"|(?:加|写|补|增加|添加|新增|编写|补充|创建|运行|跑|执行|更新).{0,12}(?:测试|单测|用例)"
+            + r"|(?:线上|生产|上线|发布).{0,6}(?:阻塞|受阻|被堵|堵住)"
+            + r"|(?:加(?!载)|写|补|增加|添加|新增|编写|补充|创建|运行|跑|执行|更新).{0,12}(?:测试|单测|用例)"
             + r"|回归测试|单元测试|单测",
         ),
     ),
@@ -343,7 +355,7 @@ _PHASE_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
         "implementation",
         re.compile(
             _kw(_ACTION_VERBS_EN)
-            + rf"|{_ACTION_VERBS_ZH}|改成|改为|改掉|写一个|加一个|加上|去掉|删除|删掉|替换|支持",
+            + rf"|{_ACTION_VERBS_ZH}|改成|改为|改掉|写一个|加一个|加上|去掉|删除|删掉|替换",
         ),
     ),
 )
