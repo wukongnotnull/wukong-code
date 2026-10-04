@@ -478,6 +478,26 @@ assert_file "$javascript_eval"
 assert_contains "$javascript_eval" \
   "Development-session observations were not preserved as raw output or intermediate commits and are not independently verifiable publication evidence."
 
+# Raw eval evidence is cloned by every plugin install. Machine captures (JSONL
+# session dumps) stay in git history behind the SHA-256 manifest; the working
+# tree keeps only human-readable indexes and transcripts.
+raw_evals=docs/wukong-code/evals/raw
+raw_eval_limit=262144
+if tracked_jsonl="$(git ls-files "$raw_evals" | grep -E '\.jsonl$' || true)" && [[ -n "$tracked_jsonl" ]]; then
+  fail "$raw_evals tracks JSONL session captures; keep them in git history:"$'\n'"$tracked_jsonl"
+else
+  pass "$raw_evals tracks no JSONL session captures"
+fi
+if oversized="$(git ls-files -z "$raw_evals" | xargs -0 -r wc -c | awk -v limit="$raw_eval_limit" '$2 != "total" && $1 > limit {print}')" && [[ -n "$oversized" ]]; then
+  fail "$raw_evals has files over $raw_eval_limit bytes:"$'\n'"$oversized"
+else
+  pass "$raw_evals keeps every file under $raw_eval_limit bytes"
+fi
+assert_contains docs/wukong-code/evals/raw/2026-07-29-rust-language-guidance/candidate.md \
+  "git show v6.4.0:docs/wukong-code/evals/raw/2026-07-29-rust-language-guidance/candidate/jsonl/64c69df/final/R3-1.jsonl"
+assert_contains docs/wukong-code/evals/raw/2026-07-29-rust-language-guidance/candidate/jsonl/64c69df/final/INTEGRITY.md \
+  "kept in git history, not in the working tree"
+
 if grep -R -nE '((curl|wget).*[|][[:space:]]*(sh|bash)|(^|[[:space:]])(go[[:space:]]+install|npm[[:space:]]+install|pnpm[[:space:]]+(install|add)|yarn[[:space:]]+(install|add)|pip3?[[:space:]]+install|brew[[:space:]]+install|apt(-get)?[[:space:]]+install|apk[[:space:]]+add|dnf[[:space:]]+install|yum[[:space:]]+install|cargo[[:space:]]+install|gem[[:space:]]+install|composer[[:space:]]+require|bundle[[:space:]]+add))' skills/language-guidance; then
   fail "installer command found"
 else
