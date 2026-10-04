@@ -56,7 +56,7 @@ const normalizePath = (p, homeDir) => {
 // Module-level cache for bootstrap content.
 // The SKILL.md file does not change during a session, so reading + parsing it
 // once eliminates redundant fs.existsSync + fs.readFileSync + regex work on
-// every agent step.  See #1202 for the full analysis.
+// every agent step.  See obra/superpowers#1202 for the full analysis.
 let _bootstrapCache = undefined; // undefined = not yet loaded, null = file missing
 
 export const WukongCodePlugin = async ({ client, directory }) => {
@@ -115,8 +115,8 @@ ${toolMapping}
 
     // Inject bootstrap into the first user message of each session.
     // Using a user message instead of a system message avoids:
-    //   1. Token bloat from system messages repeated every turn (#750)
-    //   2. Multiple system messages breaking Qwen and other models (#894)
+    //   1. Token bloat from system messages repeated every turn (obra/superpowers#750)
+    //   2. Multiple system messages breaking Qwen and other models (obra/superpowers#894)
     //
     // The hook fires on every agent step (not just every turn) because
     // opencode's prompt.ts reloads messages from DB each step.  Fresh message

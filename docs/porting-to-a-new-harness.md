@@ -401,8 +401,8 @@ pi's just says "do not try to load using-wukong-code again." If your harness has
 no skill tool, use pi's wording, not OpenCode's.
 
 Inject the result as a **user-role message, not a system message** — system
-messages bloat tokens when repeated every turn (#750) and multiple system
-messages break some models (#894). Three things you must replicate:
+messages bloat tokens when repeated every turn (obra/superpowers#750) and multiple system
+messages break some models (obra/superpowers#894). Three things you must replicate:
 
 - **Dedup guard.** The lifecycle callback can fire repeatedly (OpenCode's
   transform runs on *every* agent step; pi's `context` fires per turn). Before
@@ -410,7 +410,7 @@ messages break some models (#894). Three things you must replicate:
   (The references pick different markers — pi a custom string, OpenCode the
   `EXTREMELY_IMPORTANT` tag; matching the tag is more robust since it needs no
   harness-specific constant.) Cache the bootstrap content at module level so
-  you're not re-reading and re-parsing `SKILL.md` on every call (#1202).
+  you're not re-reading and re-parsing `SKILL.md` on every call (obra/superpowers#1202).
 - **Compaction.** If the harness compacts/summarizes history, re-inject
   afterward unless the bootstrap marker already survived in the compacted
   history. pi sets an `injectBootstrap` flag on `session_start` and
@@ -804,7 +804,7 @@ Use this as the live index; when in doubt, read the files, not this table.
   `${CLAUDE_PLUGIN_ROOT}` (Claude) or a relative path
   (Cursor). Use what your harness exports; the script re-derives the root itself.
 - **System-message injection.** Shape B injects a *user* message on purpose
-  (#750, #894). Don't "fix" it to a system message.
+  (obra/superpowers#750, #894). Don't "fix" it to a system message.
 - **Per-step vs per-turn callbacks.** OpenCode fires every step (per-call dedup
   guard); pi fires per turn (lifecycle flag + `agent_end` reset). Copying one
   harness's dedup strategy onto the other's callback frequency breaks injection.
