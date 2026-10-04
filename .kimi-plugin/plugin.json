@@ -3,8 +3,8 @@
   "version": "6.4.0",
   "description": "Wukong development workflows plus Product Design research, prototyping, audits, and QA.",
   "author": {
-    "name": "Jesse Vincent",
-    "email": "jesse@fsck.com"
+    "name": "悟空非空也",
+    "email": "1390128154@qq.com"
   },
   "homepage": "https://github.com/wukongnotnull/wukong-code",
   "license": "MIT",
@@ -28,7 +28,7 @@
     "displayName": "Wukong Code",
     "shortDescription": "Planning, TDD, debugging, and delivery workflows for coding agents",
     "longDescription": "Use Wukong Code to guide agent work through brainstorming, implementation planning, test-driven development, systematic debugging, parallel execution, code review, and finish-the-branch workflows.",
-    "developerName": "Jesse Vincent",
+    "developerName": "悟空非空也",
     "capabilities": [
       "Interactive",
       "Read",
