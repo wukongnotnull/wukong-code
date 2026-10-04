@@ -68,6 +68,10 @@ def monorepo() -> Path:
     return REPO_ROOT / "tests/skills/fixtures/language-guidance/monorepo"
 
 
+def go_basic() -> Path:
+    return REPO_ROOT / "tests/skills/fixtures/language-guidance/go-basic"
+
+
 def fixtures() -> list[dict[str, object]]:
     return [
         {
@@ -156,6 +160,88 @@ def fixtures() -> list[dict[str, object]]:
         {
             "name": "Documentation-only prompt makes no language selection",
             "prompt": "Fix a typo in README.md.",
+            "cwd": REPO_ROOT,
+            "skill_work": None,
+            "expected_kind": "none",
+            "expected_language": None,
+        },
+        # Chinese prompts exercise the same skill rows; the hook must not be
+        # English-only when the user writes in 中文.
+        {
+            "name": "Chinese investigate failure selects debugging",
+            "prompt": "fetch.go 的测试失败了，查一下原因。",
+            "cwd": go_basic(),
+            "skill_work": "Investigate failure",
+            "expected_kind": "guidance",
+            "expected_language": "go",
+        },
+        {
+            "name": "Chinese review selects review over plan wording",
+            "prompt": "请review一下src/lib.rs的错误处理，顺便给个方案。",
+            "cwd": rust_basic(),
+            "skill_work": "Review code",
+            "expected_kind": "guidance",
+            "expected_language": "rust",
+        },
+        {
+            "name": "Chinese prove completion selects verification over plan wording",
+            "prompt": "验证一下 src/lib.rs 的改动是否真的完成了，再给个后续方案。",
+            "cwd": rust_basic(),
+            "skill_work": "Prove completion",
+            "expected_kind": "guidance",
+            "expected_language": "rust",
+        },
+        {
+            "name": "Chinese write tests selects testing over a production edit",
+            "prompt": "给 src/lib.rs 补一个回归测试，然后修改 process_all。",
+            "cwd": rust_basic(),
+            "skill_work": "Write or run tests",
+            "expected_kind": "guidance",
+            "expected_language": "rust",
+        },
+        {
+            "name": "Chinese testing pressure is a test-source / production-blocked request",
+            "prompt": "线上阻塞了，先跳过失败的测试直接改 fetch.go。",
+            "cwd": go_basic(),
+            "skill_work": "Write or run tests",
+            "expected_kind": "guidance",
+            "expected_language": "go",
+        },
+        {
+            "name": "Chinese plan with no source edit selects profile",
+            "prompt": "规划一下 src/lib.rs 的改动方案。",
+            "cwd": rust_basic(),
+            "skill_work": "Design or plan with no requested source edit",
+            "expected_kind": "guidance",
+            "expected_language": "rust",
+        },
+        {
+            "name": "Chinese production-source edit selects implementation",
+            "prompt": "修改fetch.go，让它保留返回顺序。",
+            "cwd": go_basic(),
+            "skill_work": "Requested production-source edit, including brainstorming or pre-edit analysis",
+            "expected_kind": "guidance",
+            "expected_language": "go",
+        },
+        {
+            "name": "Chinese 和-coordinated cross-language targets keep the generic workflow",
+            "prompt": "修改 web/app.ts 和 rust-worker/src/lib.rs。",
+            "cwd": monorepo(),
+            "skill_work": None,
+            "expected_kind": "mixed",
+            "expected_language": None,
+        },
+        {
+            "name": "Chinese unsupported Python target keeps the generic workflow",
+            "prompt": "修改 scripts/example.py，说明适用哪个语言指导。不要创建文件。",
+            "cwd": REPO_ROOT,
+            "skill_work": None,
+            "expected_kind": "unsupported",
+            "expected_language": None,
+        },
+        {
+            "name": "Chinese documentation-only prompt makes no language selection",
+            "prompt": "修复 README.md 里的错别字。",
             "cwd": REPO_ROOT,
             "skill_work": None,
             "expected_kind": "none",

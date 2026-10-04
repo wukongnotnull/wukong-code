@@ -11,10 +11,29 @@ from typing import Any
 
 
 DOCUMENTATION_EXTENSIONS = {".adoc", ".md", ".rst", ".txt"}
-SOURCE_EXTENSION = re.compile(r"(?<![\w.])([\w./-]+\.[A-Za-z0-9]+)\b")
+# File paths are ASCII so a CJK character next to a path ("修改main.go，")
+# counts as a boundary. Python's \w and \b treat CJK as word characters and
+# would swallow the surrounding prose into the path or refuse to match.
+_PATH = r"[A-Za-z0-9_./-]+\.[A-Za-z0-9]+"
+_PATH_START = r"(?<![A-Za-z0-9_.])"
+_PATH_END = r"(?![A-Za-z0-9_])"
+SOURCE_EXTENSION = re.compile(rf"{_PATH_START}({_PATH}){_PATH_END}")
+_ACTION_VERBS_EN = r"change|modify|make|add|implement|fix|refactor|update"
+# 编辑(?!器) keeps "编辑器" (editor, a noun) from reading as an edit request.
+_ACTION_VERBS_ZH = (
+    r"修改|更改|改动|改一下|调整|编辑(?!器)|实现|添加|新增|增加|修复|修好|重构|重写|改写|迁移|更新|优化"
+)
+# "修改 main.go" / "修改main.go" and object-fronting "给 main.go 加…" / "把 main.go 改成…".
 ACTION_TARGET = re.compile(
-    r"\b(?:change|modify|make|add|implement|fix|refactor|update)\s+"
-    r"(?:the\s+)?([\w./-]+\.[A-Za-z0-9]+)\b",
+    rf"(?:\b(?:{_ACTION_VERBS_EN})\s+(?:the\s+)?"
+    rf"|(?:{_ACTION_VERBS_ZH})\s*(?:一下\s*)?"
+    rf"|(?:给|把|将|对|为)\s*)"
+    rf"({_PATH}){_PATH_END}",
+    re.IGNORECASE,
+)
+# "a.ts and b.ts" / "a.ts, b.ts" / "a.ts、b.ts" / "a.ts 和 b.ts".
+COORDINATED_TARGET = re.compile(
+    rf"\s*(?:,?\s+and|,|、|，|\s*(?:和|与|及|以及|跟)\s*)\s*({_PATH}){_PATH_END}",
     re.IGNORECASE,
 )
 TESTING_PRESSURE_WORKFLOW = """Mandatory primary workflow for this request:
@@ -90,14 +109,18 @@ def extension_languages(languages: dict[str, Any]) -> dict[str, str]:
     }
 
 
-_GO_TOKEN = re.compile(r"\bgo(?:lang)?\b", re.IGNORECASE)
+# Language names are ASCII; "用Rust实现" names Rust even with no spaces.
+_NAME_START = r"(?<![A-Za-z0-9_])"
+_NAME_END = r"(?![A-Za-z0-9_])"
+_GO_TOKEN = re.compile(rf"{_NAME_START}go(?:lang)?{_NAME_END}", re.IGNORECASE)
 _ENGLISH_GO_PREFIX = re.compile(r"(?:let'?s|please)\s+$", re.IGNORECASE)
 _ENGLISH_GO_AHEAD = re.compile(r"^\s+ahead\b", re.IGNORECASE)
 _ENGLISH_GO_IMPERATIVE = re.compile(
     r"^\s+(?:implement|fix|add|change|update|make|modify|refactor|write|create|run)\b",
     re.IGNORECASE,
 )
-_SENTENCE_START = re.compile(r"(?:\A|[.!?]\s+)\Z")
+# ASCII sentence punctuation still needs whitespace; CJK full-width punctuation does not.
+_SENTENCE_START = re.compile(r"(?:\A|[.!?]\s+|[。！？]\s*)\Z")
 
 
 def _is_english_go_idiom(prompt: str, match: re.Match[str]) -> bool:
@@ -125,7 +148,9 @@ def _go_language_matches(prompt: str) -> list[re.Match[str]]:
 def named_language_matches(prompt: str, language: str) -> list[re.Match[str]]:
     if language == "go":
         return _go_language_matches(prompt)
-    return list(re.finditer(rf"\b{re.escape(language)}\b", prompt, re.IGNORECASE))
+    return list(
+        re.finditer(rf"{_NAME_START}{re.escape(language)}{_NAME_END}", prompt, re.IGNORECASE)
+    )
 
 
 def named_languages(prompt: str, languages: dict[str, Any]) -> list[str]:
@@ -158,11 +183,7 @@ def prompt_targets(prompt: str, languages: dict[str, Any]) -> list[Path]:
         first_action = action_matches[0]
         action_tail = prompt[prompt.lower().find(first_action.lower()) + len(first_action) :]
         targets = [Path(match) for match in action_matches]
-        while coordinated := re.match(
-            r"\s*(?:,?\s+and|,)\s+([\w./-]+\.[A-Za-z0-9]+)\b",
-            action_tail,
-            re.IGNORECASE,
-        ):
+        while coordinated := COORDINATED_TARGET.match(action_tail):
             targets.append(Path(coordinated.group(1)))
             action_tail = action_tail[coordinated.end() :]
         return list(dict.fromkeys(targets))
@@ -272,27 +293,79 @@ def unregistered_source_extension(prompt: str, languages: dict[str, Any]) -> str
     return extension
 
 
+def _kw(pattern: str) -> str:
+    """ASCII-boundary keyword: like \\b but a CJK neighbour still counts as a boundary."""
+    return rf"{_NAME_START}(?:{pattern}){_NAME_END}"
+
+
+# A bounded gap that stays inside one Chinese clause, so "验证，然后修改" does not
+# pair 验证 with a 修改 from the next clause.
+_IN_CLAUSE = r"[^，。；,;!?！？]{0,20}"
+
+# Phase cues, English and Chinese, in SKILL.md precedence order: investigation,
+# review, and verification intent beat generic no-edit analysis; test-source work
+# beats a production edit. The English alternatives are the original regexes with
+# ASCII boundaries. Chinese has no word boundaries, so a cue is either a word that
+# only ever means that phase (排查, 死锁, 评审) or a word that doubles as a feature
+# noun (验证 = validation, 定位 = CSS position, 审核 = approval flow, 挂起 =
+# suspend) constrained to the phrase shape that means the phase.
+_PHASE_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
+    (
+        "debugging",
+        re.compile(
+            rf"{_NAME_START}(?:diagnos|hang|deadlock|investigat|failure)"
+            r"|调试|排查|排错|诊断|调查|卡死|卡住|挂死|挂了|挂起了|死锁|崩溃|闪退"
+            rf"|(?:查|找|定位){_IN_CLAUSE}(?:原因|根因|问题所在|问题(?:出)?在哪|哪里(?:出|有|不)|bug|故障)"
+            rf"|定位{_IN_CLAUSE}问题"
+            r"|(?:失败|报错|出错)(?:的)?原因"
+            rf"|为什么{_IN_CLAUSE}(?:失败|报错|出错|不通过|不对|异常|挂)",
+        ),
+    ),
+    ("review", re.compile(_kw(r"review(?:ing)?") + r"|审查|评审|审阅|走查")),
+    (
+        "verification",
+        re.compile(
+            _kw(r"verif(?:y|ies|ied|ying|ication)|exact checks?|claim(?:ing)? (?:this )?complete")
+            + r"|核实"
+            + rf"|(?:验证|核验)(?:一下|下)?{_IN_CLAUSE}(?:是否|有没有|是不是|完成|通过|正确|无误|生效)"
+            + r"|确认.{0,8}(?:完成|通过|正确|无误)|证明.{0,8}完成|(?:声称|宣称).{0,6}完成",
+        ),
+    ),
+    (
+        "testing",
+        re.compile(
+            _kw(r"skip|skipping") + r".*(?:failing|failed).*" + _kw(r"test")
+            + r"|" + _kw(r"production (?:is )?blocked")
+            + r"|" + _kw(r"add|write|create|run|update") + r".*" + _kw(r"test|tests|testing")
+            + r"|" + _kw(r"regression\s+test")
+            + r"|跳过.{0,12}测试|不(?:要|用|必|需要)?(?:跑|运行|执行).{0,6}测试"
+            + r"|(?:线上|生产|上线|发布).{0,6}(?:阻塞|受阻|被堵|堵住)"
+            + r"|(?:加(?!载)|写|补|增加|添加|新增|编写|补充|创建|运行|跑|执行|更新).{0,12}(?:测试|单测|用例)"
+            + r"|回归测试|单元测试|单测",
+        ),
+    ),
+    (
+        "profile",
+        re.compile(
+            _kw(r"plan|design|approach|architecture")
+            + r"|规划|计划|方案|设计|架构|思路|怎么(?:做|改|实现|设计)|如何(?:做|改|实现|设计)",
+        ),
+    ),
+    (
+        "implementation",
+        re.compile(
+            _kw(_ACTION_VERBS_EN)
+            + rf"|{_ACTION_VERBS_ZH}|改成|改为|改掉|写一个|加一个|加上|去掉|删除|删掉|替换",
+        ),
+    ),
+)
+
+
 def phase_for(prompt: str) -> str | None:
     prompt = prompt.lower()
-    if re.search(r"\b(diagnos|hang|deadlock|investigat|failure)\w*", prompt):
-        return "debugging"
-    if re.search(r"\breview(?:ing)?\b", prompt):
-        return "review"
-    if re.search(
-        r"\b(verif(?:y|ies|ied|ying|ication)|exact checks?|claim(?:ing)? (?:this )?complete)\b",
-        prompt,
-    ):
-        return "verification"
-    if re.search(
-        r"\b(skip|skipping).*(?:failing|failed).*\btest\b|\bproduction (?:is )?blocked\b|"
-        r"\b(?:add|write|create|run|update)\b.*\b(?:test|tests|testing)\b|\bregression\s+test\b",
-        prompt,
-    ):
-        return "testing"
-    if re.search(r"\b(plan|design|approach|architecture)\b", prompt):
-        return "profile"
-    if re.search(r"\b(change|modify|make|add|implement|fix|refactor|update)\b", prompt):
-        return "implementation"
+    for phase, pattern in _PHASE_PATTERNS:
+        if pattern.search(prompt):
+            return phase
     return None
 
 
