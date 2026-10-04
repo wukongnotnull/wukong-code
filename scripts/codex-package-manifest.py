@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Read the Codex transport manifest for package and sync scripts.
 
-The manifest is the only Product Design include list those scripts may use.
-It names runtime scripts, whether the integrity-check script ships, and the
+The manifest is the only include list those scripts may use for the Codex
+archive payload and Product Design script includes. It names core archive
+paths, runtime scripts, whether the integrity-check script ships, and the
 templates/ and references/ roots. It does not invent path names of its own.
 """
 
@@ -40,6 +41,18 @@ def validate_manifest(data: object) -> dict:
     if not isinstance(data, dict):
         raise SystemExit("codex-package.manifest.json must be an object")
 
+    core_archive_paths = data.get("core_archive_paths")
+    if (
+        not isinstance(core_archive_paths, list)
+        or not core_archive_paths
+        or any(not isinstance(item, str) or not item for item in core_archive_paths)
+    ):
+        raise SystemExit("core_archive_paths must be a non-empty list of relative paths")
+    core_archive_paths = [
+        validate_relative_path(item, "core_archive_paths[]")
+        for item in core_archive_paths
+    ]
+
     runtime_scripts = data.get("runtime_scripts")
     if (
         not isinstance(runtime_scripts, list)
@@ -63,6 +76,7 @@ def validate_manifest(data: object) -> dict:
     references = validate_relative_path(data.get("references"), "references")
 
     return {
+        "core_archive_paths": core_archive_paths,
         "runtime_scripts": runtime_scripts,
         "ship_integrity_check": ship_integrity_check,
         "integrity_check": integrity_check,
@@ -97,7 +111,12 @@ def shipped_scripts(manifest: dict) -> list[str]:
 
 def archive_paths(manifest: dict) -> list[str]:
     return unique_keep_order(
-        [manifest["references"], manifest["templates"], *shipped_scripts(manifest)]
+        [
+            *manifest["core_archive_paths"],
+            manifest["references"],
+            manifest["templates"],
+            *shipped_scripts(manifest),
+        ]
     )
 
 

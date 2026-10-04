@@ -145,17 +145,55 @@ mapfile -t SHIPPED_SCRIPTS < <(python3 "$MANIFEST_HELPER" scripts "$CODEX_PACKAG
 archive_from_manifest="$(python3 "$MANIFEST_HELPER" archive-paths "$CODEX_PACKAGE_MANIFEST")"
 assert_contains "$archive_from_manifest" "references" "manifest lists references/"
 assert_contains "$archive_from_manifest" "templates" "manifest lists templates/"
+assert_contains "$archive_from_manifest" ".codex-plugin" "manifest lists Codex plugin root"
+assert_contains "$archive_from_manifest" "skills" "manifest lists skills/"
+assert_contains "$archive_from_manifest" "LICENSE" "manifest lists root license"
+assert_contains "$archive_from_manifest" "hooks/hooks-codex.json" "manifest lists Codex hook configuration"
+assert_contains "$archive_from_manifest" "hooks/language_router.py" "manifest lists Codex language router"
+if printf '%s\n' "$archive_from_manifest" | grep -Fxq "scripts/bump-version.sh"; then
+  fail "manifest does not ship repo tools such as bump-version.sh"
+else
+  pass "manifest does not ship repo tools such as bump-version.sh"
+fi
 if [[ ${#SHIPPED_SCRIPTS[@]} -gt 0 ]]; then
   pass "manifest lists shipped Product Design scripts"
 else
   fail "manifest lists shipped Product Design scripts"
 fi
 
+pd_only_manifest="$TEST_ROOT/pd-only.manifest.json"
+python3 -c '
+import json
+from pathlib import Path
+import sys
+
+src = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+src.pop("core_archive_paths", None)
+Path(sys.argv[2]).write_text(json.dumps(src) + "\n", encoding="utf-8")
+' "$CODEX_PACKAGE_MANIFEST" "$pd_only_manifest"
+set +e
+missing_core_output="$(python3 "$MANIFEST_HELPER" validate "$pd_only_manifest" 2>&1)"
+missing_core_status=$?
+set -e
+if [[ "$missing_core_status" -ne 0 ]]; then
+  pass "manifest without core_archive_paths is invalid"
+else
+  fail "manifest without core_archive_paths is invalid"
+fi
+assert_contains "$missing_core_output" "core_archive_paths must be a non-empty list of relative paths" \
+  "missing core_archive_paths reports a clear error"
+
 publish_hardcodes="$(
   grep -E 'bootstrap-prototype\.mjs|check-product-design-import\.mjs|check-sites-starter-contract\.mjs' \
     "$SCRIPT_UNDER_TEST" || true
 )"
 assert_equals "$publish_hardcodes" "" "package script does not hardcode Product Design script names"
+
+core_hardcodes="$(
+  grep -E 'hooks/hooks-codex\.json|hooks/run-hook\.cmd|hooks/language_router\.py|hooks/user-prompt-submit\.py' \
+    "$SCRIPT_UNDER_TEST" || true
+)"
+assert_equals "$core_hardcodes" "" "package script does not hardcode Codex core archive paths"
 
 # Package the candidate working tree without mutating the real index or HEAD.
 # The packaging script intentionally archives a Git ref, even with

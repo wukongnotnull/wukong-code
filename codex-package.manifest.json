@@ -1,4 +1,21 @@
 {
+  "core_archive_paths": [
+    ".codex-plugin",
+    "CODE_OF_CONDUCT.md",
+    "LICENSE",
+    "README.md",
+    "THIRD_PARTY_NOTICES.md",
+    "assets",
+    "hooks/hooks-codex.json",
+    "hooks/run-hook.cmd",
+    "hooks/session-start",
+    "hooks/user-prompt-submit",
+    "hooks/user-prompt-submit.py",
+    "hooks/language_router.py",
+    "product-design.lock.json",
+    "codex-package.manifest.json",
+    "skills"
+  ],
   "runtime_scripts": [
     "scripts/bootstrap-prototype.mjs",
     "scripts/check-sites-starter-contract.mjs"

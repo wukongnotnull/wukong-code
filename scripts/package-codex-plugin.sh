@@ -42,13 +42,11 @@ Options:
   --keep-stage             Print and keep the temporary staging directory.
   -h, --help               Show this help.
 
-The archive is rootless: .codex-plugin/, assets/, skills/, the Product Design
-roots listed in codex-package.manifest.json (runtime scripts, optional integrity
-check, templates/, references/), the Codex SessionStart hook files, README.md,
-LICENSE, THIRD_PARTY_NOTICES.md, product-design.lock.json,
-codex-package.manifest.json, and CODE_OF_CONDUCT.md sit at the archive root.
-Source-only repo files, cross-harness hook configuration, tests, docs, and other
-harness manifests are intentionally not shipped.
+The archive is rootless. Its payload is exactly the paths emitted by
+scripts/codex-package-manifest.py archive-paths: core_archive_paths plus
+Product Design runtime scripts, the optional integrity check, templates/,
+and references/. Source-only repo files, cross-harness hook configuration,
+tests, docs, and other harness manifests are intentionally not shipped.
 EOF
 }
 
@@ -256,21 +254,6 @@ mapfile -t CODEX_PACKAGE_SCRIPTS < <(printf '%s\n' "$manifest_json" | python3 "$
 [[ ${#CODEX_PACKAGE_SCRIPTS[@]} -gt 0 ]] || die "Codex package manifest produced no shipped scripts"
 
 git -C "$REPO_ROOT" archive --format=tar "$REF" -- \
-  .codex-plugin \
-  CODE_OF_CONDUCT.md \
-  LICENSE \
-  README.md \
-  THIRD_PARTY_NOTICES.md \
-  assets \
-  hooks/hooks-codex.json \
-  hooks/run-hook.cmd \
-  hooks/session-start \
-  hooks/user-prompt-submit \
-  hooks/user-prompt-submit.py \
-  hooks/language_router.py \
-  product-design.lock.json \
-  codex-package.manifest.json \
-  skills \
   "${CODEX_PACKAGE_ARCHIVE_PATHS[@]}" \
   | tar -xf - -C "$STAGE"
 
