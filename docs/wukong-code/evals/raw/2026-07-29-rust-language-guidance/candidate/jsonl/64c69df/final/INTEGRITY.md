@@ -2,6 +2,8 @@
 
 Every file below is the unmodified stdout/stderr capture from one fresh, ephemeral Codex CLI session. `thread.started` in each JSONL contains the session ID indexed in `candidate.md`. SHA-256 is recorded to detect later alteration.
 
+The captures themselves are kept in git history, not in the working tree (they were 8.1 MB of machine output cloned by every plugin install). Retrieve one with `git show v6.4.0:docs/wukong-code/evals/raw/2026-07-29-rust-language-guidance/candidate/jsonl/64c69df/final/<Run>.jsonl` and compare `shasum -a 256` against this table.
+
 | Run | Session ID | Bytes | SHA-256 |
 | --- | --- | ---: | --- |
 | R1-1-retry | `019fbdf3-2625-71f0-a698-f56a980cd0c6` | 15237 | `052152c89f56f058d91806a726763a217cf62d1d136f66ac7cd9334e1d06d0ff` |
