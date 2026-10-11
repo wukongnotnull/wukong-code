@@ -146,14 +146,14 @@ Before proposing changes to skill design, workflow philosophy, or architecture, 
 
 ### Issue：记录与跟踪
 
-当用户对本仓库提出**需求/功能**或**报告 Bug** 时，主动在本仓库创建或更新 issue。用户已授权该行为，无需每次再确认。使用咨询、一般讨论**不要**开 issue（见下）。
+当用户对本仓库提出**需求/功能**、**报告 Bug**，或发起**咨询/一般讨论**时，主动在本仓库创建或更新 issue。用户已授权该行为，无需每次再确认。
 
 **创建前：**
 
 1. 搜索 open **和** closed issues（以及相关 PR）。已有对应项：在已有 issue 上补充评论，不重复开。
 2. 选用匹配模板并填实每一项；不要留空占位，不要编造缺失信息。
 3. 每个 issue 披露 model、harness、harness version、全部已装插件（或写明手写、无 agent）。
-4. 标题和正文从用户消息整理：背景、需求或问题、已知信息、待办。
+4. 标题和正文从用户消息整理：背景、需求或问题、已知信息、待办。咨询/一般讨论另见下。
 
 **模板与标签（以仓库内文件为准）：**
 
@@ -162,12 +162,14 @@ Before proposing changes to skill design, workflow philosophy, or architecture, 
 | Bug | `.github/ISSUE_TEMPLATE/bug_report.md` | `bug` |
 | 功能/需求 | `.github/ISSUE_TEMPLATE/feature_request.md` | `enhancement` |
 | 新 IDE / 平台支持 | `.github/ISSUE_TEMPLATE/platform_support.md` | 模板声明 `platform-support`；若该标签在仓库中不存在，不要创建或编造标签 |
+| 咨询/一般讨论 | 无专用模板。用 GitHub API/CLI 创建或更新 issue，不要套用 Bug/Feature 模板 | 若仓库已有 `question` 标签则加上；不要创建或编造标签 |
 
 - Bug：信息可用时写复现步骤、预期行为、实际行为，并填 Environment 表。未亲自验证则不要勾选「已确认无 Wukong Code 也能复现」。附 debug log / transcript（有则附，无则写明没有）。
 - 功能请求：写亲身遇到的问题、具体方案、考虑过的替代、是否适合 core（见模板「Is this appropriate for core Wukong Code?」）。「会很酷」不是问题陈述。
 - 平台支持：写 IDE/平台名称与链接、是否有插件系统、是否尝试过手动安装及结果。
+- **咨询/一般讨论：** 标题和正文写清讨论主题、待确认事项、已达成的结论。没有的字段留空并标明未知，不要编造。后续相关对话继续写回同一 issue。
 
-**不要用 issue 记录咨询/一般讨论。** `.github/ISSUE_TEMPLATE/config.yml` 设置了 `blank_issues_enabled: false`，并把 Questions & Help 指到 README About。把用户引到 <https://github.com/wukongnotnull/wukong-code#about> 的联系渠道。不要为问答开空白 issue，也不要滥用 Bug/Feature 模板装咨询。
+`.github/ISSUE_TEMPLATE/config.yml` 当前为 `blank_issues_enabled: false`，网页「空白 issue」表单被隐藏。这不阻止用 GitHub API/CLI 创建咨询类 issue。不要为了开咨询 issue 去改仓库设置；按本条规则用 API/CLI 记录即可。README About 仍是对外联系渠道，不能代替本仓库的 issue 跟踪。
 
 **创建或更新后：** 把 issue 链接发给用户。后续进展、验证、结论写回同一 issue。
 
