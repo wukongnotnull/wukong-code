@@ -1,208 +1,208 @@
-# Wukong Code — Product Requirements Document
+# Wukong Code — 产品需求文档（PRD）
 
-**Status:** Living snapshot of this repository. Not a roadmap.  
-**Product:** Wukong Code (`wukong-code`)  
-**Current version in tree:** `6.4.0` (`package.json`, plugin manifests), plus documented Unreleased work already on `main` (see `RELEASE-NOTES.md`)  
-**License:** MIT  
-**This document does not replace** `README.md` (install and overview) or `AGENTS.md` / `CLAUDE.md` (contributor rules).
+**状态：** 对本仓库的现行快照，不是路线图。  
+**产品：** Wukong Code（`wukong-code`）  
+**树中当前版本：** `6.4.0`（`package.json`、各插件清单），以及已在 `main` 上记录的 Unreleased 变更（见 `RELEASE-NOTES.md`）  
+**许可证：** MIT  
+**本文不替代** `README.md`（安装与概览）或 `AGENTS.md` / `CLAUDE.md`（贡献者规则）。
 
-Grounded in: `README.md`, `AGENTS.md`, `CLAUDE.md`, `.github/PULL_REQUEST_TEMPLATE.md`, issue templates, `docs/porting-to-a-new-harness.md`, `docs/testing.md`, `docs/evals-setup.md`, `skills/`, `hooks/`, `THIRD_PARTY_NOTICES.md`, `product-design.lock.json`. Dated files under `docs/wukong-code/specs/` and `docs/wukong-code/plans/` are historical design records; they are cited only where they describe behavior that still ships.
-
----
-
-## 1. Purpose
-
-Wukong Code is a **zero-dependency plugin** that gives a coding agent:
-
-1. A **composable skill library** covering software development (design, planning, TDD, debugging, review, verification, collaboration) and Product Design (research, audit, ideation, clone/implement, Design QA, share).
-2. **Session-start bootstrap** (`using-wukong-code`) so those skills **auto-trigger** from task context. Without the bootstrap, skill files on disk are inert.
-
-Tagline in `README.md`: *A complete software development methodology for coding agents* — design first, test-driven development, evidence before claims.
-
-This is **not** an IDE, a hosted agent, or a package that installs language toolchains into the user's project.
+依据：`README.md`、`AGENTS.md`、`CLAUDE.md`、`.github/PULL_REQUEST_TEMPLATE.md`、issue 模板、`docs/porting-to-a-new-harness.md`、`docs/testing.md`、`docs/evals-setup.md`、`skills/`、`hooks/`、`THIRD_PARTY_NOTICES.md`、`product-design.lock.json`。`docs/wukong-code/specs/` 与 `docs/wukong-code/plans/` 下的带日期文件是历史设计记录，仅在其所描述行为仍在交付时引用。
 
 ---
 
-## 2. Who it is for
+## 1. 产品目的
 
-| Audience | What they need from this product |
+Wukong Code 是一个**零依赖插件**，为编程智能体提供：
+
+1. **可组合的技能库**，覆盖软件开发（设计、规划、TDD、调试、评审、验证、协作）与 Product Design（研究、审计、构思、复刻/实现、Design QA、分享）。
+2. **会话启动 bootstrap**（`using-wukong-code`），使这些技能根据任务上下文**自动触发**。没有 bootstrap，磁盘上的技能文件不会被调用。
+
+`README.md` 中的定位：*A complete software development methodology for coding agents*（面向编程智能体的完整软件开发方法论）——先设计、测试驱动开发、先验证再下结论。
+
+它**不是** IDE、托管智能体，也不是会向用户项目安装语言工具链的软件包。
+
+---
+
+## 2. 面向谁
+
+| 对象 | 他们从本产品得到什么 |
 | --- | --- |
-| Developers using a supported coding agent | A repeatable engineering and Product Design process that runs inside their existing harness, without a special per-task prompt |
-| Human partners reviewing agent work | Skills that force design approval, failing tests before production code, and fresh verification before completion claims |
-| Contributors (humans and agents) | A high bar for what may enter **core**, documented in `AGENTS.md` / `CLAUDE.md` and the PR template |
-| Harness porters | A thin delivery layer (bootstrap + tool mapping + install artifact) that must not rewrite skill bodies |
+| 使用受支持编程智能体的开发者 | 在现有 harness 内运行的、可重复的工程与 Product Design 流程，无需每次任务写特殊提示 |
+| 审阅智能体工作的 human partner | 强制设计确认、生产代码前先写失败测试、宣布完成前有新鲜验证的技能 |
+| 贡献者（人类与智能体） | 进入 **core** 的高门槛，见 `AGENTS.md` / `CLAUDE.md` 与 PR 模板 |
+| Harness 移植者 | 薄交付层（bootstrap + 工具映射 + 安装产物），不得改写技能正文 |
 
-There are no named customer personas, usage metrics, or market-share claims in this repository. Do not invent them.
-
----
-
-## 3. In scope (core)
-
-What **this repository** ships and maintains:
-
-- **Harness-agnostic skills** under `skills/` (26 top-level skills: 16 general development + 10 Product Design).
-- **Per-harness delivery:** plugin manifests, SessionStart / equivalent injectors, `skills/using-wukong-code/references/<harness>-tools.md` where that harness uses a mapping file.
-- **Bootstrap:** inject `using-wukong-code` at session start (and after compaction where a harness supports it, e.g. Pi) so the agent checks for a relevant skill **before** acting.
-- **Scope routing** in `using-wukong-code`: pick the **smallest** applicable process skill; do not auto-chain brainstorming → plans → worktrees → subagent-driven-development for mechanical edits.
-- **Product Design** skills imported from OpenAI Product Design `0.1.52` (MIT), with local adaptations recorded in `product-design.lock.json`. Anthropic `frontend-design` is **not** a standalone skill; its guidance is folded into `product-design-ideate` (Apache-2.0 notice retained).
-- **Experimental `language-guidance` packs** (Go, Java, TypeScript, JavaScript, Swift, Rust): load only the relevant phase when repository evidence identifies the language. Packs do **not** install tools or override repository commands.
-- **Brainstorming visual companion:** optional local companion used by `brainstorming` for visual questions; just-in-time, never required.
-- **Contributor and eval infrastructure** in this repo: `tests/` (plugin/infrastructure), docs for cloning [wukong-code-evals](https://github.com/wukongnotnull/wukong-code-evals) into gitignored `evals/`.
-- **Documentation for operators:** install in `README.md` (and translations), harness-specific notes (`docs/README.kimi.md`, `docs/README.opencode.md`), porting (`docs/porting-to-a-new-harness.md`), testing and evals setup.
+本仓库没有具名用户画像、用量指标或市场份额声明。不要编造。
 
 ---
 
-## 4. Out of scope / non-goals
+## 3. 范围内（core）
 
-From `AGENTS.md`, `CLAUDE.md`, the PR template, README FAQ, and porting guide. These are product constraints, not suggestions.
+**本仓库**交付并维护的内容：
 
-| Non-goal | Rule |
+- **与 harness 无关的技能**，位于 `skills/`（26 个顶层技能：16 个通用开发 + 10 个 Product Design）。
+- **按 harness 交付：** 插件清单、SessionStart 或等价注入器；该 harness 使用映射文件时，路径为 `skills/using-wukong-code/references/<harness>-tools.md`。
+- **Bootstrap：** 在会话启动时注入 `using-wukong-code`（若 harness 支持压缩后恢复，例如 Pi，也在 compaction 之后注入），使智能体在**行动前**检查相关技能。
+- **`using-wukong-code` 中的 Scope routing：** 选择**最小且适用**的过程技能；对机械修改不要自动串联 brainstorming → plans → worktrees → subagent-driven-development。
+- **Product Design** 技能自 OpenAI Product Design `0.1.52`（MIT）导入，本地适配记在 `product-design.lock.json`。Anthropic `frontend-design` **不是**独立顶层技能；其指导已并入 `product-design-ideate`（保留 Apache-2.0 声明）。
+- **实验性 `language-guidance` 包**（Go、Java、TypeScript、JavaScript、Swift、Rust）：仅在仓库证据识别出语言时加载对应阶段。这些包**不**安装工具，也**不**覆盖仓库既有命令。
+- **Brainstorming visual companion：** `brainstorming` 用于视觉问题时的可选本地 companion；即时启用，从不强制。
+- **本仓库内的贡献与 eval 基础设施：** `tests/`（插件/基础设施）；文档说明将 [wukong-code-evals](https://github.com/wukongnotnull/wukong-code-evals) 克隆到被 gitignore 的 `evals/`。
+- **运维文档：** 安装见 `README.md`（及其译本）；harness 专文（`docs/README.kimi.md`、`docs/README.opencode.md`）；移植（`docs/porting-to-a-new-harness.md`）；测试与 evals 设置。
+
+---
+
+## 4. 范围外 / 非目标
+
+来自 `AGENTS.md`、`CLAUDE.md`、PR 模板、README FAQ 与移植指南。这些是产品约束，不是建议。
+
+| 非目标 | 规则 |
 | --- | --- |
-| Third-party runtime dependencies in core | Rejected unless the change is **new harness support**. External tools/services belong in a **standalone plugin** |
-| Installing project or language tools | Language packs and skills must not install toolchains or replace repo-defined commands. Missing tools are reported, not installed |
-| Per-session opt-in to skills | A working integration loads bootstrap at session start. Manual copy of skill files, `npx skills` shims, or “enable skills this session” are not real integrations |
-| Rewriting skill bodies to match Anthropic skills docs | Skill content is behavior-shaping code. “Compliance” rewording without eval evidence is rejected |
-| Project- or team-only configuration in core | Personal or single-project skills/hooks belong in a separate plugin |
-| Automatic admission of every skill | Domain-specific and externally sourced skills **may** be reviewed for core; placement is not automatic |
-| Framework / cloud / database packs as language guidance | Language packs stay language-level and official-toolchain based. Specialized stacks need the general core-admission bar; a standalone plugin is preferred when scope or maintenance is narrow |
-| Gemini CLI | Retired in v6.3.0; not a supported harness |
-| Official Codex plugin marketplace listing | Codex App installs from this repository URL; README states it is not in the official Codex marketplace |
-| Editing the user's global config to “install” | Ports must ship through the harness install artifact only (`docs/porting-to-a-new-harness.md`) |
-| Fork rebrand / sync-from-fork PRs | Closed |
-| Speculative or bulk “fix the tracker” PRs | Closed. One real, experienced problem per PR |
-| Fabricated claims or hallucinated features | Closed |
-| Bundled unrelated changes | Closed |
+| core 中的第三方运行时依赖 | 除非变更是**新 harness 支持**，否则拒绝。外部工具/服务应做成 **standalone plugin** |
+| 安装项目或语言工具 | 语言包与技能不得安装工具链或替换仓库定义的命令。缺失工具只报告，不安装 |
+| 每个会话再选择是否启用技能 | 有效集成必须在会话启动时加载 bootstrap。手工拷贝技能文件、`npx skills` 一类 shim、或「本会话再启用技能」都不是真正的集成 |
+| 为符合 Anthropic skills 文档而改写技能正文 | 技能内容是塑造行为的代码。没有 eval 证据的「合规」改写会被拒绝 |
+| 把仅服务单一项目或团队的配置放进 core | 个人或单项目的技能/钩子应做成独立插件 |
+| 自动接纳每一个技能 | 领域向与外部来源技能**可以**进入 core 评审；进入 core 不是自动的 |
+| 把框架 / 云 / 数据库包当作 language guidance | 语言包保持语言层、基于官方工具链。专用栈须满足通用 core 准入门槛；范围或维护负担窄时优先 standalone plugin |
+| Gemini CLI | 已在 v6.3.0 退役；不是受支持 harness |
+| 上架官方 Codex 插件市场 | Codex App 从本仓库 URL 安装；README 写明未上架官方 Codex marketplace |
+| 改用户全局配置来「安装」 | 移植必须只通过 harness 的安装产物交付（`docs/porting-to-a-new-harness.md`） |
+| 把 fork 再品牌化 / 从 fork 同步上游的 PR | 关闭 |
+| 推测性或批量「修 issue 列表」的 PR | 关闭。每个 PR 只解决一个真实经历过的问题 |
+| 编造声明或虚构功能 | 关闭 |
+| 捆绑互不相关的改动 | 关闭 |
 
-**Standalone plugin vs core:** Prefer a standalone plugin when the skill has narrow utility, incompatible licensing, unsafe behavior, undeclared dependencies, disproportionate maintenance, or no demonstrated value beyond one project or team.
+**Standalone plugin 与 core：** 当技能用途窄、许可不兼容、行为不安全、未声明依赖、维护负担不成比例、或无法证明超出单一项目/团队的价值时，优先做成独立插件。
 
 ---
 
-## 5. Capabilities
+## 5. 主要能力
 
-### 5.1 Software development workflow
+### 5.1 软件开发工作流
 
-Skills are **requirements**, not suggestions, when they apply. `using-wukong-code` classifies first.
+技能在适用时是**要求**，不是建议。先由 `using-wukong-code` 分类。
 
 ```text
-Your idea
+你的想法
    ↓
-Brainstorm or grilling → Approved design → Implementation plan
+Brainstorm 或 grilling → 已确认的设计 → 实施计划
    ↓
-RED → GREEN → REFACTOR → Review → Verification
+RED → GREEN → REFACTOR → 评审 → 验证
    ↓
-Merge / PR / keep the branch
+合并 / PR / 保留分支
 ```
 
-| Step | Skill(s) | Requirement |
+| 步骤 | 技能 | 要求 |
 | --- | --- | --- |
-| Route | `using-wukong-code` | Check skills before any action; smallest applicable workflow |
-| Design | `brainstorming` | New features / behavior change / ambiguous intent: design approval before implementation. Optional visual companion |
-| Deep interview | `grilling` | Explicit grilling / 「逐题问清楚」. Persist confirmed record as a spec; `writing-plans` only after the **written** spec is approved |
-| Debug | `systematic-debugging` | Unclear bugs: root cause before fix |
-| Fast path | (none / one domain skill) | Named mechanical edit (exact file + exact change, no design ambiguity) |
-| Plan | `writing-plans` | Approved multi-step design → small tasks with paths and verification |
-| Isolate | `using-git-worktrees` | Isolated workspace when execution needs isolation; clean test baseline |
-| Execute | `executing-plans` or `subagent-driven-development` | Task-level review or human checkpoints; TDD when implementation applies |
-| TDD | `test-driven-development` | RED before production implementation. Testing-pressure routing beats brainstorming when the user asks to skip a failing test |
-| Verify | `verification-before-completion` | Fresh evidence; do not treat unrun checks as proof |
-| Review | `requesting-code-review`, `receiving-code-review` | Spec and quality review in the loop |
-| Parallelism | `dispatching-parallel-agents` | Isolated parallel work when appropriate |
-| Finish | `finishing-a-development-branch` | Honor existing integration intent, or offer merge / PR / keep / discard |
-| Meta | `writing-skills` | How to author and eval skills |
+| 路由 | `using-wukong-code` | 任何行动前检查技能；选择最小且适用的工作流 |
+| 设计 | `brainstorming` | 新功能 / 行为变更 / 意图不明：实现前须设计确认。可选 visual companion |
+| 深度访谈 | `grilling` | 明确要求 grilling / 「逐题问清楚」。把已确认记录写成 spec；仅在**书面** spec 获批后才进入 `writing-plans` |
+| 调试 | `systematic-debugging` | 根因不明的缺陷：先查根因再修 |
+| 快路径 | （无 / 一个领域技能） | 已点名的机械修改（确切文件 + 确切改动，无设计歧义） |
+| 计划 | `writing-plans` | 已确认的多步设计 → 带路径与验证步骤的小任务 |
+| 隔离 | `using-git-worktrees` | 执行需要隔离时使用独立工作区；先确认干净的测试基线 |
+| 执行 | `executing-plans` 或 `subagent-driven-development` | 任务级评审或人类检查点；实现适用 TDD 时走 TDD |
+| TDD | `test-driven-development` | 生产实现前必须 RED。用户要求跳过失败测试时，testing-pressure 路由优先于 brainstorming |
+| 验证 | `verification-before-completion` | 需要新鲜证据；未运行的检查不能当作已证明 |
+| 评审 | `requesting-code-review`、`receiving-code-review` | 过程中检查需求符合度与代码质量 |
+| 并行 | `dispatching-parallel-agents` | 适当时做隔离的并行工作 |
+| 收尾 | `finishing-a-development-branch` | 尊重已有集成意图，或提供合并 / PR / 保留 / 丢弃 |
+| 元技能 | `writing-skills` | 如何编写并评测技能 |
 
-### 5.2 Product Design workflow
+### 5.2 Product Design 工作流
 
-Router: `product-design`. **Not** one fixed sequence; shortest path for the request.
+路由技能：`product-design`。**不是**固定长序列；按请求选最短路径。
 
-| Path | Skills | Gates |
+| 路径 | 技能 | 门槛 |
 | --- | --- | --- |
-| Research / audit | `product-design-user-context`, `product-design-context`, `product-design-research` or `product-design-audit` | Evidence-based; **does not modify source code** |
-| Explore a new direction | `product-design-ideate` | Three visual options; human chooses before implementation |
-| Clone / implement | `product-design-url-to-code` or `product-design-image-to-code` | Faithful recreation / selected visual as responsive frontend |
-| QA | `product-design-design-qa` | Compare render vs visual source; **blocks handoff** until it passes |
-| Share | `product-design-share` | Publish runnable prototype when the user asks |
+| 研究 / 审计 | `product-design-user-context`、`product-design-context`、`product-design-research` 或 `product-design-audit` | 以证据为准；**不修改源代码** |
+| 探索新方向 | `product-design-ideate` | 三个视觉方案；实现前由人选择 |
+| 复刻 / 实现 | `product-design-url-to-code` 或 `product-design-image-to-code` | 忠实复刻 / 将选定视觉稿实现为响应式前端 |
+| QA | `product-design-design-qa` | 比较渲染结果与视觉来源；未通过则**阻断交付** |
+| 分享 | `product-design-share` | 用户要求时发布可运行原型 |
 
-Product Design adapts to **actually available** browser, image-generation, local-build, and sharing capabilities. It does not invent tools.
+Product Design 只适配**当前实际可用**的浏览器、图像生成、本地构建与分享能力。不虚构工具。
 
 ### 5.3 Language guidance
 
-Methodology stays language-agnostic. When markers identify a supported language and phase, load **only** that pack's relevant files.
+方法论层面对语言无关。当标记识别出受支持语言与阶段时，**只**加载该包的相关文件。
 
-| Language | Status in README | Evidence |
+| 语言 | README 中的状态 | 证据 |
 | --- | --- | --- |
-| Go, Java, Swift, Rust | Experimental | Eval reports under `docs/wukong-code/evals/` |
-| TypeScript, JavaScript | Experimental | Cursor recapture-15 drafts; **publication eval pending** |
+| Go、Java、Swift、Rust | Experimental | `docs/wukong-code/evals/` 下的 eval 报告 |
+| TypeScript、JavaScript | Experimental | Cursor recapture-15 草稿；**publication eval pending** |
 
-**Experimental** means published in core while real-project evidence is still accumulating. Language packs need a human reviewer familiar with the language before stable status.
+**Experimental** 表示已进入 core 发布，真实项目证据仍在积累。语言包在标为 stable 前需要熟悉该语言的人类审阅者。
 
-### 5.4 Supported harnesses
+### 5.4 受支持的 harness
 
-Install **separately** per harness. Supported as of README:
+每个 harness **分别**安装。README 当前列出：
 
 Antigravity · Claude Code · Codex App · Codex CLI · Cursor · Factory Droid · GitHub Copilot CLI · Kimi Code · OpenCode · Pi
 
-**New-harness acceptance (required in the PR template):** a clean session, user message exactly `Let's make a react todo list`, must **auto-trigger `brainstorming` before any code**. Bootstrap at session start is the integration.
+**新 harness 验收（PR 模板强制）：** 干净会话中发送恰好 `Let's make a react todo list`，必须在写任何代码前**自动触发 `brainstorming`**。会话启动时加载 bootstrap 才算集成。
 
-Architecture of a port (`docs/porting-to-a-new-harness.md`):
+移植架构（`docs/porting-to-a-new-harness.md`）：
 
-1. **Skills** — shared verbatim; name **actions**, not vendor tools.
-2. **Tool mapping** — `references/<harness>-tools.md` when the harness uses that pattern.
-3. **Bootstrap** — inject `using-wukong-code` (+ Product Design composition pointer when that skill exists).
-
----
-
-## 6. Constraints (quality and collaboration)
-
-Contributor-facing product rules. `AGENTS.md` states a **94% PR rejection rate** for this repository; that figure is the project's own warning, not an independent metric.
-
-- PRs target **`main`**. Complete every PR template section. Disclose model, harness, harness version, plugins. A **human** must review the **complete** diff before submission.
-- Search **open and closed** PRs before opening another.
-- Skill changes: use `writing-skills`, adversarial pressure testing, **before/after eval** results. Do not retune Red Flags, rationalization lists, or “human partner” language without evidence.
-- Issues: bug vs platform (try without Wukong Code); feature requests must justify **core** vs standalone plugin; new IDE requests go through `platform_support`.
-- Terminology: **“your human partner”** is deliberate.
+1. **Skills** — 全文共享；只描述**动作**，不写厂商工具名。
+2. **Tool mapping** — 该 harness 使用此模式时，用 `references/<harness>-tools.md`。
+3. **Bootstrap** — 注入 `using-wukong-code`（存在 Product Design 技能时另加 composition pointer）。
 
 ---
 
-## 7. How success is judged
+## 6. 约束（质量与协作）
 
-No growth or NPS targets are defined in-repo. Success is **behavioral and contribution quality**.
+面向贡献者的产品规则。`AGENTS.md` 写明本仓库 **94% PR rejection rate**；这是项目自己的警告，不是独立计量指标。
 
-| Gate | What “good” means | Where it lives |
+- PR 目标分支为 **`main`**。填完 PR 模板每一节。披露 model、harness、harness 版本、已装插件。提交前必须有**人类**审阅**完整** diff。
+- 开新 PR 前检索**未关闭与已关闭**的 PR。
+- 改技能：使用 `writing-skills`、对抗压测、**改前/改后 eval**。无证据不得改动 Red Flags、rationalization 列表或 “human partner” 用语。
+- Issue：先区分 bug 与平台问题（卸载 Wukong Code 复现）；功能请求须说明为何进 **core** 而非 standalone plugin；新 IDE 走 `platform_support`。
+- 用语：**“your human partner”** 是有意保留的。
+
+---
+
+## 7. 如何判断成功
+
+仓库内没有增长或 NPS 目标。成功看**行为与贡献质量**。
+
+| 门槛 | 「好」是什么 | 落在何处 |
 | --- | --- | --- |
-| Bootstrap | Skills fire at the right time without a per-task ritual | SessionStart / injectors; new-harness transcript |
-| Process | Design before code; RED before green; verify before “done” | Skill bodies + evals |
-| Product Design | Research/audit do not edit source; new visuals need a chosen direction; Design QA blocks bad handoff | Product Design skills + import lock |
-| Plugin correctness | Non-LLM packaging, hooks, mapping, manifests | `tests/`; `npm test` / `npm run test:extended`; CI `.github/workflows/test.yml` |
-| Skill behavior | Real agent sessions comply with skills | `evals/` clone of wukong-code-evals; Drill / Cursor cohorts (manual / on-demand; needs API keys) |
-| Eval definitions | Scenario JSONL stays valid | Weekly `evals-static.yml` (no API keys) |
-| Language packs | Failing controls + repeated behavior evals; no extra frameworks | PR template “Language-pack evidence”; reports under `docs/wukong-code/evals/` |
-| Contribution | Real problem, one change, human review, no slop | PR template; `AGENTS.md` |
+| Bootstrap | 技能在正确时机触发，无需每次任务仪式 | SessionStart / 注入器；新 harness 会话记录 |
+| 过程 | 先设计再写代码；先 RED 再 GREEN；先验证再宣布完成 | 技能正文 + evals |
+| Product Design | 研究/审计不改源码；新视觉须先选定方向；Design QA 挡住不合格交付 | Product Design 技能 + import lock |
+| 插件正确性 | 非 LLM 的打包、钩子、映射、清单 | `tests/`；`npm test` / `npm run test:extended`；CI `.github/workflows/test.yml` |
+| 技能行为 | 真实智能体会话遵守技能 | `evals/` 中的 wukong-code-evals 克隆；Drill / Cursor 队列（手动/按需；需要 API key） |
+| Eval 定义 | scenario JSONL 保持有效 | 每周 `evals-static.yml`（不需要 API key） |
+| 语言包 | 失败对照 + 重复行为 eval；不引入额外框架 | PR 模板 “Language-pack evidence”；报告在 `docs/wukong-code/evals/` |
+| 贡献 | 真实问题、一次改动、人类审阅、无 slop | PR 模板；`AGENTS.md` |
 
-Full LLM evals are **outside** the required PR test gate by design (`docs/evals-setup.md`). Publication and skill-wording claims still require them.
-
----
-
-## 8. Provenance
-
-| Source | Role |
-| --- | --- |
-| [Superpowers](https://github.com/obra/superpowers) (MIT, Jesse Vincent) | Core development skills, `using-*` bootstrap pattern, hooks/injectors, Codex packaging, contributor-guideline lineage |
-| [OpenAI Product Design](https://github.com/openai/role-specific-plugins/tree/main/plugins/product-design) (MIT) | Ten Product Design skills and related assets; lockfile `product-design.lock.json` |
-| [Anthropic frontend-design](https://github.com/anthropics/skills/tree/main/skills/frontend-design) (Apache-2.0) | Folded into `product-design-ideate` original-direction guidance; not a top-level skill |
-
-Maintainer identity in README About: **悟空非空也 (Wukong)**.
+完整 LLM eval 按设计**不在**强制 PR 测试门内（`docs/evals-setup.md`）。发布与技能措辞相关的主张仍需要它们。
 
 ---
 
-## 9. Related documents
+## 8. 来源与许可
 
-| Document | Use |
+| 来源 | 角色 |
 | --- | --- |
-| `README.md` (and `README.zh-CN.md`, `README.zh-TW.md`, `README.ja.md`, `README.ko.md`) | Install, workflow, skill inventory |
-| `AGENTS.md` / `CLAUDE.md` | Contributor / agent PR rules |
-| `.github/PULL_REQUEST_TEMPLATE.md` | Mandatory PR fields, harness transcript, evals |
-| `docs/porting-to-a-new-harness.md` | How a port must work |
-| `docs/testing.md` | `tests/` vs `evals/` |
-| `docs/evals-setup.md` | Cloning and tiering the eval harness |
-| `RELEASE-NOTES.md` | Shipped vs Unreleased on `main` |
-| `docs/wukong-code/specs/`, `docs/wukong-code/plans/` | Dated feature designs and implementation plans (history) |
+| [Superpowers](https://github.com/obra/superpowers)（MIT，Jesse Vincent） | 核心开发技能、`using-*` bootstrap 模式、hooks/injectors、Codex 打包、贡献指南谱系 |
+| [OpenAI Product Design](https://github.com/openai/role-specific-plugins/tree/main/plugins/product-design)（MIT） | 十个 Product Design 技能及相关资源；锁文件 `product-design.lock.json` |
+| [Anthropic frontend-design](https://github.com/anthropics/skills/tree/main/skills/frontend-design)（Apache-2.0） | 并入 `product-design-ideate` 的原创方向指导；不是顶层技能 |
+
+README About 中的维护者身份：**悟空非空也 (Wukong)**。
+
+---
+
+## 9. 相关文档
+
+| 文档 | 用途 |
+| --- | --- |
+| `README.md`（以及 `README.zh-CN.md`、`README.zh-TW.md`、`README.ja.md`、`README.ko.md`） | 安装、工作流、技能清单 |
+| `AGENTS.md` / `CLAUDE.md` | 贡献者 / 智能体 PR 规则 |
+| `.github/PULL_REQUEST_TEMPLATE.md` | 必填 PR 字段、harness 会话记录、evals |
+| `docs/porting-to-a-new-harness.md` | 移植必须满足什么 |
+| `docs/testing.md` | `tests/` 与 `evals/` |
+| `docs/evals-setup.md` | 如何克隆并分层运行 eval harness |
+| `RELEASE-NOTES.md` | `main` 上已发布与 Unreleased |
+| `docs/wukong-code/specs/`、`docs/wukong-code/plans/` | 带日期的功能设计与实施计划（历史） |
