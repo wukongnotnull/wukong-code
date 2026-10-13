@@ -175,18 +175,14 @@ Before proposing changes to skill design, workflow philosophy, or architecture, 
 
 若无法确定仓库，或 GitHub 权限/工具不可用：明确说明尚未创建或更新 issue 及原因。不要声称已完成记录。
 
-### Grilling 共识：确认记录记 Issue，另写技术规格
+### Grilling 共识：Issue 跟踪（本仓库开发习惯）
 
-当 grilling（或同等「逐题问清楚」）与人类伙伴达成共识后，按下面顺序交接。Issue/看板跟踪是本仓库开发习惯，不是 grilling skill 的能力，也不是 spec。
+Issue 与看板跟踪是 **本仓库** 开发习惯，不是 grilling skill 的能力。插件用户以 [`skills/grilling/SKILL.md`](skills/grilling/SKILL.md) 的 HANDOFF 为准；不要用本文件替代或覆盖 skill 里的交接步骤，也不要把 Issue/Projects 跟踪写进 skill。
 
-**交接顺序：** 确认记录 → 根据确认后的记录写 spec **技术规格文档**（不要把确认记录自己当成 spec 文档）→ 审核 spec 文档 → 再 `writing-plans`。
+当 grilling（或同等「逐题问清楚」）与人类伙伴达成共识后：
 
-1. **跟踪（Issue，不是 spec）：** 把共识记到本仓库 GitHub issue：背景、已做决定、未决问题、后续跟进。用户已授权创建/更新 issue，无需每次再确认。先搜索 open 和 closed issues；已有对应项则补充，不重复开。看板按下文 GitHub Projects 规则同步。Issue 与 Shared-Understanding Record（确认记录）都不是 spec 文件。
-2. **不要把确认记录落盘成 spec：** 禁止把确认记录原样另存、复制或提交为 spec / design spec。禁止把确认记录、issue 正文或聊天共识当作 `docs/wukong-code/specs/` 里的规格文档。
-3. **必须另写技术规格文档：** 记录经人类确认之后，根据该确认记录撰写一份独立的 **技术规格文档**（spec），写入 `docs/wukong-code/specs/`（或人类指定的路径）。该文件是从确认记录推导出的规格，不是确认记录本身。已有带日期的 specs / plans 只作历史参考，不能替代本次新写的 spec。
-4. **`docs/prd.md` 不是 grilling spec：** 若仓库里**已经存在** `docs/prd.md`，把它当作产品快照。不要用 PRD 替代本次 grilling 的技术规格，也不要用新 spec 去同步或替代 PRD。跟踪仍写回对应 issue。
-5. **审核后再 writing-plans：** 写出 spec 文件后请人类审核该文件。未获对该 spec 文件的明确批准前，不要进入 `writing-plans`，不要开始实现。人类批准 spec 文件之后，再以 `writing-plans` 为下一步主流程。
-6. **不要改 grilling skill 来承载跟踪：** 不要修改 `skills/grilling/SKILL.md` 以加入 Issue/看板能力。对本仓库，本文件补充：确认记录 ≠ spec；必须另写技术规格；Issue 跟踪是仓库开发习惯。本文件中与「确认记录是否即 spec」相关的用户指令，优先于 skill 里把确认记录原样持久化为 spec 的写法。
+1. 把共识记到本仓库 GitHub issue：背景、已做决定、未决问题、后续跟进。用户已授权创建/更新 issue，无需每次再确认。先搜索 open 和 closed issues；已有对应项则补充，不重复开。看板按下文 GitHub Projects 规则同步。
+2. 若仓库里**已经存在** `docs/prd.md`，把它当作产品快照。不要用新 spec 去同步或替代 PRD。跟踪仍写回对应 issue。
 
 ### GitHub Projects
 
@@ -197,7 +193,7 @@ Before proposing changes to skill design, workflow philosophy, or architecture, 
 1. 创建或更新 issue、创建 PR 后，检查该条目是否已在板上。未入板则补上；已在板上不要重复添加。
 2. 不要声称仓库已启用 issue/PR 自动入板，除非当场验证了该自动入板规则。
 3. 状态用该看板 **Status 字段的实际选项名**，不要发明列。若选项正好是 `Todo` / `In Progress` / `Done`，则：`Todo` = 待处理，`In Progress` = 正在实施或评审，`Done` = 已完成。开始工作和交付时同步状态，并在关联 issue 中记录进展、验证与结论。
-4. 历史设计与实施计划：先查阅已有 issue/PR，以及仓库内已存在的 [`docs/wukong-code/specs/`](docs/wukong-code/specs/)、[`docs/wukong-code/plans/`](docs/wukong-code/plans/)（只作历史参考，不要重复已交付需求，也不要推断未完成状态）。新的 grilling 技术规格按上文「Grilling 共识」撰写，不要把确认记录或 issue 正文当作 spec。若看板有 README/索引，一并查阅。
+4. 历史设计与实施计划：先查阅已有 issue/PR，以及仓库内已存在的 [`docs/wukong-code/specs/`](docs/wukong-code/specs/)、[`docs/wukong-code/plans/`](docs/wukong-code/plans/)（只作历史参考，不要重复已交付需求，也不要推断未完成状态）。新的 grilling 技术规格按 `skills/grilling/SKILL.md` 的 HANDOFF 撰写。若看板有 README/索引，一并查阅。
 
 若 Projects 权限或工具不可用：继续在 issue 中记录，并明确说明未同步项目状态。不得声称已入板或已更新状态。
 

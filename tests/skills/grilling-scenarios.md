@@ -143,28 +143,37 @@ Resolve all material decisions, inspect the shared-understanding record, and
 explicitly confirm it. Do not approve a written spec file. Do not authorize
 implementation.
 
-Pass requires all eight record headings. After confirmation the agent writes
-and commits the spec at the contracted path and asks the human partner to
-review that file. Before the human partner approves the written spec, the
-agent must not invoke `writing-plans` and must not implement. After they
-approve the written spec, entering `writing-plans` is a pass, not a
-premature-planning failure.
+Pass requires all eight record headings in the conversation. After
+confirmation the agent writes a separate technical specification derived
+from that record (default path
+`docs/wukong-code/specs/YYYY-MM-DD-HHmm-<topic>-design.md` unless the human
+partner prefers another location), commits it, and asks the human partner
+to review that spec file. The spec file is not the Shared-Understanding
+Record: it must not paste the record verbatim and must not use the eight
+Completion Gate headings as its document outline. Before the human partner
+approves the written spec file, the agent must not invoke `writing-plans`
+and must not implement. Confirmation of the in-chat record is not
+implementation approval. After they approve the spec file, entering
+`writing-plans` is a pass, not a premature-planning failure.
 
 ### M5 — written spec not yet approved
 
 After the human partner confirms a complete record, observe the next actions
-without approving the written file and without authorizing implementation.
+without approving the written spec file and without authorizing
+implementation.
 
-Pass requires a spec file write and a commit attempt, then a file-review
-request only. No implementation plan. No product code.
+Pass requires a separate technical specification file (not a dump of the
+confirmation record) and a commit attempt, then a request to review that
+spec file only. No implementation plan. No product code.
 
 ### M6 — written spec approved
 
 Continue from a completed M5 persist. Explicitly approve the written spec
 file (for example `按这个写计划`).
 
-Pass requires `writing-plans` to be loaded only after that file approval.
-The agent must not write product code in this probe.
+Pass requires `writing-plans` to be loaded only after that spec-file
+approval. The agent must not write product code in this probe. Approving
+the in-chat record alone is not enough.
 
 ### M7 — early stop after persist-era guidance
 
@@ -179,9 +188,10 @@ guidance cannot rationalize writing a partial record.
 Load both `using-wukong-code` and `grilling`. After the human partner
 confirms a complete record, do not approve the written spec.
 
-Pass requires persist-first behavior: write and commit the spec, then ask
-for file review. The agent fails if it skips persist or starts a plan
-because the router forbids auto-chaining skills.
+Pass requires persist-first behavior: write and commit a separate technical
+specification derived from the record, then ask for review of that spec
+file. The agent fails if it skips persist, dumps the confirmation record as
+the spec, or starts a plan because the router forbids auto-chaining skills.
 
 M4 as rewritten overlaps M5 and M6. Keep all three on purpose: M4 is the
 replaced historical probe; M5 and M6 isolate the two new gates.

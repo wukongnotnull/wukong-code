@@ -18,8 +18,9 @@ Before the human partner explicitly confirms the shared-understanding record,
 perform read-only research and dialogue only. Do not create or edit files, run
 tests, implement, or mutate external state.
 
-Confirmation approves the record and authorizes writing and committing that
-record as a spec. It does not authorize implementation or writing-plans.
+Confirmation approves the record and authorizes writing and committing a
+separate technical specification derived from it. It does not authorize
+treating the record as the spec, implementation, or writing-plans.
 Take no planning or implementation action until the human partner explicitly
 approves the written spec file.
 </CONFIRMATION-GATE>
@@ -97,43 +98,69 @@ the affected node and resume the interview.
 
 ### 6. HANDOFF
 
-After confirmation, persist the confirmed record as a spec, then wait for
-file review. Do not ask a next-step skill menu. Do not invoke writing-plans
-or begin implementation.
+After confirmation, write a separate technical specification derived from
+the confirmed record, then wait for review of that spec file. Do not ask a
+next-step skill menu. Do not invoke writing-plans or begin implementation.
 
-1. Write the spec to `docs/wukong-code/specs/YYYY-MM-DD-HHmm-<topic>-design.md`
+The Shared-Understanding Record is the confirmed interview product. It is
+not the spec. Confirmation of the record authorizes writing the spec file.
+It does not make the record itself the spec, and it does not authorize
+implementation or writing-plans.
+
+1. Write a technical specification document to
+   `docs/wukong-code/specs/YYYY-MM-DD-HHmm-<topic>-design.md`
    unless the human partner has a spec-location preference, which overrides
    the directory only. `YYYY-MM-DD-HHmm` is local 24-hour time to the minute.
    `<topic>` is the Objective reduced to kebab-case ASCII (lowercase, hyphen
    separated). If the Objective is not ASCII, transliterate or shorten to a
    stable kebab-case slug that still names the work.
-2. Header: title, `Status: Confirmed`, `Date`, `Source: grilling`. Body: the
-   confirmed eight sections in the Completion Gate order. Do not rewrite the
-   record into design narrative or add unconfirmed lists.
-3. Inline self-review only: placeholders, contradictions, bundled
-   independent subsystems (flag, do not split unless asked), damaged
-   headings or order. Do not change confirmed meaning. Do not dispatch a
-   spec-reviewer subagent.
-4. Commit only that spec file. The message states why the grilling consensus
-   is being archived. Do not stage unrelated files. If git is unavailable or
-   the commit fails, leave the file on disk, report the failure, and continue
-   to file review.
-5. Ask the human partner to review the written spec. Stop and wait. Use this
+2. The spec is derived from the confirmed record. Header: title (the work,
+   not "Shared-Understanding Record"), `Status: Confirmed`, `Date`,
+   `Source: grilling`. Body, in this order, each section filled from
+   confirmed content only:
+   1. Problem and objective
+   2. Architecture and component boundaries
+   3. Interfaces, data, and behavior
+   4. Constraints, compatibility, and non-goals
+   5. Errors, operations, and other confirmed concerns that affect
+      implementation
+   6. Acceptance criteria and testing
+   Ground every requirement in a confirmed decision, verified fact,
+   constraint, authorized default, or success criterion. Closed branches
+   become non-goals or constraints; do not reopen them as options.
+   Authorized defaults become specified defaults. Non-blocking open items
+   stay labeled open — do not invent resolutions.
+3. Do not paste the Shared-Understanding Record as the file body. Do not
+   use the eight Completion Gate headings (Objective, Verified Facts,
+   Confirmed Decisions, Closed Branches, Constraints and Non-goals,
+   Authorized Defaults, Non-blocking Open Items, Success Criteria) as the
+   spec's outline. Do not add unconfirmed alternatives, new scope, or the
+   interview transcript.
+4. Inline self-review only: placeholders, contradictions, ungrounded
+   requirements, bundled independent subsystems (flag, do not split unless
+   asked), damaged headings or order. Do not change confirmed meaning. Do
+   not dispatch a spec-reviewer subagent.
+5. Commit only that spec file. The message states why this technical
+   specification is being archived. Do not stage unrelated files. If git is
+   unavailable or the commit fails, leave the file on disk, report the
+   failure, and continue to file review.
+6. Ask the human partner to review the spec file. Stop and wait. Use this
    meaning: Spec written and committed to `<path>` (or written to `<path>` if
-   commit failed). Please review that file and say whether to change it
+   commit failed). Please review that spec file and say whether to change it
    before the implementation plan.
-6. If they request corrections, edit only affected sections, keep the eight
-   headings and confirmed meaning, commit again if the file changed, and
-   re-request review.
-7. When they explicitly approve the written spec (yes, LGTM, proceed, 可以,
-   没问题, 按这个写计划, or equivalent go-ahead on the file), load
+7. If they request corrections, edit only affected spec sections, keep
+   confirmed meaning, commit again if the file changed, and re-request
+   review.
+8. When they explicitly approve the written spec file (yes, LGTM, proceed,
+   可以, 没问题, 按这个写计划, or equivalent go-ahead on the file), load
    writing-plans as the next primary process and follow it. Do not load
    domain or implementation skills, and do not write product code, until
    writing-plans later hands off to an execution skill. Silence, tone, and
-   "looks fine" aimed at the in-chat record are not approval.
+   "looks fine" aimed at the in-chat record are not approval of the spec
+   file.
 
-HANDOFF remains grilling through the file-review request. writing-plans
-becomes the primary process only after written-spec approval.
+HANDOFF remains grilling through the spec-file-review request.
+writing-plans becomes the primary process only after spec-file approval.
 
 ## Turn Contract
 
@@ -213,8 +240,9 @@ Use this Markdown structure for both confirmation and final records:
 8. Success Criteria
 
 Emit the record in the conversation. After the human partner confirms the
-complete record, write it to the spec path in HANDOFF. Do not write a file
-before that confirmation.
+complete record, write a separate technical specification per HANDOFF. Do
+not write a file before that confirmation. Do not write the record itself
+as the spec.
 
 ## Early Stop
 
@@ -233,5 +261,5 @@ record.
 | Before confirmation | Read-only research and one recommended decision per turn |
 | Upstream decision changes | Reopen only affected downstream nodes |
 | Human partner stops | Emit a partial record; do not write or commit a spec |
-| Record confirmed | Write and commit the spec, then wait for file review |
-| Written spec approved | Load `writing-plans` as the next primary process |
+| Record confirmed | Write a separate technical spec derived from the record, then wait for spec-file review |
+| Written spec file approved | Load `writing-plans` as the next primary process |
