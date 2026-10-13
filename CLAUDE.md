@@ -175,14 +175,14 @@ Before proposing changes to skill design, workflow philosophy, or architecture, 
 
 若无法确定仓库，或 GitHub 权限/工具不可用：明确说明尚未创建或更新 issue 及原因。不要声称已完成记录。
 
-### Grilling 共识：记 Issue，不落盘 spec
+### Grilling 共识：Issue 跟踪（本仓库开发习惯）
+
+Issue 与看板跟踪是 **本仓库** 开发习惯，不是 grilling skill 的能力。插件用户以 [`skills/grilling/SKILL.md`](skills/grilling/SKILL.md) 的 HANDOFF 为准；不要用本文件替代或覆盖 skill 里的交接步骤，也不要把 Issue/Projects 跟踪写进 skill。
 
 当 grilling（或同等「逐题问清楚」）与人类伙伴达成共识后：
 
-1. 把共识记到本仓库 GitHub issue：背景、已做决定、未决问题、后续跟进。用户已授权创建/更新 issue，无需每次再确认。先搜索 open 和 closed issues；已有对应项则补充，不重复开。
-2. **不要**把该共识落盘成 spec 作为系统记录。禁止新建 `docs/wukong-code/specs/` 文件、禁止新建 spec markdown、禁止以「design spec」文件作为共识的权威来源。已有带日期的 specs / plans 只作历史参考。
-3. 若仓库里**已经存在** `docs/prd.md`，把它当作产品快照，不要为 grilling 结论再写一份 spec，也不要用新 spec 去同步或替代 PRD。grilling 结论仍然写进对应 issue。
-4. 本文件中的用户指令优先于 `grilling` skill 里「写入 spec 并提交」的交接步骤：对本仓库，共识的系统记录是 GitHub issue，不是 spec 文件。
+1. 把共识记到本仓库 GitHub issue：背景、已做决定、未决问题、后续跟进。用户已授权创建/更新 issue，无需每次再确认。先搜索 open 和 closed issues；已有对应项则补充，不重复开。看板按下文 GitHub Projects 规则同步。
+2. 若仓库里**已经存在** `docs/prd.md`，把它当作产品快照。不要用新 spec 去同步或替代 PRD。跟踪仍写回对应 issue。
 
 ### GitHub Projects
 
@@ -193,7 +193,7 @@ Before proposing changes to skill design, workflow philosophy, or architecture, 
 1. 创建或更新 issue、创建 PR 后，检查该条目是否已在板上。未入板则补上；已在板上不要重复添加。
 2. 不要声称仓库已启用 issue/PR 自动入板，除非当场验证了该自动入板规则。
 3. 状态用该看板 **Status 字段的实际选项名**，不要发明列。若选项正好是 `Todo` / `In Progress` / `Done`，则：`Todo` = 待处理，`In Progress` = 正在实施或评审，`Done` = 已完成。开始工作和交付时同步状态，并在关联 issue 中记录进展、验证与结论。
-4. 历史设计与实施计划：先查阅已有 issue/PR，以及仓库内已存在的 [`docs/wukong-code/specs/`](docs/wukong-code/specs/)、[`docs/wukong-code/plans/`](docs/wukong-code/plans/)（只作参考，不要据此新建 spec 或重复需求，也不要推断未完成状态）。若看板有 README/索引，一并查阅。
+4. 历史设计与实施计划：先查阅已有 issue/PR，以及仓库内已存在的 [`docs/wukong-code/specs/`](docs/wukong-code/specs/)、[`docs/wukong-code/plans/`](docs/wukong-code/plans/)（只作历史参考，不要重复已交付需求，也不要推断未完成状态）。新的 grilling 技术规格按 `skills/grilling/SKILL.md` 的 HANDOFF 撰写。若看板有 README/索引，一并查阅。
 
 若 Projects 权限或工具不可用：继续在 issue 中记录，并明确说明未同步项目状态。不得声称已入板或已更新状态。
 
