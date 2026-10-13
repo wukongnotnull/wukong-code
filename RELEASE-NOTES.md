@@ -1,8 +1,8 @@
 # Wukong Code Release Notes
 
-## Unreleased
+## v6.5.0 (2026-10-13)
 
-Changes merged to `main` after v6.4.0. Rename this heading to the version and date when the next release PR runs `scripts/bump-version.sh`.
+Changes merged to `main` after v6.4.0.
 
 ### Language Guidance
 
@@ -20,6 +20,11 @@ Changes merged to `main` after v6.4.0. Rename this heading to the version and da
 - **Host-tool preflight.** `scripts/test.sh` checks for every host tool the suites shell out to (`git node python3 rg rsync jq zip unzip tar gzip shasum`, plus `npm` for extended) and exits `3` with the full missing list before running anything, so a missing tool shows up once by name instead of as unrelated assertion failures. `docs/testing.md` documents the table. (#38)
 - **ShellCheck is a CI gate.** A separate `lint` job in `.github/workflows/test.yml` runs `bash scripts/lint-shell.sh --all` on every pull request and push; the 11 warning lines that had accumulated in `tests/claude-code/` (including a `$?`-after-`echo` that always reported exit code 0) are cleared. `ubuntu-latest` ships `shellcheck`, so the job adds no dependency. (#45)
 - **`evals-static` re-pinned to a reachable harness commit.** The weekly manifest-validation workflow clones the harness branch explicitly, hoists repo/branch/commit into `env`, and fails with a `::error::` naming the unreachable pin; `tests/test-automation/test-test-runner.sh` fails if `docs/evals-setup.md` and the workflow disagree on the pin. (#37)
+
+### Documentation
+
+- **Issue and GitHub Projects collaboration rules.** `CLAUDE.md` (canonical; `AGENTS.md` is a symlink) now requires agents working on this repository to search then create or update GitHub issues for 需求、Bug、and 咨询/一般讨论, and to record grilling consensus on the issue instead of writing a new spec under `docs/wukong-code/specs/`. The English PR bar, identity disclosure, and skill content are unchanged. (#50, tracking #49)
+- **Simplified Chinese product-requirements snapshot.** `docs/prd.md` states current purpose, audience, in/out of scope, capabilities, and how success is judged. It is a snapshot of what the repo already ships, not a roadmap. (#51)
 
 ## v6.4.0 (2026-10-04)
 
