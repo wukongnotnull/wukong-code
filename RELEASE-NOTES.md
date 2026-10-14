@@ -1,5 +1,18 @@
 # Wukong Code Release Notes
 
+## v6.7.0 (2026-10-14)
+
+Changes merged to `main` after v6.6.0, other than this version bump. The product commits are only PR #60 (`256c535`, merge `7ec3304`).
+
+### Skills
+
+- **Record questions and replies as GitHub issues.** New skill `recording-qa-to-issues` (`skills/recording-qa-to-issues/SKILL.md`, Codex metadata in `agents/openai.yaml` with `allow_implicit_invocation: true`). When the human partner asks a question, reports a problem, requests a change, or follows up in Cursor, Claude Code, Codex, Kimi, OpenCode, or Pi — including 提问, 咨询, bug reports, feature requests, and UI or docs discussions — the session facing that person records the turn on one GitHub issue in the current repo. One trackable question is one issue; a follow-up is a comment on that issue; a greeting with nothing to track, a delegated subagent, an explicit request not to record, or a missing repo / unavailable `gh` is not recorded (and a missing repo is not reported as recorded). The title is `<type>(<scope>): <description>`, or `<type>: <description>` when there is no scope. The body is 来源 (the tool name), 提问 (original text, with secret values replaced by `[REDACTED]`), and 回复要点 (conclusions, not the full chain of thought). One primary type sets the title type; other types are extra labels. The skill's table is bug/`fix`, feature/`feat`, enhancement/`feat`, documentation/`docs`, ui/`fix` or `feat`, refactor/`refactor`, performance/`perf`, test/`test`, security/`fix`, chore/`chore`, question/`question`, and discussion/`discussion`. A missing label is created with `gh label create` and no custom color. Search open and closed issues first; the same topic is a comment, not a second issue. The skill does not close the issue and does not touch a Project board. (#60)
+
+### Repository
+
+- **Contributor guide points at the skill instead of copying its type table.** `CLAUDE.md` (canonical; `AGENTS.md` is a symlink) tells agents to record the human partner's questions and replies with `skills/recording-qa-to-issues/SKILL.md`, and to take type, labels, and title from that skill. The rest of the issue section stays this repository's contributor rules. (#60)
+- **READMEs list the new skill.** `README.md`, `README.zh-CN.md`, `README.zh-TW.md`, `README.ja.md`, and `README.ko.md` now count 27 top-level skills (17 general development skills and 10 Product Design skills) and name `recording-qa-to-issues` under Collaboration. (#60)
+
 ## v6.6.0 (2026-10-14)
 
 Changes merged to `main` after v6.5.0, other than this version bump. The product commits are only PR #55 (`1b3542e`, `840317c`, merge `3b81a61`).

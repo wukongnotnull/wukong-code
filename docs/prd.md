@@ -2,7 +2,7 @@
 
 **状态：** 本文是对本仓库现状的快照，不是路线图。  
 **产品：** Wukong Code（`wukong-code`）  
-**本仓库当前版本：** `6.6.0`（`package.json`、各插件 manifest；见 `RELEASE-NOTES.md`）  
+**本仓库当前版本：** `6.7.0`（`package.json`、各插件 manifest；见 `RELEASE-NOTES.md`）  
 **许可证：** MIT  
 **本文不替代** `README.md`（安装与概览）或 `AGENTS.md` / `CLAUDE.md`（贡献者规则）。
 
