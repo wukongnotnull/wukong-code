@@ -2,7 +2,7 @@
 
 ## v6.6.0 (2026-10-14)
 
-Changes merged to `main` after v6.5.0. `git log v6.5.0..` is only PR #55 (`1b3542e`, `840317c`, merge `3b81a61`).
+Changes merged to `main` after v6.5.0, other than this version bump. The product commits are only PR #55 (`1b3542e`, `840317c`, merge `3b81a61`).
 
 ### Skills
 
