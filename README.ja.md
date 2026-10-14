@@ -220,7 +220,7 @@ Pi パッケージはスキルを読み込み、起動時とコンテキスト�
 
 ## 収録内容
 
-**26 個のトップレベルスキル**：汎用開発スキル 16 個、Product Design スキル 10 個。
+**27 個のトップレベルスキル**：汎用開発スキル 17 個、Product Design スキル 10 個。
 
 | 分野 | スキルとガイダンス |
 | --- | --- |
@@ -228,7 +228,7 @@ Pi パッケージはスキルを読み込み、起動時とコンテキスト�
 | **デバッグ** | `systematic-debugging`、根本原因の追跡、多層防御、条件ベースの待機 |
 | **検証** | `verification-before-completion` |
 | **計画** | `brainstorming`、`grilling`、`writing-plans`、`executing-plans` |
-| **協業** | `dispatching-parallel-agents`、`subagent-driven-development`、`requesting-code-review`、`receiving-code-review` |
+| **協業** | `dispatching-parallel-agents`、`subagent-driven-development`、`requesting-code-review`、`receiving-code-review`、`recording-qa-to-issues` |
 | **ワークスペース** | `using-git-worktrees`、`finishing-a-development-branch` |
 | **言語別実装** | 実験的でエビデンスベースの `language-guidance` パック |
 | **メタ** | `writing-skills`、`using-wukong-code` |

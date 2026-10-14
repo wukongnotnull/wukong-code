@@ -220,7 +220,7 @@ The Pi package loads the skills and injects the `using-wukong-code` bootstrap at
 
 ## What's inside
 
-**26 top-level skills**: 16 general development skills and 10 Product Design skills.
+**27 top-level skills**: 17 general development skills and 10 Product Design skills.
 
 | Area | Skills and guidance |
 | --- | --- |
@@ -228,7 +228,7 @@ The Pi package loads the skills and injects the `using-wukong-code` bootstrap at
 | **Debugging** | `systematic-debugging`, root-cause tracing, defense in depth, condition-based waiting |
 | **Verification** | `verification-before-completion` |
 | **Planning** | `brainstorming`, `grilling`, `writing-plans`, `executing-plans` |
-| **Collaboration** | `dispatching-parallel-agents`, `subagent-driven-development`, `requesting-code-review`, `receiving-code-review` |
+| **Collaboration** | `dispatching-parallel-agents`, `subagent-driven-development`, `requesting-code-review`, `receiving-code-review`, `recording-qa-to-issues` |
 | **Workspace** | `using-git-worktrees`, `finishing-a-development-branch` |
 | **Language implementation** | Experimental evidence-based `language-guidance` packs |
 | **Meta** | `writing-skills`, `using-wukong-code` |

@@ -220,7 +220,7 @@ Pi 패키지는 스킬을 불러오고 시작 시점과 컨텍스트 압축 후�
 
 ## 포함된 내용
 
-**26개의 최상위 스킬**: 범용 개발 스킬 16개와 Product Design 스킬 10개.
+**27개의 최상위 스킬**: 범용 개발 스킬 17개와 Product Design 스킬 10개.
 
 | 영역 | 스킬과 가이드 |
 | --- | --- |
@@ -228,7 +228,7 @@ Pi 패키지는 스킬을 불러오고 시작 시점과 컨텍스트 압축 후�
 | **디버깅** | `systematic-debugging`, 근본 원인 추적, 심층 방어, 조건 기반 대기 |
 | **검증** | `verification-before-completion` |
 | **계획** | `brainstorming`, `grilling`, `writing-plans`, `executing-plans` |
-| **협업** | `dispatching-parallel-agents`, `subagent-driven-development`, `requesting-code-review`, `receiving-code-review` |
+| **협업** | `dispatching-parallel-agents`, `subagent-driven-development`, `requesting-code-review`, `receiving-code-review`, `recording-qa-to-issues` |
 | **작업 공간** | `using-git-worktrees`, `finishing-a-development-branch` |
 | **언어 구현** | 실험적이며 근거 기반인 `language-guidance` 팩 |
 | **메타** | `writing-skills`, `using-wukong-code` |

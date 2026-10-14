@@ -146,6 +146,8 @@ Before proposing changes to skill design, workflow philosophy, or architecture, 
 
 ### Issue：记录与跟踪
 
+Agent 会话里，人类伙伴的提问与回复按 [`skills/recording-qa-to-issues/SKILL.md`](skills/recording-qa-to-issues/SKILL.md) 记到 GitHub issue。类型、标签和标题以该 skill 为准。不要把那张类型表抄进本文件。本节其余内容仍是本仓库贡献者协作规则。
+
 当用户对本仓库提出**需求/功能**、**报告 Bug**，或发起**咨询/一般讨论**时，主动在本仓库创建或更新 issue。用户已授权该行为，无需每次再确认。
 
 **创建前：**
