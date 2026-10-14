@@ -1,5 +1,17 @@
 # Wukong Code Release Notes
 
+## v6.6.0 (2026-10-14)
+
+Changes merged to `main` after v6.5.0. `git log v6.5.0..` is only PR #55 (`1b3542e`, `840317c`, merge `3b81a61`).
+
+### Skills
+
+- **Grilling HANDOFF writes a derived technical spec.** After the human partner confirms the Shared-Understanding Record, `skills/grilling/SKILL.md` writes a separate technical specification and waits for review of that file. The record stays the interview product. Confirmation does not make the record the spec, and it does not authorize implementation or `writing-plans`. The spec header is the work title (not "Shared-Understanding Record"), `Status: Confirmed`, `Date`, `Source: grilling`. The body is six sections filled only from confirmed content: Problem and objective; Architecture and component boundaries; Interfaces, data, and behavior; Constraints, compatibility, and non-goals; Errors, operations, and other confirmed concerns that affect implementation; Acceptance criteria and testing. The eight Completion Gate headings are not the outline, and the record is not pasted as the file. Closed branches become non-goals or constraints; authorized defaults become specified defaults; non-blocking open items stay labeled open. Inline self-review only (no spec-reviewer subagent). Commit only that spec file, then stop for spec-file review. `writing-plans` loads only after explicit approval of the written file (`按这个写计划` and the other go-aheads already listed). Early stop still emits a partial record and does not write a spec. The default path is unchanged: `docs/wukong-code/specs/YYYY-MM-DD-HHmm-<topic>-design.md`, overridable by a spec-location preference. `tests/skills/grilling-scenarios.md` M4–M6 and U1 now require that derived file. Cursor subagent probes (not a Drill or tmux cohort) are in `docs/wukong-code/evals/2026-10-13-grilling-derived-spec-handoff.md`: RED wrote the eight-section record as the spec; GREEN wrote the derived outline, asked for spec-file review, and loaded `writing-plans` only after `按这个写计划`. (#55)
+
+### Repository
+
+- **Contributor rules no longer override the grilling HANDOFF.** `CLAUDE.md` (canonical; `AGENTS.md` is a symlink) now says issue and GitHub Project tracking is this repository's habit, not a grilling skill capability. Plugin users follow `skills/grilling/SKILL.md`. The section no longer forbids a grilling spec file and no longer tells agents on this repo to ignore the skill's write-and-commit step. Consensus is still recorded on a GitHub issue. If `docs/prd.md` already exists, it stays the product snapshot and is not replaced by a spec. (#55)
+
 ## v6.5.0 (2026-10-13)
 
 Changes merged to `main` after v6.4.0.
