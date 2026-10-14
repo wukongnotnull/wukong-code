@@ -220,7 +220,7 @@ Pi 套件會載入技能，並在工作階段啟動和內容壓縮後注入 `usi
 
 ## 包含內容
 
-**26 個頂層技能**：16 個通用開發技能與 10 個 Product Design 技能。
+**27 個頂層技能**：17 個通用開發技能與 10 個 Product Design 技能。
 
 | 領域 | 技能與指導 |
 | --- | --- |
@@ -228,7 +228,7 @@ Pi 套件會載入技能，並在工作階段啟動和內容壓縮後注入 `usi
 | **除錯** | `systematic-debugging`、根因追蹤、縱深防禦、基於條件的等待 |
 | **驗證** | `verification-before-completion` |
 | **規劃** | `brainstorming`、`grilling`、`writing-plans`、`executing-plans` |
-| **協作** | `dispatching-parallel-agents`、`subagent-driven-development`、`requesting-code-review`、`receiving-code-review` |
+| **協作** | `dispatching-parallel-agents`、`subagent-driven-development`、`requesting-code-review`、`receiving-code-review`、`recording-qa-to-issues` |
 | **工作區** | `using-git-worktrees`、`finishing-a-development-branch` |
 | **語言實作** | 以證據為基礎的實驗性 `language-guidance` 指導套件 |
 | **元技能** | `writing-skills`、`using-wukong-code` |

@@ -222,7 +222,7 @@ Pi 软件包会加载技能，并在会话启动和上下文压缩后注入 `usi
 
 ## 包含内容
 
-**26 个顶层技能**：16 个通用开发技能和 10 个 Product Design 技能。
+**27 个顶层技能**：17 个通用开发技能和 10 个 Product Design 技能。
 
 
 | 领域       | 技能与指导                                                                                                        |
@@ -231,7 +231,7 @@ Pi 软件包会加载技能，并在会话启动和上下文压缩后注入 `usi
 | **调试**   | `systematic-debugging`、根因追踪、纵深防御、基于条件的等待                                                                     |
 | **验证**   | `verification-before-completion`                                                                             |
 | **规划**   | `brainstorming`、`grilling`、`writing-plans`、`executing-plans`                                                 |
-| **协作**   | `dispatching-parallel-agents`、`subagent-driven-development`、`requesting-code-review`、`receiving-code-review` |
+| **协作**   | `dispatching-parallel-agents`、`subagent-driven-development`、`requesting-code-review`、`receiving-code-review`、`recording-qa-to-issues` |
 | **工作区**  | `using-git-worktrees`、`finishing-a-development-branch`                                                       |
 | **语言实现** | 基于证据的实验性 `language-guidance` 指导包                                                                             |
 | **元技能**  | `writing-skills`、`using-wukong-code`                                                                         |

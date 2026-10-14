@@ -1,0 +1,6 @@
+interface:
+  display_name: "Recording Q&A to Issues"
+  short_description: "Record each question and reply as a GitHub issue"
+  default_prompt: "Use $recording-qa-to-issues to record this question and reply on GitHub."
+policy:
+  allow_implicit_invocation: true
